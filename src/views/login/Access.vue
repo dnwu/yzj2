@@ -9,37 +9,45 @@
   </div>
 </template>
 <script>
-  import cookie from '@/util/cookie'
-  export default {
-    data(){
-      return {
-        username: cookie.getCookie("username")
-      }
+import cookie from "@/util/cookie";
+import { mapGetters } from "vuex";
+export default {
+  data() {
+    return {
+      // username: cookie.getCookie("username")
+      // username: this.cookie
+    };
+  },
+  methods: {
+    handleClick(path) {
+      this.$router.push({ name: path });
     },
-    methods: {
-        handleClick (path){
-            this.$router.push({name: path});
-        },
-        tocenter(){
-          console.log(1111)
-        }
+    tocenter() {
+      console.log(1111);
+    },
+    text() {
+      console.log("getter", this.cookie);
     }
+  },
+  computed: {
+    ...mapGetters(["username"])
   }
+};
 </script>
 <style scoped>
-  .split{
-    padding: 0 15px;
-    font-size: 16px;
-  }
-  .link{
-    cursor: pointer;
-    font-size: 15px;
-    color: #48576a;
-  }
-  .link:hover{
-    color: #F7BA2A;
-  }
-  P:hover{
-    cursor: pointer;
-  }
+.split {
+  padding: 0 15px;
+  font-size: 16px;
+}
+.link {
+  cursor: pointer;
+  font-size: 15px;
+  color: #48576a;
+}
+.link:hover {
+  color: #f7ba2a;
+}
+p:hover {
+  cursor: pointer;
+}
 </style>

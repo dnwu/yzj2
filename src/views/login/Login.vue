@@ -58,6 +58,7 @@
   import ElInput from "../../../node_modules/element-ui/packages/input/src/input";
   import ElFormItem from "../../../node_modules/element-ui/packages/form/src/form-item";
   import ElCol from "element-ui/packages/col/src/col";
+  import {mapMutations} from 'vuex'
   export default {
     components: {
       ElCol,
@@ -85,10 +86,20 @@
         }
       }
     },
+    created () {
+      let cookie = this.$cookie.get('username')
+      this.setCookie(cookie)
+    },
     methods: {
+      ...mapMutations({
+        setCookie:'SET_USERNAME'
+      }),
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
+            this.$cookie.set('username', 'Hello world!',{ expires: '1D' })
+            let cookie = this.$cookie.get('username')
+            this.setCookie(cookie)
             alert('login!');
           } else {
             console.log('error submit!!');
