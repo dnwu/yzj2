@@ -17,5 +17,4 @@ export default {
     _date.setDate(_date.getDate()+30);
     document.cookie=(name+"="+value+";expires="+_date.toGMTString()+";");
   }
-
 }

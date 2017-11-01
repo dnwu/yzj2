@@ -2,12 +2,12 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/views/Home'
 import AirCargoServices from '@/views/Product/AirCargoServices/AirCargoServices'
-import Domestic from '@/views/Product/AirCargoServices/Domestic'
-import International from '@/views/Product/AirCargoServices/International'
-import Normal from '@/views/Product/AirCargoServices/Normal'
-import Heavy from '@/views/Product/AirCargoServices/Heavy'
-import CodeChain from '@/views/Product/AirCargoServices/CodeChain'
-import Danger from '@/views/Product/AirCargoServices/Danger'
+import Haihang from '@/views/Product/AirCargoServices/Haihang'
+import Spa_truck from '@/views/Product/AirCargoServices/Spa_truck'
+import Make_up from '@/views/Product/AirCargoServices/Make_up'
+import Class from '@/views/Product/AirCargoServices/Class'
+import Goods_server from '@/views/Product/AirCargoServices/Goods_server'
+import Contract from '@/views/Product/AirCargoServices/Contract'
 import EntrepotServices from '@/views/Product/EntrepotServices/EntrepotServices'
 import ManagerServices from '@/views/Product/ManagerServices/ManagerServices'
 import FinanceServices from '@/views/Product/FinanceServices/FinanceServices'
@@ -59,42 +59,42 @@ let router = new Router({
       // name: 'product/airCargoServices/domestic',
       path: '/product/airCargoServices/haihang',
       name: 'product/airCargoServices/haihang',
-      component: Domestic
+      component: Haihang
     },
     {
       // path: '/product/airCargoServices/international',
       // name: 'product/airCargoServices/international',
       path: '/product/airCargoServices/spa_truck',
       name: 'product/airCargoServices/spa_truck',
-      component: International
+      component: Spa_truck
     },
     {
       // path: '/product/airCargoServices/normal',
       // name: 'product/airCargoServices/normal',
       path: '/product/airCargoServices/make_up',
       name: 'product/airCargoServices/make_up',
-      component: Normal
+      component: Make_up
     },
     {
       // path: '/product/airCargoServices/heavy',
       // name: 'product/airCargoServices/heavy',
       path: '/product/airCargoServices/class',
       name: 'product/airCargoServices/class',
-      component: Heavy
+      component: Class
     },
     {
       // path: '/product/airCargoServices/codeChain',
       // name: 'product/airCargoServices/codeChain',
       path: '/product/airCargoServices/goods_server',
       name: 'product/airCargoServices/goods_server',
-      component: CodeChain
+      component: Goods_server
     },
     {
       // path: '/product/airCargoServices/danger',
       // name: 'product/airCargoServices/danger',
       path: '/product/airCargoServices/contract',
       name: 'product/airCargoServices/contract',
-      component: Danger
+      component: Contract
     },
     {
       path: '/product/entrepotServices',

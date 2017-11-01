@@ -45,7 +45,7 @@
     },
     methods: {
       handleSelect(key, keyPath){
-       console.log(key, keyPath);
+      //  console.log(key, keyPath);
        if(key == 'about/company') {
          window.location.href = 'http://yzj.sibat.cn/yzj/'
        }

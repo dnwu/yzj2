@@ -55,6 +55,6 @@
     vertical-align: middle;
   }
   .el-menu--horizontal .el-submenu>.el-menu{
-    display: flex;
+    /* display: flex; */
   }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div>
     <template v-if="username">
-      <p>欢迎您！{{username}}</p>
+      <p @click='tocenter'>欢迎您！{{username}}</p>
     </template>
     <template v-else>
       <p><span class="link" @click.stop="handleClick('login')">会员登录</span><span class="split">|</span><span class="link" @click.stop="handleClick('register')">注册</span></p>
@@ -19,6 +19,9 @@
     methods: {
         handleClick (path){
             this.$router.push({name: path});
+        },
+        tocenter(){
+          console.log(1111)
         }
     }
   }
@@ -35,5 +38,8 @@
   }
   .link:hover{
     color: #F7BA2A;
+  }
+  P:hover{
+    cursor: pointer;
   }
 </style>
