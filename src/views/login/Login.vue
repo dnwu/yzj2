@@ -29,7 +29,7 @@
               <div class="password-con">
                 <i class="password-icon"></i>
                 <el-form-item prop="password">
-                  <el-input type="password" v-model="form.password" @enter="submitForm('form')" placeholder="请输入密码" borderRadius="0px" paddingLeft="50px" height="42px" auto-complete="off"></el-input>
+                  <el-input type="password" v-model="form.password" @keyup.enter.native="submitForm('form')" placeholder="请输入密码" borderRadius="0px" paddingLeft="50px" height="42px" auto-complete="off"></el-input>
                 </el-form-item>
               </div>
               <el-row>
