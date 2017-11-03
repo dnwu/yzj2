@@ -18,9 +18,19 @@
   import Emenu from '@/views/menu'
   import Access from '@/views/login/Access'
   import Foot from '@/views/foot'
+  import {mapMutations} from 'vuex'
   export default {
     name: 'app',
-    components:{Emenu,Access,Foot}
+    components:{Emenu,Access,Foot},
+    created () {
+      let username = this.$cookie.get('username')
+      this.setcookie(username)
+    },
+    methods:{
+      ...mapMutations({
+        setcookie:'SET_USERNAME'
+      })
+    }
   }
 </script>
 
@@ -53,6 +63,9 @@
     background-color: white !important;
     display: table-cell;
     vertical-align: middle;
+  }
+  .main-container{
+    background-color: #f9f9f9;
   }
   .el-menu--horizontal .el-submenu>.el-menu{
     /* display: flex; */

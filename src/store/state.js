@@ -1,4 +1,5 @@
+
 const state = {
-  username : ''
+  username : '',
 }
 export default state

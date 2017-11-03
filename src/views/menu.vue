@@ -41,6 +41,7 @@
       }
     },
     mounted(){
+      // console.log(this.$route)
       this.defaultactive = this.$route.matched[0].name || 'home';
     },
     methods: {

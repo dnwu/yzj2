@@ -34,6 +34,23 @@ import Member from '@/views/About/Member'
 import Join from '@/views/About/Join'
 import Login from '@/views/Login/Login'
 import Register from '@/views/Login/Register'
+import store from '@/store'
+
+const Center = () => import('@/views/Center/Center')
+const Account = () => import('@/views/Center/Account/Account')
+const Personal = () => import('@/views/Center/Personal/Personal')
+const Company_info = () => import('@/views/Center/Company_info/Company_info')
+const Address = () => import('@/views/Center/Address/Address')
+const Online_product = () => import('@/views/Center/Online_product/Online_product')
+const Online_write = () => import('@/views/Center/Online_write/Online_write')
+const Online_check = () => import('@/views/Center/Online_check/Online_check')
+const Online_order_s = () => import('@/views/Center/Online_order_s/Online_order_s')
+const Online_pay_s = () => import('@/views/Center/Online_pay_s/Online_pay_s')
+const Jinpeng_client = () => import('@/views/Center/Jinpeng_Client/Jinpeng_client')
+const Order_search = () => import('@/views/Center/Order_search/Order_search')
+const Order_track = () => import('@/views/Center/Order_track/Order_track')
+const My_finance = () => import('@/views/Center/My_finance/My_finance')
+const Change_password = () => import('@/views/Center/Change_password/Change_password')
 
 Vue.use(Router);
 
@@ -226,12 +243,62 @@ let router = new Router({
       name: 'register',
       component: Register
     },
+    {
+      path: '/center',
+      name:'center',
+      component: Center,
+      redirect:'/center/account',
+      children:[{
+        path:'/center/account',
+        component:Account
+      },{
+        path:'/center/change_password',
+        component:Change_password
+      },{
+        path:'/center/personal',
+        component:Personal
+      },{
+        path:'/center/company_info',
+        component:Company_info
+      },{
+        path:'/center/address',
+        component:Address
+      },{
+        path:'/center/online_product',
+        component:Online_product
+      },{
+        path:'/center/online_write',
+        component:Online_write
+      },{
+        path:'/center/online_check',
+        component:Online_check
+      },{
+        path:'/center/online_order_s',
+        component:Online_order_s
+      },{
+        path:'/center/online_pay_s',
+        component:Online_pay_s
+      },{
+        path:'/center/jinpeng_client',
+        component:Jinpeng_client
+      },{
+        path:'/center/order_search',
+        component:Order_search
+      },{
+        path:'/center/order_track',
+        component:Order_track
+      },{
+        path:'/center/my_finance',
+        component:My_finance
+      }]
+    }
   ]
 });
 
 router.beforeEach((to,from,next)=>{
   if(to.name !== "login"){
     //判断是否需要登录
+    // console.log(store)
     next();
     // next({
     //   name: "login",
