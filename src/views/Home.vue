@@ -8,7 +8,7 @@
       </el-carousel>
       <div class="search-input">
         <el-input placeholder="请输入订单号进行查询" icon="search" v-model="search" :on-icon-click="searchOrder"></el-input>
-        <button class="search-btn" type="button">马上查单</button>
+        <button class="search-btn" type="button" @click="searchOrder">马上查单</button>
       </div>
     </div>
     <div class="service-container">
@@ -120,9 +120,23 @@
         return width / 1920 * 650 + 'px';
       },
       searchOrder (){
-          console.log(this.search)
+          // console.log(this.search)
+          window.location.href = 'http://119.23.163.129:8080/front/order/track/public'
       },
       goPage (path){
+        console.log(path)
+        if(path == 'service/deliver') {
+          window.location.href = 'http://119.23.163.129:8080/front/order/add_first'
+          return
+        }
+        if(path == 'service/order') {
+          window.location.href = 'http://119.23.163.129:8080/front/order/order_list_my'
+          return
+        }
+        if(path == 'service/price') {
+          window.location.href = 'http://119.23.163.129:8080/front/product'
+          return
+        }
         this.$router.push({name: path});
       }
     },

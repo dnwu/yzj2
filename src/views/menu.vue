@@ -45,9 +45,18 @@
     },
     methods: {
       handleSelect(key, keyPath){
-      //  console.log(key, keyPath);
+       console.log(key, keyPath);
        if(key == 'about/company') {
          window.location.href = 'http://yzj.sibat.cn/yzj/'
+       }
+       if(key == 'service/deliver') {
+        window.location.href = 'http://119.23.163.129:8080/front/order/add_first'
+       }
+       if(key == 'service/order'){
+         window.location.href = 'http://119.23.163.129:8080/front/order/order_list_my'
+       }
+       if(key == 'service/price'){
+         window.location.href = 'http://119.23.163.129:8080/front/product'
        }
         this.go(key);
       },
