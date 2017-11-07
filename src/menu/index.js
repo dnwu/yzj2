@@ -122,57 +122,57 @@ export default [
   {
     title: "服务支持",
     view: "service",
-    children: [
-      {
-        title: "我要发货",
-        view: "service/deliver",
-      },
-      {
-        title: "订单查询",
-        view: "service/order",
-      },
-      {
-        title: "运价时效查询",
-        view: "service/price",
-      },
-      {
-        title: "运输范围查询",
-        view: "service/range",
-      },
-      {
-        title: "运输标准查询",
-        view: "service/standard",
-      },
-      {
-        title: "更多标准查询",
-        view: "service/more",
-      },
-    ]
+    // children: [
+    //   {
+    //     title: "我要发货",
+    //     view: "service/deliver",
+    //   },
+    //   {
+    //     title: "订单查询",
+    //     view: "service/order",
+    //   },
+    //   {
+    //     title: "运价时效查询",
+    //     view: "service/price",
+    //   },
+    //   {
+    //     title: "运输范围查询",
+    //     view: "service/range",
+    //   },
+    //   {
+    //     title: "运输标准查询",
+    //     view: "service/standard",
+    //   },
+    //   {
+    //     title: "更多标准查询",
+    //     view: "service/more",
+    //   },
+    // ]
   },
-  {
-    title: "促销活动",
-    view: "promotion",
-  },
+  // {
+  //   title: "促销活动",
+  //   view: "promotion",
+  // },
   {
     title: "关于我们",
     view: "about",
-    children: [
-      {
-        title: "关于扬子江货运集团",
-        view: "about/company",
-      },
-      {
-        title: "新闻中心",
-        view: "about/news",
-      },
-      {
-        title: "会员权益",
-        view: "about/member",
-      },
-      {
-        title: "人才招聘",
-        view: "about/join",
-      },
-    ]
+    // children: [
+    //   {
+    //     title: "关于扬子江货运集团",
+    //     view: "about/company",
+    //   },
+    //   {
+    //     title: "新闻中心",
+    //     view: "about/news",
+    //   },
+    //   {
+    //     title: "会员权益",
+    //     view: "about/member",
+    //   },
+    //   {
+    //     title: "人才招聘",
+    //     view: "about/join",
+    //   },
+    // ]
   },
 ]

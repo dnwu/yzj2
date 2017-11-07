@@ -11,6 +11,11 @@
             </template>
           </ul>
         </template>
+        <template v-else-if="!mn.children">
+          <ul class="menu-ul">
+            <li class="menu-a">{{mn.title}}</li>
+          </ul>
+        </template>
       </template>
     </div>
     <p class="href-container">

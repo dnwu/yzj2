@@ -4,14 +4,18 @@
     <p class="vertical-news-year">{{date.split('-')[0]}}</p>
     <p class="vertical-news-split">一</p>
     <p class="vertical-news-title">{{title}}</p>
-    <p class="vertical-news-summary">{{summary}}</p>
+    <p class="vertical-news-summary">{{summary.substr(0,61)+'...'}}</p>
     <p class="vertical-news-split">一</p>
-    <p class="vertical-news-detail">详情 ></p>
+    <p class="vertical-news-detail" @click="gotoNewsDetial(id)">详情 ></p>
     <img class="vertical-news-img" :src="imgSrc"/>
   </div>
 </template>
 <script>
   export default {
+    data () {
+      return {
+      }
+    },
     props: {
       date: {
         type: String,
@@ -19,7 +23,7 @@
       },
       title: {
         type: String,
-        default: '新闻标题啦啦啦啦啦啦啦啦！'
+        default: '新闻标题啦啦啦啦啦啦啦啦啦啦啦啦啦啦！'
       },
       summary: {
         type: String,
@@ -28,7 +32,19 @@
       imgSrc: {
         type: String,
         default: require('../assets/news.png')
+      },
+      id:{
+        require:true
       }
+    },
+    created () {
+    },
+    methods: {
+      gotoNewsDetial(id){
+        this.$router.push('/about/news/'+id)
+      }
+    },
+    computed:{
     }
   }
 </script>
@@ -57,6 +73,10 @@
     color: #333;
     font-size: 15px;
     margin: 2px 0 10px;
+    width: 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .vertical-news-img {

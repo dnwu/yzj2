@@ -54,6 +54,7 @@
     display: table-cell;
     vertical-align: middle;
   }
+
   .el-menu--horizontal .el-submenu>.el-menu{
     /* display: flex; */
   }

@@ -71,3 +71,9 @@
     }
   }
 </script>
+<style>
+ .el-menu--horizontal{
+   border-bottom: none;
+  }
+</style>
+

@@ -59,33 +59,33 @@
         <p class="con-check-all">查看全部 ></p>
         <div class="success-cu" @click.stop="goPage('success/3CElectronics')">
           <span class="success-icon icon-3C-elec"></span>
-          <p class="success-title">3C电子行业</p>
+          <p class="success-title">定制化包机服务</p>
         </div>
         <div class="success-cu" @click.stop="goPage('success/healthCare')">
           <span class="success-icon icon-health-care"></span>
-          <p class="success-title">医疗行业</p>
+          <p class="success-title">定制化一体化服务方案</p>
         </div>
         <div class="success-cu" @click.stop="goPage('success/freshProduce')">
           <span class="success-icon icon-fresh"></span>
-          <p class="success-title">生鲜行业</p>
+          <p class="success-title">跨境电商综合物流服务</p>
         </div>
-        <div class="success-cu" @click.stop="goPage('success/FMCG')">
+        <!-- <div class="success-cu" @click.stop="goPage('success/FMCG')">
           <span class="success-icon icon-fmcg"></span>
           <p class="success-title">快消行业</p>
-        </div>
+        </div> -->
       </div>
     </div>
     <div class="news-container">
       <p class="product-con-title-zh">新闻资讯</p>
       <p class="product-con-title-en">NEWS INFORMATION</p>
       <div class="news-con">
-        <p class="con-check-all">查看全部 ></p>
-        <vertical-news></vertical-news>
-        <vertical-news></vertical-news>
-        <vertical-news></vertical-news>
+        <p class="con-check-all" @click="gotoNews">查看全部 ></p>
+        <vertical-news :date='newsData[0].time' :title='newsData[0].title' :summary='newsData[0].contentSTR' :id="newsData[0].id" :imgSrc="newImageUrl[0].url"></vertical-news>
+        <vertical-news :date='newsData[1].time' :title='newsData[1].title' :summary='newsData[1].contentSTR' :id="newsData[1].id" :imgSrc="newImageUrl[1].url"></vertical-news>
+        <vertical-news :date='newsData[2].time' :title='newsData[2].title' :summary='newsData[2].contentSTR' :id="newsData[2].id" :imgSrc="newImageUrl[2].url"></vertical-news>
       </div>
     </div>
-    <div class="promotion-container">
+    <!-- <div class="promotion-container">
       <p class="product-con-title-zh">促销活动资讯</p>
       <p class="product-con-title-en">SALES PROMOTION</p>
       <div class="promotion-con">
@@ -93,25 +93,28 @@
         <horizontal-news></horizontal-news>
         <horizontal-news :rightMod="true"></horizontal-news>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 <script>
   import ElInput from "../../node_modules/element-ui/packages/input/src/input";
   import VerticalNews from '@/components/VerticalNews';
   import HorizontalNews from '@/components/HorizontalNews'
+  import newsData from '@/data/news.json'
   export default {
     components: {ElInput,VerticalNews,HorizontalNews},
     data (){
       return {
-        headPic: [require('../assets/plan_pic2.png'), require('../assets/plan_pic.png'), require('../assets/plan_pic.png')],
+        headPic: [require('../assets/plan_pic2.png'), require('../assets/plan_pic.png')],
         headImgHeight: this.getHeadImgHeight(),
         search: '',
-        productPic: [{title:"航空货运服务",src:require('../assets/product_pic.png'),view:'product/airCargoServices'},
-          {title:"货站地面服务",src:require('../assets/product_pic.png'),view:'product/entrepotServices'},
-          {title:"代理人服务",src:require('../assets/product_pic.png'),view:'product/managerServices'},
-          {title:"金融服务",src:require('../assets/product_pic.png'),view:'product/financeServices'},
-          {title:"智慧口岸",src:require('../assets/product_pic.png'),view:'product/smartServices'}]
+        productPic: [{title:"航空货运服务",src:require('../assets/product_pic.jpg'),view:'product/airCargoServices'},
+          {title:"货站地面服务",src:require('../assets/product_pic2.jpg'),view:'product/entrepotServices'},
+          {title:"代理人服务",src:require('../assets/product_pic3.jpg'),view:'product/managerServices'},
+          {title:"金融服务",src:require('../assets/product_pic4.jpg'),view:'product/financeServices'},
+          {title:"智慧口岸",src:require('../assets/product_pic5.jpg'),view:'product/smartServices'}],
+        newsData:newsData,
+        newImageUrl:[{url:require('../assets/news1.jpg')},{url:require('../assets/news2.jpg')},{url:require('../assets/news3.jpg')}]
       }
     },
     methods: {
@@ -138,6 +141,9 @@
           return
         }
         this.$router.push({name: path});
+      },
+      gotoNews(){
+        this.$router.push('/about/news')
       }
     },
     mounted (){
