@@ -184,7 +184,7 @@
     margin: 50px 0 30px;
   }
   /* 用户名密码框重置 */
-  input.el-input__inner{
+  .login-container input.el-input__inner{
     padding-left: 40px;
   }
   .password-con{

@@ -143,10 +143,10 @@ export default [
         title: "运输标准查询",
         view: "service/standard",
       },
-      {
-        title: "更多标准查询",
-        view: "service/more",
-      },
+      // {
+      //   title: "更多标准查询",
+      //   view: "service/more",
+      // },
     ]
   },
   {

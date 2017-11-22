@@ -42,14 +42,14 @@
     },
     mounted(){
       // console.log(this.$route)
-      this.defaultactive = this.$route.matched[0].name || 'home';
+      this.defaultactive = this.$route.name || 'home';
     },
     methods: {
       handleSelect(key, keyPath){
       //  console.log(key, keyPath);
-       if(key == 'about/company') {
-         window.location.href = 'http://yzj.sibat.cn/yzj/'
-       }
+      //  if(key == 'about/company') {
+      //    window.location.href = 'http://yzj.sibat.cn/yzj/'
+      //  }
         this.go(key);
       },
       go(target){
@@ -58,7 +58,9 @@
     },
     watch: {
       $route(){
-        this.defaultactive = this.$route.matched[0].name;
+        this.defaultactive = this.$route.name;
+        // console.log(this.$route)
+
       }
     }
   }

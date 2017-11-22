@@ -19,7 +19,7 @@
     <div class="info">
       <p class="account-type"><span>账号类别</span><span>货主(企业)</span></p>
       <p class="account-level"><span>账号级别</span><span>主账号</span></p>
-      <p class="email"><span>油箱</span><span>zhangsan@QQ.com</span></p>
+      <p class="email"><span>邮箱</span><span>zhangsan@QQ.com</span></p>
     </div>
   </div>
 </template>

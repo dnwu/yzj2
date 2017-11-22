@@ -69,5 +69,10 @@
   }
   .el-menu--horizontal .el-submenu>.el-menu{
     /* display: flex; */
+
+  }
+  .el-menu--horizontal{
+    border-bottom:none;
+    font-weight:550;
   }
 </style>
