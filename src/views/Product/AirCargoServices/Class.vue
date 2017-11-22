@@ -1,10 +1,6 @@
 <template>
   <div>
-    <div class="pic"></div>
-    <div class="title">
-      <span class="icon"></span>
-      <span>种类特性产品</span>
-    </div>
+    <HeaderPic title="种类特性产品"></HeaderPic>
     <div class="content">
       <div class="box">
         <h2>生鲜类</h2>
@@ -28,36 +24,14 @@
   </div>
 </template>
 <script>
+import HeaderPic from "@/components/header";
 export default {
-
+  components: {
+    HeaderPic
+  }
 }
 </script>
 <style lang="scss" scoped>
-.pic {
-  height: 250px;
-  background: url('/static/img/thead.png');
-  background-size: cover;
-}
-
-.title {
-  height: 68px;
-  background-color: #F1F1F1;
-  border-bottom: 2px solid #B3B3B3;
-  text-align: center;
-  font-size: 20px;
-  font-weight: 700;
-  line-height: 68px;
-  .icon {
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    background: url('/static/img/icon3.png') no-repeat center center;
-    background-size: contain;
-    margin-right: 4px;
-    vertical-align: middle;
-  }
-}
-
 .content {
   width: 1000px;
   margin: 0 auto 200px;

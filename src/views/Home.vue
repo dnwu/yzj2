@@ -318,7 +318,7 @@
     width: 100%;
     padding: 70px 0;
     background-size: 100% 100%;
-    background-image: url("/static/img/success_bg.png");
+    background-image: url("../assets/success_bg.png");
   }
   .success-con-title-zh{
     margin: 0;

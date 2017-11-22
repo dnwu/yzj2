@@ -1,10 +1,6 @@
 <template>
   <div>
-    <div class="pic"></div>
-    <div class="title">
-      <span class="icon"></span>
-      <span>跨境电商综合物流服务</span>
-    </div>
+    <HeaderPic title="跨境电商综合物流服务"></HeaderPic>
     <div class="content">
       <p>公司旗下天津华宇股份有限公司为跨境电商企业提供仓储、分拣包装、运输、通关、配送等物流服务，亚马逊等知名电商平台已入驻。</p>
       <div class="box">
@@ -33,35 +29,14 @@
   </div>
 </template>
 <script>
+import HeaderPic from "@/components/header";
 export default {
-
+  components: {
+    HeaderPic
+  }
 }
 </script>
 <style lang="scss" scoped>
-.pic {
-  height: 250px;
-  background-image: url('/static/img/thead.png');
-  background-size: cover;
-}
-
-.title {
-  height: 68px;
-  background-color: #F1F1F1;
-  border-bottom: 2px solid #B3B3B3;
-  text-align: center;
-  font-size: 20px;
-  font-weight: 700;
-  line-height: 68px;
-  .icon {
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    background: url('/static/img/icon13.png') no-repeat center center;
-    background-size: contain;
-    margin-right: 4px;
-    vertical-align: middle;
-  }
-}
 
 .content {
   width: 800px;

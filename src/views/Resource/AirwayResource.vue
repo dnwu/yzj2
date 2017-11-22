@@ -1,10 +1,6 @@
 <template>
   <div>
-    <div class="pic"></div>
-    <div class="title">
-      <span class="icon"></span>
-      <span>航线资源</span>
-    </div>
+    <HeaderPic title="航线资源"></HeaderPic>
     <div class="content">
       <div class="box">
         <p>航空货运业务覆盖国内外270余个城市，国内外航线近1200条，拥有26架全货机，近700架客机的腹舱资源。</p>
@@ -24,35 +20,14 @@
   </div>
 </template>
 <script>
+import HeaderPic from "@/components/header";
 export default {
-
+  components: {
+    HeaderPic
+  }
 }
 </script>
 <style lang="scss" scoped>
-.pic {
-  height: 250px;
-  background-image: url('/static/img/thead.png');
-  background-size: cover;
-}
-
-.title {
-  height: 68px;
-  background-color: #F1F1F1;
-  border-bottom: 2px solid #B3B3B3;
-  text-align: center;
-  font-size: 20px;
-  font-weight: 700;
-  line-height: 68px;
-  .icon {
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    background: url('/static/img/icon8.png') no-repeat center center;
-    background-size: contain;
-    margin-right: 4px;
-    vertical-align: middle;
-  }
-}
 
 .content {
   width: 600px;

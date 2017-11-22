@@ -1,10 +1,6 @@
 <template>
   <div>
-    <div class="pic"></div>
-    <div class="title">
-      <span class="icon"></span>
-      <span>定制化包机服务</span>
-    </div>
+    <HeaderPic title="定制化包机服务"></HeaderPic>
     <div class="content">
       <h3>公司为客户提供各种特殊物品的定制化包机服务</h3>
       <div class="time-way">
@@ -48,35 +44,14 @@
   </div>
 </template>
 <script>
+import HeaderPic from "@/components/header";
 export default {
-
+  components: {
+    HeaderPic
+  }
 }
 </script>
 <style lang="scss" scoped>
-.pic {
-  height: 250px;
-  background-image: url('/static/img/thead.png');
-  background-size: cover;
-}
-
-.title {
-  height: 68px;
-  background-color: #F1F1F1;
-  border-bottom: 2px solid #B3B3B3;
-  text-align: center;
-  font-size: 20px;
-  font-weight: 700;
-  line-height: 68px;
-  .icon {
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    background: url('/static/img/icon11.png') no-repeat center center;
-    background-size: contain;
-    margin-right: 4px;
-    vertical-align: middle;
-  }
-}
 
 .content {
   width: 800px;

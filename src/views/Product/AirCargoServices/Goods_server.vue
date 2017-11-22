@@ -1,12 +1,6 @@
 <template>
   <div>
-    <div class="pic">
-      <!-- <img src="./thead.png" alt=""> -->
-    </div>
-    <div class="title">
-      <span class="icon"></span>
-      <span>货物服务性产品</span>
-    </div>
+    <HeaderPic title="货物服务性产品"></HeaderPic>
     <div class="content">
       <div class="head">通过为客户提供便捷的货物运输服务，提高货物的附加值，从而增加产品收益。</div>
       <div class="box">
@@ -38,35 +32,14 @@
   </div>
 </template>
 <script>
+import HeaderPic from "@/components/header";
 export default {
-
+  components: {
+    HeaderPic
+  }
 }
 </script>
 <style lang="scss" scoped>
-.pic {
-  height: 250px;
-  background: url('/static/img/thead.png');
-  background-size: cover;
-}
-
-.title {
-  height: 68px;
-  background-color: #F1F1F1;
-  border-bottom: 2px solid #B3B3B3;
-  text-align: center;
-  font-size: 20px;
-  font-weight: 700;
-  line-height: 68px;
-  .icon {
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    background: url('/static/img/icon4.png') no-repeat center center;
-    background-size: contain;
-    margin-right: 4px;
-    vertical-align: middle;
-  }
-}
 
 .content {
   width: 1000px;

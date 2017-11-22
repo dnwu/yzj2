@@ -1,10 +1,6 @@
 <template>
   <div>
-    <div class="pic"></div>
-    <div class="title">
-      <span class="icon"></span>
-      <span>海航航线网络产品</span>
-    </div>
+    <HeaderPic title='海航航线网络产品'></HeaderPic>
     <div class="content">
       <h4>
         <span></span>产品介绍</h4>
@@ -27,35 +23,14 @@
   </div>
 </template>
 <script>
+import HeaderPic from "@/components/header";
 export default {
-
-}
+  components: {
+    HeaderPic
+  }
+};
 </script>
 <style lang="scss" scoped>
-.pic {
-  height: 250px;
-  background: url('/static/img/thead.png');
-  background-size: cover;
-}
-
-.title {
-  height: 68px;
-  background-color: #F1F1F1;
-  border-bottom: 2px solid #B3B3B3;
-  text-align: center;
-  font-size: 20px;
-  font-weight: 700;
-  line-height: 68px;
-  .icon{
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    background: url('/static/img/icon1.png') no-repeat center center;
-    background-size: contain;
-    margin-right: 4px;
-    vertical-align: middle;
-  }
-}
 
 .content {
   width: 1000px;
@@ -74,12 +49,12 @@ export default {
         flex: 1;
         line-height: 30px;
         text-align: center;
-        border: 1px solid #B2B2B2;
+        border: 1px solid #b2b2b2;
         margin-left: -1px;
-        &:first-child{
+        &:first-child {
           border-left: none;
         }
-        &:last-child{
+        &:last-child {
           border-right: none;
         }
       }
@@ -88,15 +63,15 @@ export default {
       display: flex;
       margin-top: -1px;
       div {
-        border: 1px solid #B2B2B2;
+        border: 1px solid #b2b2b2;
         flex: 1;
         box-sizing: border-box;
         padding: 30px;
         margin-left: -1px;
-        &:first-child{
+        &:first-child {
           border-left: none;
         }
-        &:last-child{
+        &:last-child {
           border-right: none;
         }
       }

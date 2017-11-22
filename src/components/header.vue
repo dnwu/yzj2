@@ -3,7 +3,7 @@
     <div ref="pic" class="pic"></div>
     <div class="title">
       <span ref="icon" class="icon"></span>
-      <span ref="title">海航航线网络产品</span>
+      <span>{{title}}</span>
     </div>
   </div>
 </template>
@@ -29,7 +29,7 @@ export default {
   },
   mounted () {
     this.$refs.pic.style.backgroundImage = 'url('+this.picUrl+')'
-    this.$refs.title.innerHTML = this.title
+    // this.$refs.title.innerHTML = this.title
     this.$refs.icon.style.backgroundImage = 'url('+this.iconUrl+')'
   }
 };
