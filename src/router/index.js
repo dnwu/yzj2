@@ -32,10 +32,18 @@ import News from '@/views/About/News/News'
 import Promotion from '@/views/About/Promotion'
 import Member from '@/views/About/Member'
 import Join from '@/views/About/Join'
-import Login from '@/views/Login/Login'
+// import Login from '@/views/Login/Login'
 import Register from '@/views/Login/Register'
 import store from '@/store'
 
+const LoginIndex = () => import('@/views/Login/Login')
+const Login = () => import('@/views/Login/Login/Login')
+const Register1 = () => import('@/views/Login/register1/register1')
+const Register2 = () => import('@/views/Login/Register2/Register2')
+const Error = () => import('@/views/Login/Error/Error')
+const Success = () => import('@/views/Login/Success/Success')
+
+const Index = () => import ('@/views/Index/Index')
 const Service = () => import ('@/views/Service/Service')
 const About = () => import ('@/views/About/About')
 const NewsDetail = () => import ('@/views/About/NewsDetail/NewsDetail')
@@ -43,16 +51,23 @@ const Center = () => import ('@/views/Center/Center')
 const Account = () => import ('@/views/Center/Account/Account')
 const Personal = () => import ('@/views/Center/Personal/Personal')
 const Company_info = () => import ('@/views/Center/Company_info/Company_info')
+const Doings = () => import ('@/views/Center/Doings/Doings')
+const Experience = () => import ('@/views/Center/Experience/Experience')
+const Integral = () => import ('@/views/Center/Integral/Integral')
 const Address = () => import ('@/views/Center/Address/Address')
+const Son_account = () => import ('@/views/Center/Son_account/Son_account')
 const Online_product = () => import ('@/views/Center/Online_product/Online_product')
 const Online_write = () => import ('@/views/Center/Online_write/Online_write')
 const Online_check = () => import ('@/views/Center/Online_check/Online_check')
 const Online_order_s = () => import ('@/views/Center/Online_order_s/Online_order_s')
 const Online_pay_s = () => import ('@/views/Center/Online_pay_s/Online_pay_s')
+const Client_product = () => import ('@/views/Center/Client_product/Client_product')
 const Jinpeng_client = () => import ('@/views/Center/Jinpeng_Client/Jinpeng_client')
 const Order_search = () => import ('@/views/Center/Order_search/Order_search')
 const Order_detail = () => import ('@/views/Center/Order_detail/Order_detail')
 const Order_track = () => import ('@/views/Center/Order_track/Order_track')
+const Ticket_info_egis = () => import ('@/views/Center/Ticket_info_egis/Ticket_info_egis')
+const Bill_look = () => import ('@/views/Center/Bill_look/Bill_look')
 const My_finance = () => import ('@/views/Center/My_finance/My_finance')
 const Change_password = () => import ('@/views/Center/Change_password/Change_password')
 
@@ -61,179 +76,198 @@ Vue.use(Router);
 let router = new Router({
   routes: [
     {
-      path: '/',
-      name: 'homepage',
-      component: Home
-    }, {
-      path: '/home',
-      name: 'home',
-      component: Home
-    }, {
-      path: '/product/airCargoServices',
-      name: 'product/airCargoServices',
-      component: AirCargoServices
-    }, {
-      // path: '/product/airCargoServices/domestic', name:
-      // 'product/airCargoServices/domestic',
-      path: '/product/airCargoServices/haihang',
-      name: 'product/airCargoServices/haihang',
-      component: Haihang
-    }, {
-      // path: '/product/airCargoServices/international', name:
-      // 'product/airCargoServices/international',
-      path: '/product/airCargoServices/spa_truck',
-      name: 'product/airCargoServices/spa_truck',
-      component: Spa_truck
-    }, {
-      // path: '/product/airCargoServices/normal', name:
-      // 'product/airCargoServices/normal',
-      path: '/product/airCargoServices/make_up',
-      name: 'product/airCargoServices/make_up',
-      component: Make_up
-    }, {
-      // path: '/product/airCargoServices/heavy', name:
-      // 'product/airCargoServices/heavy',
-      path: '/product/airCargoServices/class',
-      name: 'product/airCargoServices/class',
-      component: Class
-    }, {
-      // path: '/product/airCargoServices/codeChain', name:
-      // 'product/airCargoServices/codeChain',
-      path: '/product/airCargoServices/goods_server',
-      name: 'product/airCargoServices/goods_server',
-      component: Goods_server
-    }, {
-      // path: '/product/airCargoServices/danger', name:
-      // 'product/airCargoServices/danger',
-      path: '/product/airCargoServices/contract',
-      name: 'product/airCargoServices/contract',
-      component: Contract
-    }, {
-      path: '/product/entrepotServices',
-      name: 'product/entrepotServices',
-      component: EntrepotServices
-    }, {
-      path: '/product/managerServices',
-      name: 'product/managerServices',
-      component: ManagerServices
-    }, {
-      path: '/product/financeServices',
-      name: 'product/financeServices',
-      component: FinanceServices
-    }, {
-      path: '/product/smartServices',
-      name: 'product/smartServices',
-      component: SmartServices
-    }, {
-      path: '/resource/airCompany',
-      name: 'resource/airCompany',
-      component: AirCompany
-    }, {
-      path: '/resource/airwayResource',
-      name: 'resource/airwayResource',
-      component: AirwayResource
-    }, {
-      path: '/resource/airModelResource',
-      name: 'resource/airModelResource',
-      component: AirModelResource
-    }, {
-      path: '/resource/entrepotResource',
-      name: 'resource/entrepotResource',
-      component: EntrepotResource
-    }, {
-      path: '/resource/cooperativePartner',
-      name: 'resource/cooperativePartner',
-      component: CooperativePartner
-    }, {
-      path: '/success/3CElectronics',
-      name: 'success/3CElectronics',
-      component: TCElectronics
-    }, {
-      path: '/success/healthCare',
-      name: 'success/healthCare',
-      component: HealthCare
-    }, {
-      path: '/success/freshProduce',
-      name: 'success/freshProduce',
-      component: FreshProduce
-    }, {
-      path: '/success/FMCG',
-      name: 'success/FMCG',
-      component: FMCG
-    }, {
-      path: '/service',
-      name: 'service',
-      component: Service,
-      redirect: '/service/standard',
-      children: [
+      path:'/',
+      component:Index,
+      redirect:'/home',
+      children:[
         {
-          path: '/service/deliver',
-          name: 'service/deliver',
-          component: Deliver
+          path: '/home',
+          name: 'home',
+          component: Home
         }, {
-          path: '/service/order',
-          name: 'service/order',
-          component: Order
+          path: '/product/airCargoServices',
+          name: 'product/airCargoServices',
+          component: AirCargoServices,
+          redirect:'/product/airCargoServices/haihang'
         }, {
-          path: '/service/price',
-          name: 'service/price',
-          component: Price
+          // path: '/product/airCargoServices/domestic', name:
+          // 'product/airCargoServices/domestic',
+          path: '/product/airCargoServices/haihang',
+          name: 'product/airCargoServices/haihang',
+          component: Haihang
         }, {
-          path: '/service/range',
-          name: 'service/range',
-          component: Range
+          // path: '/product/airCargoServices/international', name:
+          // 'product/airCargoServices/international',
+          path: '/product/airCargoServices/spa_truck',
+          name: 'product/airCargoServices/spa_truck',
+          component: Spa_truck
         }, {
-          path: '/service/standard',
-          name: 'service/standard',
-          component: Standard
+          // path: '/product/airCargoServices/normal', name:
+          // 'product/airCargoServices/normal',
+          path: '/product/airCargoServices/make_up',
+          name: 'product/airCargoServices/make_up',
+          component: Make_up
         }, {
-          path: '/service/more',
-          name: 'service/more',
-          component: More
-        }
+          // path: '/product/airCargoServices/heavy', name:
+          // 'product/airCargoServices/heavy',
+          path: '/product/airCargoServices/class',
+          name: 'product/airCargoServices/class',
+          component: Class
+        }, {
+          // path: '/product/airCargoServices/codeChain', name:
+          // 'product/airCargoServices/codeChain',
+          path: '/product/airCargoServices/goods_server',
+          name: 'product/airCargoServices/goods_server',
+          component: Goods_server
+        }, {
+          // path: '/product/airCargoServices/danger', name:
+          // 'product/airCargoServices/danger',
+          path: '/product/airCargoServices/contract',
+          name: 'product/airCargoServices/contract',
+          component: Contract
+        }, {
+          path: '/product/entrepotServices',
+          name: 'product/entrepotServices',
+          component: EntrepotServices
+        }, {
+          path: '/product/managerServices',
+          name: 'product/managerServices',
+          component: ManagerServices
+        }, {
+          path: '/product/financeServices',
+          name: 'product/financeServices',
+          component: FinanceServices
+        }, {
+          path: '/product/smartServices',
+          name: 'product/smartServices',
+          component: SmartServices
+        }, {
+          path: '/resource/airCompany',
+          name: 'resource/airCompany',
+          component: AirCompany
+        }, {
+          path: '/resource/airwayResource',
+          name: 'resource/airwayResource',
+          component: AirwayResource
+        }, {
+          path: '/resource/airModelResource',
+          name: 'resource/airModelResource',
+          component: AirModelResource
+        }, {
+          path: '/resource/entrepotResource',
+          name: 'resource/entrepotResource',
+          component: EntrepotResource
+        }, {
+          path: '/resource/cooperativePartner',
+          name: 'resource/cooperativePartner',
+          component: CooperativePartner
+        }, {
+          path: '/success/3CElectronics',
+          name: 'success/3CElectronics',
+          component: TCElectronics
+        }, {
+          path: '/success/healthCare',
+          name: 'success/healthCare',
+          component: HealthCare
+        }, {
+          path: '/success/freshProduce',
+          name: 'success/freshProduce',
+          component: FreshProduce
+        }, {
+          path: '/success/FMCG',
+          name: 'success/FMCG',
+          component: FMCG
+        }, {
+          path: '/service',
+          name: 'service',
+          component: Service,
+          redirect: '/service/standard',
+          children: [
+            {
+              path: '/service/deliver',
+              name: 'service/deliver',
+              component: Deliver
+            }, {
+              path: '/service/order',
+              name: 'service/order',
+              component: Order
+            }, {
+              path: '/service/price',
+              name: 'service/price',
+              component: Price
+            }, {
+              path: '/service/range',
+              name: 'service/range',
+              component: Range
+            }, {
+              path: '/service/standard',
+              name: 'service/standard',
+              component: Standard
+            }, {
+              path: '/service/more',
+              name: 'service/more',
+              component: More
+            }
+          ]
+        }, {
+          path: '/about',
+          name: 'about',
+          component: About,
+          children: [
+            {
+              path: '/about/company',
+              name: 'about/company',
+              component: Company,
+              redirect: '/about/news'
+            }, {
+              path: '/about/news',
+              name: 'about/news',
+              component: News
+            }, {
+              path: '/about/news/:id',
+              name: 'about/news/id',
+              component: NewsDetail
+            }, {
+              path: '/about/member',
+              name: 'about/member',
+              component: Member,
+              // redirect: '/about/news'
+            }, {
+              path: '/about/join',
+              name: 'about/join',
+              component: Join,
+              // redirect: '/about/news'
+            }
+          ]
+        }, {
+          path: '/promotion',
+          name: 'promotion',
+          component: Promotion
+        },
       ]
-    }, {
-      path: '/about',
-      name: 'about',
-      component: About,
-      children: [
-        {
-          path: '/about/company',
-          name: 'about/company',
-          component: Company,
-          redirect: '/about/news'
-        }, {
-          path: '/about/news',
-          name: 'about/news',
-          component: News
-        }, {
-          path: '/about/news/:id',
-          name: 'about/news/id',
-          component: NewsDetail
-        }, {
-          path: '/about/member',
-          name: 'about/member',
-          component: Member,
-          // redirect: '/about/news'
-        }, {
-          path: '/about/join',
-          name: 'about/join',
-          component: Join,
-          // redirect: '/about/news'
-        }
-      ]
-    }, {
-      path: '/promotion',
-      name: 'promotion',
-      component: Promotion
     }, {
       path: '/login',
       name: 'login',
-      component: Login
-    }, {
-      path: '/register',
-      name: 'register',
-      component: Register
+      component: LoginIndex,
+      redirect:'/login/login',
+      children:[
+        {
+          path: '/login/login',
+          component:Login
+        },{
+          path: '/login/register1',
+          component:Register1
+        },{
+          path: '/login/register2',
+          component: Register2
+        },{
+          path: '/login/success',
+          component: Success
+        },{
+          path: '/login/error',
+          component:Error
+        }
+      ]
     }, {
       path: '/center',
       name: 'center',
@@ -253,9 +287,21 @@ let router = new Router({
           path: '/center/company_info',
           component: Company_info
         }, {
+          path:'/center/doings',
+          component:Doings
+        },{
+          path: '/center/experience',
+          component:Experience
+        },{
+          path:'/center/integral',
+          component:Integral
+        },{
           path: '/center/address',
           component: Address
         }, {
+          path:'/center/son_account',
+          component:Son_account
+        },{
           path: '/center/online_product',
           component: Online_product
         }, {
@@ -271,8 +317,8 @@ let router = new Router({
           path: '/center/online_pay_s',
           component: Online_pay_s
         }, {
-          path: '/center/jinpeng_client',
-          component: Jinpeng_client
+          path: '/center/client_product',
+          component: Client_product
         }, {
           path: '/center/order_search',
           component: Order_search
@@ -283,8 +329,11 @@ let router = new Router({
           path: '/center/order_track',
           component: Order_track
         }, {
-          path: '/center/my_finance',
-          component: My_finance
+          path: '/center/ticket_info_egis',
+          component: Ticket_info_egis
+        },{
+          path:'/center/bill_look',
+          component: Bill_look
         }
       ]
     }
