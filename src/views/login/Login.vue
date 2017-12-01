@@ -1,5 +1,5 @@
 <template>
-<div class="login">
+<div class="loginindex">
   <div class="head">
     <div class="center">
       <img src="../../assets/login_logo.png" alt="">
@@ -37,7 +37,7 @@ export default {
   width: 1200px;
   margin: 0 auto;
 }
-.login {
+.loginindex {
   height: 100%;
   .head {
     height: 100px;
@@ -63,7 +63,6 @@ export default {
     background-color: #fff;
     min-height: 100%;
     padding: 200px 100px;
-    height: 200px;
     box-sizing: border-box;
   }
   .foot {
