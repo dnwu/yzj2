@@ -43,7 +43,7 @@
             <el-button type="warning" @click="onSubmit('loginForm')">登录</el-button>
           </el-form-item>
         </div>
-        <div @click="goto('/login/register1')" class="toRegister">
+        <div @click="goto('/login/register')" class="toRegister">
           立即注册
         </div>
       </el-form>

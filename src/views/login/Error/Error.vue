@@ -10,7 +10,7 @@
     <p>程序员正在火速修复，请稍后再试</p>
   </div>
   <div>
-    <el-button @click="goto('/login/register1')" type="warning" round>返回</el-button>
+    <el-button @click="goto('/login/register')" type="warning" round>返回</el-button>
   </div>
 </div>
 </template>

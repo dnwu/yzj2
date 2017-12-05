@@ -18,7 +18,8 @@
 export default {
   data() {
     return {
-      time: 10
+      time: 10,
+      timer:null
     };
   },
   created() {
@@ -26,17 +27,17 @@ export default {
   },
   methods: {
     lastTime() {
-      var timer = null;
-      clearInterval(timer);
-      timer = setInterval(() => {
+      clearInterval(this.timer);
+      this.timer = setInterval(() => {
         this.time--;
         if (this.time <= 0) {
-          clearInterval(timer);
+          clearInterval(this.timer);
           this.$router.push('/login')
         }
       }, 1000);
     },
     goto(path){
+      clearInterval(this.timer)
       this.$router.push(path)
     }
   }

@@ -33,13 +33,12 @@ import Promotion from '@/views/About/Promotion'
 import Member from '@/views/About/Member'
 import Join from '@/views/About/Join'
 // import Login from '@/views/Login/Login'
-import Register from '@/views/Login/Register'
+// import Register from '@/views/Login/Register'
 import store from '@/store'
 
 const LoginIndex = () => import('@/views/Login/Login')
 const Login = () => import('@/views/Login/Login/Login')
-const Register1 = () => import('@/views/Login/register1/register1')
-const Register2 = () => import('@/views/Login/Register2/Register2')
+const Register = () => import('@/views/Login/register/register')
 const Error = () => import('@/views/Login/Error/Error')
 const Success = () => import('@/views/Login/Success/Success')
 
@@ -255,11 +254,8 @@ let router = new Router({
           path: '/login/login',
           component:Login
         },{
-          path: '/login/register1',
-          component:Register1
-        },{
-          path: '/login/register2',
-          component: Register2
+          path: '/login/register',
+          component:Register
         },{
           path: '/login/success',
           component: Success

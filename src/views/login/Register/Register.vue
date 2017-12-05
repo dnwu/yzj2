@@ -123,7 +123,7 @@ export default {
       }
     };
     return {
-      show: false,
+      show: true,
       time: 60,
       timer: null,
       lasttimeshow: false,

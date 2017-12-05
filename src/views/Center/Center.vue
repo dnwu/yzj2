@@ -142,6 +142,17 @@ export default {
     box-sizing: border-box;
     z-index: 9;
     box-shadow: 0 0 10px gray;
+    position: relative;
+    &::after{
+      content: '';
+      display: inline-block;
+      width: 100%;
+      height: 1px;
+      background-color: #E7E7E7;
+      position: absolute;
+      bottom: -61px;
+      left: 0;
+    }
     .left {
       .logo {
         display: inline-block;
@@ -266,6 +277,8 @@ export default {
     .contain {
       padding-left: 200px;
       flex: 1;
+      min-width: 1200px;
+      box-sizing: border-box;
     }
   }
 }
