@@ -133,6 +133,7 @@ export default {
   min-height: 100%;
   display: flex;
   flex-direction: column;
+  background-color: #f9f9f9;
   .center-head {
     width: 100%;
     height: 100px;
@@ -195,12 +196,13 @@ export default {
     }
   }
   .center-main {
-    width: 100%;
+    width: 1500px;
+    margin: 0 auto;
     flex: 1;
     background-color: #f9f9f9;
     display: flex;
     position: relative;
-    padding: 0 200px;
+    // padding: 0 200px;
     box-sizing: border-box;
     .nav {
       img:not(.menu) {

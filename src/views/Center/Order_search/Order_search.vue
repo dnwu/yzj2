@@ -360,11 +360,11 @@ export default {
   .gray {
     color: #adadad;
   }
-  .orange{
-    color: #FCCE00;
+  .orange {
+    color: #fcce00;
   }
-  .green{
-    color: #8CC63E;
+  .green {
+    color: #8cc63e;
   }
   .head {
     display: flex;
@@ -542,9 +542,13 @@ export default {
             }
           }
           .operate {
-            span{
+            span {
               cursor: pointer;
               margin: 0 4px;
+            }
+            .detail:hover,
+            .track:hover {
+              color: black;
             }
             button {
               margin-top: 8px;
