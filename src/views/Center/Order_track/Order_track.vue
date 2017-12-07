@@ -60,14 +60,14 @@
             <p>运送中</p>
           </div>
           <div class="right">
-            <el-button type="danger">订单详情</el-button>
+            <el-button type="danger" @click="goto('/center/order_detail')">订单详情</el-button>
           </div>
         </div>
       </div>
       <div class="main-bottom">
         <div class="triangle">
             <div><span>跟</span><span>踪</span><span>信</span><span>息</span></div>
-          </div>
+        </div>
         <div class="content">
           <div class="content-left">
             <div class="box weight">
@@ -134,6 +134,11 @@
 export default {
   data() {
     return {};
+  },
+  methods:{
+    goto(path){
+      this.$router.push(path)
+    }
   }
 };
 </script>
@@ -304,7 +309,7 @@ export default {
                   content: "";
                   position: absolute;
                   top: 6px;
-                  left: -175px;
+                  left: -174px;
                   display: inline-block;
                   width: 8px;
                   height: 8px;
