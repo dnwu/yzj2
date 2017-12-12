@@ -143,6 +143,7 @@ export default {
         text-align: center;
         color: #5e5e5e;
         font-weight: 700;
+        cursor: pointer;
         &.active {
           position: relative;
           background-color: #fff;

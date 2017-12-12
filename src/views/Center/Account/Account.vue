@@ -255,10 +255,10 @@ export default {
         flex: 2;
         margin-left: 20px;
         padding-top: 40px;
-        .revise{
+        .revise {
           display: flex;
           justify-content: flex-end;
-          button{
+          button {
             width: 66px;
             padding: 2px 15px;
             box-shadow: 0 5px 10px gray;

@@ -32,15 +32,15 @@ import News from '@/views/About/News/News'
 import Promotion from '@/views/About/Promotion'
 import Member from '@/views/About/Member'
 import Join from '@/views/About/Join'
-// import Login from '@/views/Login/Login'
-// import Register from '@/views/Login/Register'
+// import Login from '@/views/Login/Login' import Register from
+// '@/views/Login/Register'
 import store from '@/store'
 
-const LoginIndex = () => import('@/views/Login/Login')
-const Login = () => import('@/views/Login/Login/Login')
-const Register = () => import('@/views/Login/register/register')
-const Error = () => import('@/views/Login/Error/Error')
-const Success = () => import('@/views/Login/Success/Success')
+const LoginIndex = () => import ('@/views/Login/Login')
+const Login = () => import ('@/views/Login/Login/Login')
+const Register = () => import ('@/views/Login/register/register')
+const Error = () => import ('@/views/Login/Error/Error')
+const Success = () => import ('@/views/Login/Success/Success')
 
 const Index = () => import ('@/views/Index/Index')
 const Service = () => import ('@/views/Service/Service')
@@ -75,10 +75,10 @@ Vue.use(Router);
 let router = new Router({
   routes: [
     {
-      path:'/',
-      component:Index,
-      redirect:'/home',
-      children:[
+      path: '/',
+      component: Index,
+      redirect: '/home',
+      children: [
         {
           path: '/home',
           name: 'home',
@@ -87,7 +87,7 @@ let router = new Router({
           path: '/product/airCargoServices',
           name: 'product/airCargoServices',
           component: AirCargoServices,
-          redirect:'/product/airCargoServices/haihang'
+          redirect: '/product/airCargoServices/haihang'
         }, {
           // path: '/product/airCargoServices/domestic', name:
           // 'product/airCargoServices/domestic',
@@ -242,26 +242,27 @@ let router = new Router({
           path: '/promotion',
           name: 'promotion',
           component: Promotion
-        },
+        }
       ]
     }, {
       path: '/login',
       name: 'login',
       component: LoginIndex,
-      redirect:'/login/login',
-      children:[
+      redirect: '/login/login',
+      children: [
         {
           path: '/login/login',
-          component:Login
-        },{
+          component: Login,
+          name: 'login/login'
+        }, {
           path: '/login/register',
-          component:Register
-        },{
+          component: Register
+        }, {
           path: '/login/success',
           component: Success
-        },{
+        }, {
           path: '/login/error',
-          component:Error
+          component: Error
         }
       ]
     }, {
@@ -272,64 +273,124 @@ let router = new Router({
       children: [
         {
           path: '/center/account',
-          component: Account
+          component: Account,
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+          }
         }, {
           path: '/center/change_password',
-          component: Change_password
+          component: Change_password,
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+          }
         }, {
           path: '/center/personal',
-          component: Personal
+          component: Personal,
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+          }
         }, {
           path: '/center/company_info',
-          component: Company_info
+          component: Company_info,
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+          }
         }, {
-          path:'/center/doings',
-          component:Doings
-        },{
+          path: '/center/doings',
+          component: Doings,
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+          }
+        }, {
           path: '/center/experience',
-          component:Experience
-        },{
-          path:'/center/integral',
-          component:Integral
-        },{
-          path: '/center/address',
-          component: Address
+          component: Experience,
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+          }
         }, {
-          path:'/center/son_account',
-          component:Son_account
-        },{
+          path: '/center/integral',
+          component: Integral,
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+          }
+        }, {
+          path: '/center/address',
+          component: Address,
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+          }
+        }, {
+          path: '/center/son_account',
+          component: Son_account,
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+          }
+        }, {
           path: '/center/online_product',
-          component: Online_product
+          component: Online_product,
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+          }
         }, {
           path: '/center/online_write',
-          component: Online_write
+          component: Online_write,
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+          }
         }, {
           path: '/center/online_check',
-          component: Online_check
+          component: Online_check,
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+          }
         }, {
           path: '/center/online_order_s',
-          component: Online_order_s
+          component: Online_order_s,
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+          }
         }, {
           path: '/center/online_pay_s',
-          component: Online_pay_s
+          component: Online_pay_s,
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+          }
         }, {
           path: '/center/client_product',
-          component: Client_product
+          component: Client_product,
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+          }
         }, {
           path: '/center/order_search',
-          component: Order_search
+          component: Order_search,
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+          }
         }, {
           path: '/center/order_detail',
-          component: Order_detail
+          component: Order_detail,
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+          }
         }, {
           path: '/center/order_track',
-          component: Order_track
+          component: Order_track,
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+          }
         }, {
           path: '/center/ticket_info_egis',
-          component: Ticket_info_egis
-        },{
-          path:'/center/bill_look',
-          component: Bill_look
+          component: Ticket_info_egis,
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+          }
+        }, {
+          path: '/center/bill_look',
+          component: Bill_look,
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+          }
         }
       ]
     }
@@ -337,12 +398,20 @@ let router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-  if (to.name !== "login") {
+  // console.log(to.meta.requireAuth);
+  if (to.meta.requireAuth) {
     // 判断是否需要登录
-    // console.log(store.state)
-    next();
+    console.log('需要验证token',store.state.token)
+    if (store.state.token) {
+      // console.log('token还有');
+      next();
+    } else {
+      // next(); console.log('token没有了');
+      next({path: '/login'});
+    }
     // next({   name: "login",   query:{     redirect: to.fullPath   } })
   } else {
+    console.log('不需要验证token',store.state.token)
     next();
   }
 });
