@@ -24,10 +24,13 @@ import { mapGetters ,mapMutations } from "vuex";
 export default {
   data() {
     return {
-      // username: cookie.getCookie("username")
-      // username: this.cookie
+      // usernameStatus: cookie.getCookie("username"),
+      // username: this.cookie,
       showOrhide:false
     };
+  },
+  created () {
+    console.log('created',this.username);
   },
   methods: {
     ...mapMutations({
@@ -42,9 +45,6 @@ export default {
     },
     goCenter() {
       this.$router.push('/center')
-    },
-    text() {
-      console.log("getter", this.cookie);
     },
     toleave() {
       this.timer = setTimeout(() => {

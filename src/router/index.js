@@ -70,6 +70,20 @@ const Bill_look = () => import ('@/views/Center/Bill_look/Bill_look')
 const My_finance = () => import ('@/views/Center/My_finance/My_finance')
 const Change_password = () => import ('@/views/Center/Change_password/Change_password')
 
+// 供应商组件
+const SupplierIndex = () => import('@/views/Supplier/Supplier')
+const Supplier_Account = () => import('@/views/Supplier/Account/Account')
+const Supplier_Company_info = () => import('@/views/Supplier/Company_info/Company_info')
+const Supplier_Server_info = () => import('@/views/Supplier/Server_info/Server_info')
+const Supplier_Son_account = () => import('@/views/Supplier/Son_account/Son_account')
+const Supplier_Order_taking = () => import('@/views/Supplier/Order_taking/Order_taking')
+const Supplier_Booking_space = () => import('@/views/Supplier/Booking_space/Booking_space')
+const Supplier_Making_bill = () => import('@/views/Supplier/Making_bill/Making_bill')
+const Supplier_Airlift = () => import('@/views/Supplier/Airlift/Airlift')
+const Supplier_Land_transport = () => import('@/views/Supplier/Land_transport/Land_transport')
+const Supplier_Airport_operation = () => import('@/views/Supplier/Airport_operation/Airport_operation')
+const Supplier_Value_add = () => import('@/views/Supplier/Value_add/Value_add')
+
 Vue.use(Router);
 
 let router = new Router({
@@ -393,25 +407,81 @@ let router = new Router({
           }
         }
       ]
+    },{
+      path:'/supplier',
+      name:'supplier',
+      component:SupplierIndex,
+      redirect:'/supplier/account',
+      children:[
+        {
+          path:'/supplier/account',
+          component:Supplier_Account,
+          name:'supplier/account'
+        },
+        {
+          path:'/supplier/company_info',
+          component:Supplier_Company_info,
+          name:'supplier/company_info'
+        },
+        {
+          path:'/supplier/server_info',
+          component:Supplier_Server_info,
+          name:'supplier/server_info'
+        },
+        {
+          path:'/supplier/son_account',
+          component:Supplier_Son_account,
+          name:'supplier/son_account'
+        },
+        {
+          path:'/supplier/order_taking',
+          component:Supplier_Order_taking,
+          name:'supplier/order_taking'
+        },
+        {
+          path:'/supplier/booking_space',
+          component:Supplier_Booking_space,
+          name:'supplier/booking_space'
+        },
+        {
+          path:'/supplier/making_bill',
+          component:Supplier_Making_bill,
+          name:'supplier/making_bill'
+        },
+        {
+          path:'/supplier/airlift',
+          component:Supplier_Airlift,
+          name:'supplier/airlift'
+        },
+        {
+          path:'/supplier/land_transport',
+          component:Supplier_Land_transport,
+          name:'supplier/land_transport'
+        },
+        {
+          path:'/supplier/airport_operation',
+          component:Supplier_Airport_operation,
+          name:'supplier/airport_operation'
+        },
+        {
+          path:'/supplier/value_add',
+          component:Supplier_Value_add,
+          name:'supplier/value_add'
+        }
+      ]
     }
   ]
 });
 
 router.beforeEach((to, from, next) => {
-  // console.log(to.meta.requireAuth);
   if (to.meta.requireAuth) {
     // 判断是否需要登录
-    console.log('需要验证token',store.state.token)
     if (store.state.token) {
-      // console.log('token还有');
       next();
     } else {
-      // next(); console.log('token没有了');
       next({path: '/login'});
     }
-    // next({   name: "login",   query:{     redirect: to.fullPath   } })
   } else {
-    console.log('不需要验证token',store.state.token)
     next();
   }
 });
