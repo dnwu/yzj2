@@ -93,6 +93,13 @@ export default {
       setUsername: "SET_USERNAME",
       setId: "SET_ID"
     }),
+    prompt(title) {
+      this.$notify.error({
+        title: "错误",
+        message: title,
+        duration: 2000
+      });
+    },
     goto(path) {
       this.$router.push(path);
     },
@@ -110,17 +117,9 @@ export default {
               .then(data => {
                 // console.log("personal", data.data);
                 if (data.data.code == "10004") {
-                  this.$notify.error({
-                    title: "错误",
-                    message: "用户不存在",
-                    duration: 2000
-                  });
+                  this.prompt('用户名不存在')
                 } else if (data.data.code == "10106") {
-                  this.$notify.error({
-                    title: "错误",
-                    message: "用户名或密码错误",
-                    duration: 2000
-                  });
+                  this.prompt('用户名或密码错误')
                 } else if (data.data.code == "1") {
                   this.setUsertype("personal");
                   this.setToken(data.data.data.token);
@@ -141,24 +140,16 @@ export default {
               .then(data => {
                 // console.log("company", data.data);
                 if (data.data.code == "-2") {
-                  this.$notify.error({
-                    title: "错误",
-                    message: "用户不存在",
-                    duration: 2000
-                  });
+                  this.prompt('用户名不存在')
                 } else if (data.data.code == "-1") {
-                  this.$notify.error({
-                    title: "错误",
-                    message: "用户名或密码错误",
-                    duration: 2000
-                  });
+                  this.prompt('用户名或密码错误')
                 } else if (data.data.code == "1") {
                   this.setUsertype("company");
                   this.setToken(data.data.token);
                   this.setUsername(this.Form.username);
                   this.setId(data.data.id);
                   this.$cookie.set("username", this.Form.username, 1);
-                  this.$router.push({path:'/supplier/account'})
+                  this.$router.push({ path: "/supplier/account" });
                 }
               });
           }

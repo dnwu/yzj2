@@ -83,12 +83,12 @@
               <el-button @click="getnum()" type="warning" round>获取验证码</el-button>
             </div>
             <div v-show='lasttimeshow' class="lasttime">
-              <el-button type="info" round>{{time}}s后重新获取</el-button>
+              <el-button type="info"  round>{{time}}s后重新获取</el-button>
             </div>
             <p>请输入短信验证码</p>
           </div>
           <div class="registerNow">
-            <el-button type="warning" @click="register()" round>立即注册</el-button>
+            <el-button type="warning" @click="register('ruleForm2')" round>立即注册</el-button>
           </div>
         </div>
       </transition>
@@ -100,7 +100,7 @@
 export default {
   data() {
     var validatePass = (rule, value, callback) => {
-      console.log(value.length);
+      // console.log(value.length);
       if (value === "") {
         callback(new Error("请输入密码"));
       } else {
@@ -146,7 +146,7 @@ export default {
         pass: [{ validator: validatePass, trigger: "blur" }],
         repass: [{ validator: validaterepass, trigger: "blur" }],
         phone: [
-          { required: true, message: "请输入固定电话", trigger: "blur" },
+          { required: false, message: "请输入固定电话", trigger: "blur" },
           { min: 3, max: 60, message: "长度在 3 到 60 个字符", trigger: "blur" }
         ],
         email: [
@@ -162,12 +162,23 @@ export default {
     };
   },
   methods: {
+    prompt(title) {
+      this.$notify.error({
+        title: "错误",
+        message: title,
+        duration: 2000
+      });
+    },
     getnum() {
-      this.lasttimeshow = true;
-      console.log(this.timer);
+      // console.log(this.timer,this.registerForm.mobile);
       if (this.timer) {
         return false;
       }
+      if(this.registerForm.mobile == ''){
+        this.prompt('手机号不能为空')
+        return false
+      }
+      this.lasttimeshow = true;
       // clearInterval(timer);
       this.timer = setInterval(() => {
         this.time--;
@@ -177,13 +188,18 @@ export default {
           clearInterval(this.timer);
         }
       }, 1000);
+      this.axios.post("/app/v1/common/sendSms", {
+        phone: this.registerForm.mobile,
+        smdType: "personal_reg"
+      }).then(data=>{
+        // console.log(data);
+      });
     },
     nextStep(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
           this.show = false;
           this.$refs.head.classList.add("step2");
-          alert("submit!");
         } else {
           console.log("error submit!!");
           return false;
@@ -193,8 +209,34 @@ export default {
     goto(path) {
       this.$router.push(path);
     },
-    register() {
-      this.$router.push("/login/success");
+    register(formName) {
+      // console.log(this.registerForm);
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.axios
+            .post("/app/v1/user/userRegister", {
+              email: this.registerForm.email,
+              identityCard: this.registerForm.id,
+              name: this.registerForm.name,
+              password: this.registerForm.pass,
+              phone: this.registerForm.mobile,
+              smsCode: this.registerForm.testNum,
+              telephone: this.registerForm.phone,
+              userName: this.registerForm.realname
+            })
+            .then(data => {
+              // console.log(data);
+              if(data.data.code == '1'){
+                this.$router.push("/login/success");
+              }else{
+                this.$router.push("/login/error");
+              }
+            });
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
     }
   }
 };
