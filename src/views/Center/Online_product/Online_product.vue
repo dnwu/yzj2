@@ -4,13 +4,13 @@
       <span class="product-header-logo">网上下单</span>
       <div class="product-header-inner">
         <ul>
-          <li v-for="(item, index) in chooselist">
+          <li v-for="(item, index) in chooselist" :key="index">
             <div class="choose-list-left" @click="trumpIndex(index)">
               <div class="left-img-wrapper">
                 <div class="left-img-inner">
                   <img :src="(index >= nowIndex)?imgarr[index].active:imgarr[index].default" v-if="index <= nowIndex">
                 </div>
-              </div>           
+              </div>
               <div class="left-step-wrapper"><span class="left-step">{{ item.name }}</span></div>
             </div>
             <div class="choose-list-right" v-if="index<=4">

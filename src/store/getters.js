@@ -1,5 +1,4 @@
 export const username = state => state.username
-<<<<<<< HEAD
 
 export const airSelect = state => state.airSelect
 
@@ -46,8 +45,6 @@ export const endDate = state => state.endDate
 export const startLand = state => state.startLand
 
 export const endLand = state => state.endLand
-=======
 export const token = state => state.token
 export const usertype = state => state.usertype
 export const id = state => state.id
->>>>>>> 8f843bead6a99346b9f754c69f7c4a4b3456aeae

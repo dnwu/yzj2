@@ -5,7 +5,6 @@ const mutations = {
     window.localStorage.setItem("username", username);
     state.username = username
   },
-<<<<<<< HEAD
   airShow (state) {
     state.airSelect = !state.airSelect
   },
@@ -157,7 +156,7 @@ const mutations = {
   },
   endLand(state, value) {
     state.endLand = value
-=======
+  },
   [types.SET_TOKEN](state,token){
     window.localStorage.setItem("token", token);
     state.token = token
@@ -177,7 +176,6 @@ const mutations = {
   [types.SET_USERTYPE](state,usertype){
     window.localStorage.setItem("usertype", usertype);
     state.usertype = usertype
->>>>>>> 8f843bead6a99346b9f754c69f7c4a4b3456aeae
   }
 
 }

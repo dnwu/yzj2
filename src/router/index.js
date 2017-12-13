@@ -35,13 +35,10 @@ import Join from '@/views/About/Join'
 // import Login from '@/views/Login/Login' import Register from
 // '@/views/Login/Register'
 import store from '@/store'
-<<<<<<< HEAD
 import PIndex from '@/views/Center/Online_product/product_index'
 import productWrite from '@/views/Center/Online_product/product_write'
 import productComplete from '@/views/Center/Online_product/product_complete'
-=======
 import * as types from '@/store/mutation-type'
->>>>>>> 8f843bead6a99346b9f754c69f7c4a4b3456aeae
 
 const LoginIndex = () => import ('@/views/Login/Login')
 const Login = () => import ('@/views/Login/Login/Login')
