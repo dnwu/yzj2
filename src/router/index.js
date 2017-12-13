@@ -35,6 +35,9 @@ import Join from '@/views/About/Join'
 // import Login from '@/views/Login/Login'
 import Register from '@/views/Login/Register'
 import store from '@/store'
+import PIndex from '@/views/Center/Online_product/product_index'
+import productWrite from '@/views/Center/Online_product/product_write'
+import productComplete from '@/views/Center/Online_product/product_complete'
 
 const LoginIndex = () => import('@/views/Login/Login')
 const Login = () => import('@/views/Login/Login/Login')
@@ -303,7 +306,21 @@ let router = new Router({
           component:Son_account
         },{
           path: '/center/online_product',
-          component: Online_product
+          component: Online_product,
+          children: [
+            {
+              path: '/center/online_product',
+              component: PIndex
+            },
+            {
+              path: '/center/online_product/write',
+              component: productWrite
+            },
+            {
+              path: '/center/online_product/complete',
+              component: productComplete
+            }
+          ]
         }, {
           path: '/center/online_write',
           component: Online_write
