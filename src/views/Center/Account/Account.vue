@@ -1,25 +1,111 @@
 <template>
   <div class="account">
-    <div class="avatar-container">
-      <img v-if="imageUrl" :src="imageUrl" class="avatar">
-      <el-upload
-        class="avatar-uploader"
-        action="https://jsonplaceholder.typicode.com/posts/"
-        :show-file-list="false"
-        :on-success="handleAvatarSuccess"
-        :before-upload="beforeAvatarUpload">
-        <el-button size="small" type="primary">点击上传</el-button>
-      </el-upload>
+    <div class="head">
+      <div class="title">账号信息</div>
+      <div class="sign"><span>每日签到</span></div>
     </div>
-    <div class="info">
-      <p class="username"><span>用户名</span><span>zhangsan</span></p>
-      <p class="password"><span>密码</span><span><el-button @click="changepassword">修改密码</el-button></span></p>
-      <p class="phone"><span>手机</span><span>131643135431</span></p>
-    </div>
-    <div class="info">
-      <p class="account-type"><span>账号类别</span><span>货主(企业)</span></p>
-      <p class="account-level"><span>账号级别</span><span>主账号</span></p>
-      <p class="email"><span>邮箱</span><span>zhangsan@QQ.com</span></p>
+    <div class="main">
+      <div class="main-top">
+        <div class="base-info">
+          <div class="head-img"><img src="../../../assets/head_img.png" alt=""></div>
+          <div class="info">
+            <p class="company-name">深圳运捷信息系统有限公司</p>
+            <div class="star">
+              <el-rate
+                v-model='starNum'
+                disabled
+                :max='starNum'
+                text-color="#ff9900"
+                score-template="{value}">
+              </el-rate>
+            </div>
+            <div class="member">
+              <div class="integral">会员积分：<span class="score">{{score}}</span></div>
+              <div class="doings">
+                <el-badge :value="1" :max="10" class="item">
+                  <el-button size="small">我的活动</el-button>
+                </el-badge>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="goods-info">
+          <div class="confirm">
+            <el-badge :value="confirmNum" class="item">
+              <img src="../../../assets/account_icon1.png" alt="">
+            </el-badge>
+            <p>{{confirmNum}}</p>
+            <p>待确认</p>
+          </div>
+          <div class="pay">
+            <el-badge :value="payNum" class="item">
+              <img src="../../../assets/account_icon2.png" alt="">
+            </el-badge>
+            <p>{{payNum}}</p>
+            <p>待支付</p>
+          </div>
+          <div class="received">
+            <el-badge :value="receivedNum" class="item">
+              <img src="../../../assets/account_icon3.png" alt="">
+            </el-badge>
+            <p>{{receivedNum}}</p>
+            <p>待收货</p>
+          </div>
+          <div class="done">
+            <img src="../../../assets/account_icon4.png" alt="">
+            <p>12</p>
+            <p>已完成</p>
+          </div>
+        </div>
+      </div>
+      <div class="main-bottom">
+        <div class="account-info">
+          <div class="triangle">
+            <div><span>账</span><span>号</span><span>信</span><span>息</span></div>
+          </div>
+          <div class="account-coding">
+            <span class="title">会员编码</span><span class="colon">:</span><span class="content">HH000001</span>
+          </div>
+          <div class="account">
+            <span class="title">会员账号</span><span class="colon">:</span><span class="content">YOY2017</span>
+          </div>
+          <div class="pass">
+            <span class="title">会员密码</span><span class="colon">:</span><span class="btn"><el-button type="info" size='mini'>修改</el-button></span>
+          </div>
+          <div class="phonenum">
+            <span class="title">手机号</span><span class="colon">:</span><span class="content">17688772007</span><span class="btn"><el-button type="info" size='mini'>修改</el-button></span>
+          </div>
+          <div class="email">
+            <span class="title">邮箱</span><span class="colon">:</span><span class="content">lcy4634546@aliyun.com</span><span class="btn"><el-button type="info" size='mini'>修改</el-button></span>
+          </div>
+          <div class="account-type">
+            <span class="title">账号类型</span><span class="colon">:</span><span class="content">一般/企业</span>
+          </div>
+          <div class="account-level">
+             <span class="title">账号级别</span><span class="colon">:</span><span class="content">主账号</span>
+          </div>
+        </div>
+        <div class="personal-info">
+          <div class="triangle">
+            <div><span>个</span><span>人</span><span>信</span><span>息</span></div>
+          </div>
+          <div class="name">
+            <span class="title">会员姓名</span><span class="colon">:</span><span class="content">陈悠悠</span>
+          </div>
+          <div class="id">
+            <span class="title">身份证号码</span><span class="colon">:</span><span class="content">4654646354634646</span>
+          </div>
+          <div class="cellphone">
+            <span class="title">固定电话</span><span class="colon">:</span><span class="content">010-154654654</span>
+          </div>
+          <div class="detial">
+            <span class="title">详细地址</span><span class="colon">:</span><span class="content">北京市朝阳区长安大街</span>
+          </div>
+          <div class="revise">
+            <el-button type="info" size='mini'>修改</el-button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -27,69 +113,191 @@
 export default {
   data() {
     return {
-      imageUrl: "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3289761550,697278018&fm=27&gp=0.jpg"
+      starNum: 3,
+      score: 3450,
+      confirmNum: 2,
+      payNum: 3,
+      receivedNum: 4
     };
-  },
-  methods: {
-    handleAvatarSuccess(res, file) {
-      this.imageUrl = URL.createObjectURL(file.raw);
-    },
-    beforeAvatarUpload(file) {
-      const isJPG = file.type === "image/jpeg";
-      const isLt2M = file.size / 1024 / 1024 < 2;
-
-      if (!isJPG) {
-        this.$message.error("上传头像图片只能是 JPG 格式!");
-      }
-      if (!isLt2M) {
-        this.$message.error("上传头像图片大小不能超过 2MB!");
-      }
-      return isJPG && isLt2M;
-    },
-    changepassword() {
-      this.$router.push('/center/change_password')
-    }
   }
 };
 </script>
 <style lang="scss">
-.account{
-  display: flex;
-  padding:100px 50px 0;
-  >div{
-    flex: 1
-  }
-  .avatar-container{
-    text-align: center;
-    .avatar{
-      width: 100px;
-      height: 100px;
-      display: inline-block;
-      margin-bottom: 20px;
+.account {
+  .head {
+    display: flex;
+    > div {
+      flex: 1;
+      line-height: 61px;
+    }
+    .title {
+      padding-left: 20px;
+      color: #b3b3b3;
+    }
+    .sign {
+      text-align: right;
+      span {
+        display: inline-block;
+        border: 1px solid #f5363e;
+        color: #f5363e;
+        height: 20px;
+        line-height: 20px;
+        padding: 3px;
+        border-radius: 5px;
+        cursor: pointer;
+      }
     }
   }
-  .info{
-    p{
-      display: block;
-      padding: 10px 20px;
-      margin: 0;
-      height: 40px;
-      line-height: 40px;
-      >span{
-        display: inline-block;
-        width: 50%;
-        .el-button{
+  .main {
+    padding: 40px;
+    .main-top {
+      display: flex;
+      background-color: #fff;
+      box-shadow: 0 0 4px #e0e0e0;
+      padding: 20px;
+      height: 200px;
+      .base-info {
+        flex: 3;
+        position: relative;
+        display: flex;
+        &::after {
+          content: "";
+          display: inline-block;
+          width: 0;
+          height: 100%;
+          border-left: 1px dashed #e0e0e0;
+          position: absolute;
+          right: 0;
+          top: 0;
+        }
+        .head-img {
+          width: 200px;
           text-align: center;
+          img {
+            margin-top: 50%;
+            transform: translateY(-50%);
+            border: 8px solid #f2f2f2;
+            border-radius: 50%;
+          }
         }
-        &:nth-of-type(2){
-          color: gray;
+        .info {
+          flex: 1;
+          .company-name {
+            font-size: 16px;
+            color: #999999;
+          }
+          .star {
+            margin: 40px 0;
+          }
+          .member {
+            display: flex;
+            .integral {
+              flex: 1;
+              color: #999999;
+              font-size: 16px;
+              .score {
+                color: #fccf00;
+              }
+            }
+            .doings {
+              flex: 1;
+              .el-badge {
+                box-shadow: 1px 4px 4px #e0e0e0;
+                button {
+                  color: #fff;
+                  background-color: #fccf00;
+                }
+              }
+            }
+          }
         }
       }
-      &:first-child{
-        padding-top: 0;
+      .goods-info {
+        flex: 2;
+        display: flex;
+        > div {
+          flex: 1;
+          text-align: center;
+          margin-top: 40px;
+          color: #999999;
+          img {
+            cursor: pointer;
+          }
+          .el-badge__content.is-fixed {
+            right: 20px;
+            top: 4px;
+          }
+        }
       }
-      &:last-child{
-        padding-bottom: 0;
+    }
+    .main-bottom {
+      display: flex;
+      margin-top: 30px;
+      .triangle {
+        display: inline-block;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 0;
+        height: 0;
+        border: 38px solid #fccf00;
+        border-color: #fccf00 transparent transparent #fccf00;
+        > div {
+          display: inline-block;
+          transform: rotate(-45deg) translate(-12px, -40px);
+          color: #fff;
+        }
+      }
+      .account-info {
+        flex: 3;
+      }
+      .personal-info {
+        flex: 2;
+        margin-left: 20px;
+        padding-top: 40px;
+        .revise {
+          display: flex;
+          justify-content: flex-end;
+          button {
+            width: 66px;
+            padding: 2px 15px;
+            box-shadow: 0 5px 10px gray;
+          }
+        }
+      }
+      > div {
+        position: relative;
+        box-sizing: border-box;
+        min-height: 200px;
+        background-color: #fff;
+        box-shadow: 0 0 4px #e0e0e0;
+        padding: 20px 20px 20px 80px;
+        color: #a0a0a0;
+        > div:not(.triangle) {
+          display: flex;
+          .title {
+            width: 100px;
+            text-align: justify;
+            &::after {
+              content: "";
+              display: inline-block;
+              width: 100%;
+              overflow: hidden;
+              height: 0;
+            }
+          }
+          .colon {
+            margin: 0 10px;
+            font-weight: 700;
+          }
+          .btn {
+            margin-left: 20px;
+            .el-button {
+              box-shadow: 0 5px 10px gray;
+              padding: 2px 16px;
+            }
+          }
+        }
       }
     }
   }

@@ -1,8 +1,8 @@
 <template>
-<div class="login">
+<div class="loginindex">
   <div class="head">
     <div class="center">
-      <img src="../../assets/login_logo.png" alt="">
+      <img @click="goto('/home')" src="../../assets/login_logo.png" alt="">
       <span>欢迎登录</span>
     </div>
   </div>
@@ -29,6 +29,11 @@
 export default {
   data() {
     return {};
+  },
+  methods: {
+    goto(path) {
+      this.$router.push(path);
+    }
   }
 };
 </script>
@@ -37,7 +42,7 @@ export default {
   width: 1200px;
   margin: 0 auto;
 }
-.login {
+.loginindex {
   height: 100%;
   .head {
     height: 100px;
@@ -48,6 +53,7 @@ export default {
     img {
       vertical-align: middle;
       transform: translateY(-12%);
+      cursor: pointer;
     }
     span {
       line-height: 100px;
@@ -63,7 +69,6 @@ export default {
     background-color: #fff;
     min-height: 100%;
     padding: 200px 100px;
-    height: 200px;
     box-sizing: border-box;
   }
   .foot {
@@ -71,29 +76,29 @@ export default {
     margin-top: -100px;
     .center {
       display: table;
-      ul{
+      ul {
         display: flex;
         list-style: none;
-        li{
+        li {
           flex: 1;
           text-align: center;
           position: relative;
           color: #e0e0e0;
-          &::before{
-            content: '';
+          &::before {
+            content: "";
             display: inline-block;
             width: 2px;
             height: 100%;
             position: absolute;
             left: 0;
-            background-color: #E0e0e0;
+            background-color: #e0e0e0;
           }
-          &:first-child::before{
+          &:first-child::before {
             display: none;
           }
         }
       }
-      p{
+      p {
         text-align: center;
         color: #e0e0e0;
       }

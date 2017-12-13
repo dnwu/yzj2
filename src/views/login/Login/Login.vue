@@ -17,30 +17,169 @@
           </div>
         </el-col>
       </el-row>
-      <el-form>
-        <el-input v-model="Form.name"></el-input>
-        <el-input type="password" v-model="Form.pass" auto-complete="off"></el-input>
+      <el-form :model="Form" ref="loginForm" :rules="rules">
+        <div ref="userinput" class="input username">
+          <img class="icon" :src="typeinput=='username'?iconRes[0].focus:iconRes[0].blur" alt="">
+          <el-form-item label="" prop="username">
+            <el-input @focus="setclass('username')" @blur="removeclass('username')" placeholder="请输入用户名" v-model="Form.username"></el-input>
+          </el-form-item>
+        </div>
+        <div ref="passinput" class="input password">
+          <img class="icon" :src="typeinput=='password'?iconRes[1].focus:iconRes[1].blur" alt="">
+          <el-form-item label="" prop="password">
+            <el-input @focus="setclass('password')" @blur="removeclass('password')" type="password" placeholder="请输入密码" v-model="Form.password" auto-complete="off"></el-input>
+          </el-form-item>
+          <span class="forgetpass">忘记密码？</span>
+        </div>
+        <div class="autoLogin">
+          <el-form-item label="">
+            <el-checkbox-group v-model="Form.deadLine">
+              <el-checkbox  label="两周内免登陆"></el-checkbox >
+            </el-checkbox-group>
+          </el-form-item>
+        </div>
+        <div class="submit">
+          <el-form-item>
+            <el-button type="warning" @click="onSubmit('loginForm')">登录</el-button>
+          </el-form-item>
+        </div>
+        <div @click="goto('/login/register')" class="toRegister">
+          立即注册
+        </div>
       </el-form>
     </div>
   </div>
 </div>
 </template>
 <script>
+import getmd5 from "@/api/getmd5";
+import { mapMutations } from "vuex";
 export default {
   data() {
     return {
-      type:'personal',
-      Form:{
-        name:'',
-        pass:''
+      type: "personal",
+      typeinput: "",
+      Form: {
+        username: "",
+        password: "",
+        deadLine: ""
+      },
+      iconRes: [
+        {
+          focus: require("../../../assets/username1.png"),
+          blur: require("../../../assets/username.png")
+        },
+        {
+          focus: require("../../../assets/password1.png"),
+          blur: require("../../../assets/password.png")
+        }
+      ],
+      rules: {
+        username: [
+          { required: true, message: "请输入用户名", trigger: "blur" },
+          { min: 3, max: 25, message: "长度在 3 到 5 个字符", trigger: "blur" }
+        ],
+        password: [
+          { required: true, message: "请输入密码", trigger: "blur" },
+          { min: 3, max: 25, message: "长度在 3 到 5 个字符", trigger: "blur" }
+        ]
       }
     };
+  },
+  methods: {
+    ...mapMutations({
+      setUsertype: "SET_USERTYPE",
+      setToken: "SET_TOKEN",
+      setUsername: "SET_USERNAME",
+      setId: "SET_ID"
+    }),
+    prompt(title) {
+      this.$notify.error({
+        title: "错误",
+        message: title,
+        duration: 2000
+      });
+    },
+    goto(path) {
+      this.$router.push(path);
+    },
+    onSubmit(loginForm) {
+      this.$refs[loginForm].validate(valid => {
+        if (valid) {
+          if (this.type === "personal") {
+            this.axios
+              .post("/app/v1/user/userLogin", {
+                // "password": "96e79218965eb72c92a549dd5a330112",
+                // "userName": "abc"
+                password: getmd5(this.Form.password),
+                userName: this.Form.username
+              })
+              .then(data => {
+                // console.log("personal", data.data);
+                if (data.data.code == "10004") {
+                  this.prompt('用户名不存在')
+                } else if (data.data.code == "10106") {
+                  this.prompt('用户名或密码错误')
+                } else if (data.data.code == "1") {
+                  this.setUsertype("personal");
+                  this.setToken(data.data.data.token);
+                  this.setUsername(this.Form.username);
+                  this.setId(data.data.data.id);
+                  this.$cookie.set("username", this.Form.username, 1);
+                  this.$router.push({ path: "/center/account" });
+                }
+              });
+          } else if (this.type === "company") {
+            this.axios
+              .post("/web/v1/supplier/logining", {
+                // "password": "96e79218965eb72c92a549dd5a330112",
+                // "userName": "abc"
+                password: this.Form.password,
+                userName: this.Form.username
+              })
+              .then(data => {
+                // console.log("company", data.data);
+                if (data.data.code == "-2") {
+                  this.prompt('用户名不存在')
+                } else if (data.data.code == "-1") {
+                  this.prompt('用户名或密码错误')
+                } else if (data.data.code == "1") {
+                  this.setUsertype("company");
+                  this.setToken(data.data.token);
+                  this.setUsername(this.Form.username);
+                  this.setId(data.data.id);
+                  this.$cookie.set("username", this.Form.username, 1);
+                  this.$router.push({ path: "/supplier/account" });
+                }
+              });
+          }
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
+    setclass(e) {
+      if (e == "username") {
+        this.typeinput = "username";
+        this.$refs.userinput.style.borderColor = "#FDDA3E";
+      }
+      if (e == "password") {
+        this.typeinput = "password";
+        this.$refs.passinput.style.borderColor = "#FDDA3E";
+      }
+    },
+    removeclass(e) {
+      this.typeinput = "";
+      this.$refs.userinput.style.borderColor = "#c6c6c6";
+      this.$refs.passinput.style.borderColor = "#c6c6c6";
+    }
   }
 };
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 .login {
-  height: 100%;
+  height: 520px;
   box-sizing: border-box;
   background-image: url("../../../assets/login_bg.png");
   background-clip: content-box;
@@ -56,29 +195,91 @@ export default {
       text-align: center;
       margin: 10px 0;
     }
-    .login-body{
-      .button{
+    .login-body {
+      .button {
         height: 40px;
         background-color: #f9f9f9;
         line-height: 40px;
         text-align: center;
-        color: #5E5E5E;
+        color: #5e5e5e;
         font-weight: 700;
-        &.active{
+        cursor: pointer;
+        &.active {
           position: relative;
           background-color: #fff;
           box-shadow: 0 0 10px #c0c0c0;
           color: #ccc;
-          border-bottom: 1px solid #F4C901;
+          border-bottom: 1px solid #f4c901;
         }
-        img{
+        img {
           width: 25px;
           height: 25px;
           margin-right: 10px;
           vertical-align: middle;
         }
       }
+      .el-form {
+        margin-top: 40px;
+        padding: 0 20px;
+        .input {
+          position: relative;
+          margin: 40px 0;
+          padding: 0 20px;
+          border-bottom: 1px solid #c6c6c6;
+          .el-input {
+            .el-input__inner {
+              border: none;
+              border-radius: 0;
+            }
+          }
+          .icon {
+            position: absolute;
+            top: 10px;
+            left: 0;
+            z-index: 99;
+          }
+          .forgetpass {
+            position: absolute;
+            top: 10px;
+            right: 0;
+            color: #2b99fa;
+            cursor: pointer;
+          }
+          .el-form-item {
+            margin: 0;
+          }
+        }
+        .autoLogin {
+          .el-checkbox__inner {
+            border-radius: 50%;
+          }
+          .el-checkbox__label {
+            color: #b3b3b3;
+          }
+        }
+        .submit {
+          .el-button--warning {
+            width: 100%;
+            border-radius: 20px;
+          }
+        }
+        .toRegister {
+          text-align: right;
+          font-size: 14px;
+          color: #bcbcbc;
+          cursor: pointer;
+          &::before {
+            content: "";
+            display: inline-block;
+            width: 24px;
+            height: 10px;
+            background-image: url("../../../assets/register_icon.png");
+            background-size: cover;
+          }
+        }
+      }
     }
   }
 }
 </style>
+

@@ -1,6 +1,6 @@
 <template>
-<div class="register2">
-  register2
+<div class="airport-operation">
+  airport-operation
 </div>
 </template>
 <script>

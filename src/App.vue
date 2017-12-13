@@ -4,9 +4,11 @@
   </div>
 </template>
 <script>
+export default{
+}
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 #app{
-  height: 100%;
+  height: 100vh;
 }
 </style>

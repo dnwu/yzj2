@@ -11,7 +11,7 @@
         </div>
       </div>
       <div class="right">
-        <p>欢迎您！<span class="username">XXXXXXXXX</span>&nbsp;&nbsp;|&nbsp;&nbsp;<span class="logout">退出登录</span></p>
+        <p>欢迎您！<span class="username">{{username}}</span>&nbsp;&nbsp;|&nbsp;&nbsp;<span class="logout" @click="logout">退出登录</span></p>
       </div>
     </div>
     <div class="center-main">
@@ -48,6 +48,7 @@
   </div>
 </template>
 <script>
+import {mapGetters,mapMutations} from 'vuex'
 export default {
   data() {
     return {
@@ -116,15 +117,29 @@ export default {
     }
   },
   methods: {
+    ...mapMutations({
+      'setUsertype':'SET_USERTYPE',
+      'setToken':'SET_TOKEN',
+      'setUsername':'SET_USERNAME',
+      'setId':'SET_ID'
+    }),
     goto(index,path){
       this.$router.push(path)
       this.activeIndex = index
+    },
+    logout(){
+      this.$cookie.delete('username')
+      this.setUsername('')
+      this.setUsertype('')
+      this.setToken('')
+      this.setId('')
+      this.$router.push('/login')
     }
   },
-  watch:{
-    route(){
-      console.log('1213');
-    }
+  computed: {
+    ...mapGetters([
+      'username',
+    ])
   }
 };
 </script>
@@ -133,6 +148,7 @@ export default {
   min-height: 100%;
   display: flex;
   flex-direction: column;
+  background-color: #f9f9f9;
   .center-head {
     width: 100%;
     height: 100px;
@@ -142,6 +158,17 @@ export default {
     box-sizing: border-box;
     z-index: 9;
     box-shadow: 0 0 10px gray;
+    position: relative;
+    &::after{
+      content: '';
+      display: inline-block;
+      width: 100%;
+      height: 1px;
+      background-color: #E7E7E7;
+      position: absolute;
+      bottom: -61px;
+      left: 0;
+    }
     .left {
       .logo {
         display: inline-block;
@@ -184,12 +211,13 @@ export default {
     }
   }
   .center-main {
-    width: 100%;
+    width: 1500px;
+    margin: 0 auto;
     flex: 1;
     background-color: #f9f9f9;
     display: flex;
     position: relative;
-    padding: 0 200px;
+    // padding: 0 200px;
     box-sizing: border-box;
     .nav {
       img:not(.menu) {
@@ -266,6 +294,8 @@ export default {
     .contain {
       padding-left: 200px;
       flex: 1;
+      min-width: 1200px;
+      box-sizing: border-box;
     }
   }
 }

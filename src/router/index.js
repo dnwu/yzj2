@@ -32,19 +32,22 @@ import News from '@/views/About/News/News'
 import Promotion from '@/views/About/Promotion'
 import Member from '@/views/About/Member'
 import Join from '@/views/About/Join'
-// import Login from '@/views/Login/Login'
-import Register from '@/views/Login/Register'
+// import Login from '@/views/Login/Login' import Register from
+// '@/views/Login/Register'
 import store from '@/store'
+<<<<<<< HEAD
 import PIndex from '@/views/Center/Online_product/product_index'
 import productWrite from '@/views/Center/Online_product/product_write'
 import productComplete from '@/views/Center/Online_product/product_complete'
+=======
+import * as types from '@/store/mutation-type'
+>>>>>>> 8f843bead6a99346b9f754c69f7c4a4b3456aeae
 
-const LoginIndex = () => import('@/views/Login/Login')
-const Login = () => import('@/views/Login/Login/Login')
-const Register1 = () => import('@/views/Login/register1/register1')
-const Register2 = () => import('@/views/Login/Register2/Register2')
-const Error = () => import('@/views/Login/Error/Error')
-const Success = () => import('@/views/Login/Success/Success')
+const LoginIndex = () => import ('@/views/Login/Login')
+const Login = () => import ('@/views/Login/Login/Login')
+const Register = () => import ('@/views/Login/register/register')
+const Error = () => import ('@/views/Login/Error/Error')
+const Success = () => import ('@/views/Login/Success/Success')
 
 const Index = () => import ('@/views/Index/Index')
 const Service = () => import ('@/views/Service/Service')
@@ -74,15 +77,29 @@ const Bill_look = () => import ('@/views/Center/Bill_look/Bill_look')
 const My_finance = () => import ('@/views/Center/My_finance/My_finance')
 const Change_password = () => import ('@/views/Center/Change_password/Change_password')
 
+// 供应商组件
+const SupplierIndex = () => import('@/views/Supplier/Supplier')
+const Supplier_Account = () => import('@/views/Supplier/Account/Account')
+const Supplier_Company_info = () => import('@/views/Supplier/Company_info/Company_info')
+const Supplier_Server_info = () => import('@/views/Supplier/Server_info/Server_info')
+const Supplier_Son_account = () => import('@/views/Supplier/Son_account/Son_account')
+const Supplier_Order_taking = () => import('@/views/Supplier/Order_taking/Order_taking')
+const Supplier_Booking_space = () => import('@/views/Supplier/Booking_space/Booking_space')
+const Supplier_Making_bill = () => import('@/views/Supplier/Making_bill/Making_bill')
+const Supplier_Airlift = () => import('@/views/Supplier/Airlift/Airlift')
+const Supplier_Land_transport = () => import('@/views/Supplier/Land_transport/Land_transport')
+const Supplier_Airport_operation = () => import('@/views/Supplier/Airport_operation/Airport_operation')
+const Supplier_Value_add = () => import('@/views/Supplier/Value_add/Value_add')
+
 Vue.use(Router);
 
 let router = new Router({
   routes: [
     {
-      path:'/',
-      component:Index,
-      redirect:'/home',
-      children:[
+      path: '/',
+      component: Index,
+      redirect: '/home',
+      children: [
         {
           path: '/home',
           name: 'home',
@@ -91,7 +108,7 @@ let router = new Router({
           path: '/product/airCargoServices',
           name: 'product/airCargoServices',
           component: AirCargoServices,
-          redirect:'/product/airCargoServices/haihang'
+          redirect: '/product/airCargoServices/haihang'
         }, {
           // path: '/product/airCargoServices/domestic', name:
           // 'product/airCargoServices/domestic',
@@ -246,29 +263,28 @@ let router = new Router({
           path: '/promotion',
           name: 'promotion',
           component: Promotion
-        },
+        }
       ]
     }, {
       path: '/login',
       name: 'login',
       component: LoginIndex,
-      redirect:'/login/login',
-      children:[
+      redirect: '/login/login',
+      children: [
         {
           path: '/login/login',
-          component:Login
-        },{
-          path: '/login/register1',
-          component:Register1
-        },{
-          path: '/login/register2',
-          component: Register2
-        },{
+          component: Login,
+          name: 'login/login'
+        }, {
+          path: '/login/register',
+          name:'login/register',
+          component: Register
+        }, {
           path: '/login/success',
           component: Success
-        },{
+        }, {
           path: '/login/error',
-          component:Error
+          component: Error
         }
       ]
     }, {
@@ -279,34 +295,71 @@ let router = new Router({
       children: [
         {
           path: '/center/account',
-          component: Account
+          component: Account,
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'personal'
+          }
         }, {
           path: '/center/change_password',
-          component: Change_password
+          component: Change_password,
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'personal'
+          }
         }, {
           path: '/center/personal',
-          component: Personal
+          component: Personal,
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'personal'
+          }
         }, {
           path: '/center/company_info',
-          component: Company_info
+          component: Company_info,
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'personal'
+          }
         }, {
-          path:'/center/doings',
-          component:Doings
-        },{
+          path: '/center/doings',
+          component: Doings,
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'personal'
+          }
+        }, {
           path: '/center/experience',
-          component:Experience
-        },{
-          path:'/center/integral',
-          component:Integral
-        },{
-          path: '/center/address',
-          component: Address
+          component: Experience,
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'personal'
+          }
         }, {
-          path:'/center/son_account',
-          component:Son_account
-        },{
+          path: '/center/integral',
+          component: Integral,
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'personal'
+          }
+        }, {
+          path: '/center/address',
+          component: Address,
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'personal'
+          }
+        }, {
+          path: '/center/son_account',
+          component: Son_account,
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'personal'
+          }
+        }, {
           path: '/center/online_product',
           component: Online_product,
+<<<<<<< HEAD
           children: [
             {
               path: '/center/online_product',
@@ -321,48 +374,219 @@ let router = new Router({
               component: productComplete
             }
           ]
+=======
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'personal'
+          }
+>>>>>>> 8f843bead6a99346b9f754c69f7c4a4b3456aeae
         }, {
           path: '/center/online_write',
-          component: Online_write
+          component: Online_write,
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'personal'
+          }
         }, {
           path: '/center/online_check',
-          component: Online_check
+          component: Online_check,
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'personal'
+          }
         }, {
           path: '/center/online_order_s',
-          component: Online_order_s
+          component: Online_order_s,
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'personal'
+          }
         }, {
           path: '/center/online_pay_s',
-          component: Online_pay_s
+          component: Online_pay_s,
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'personal'
+          }
         }, {
           path: '/center/client_product',
-          component: Client_product
+          component: Client_product,
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'personal'
+          }
         }, {
           path: '/center/order_search',
-          component: Order_search
+          component: Order_search,
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'personal'
+          }
         }, {
           path: '/center/order_detail',
-          component: Order_detail
+          component: Order_detail,
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'personal'
+          }
         }, {
           path: '/center/order_track',
-          component: Order_track
+          component: Order_track,
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'personal'
+          }
         }, {
           path: '/center/ticket_info_egis',
-          component: Ticket_info_egis
-        },{
-          path:'/center/bill_look',
-          component: Bill_look
+          component: Ticket_info_egis,
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'personal'
+          }
+        }, {
+          path: '/center/bill_look',
+          component: Bill_look,
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'personal'
+          }
+        }
+      ]
+    },{
+      path:'/supplier',
+      name:'supplier',
+      component:SupplierIndex,
+      redirect:'/supplier/account',
+      children:[
+        {
+          path:'/supplier/account',
+          component:Supplier_Account,
+          name:'supplier/account',
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'company' // 添加字段，判断用户权限
+          }
+        },
+        {
+          path:'/supplier/company_info',
+          component:Supplier_Company_info,
+          name:'supplier/company_info',
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'company' // 添加字段，判断用户权限
+          }
+        },
+        {
+          path:'/supplier/server_info',
+          component:Supplier_Server_info,
+          name:'supplier/server_info',
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'company' // 添加字段，判断用户权限
+          }
+        },
+        {
+          path:'/supplier/son_account',
+          component:Supplier_Son_account,
+          name:'supplier/son_account',
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'company' // 添加字段，判断用户权限
+          }
+        },
+        {
+          path:'/supplier/order_taking',
+          component:Supplier_Order_taking,
+          name:'supplier/order_taking',
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'company' // 添加字段，判断用户权限
+          }
+        },
+        {
+          path:'/supplier/booking_space',
+          component:Supplier_Booking_space,
+          name:'supplier/booking_space',
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'company' // 添加字段，判断用户权限
+          }
+        },
+        {
+          path:'/supplier/making_bill',
+          component:Supplier_Making_bill,
+          name:'supplier/making_bill',
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'company' // 添加字段，判断用户权限
+          }
+        },
+        {
+          path:'/supplier/airlift',
+          component:Supplier_Airlift,
+          name:'supplier/airlift',
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'company' // 添加字段，判断用户权限
+          }
+        },
+        {
+          path:'/supplier/land_transport',
+          component:Supplier_Land_transport,
+          name:'supplier/land_transport',
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'company' // 添加字段，判断用户权限
+          }
+        },
+        {
+          path:'/supplier/airport_operation',
+          component:Supplier_Airport_operation,
+          name:'supplier/airport_operation',
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'company' // 添加字段，判断用户权限
+          }
+        },
+        {
+          path:'/supplier/value_add',
+          component:Supplier_Value_add,
+          name:'supplier/value_add',
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'company' // 添加字段，判断用户权限
+          }
         }
       ]
     }
   ]
 });
 
+// 页面刷新时，重新赋值token
+if (window.localStorage.getItem('token')) {
+  // window.localStorage.setItem("usertype", usertype);
+  store.commit(types.SET_USERNAME, window.localStorage.getItem('username'))
+  store.commit(types.SET_TOKEN, window.localStorage.getItem('token'))
+  store.commit(types.SET_USERTYPE, window.localStorage.getItem('usertype'))
+  store.commit(types.SET_ID, window.localStorage.getItem('id'))
+}
+
 router.beforeEach((to, from, next) => {
-  if (to.name !== "login") {
+  // console.log('from',from);
+  // console.log('usertype',to.meta.usertype);
+  // console.log('storeusertype',store.state.usertype);
+  if (to.meta.requireAuth) {
     // 判断是否需要登录
-    // console.log(store.state)
-    next();
-    // next({   name: "login",   query:{     redirect: to.fullPath   } })
+    if (store.state.token) {
+      // console.log(store.state.usertype,to.meta.usertype);
+      if(store.state.usertype === to.meta.usertype){
+        next();
+      }else{
+        next({path: from.fullPath})
+      }
+    } else {
+      next({path: '/login'});
+    }
   } else {
     next();
   }

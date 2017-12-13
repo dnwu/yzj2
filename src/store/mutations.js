@@ -2,8 +2,10 @@ import * as types from './mutation-type'
 
 const mutations = {
   [types.SET_USERNAME](state,username) {
+    window.localStorage.setItem("username", username);
     state.username = username
   },
+<<<<<<< HEAD
   airShow (state) {
     state.airSelect = !state.airSelect
   },
@@ -155,6 +157,27 @@ const mutations = {
   },
   endLand(state, value) {
     state.endLand = value
+=======
+  [types.SET_TOKEN](state,token){
+    window.localStorage.setItem("token", token);
+    state.token = token
+  },
+  [types.SET_ID](state,id){
+    window.localStorage.setItem("id", id);
+    state.id = id
+  },
+  [types.LOGOUT](state){
+    localStorage.removeItem('token');
+    localStorage.removeItem('usertype');
+    localStorage.removeItem('id');
+    state.token = null
+    state.usertype = null
+    state.id = null
+  },
+  [types.SET_USERTYPE](state,usertype){
+    window.localStorage.setItem("usertype", usertype);
+    state.usertype = usertype
+>>>>>>> 8f843bead6a99346b9f754c69f7c4a4b3456aeae
   }
 
 }

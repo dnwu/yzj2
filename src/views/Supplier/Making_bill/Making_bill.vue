@@ -1,6 +1,6 @@
 <template>
-<div class="register1">
-  register1
+<div class="making-bill">
+  making-bill
 </div>
 </template>
 <script>
