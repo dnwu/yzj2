@@ -9,7 +9,7 @@
         <div class="base-info">
           <div class="head-img"><img src="../../../assets/head_img.png" alt=""></div>
           <div class="info">
-            <p class="company-name">深圳运捷信息系统有限公司</p>
+            <p class="company-name">{{userInfo.account}}</p>
             <div class="star">
               <el-rate
                 v-model='starNum'
@@ -76,13 +76,13 @@
             <span class="title">手机号</span><span class="colon">:</span><span class="content">17688772007</span><span class="btn"><el-button type="info" size='mini'>修改</el-button></span>
           </div>
           <div class="email">
-            <span class="title">邮箱</span><span class="colon">:</span><span class="content">lcy4634546@aliyun.com</span><span class="btn"><el-button type="info" size='mini'>修改</el-button></span>
+            <span class="title">邮箱</span><span class="colon">:</span><span class="content">{{userInfo.email}}</span><span class="btn"><el-button type="info" size='mini'>修改</el-button></span>
           </div>
           <div class="account-type">
-            <span class="title">账号类型</span><span class="colon">:</span><span class="content">一般/企业</span>
+            <span class="title">账号类型</span><span class="colon">:</span><span class="content">{{userInfo.accountType}}</span>
           </div>
           <div class="account-level">
-             <span class="title">账号级别</span><span class="colon">:</span><span class="content">主账号</span>
+             <span class="title">账号级别</span><span class="colon">:</span><span class="content">{{userInfo.accountLevel}}</span>
           </div>
         </div>
         <div class="personal-info">
@@ -110,6 +110,7 @@
   </div>
 </template>
 <script>
+import { mapGetters } from "vuex";
 export default {
   data() {
     return {
@@ -117,8 +118,30 @@ export default {
       score: 3450,
       confirmNum: 2,
       payNum: 3,
-      receivedNum: 4
+      receivedNum: 4,
+      userInfo:null
     };
+  },
+  created() {
+    this.getUserInfo()
+  },
+  methods: {
+    getUserInfo() {
+      this.axios
+        .post("/app/v1/user/userInfo", {
+          id: this.id,
+          token: this.token
+        })
+        .then(data => {
+          console.log(data.data);
+          if(data.data.code == '1'){
+            this.userInfo = data.data.data
+          }
+        });
+    }
+  },
+  computed: {
+    ...mapGetters(["token", "id"])
   }
 };
 </script>
