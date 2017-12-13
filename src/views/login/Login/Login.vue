@@ -33,7 +33,7 @@
         </div>
         <div class="autoLogin">
           <el-form-item label="">
-            <el-checkbox-group v-model="Form.resource">
+            <el-checkbox-group v-model="Form.deadLine">
               <el-checkbox  label="两周内免登陆"></el-checkbox >
             </el-checkbox-group>
           </el-form-item>
@@ -52,6 +52,8 @@
 </div>
 </template>
 <script>
+import getmd5 from "@/api/getmd5";
+import { mapMutations } from "vuex";
 export default {
   data() {
     return {
@@ -60,7 +62,7 @@ export default {
       Form: {
         username: "",
         password: "",
-        resource: ""
+        deadLine: ""
       },
       iconRes: [
         {
@@ -73,31 +75,98 @@ export default {
         }
       ],
       rules: {
-        username:[
-            { required: true, message: '请输入用户名', trigger: 'blur' },
-            { min: 3, max: 25, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+        username: [
+          { required: true, message: "请输入用户名", trigger: "blur" },
+          { min: 3, max: 25, message: "长度在 3 到 5 个字符", trigger: "blur" }
         ],
-        password:[
-          { required: true, message: '请输入密码', trigger: 'blur' },
-          { min: 3, max: 25, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+        password: [
+          { required: true, message: "请输入密码", trigger: "blur" },
+          { min: 3, max: 25, message: "长度在 3 到 5 个字符", trigger: "blur" }
         ]
       }
     };
   },
   methods: {
+    ...mapMutations({
+      setUsertype: "SET_USERTYPE",
+      setToken: "SET_TOKEN",
+      setUsername: "SET_USERNAME",
+      setId: "SET_ID"
+    }),
     goto(path) {
       this.$router.push(path);
     },
     onSubmit(loginForm) {
-      this.$refs[loginForm].validate((valid) => {
-          if (valid) {
-            console.log(valid);
-            alert('submit!');
-          } else {
-            console.log('error submit!!');
-            return false;
+      this.$refs[loginForm].validate(valid => {
+        if (valid) {
+          if (this.type === "personal") {
+            this.axios
+              .post("/app/v1/user/userLogin", {
+                // "password": "96e79218965eb72c92a549dd5a330112",
+                // "userName": "abc"
+                password: getmd5(this.Form.password),
+                userName: this.Form.username
+              })
+              .then(data => {
+                // console.log("personal", data.data);
+                if (data.data.code == "10004") {
+                  this.$notify.error({
+                    title: "错误",
+                    message: "用户不存在",
+                    duration: 2000
+                  });
+                } else if (data.data.code == "10106") {
+                  this.$notify.error({
+                    title: "错误",
+                    message: "用户名或密码错误",
+                    duration: 2000
+                  });
+                } else if (data.data.code == "1") {
+                  this.setUsertype("personal");
+                  this.setToken(data.data.data.token);
+                  this.setUsername(this.Form.username);
+                  this.setId(data.data.data.id);
+                  this.$cookie.set("username", this.Form.username, 1);
+                  this.$router.push({ path: "/center/account" });
+                }
+              });
+          } else if (this.type === "company") {
+            this.axios
+              .post("/web/v1/supplier/logining", {
+                // "password": "96e79218965eb72c92a549dd5a330112",
+                // "userName": "abc"
+                password: this.Form.password,
+                userName: this.Form.username
+              })
+              .then(data => {
+                // console.log("company", data.data);
+                if (data.data.code == "-2") {
+                  this.$notify.error({
+                    title: "错误",
+                    message: "用户不存在",
+                    duration: 2000
+                  });
+                } else if (data.data.code == "-1") {
+                  this.$notify.error({
+                    title: "错误",
+                    message: "用户名或密码错误",
+                    duration: 2000
+                  });
+                } else if (data.data.code == "1") {
+                  this.setUsertype("company");
+                  this.setToken(data.data.token);
+                  this.setUsername(this.Form.username);
+                  this.setId(data.data.id);
+                  this.$cookie.set("username", this.Form.username, 1);
+                  this.$router.push({path:'/supplier/account'})
+                }
+              });
           }
-        });
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
     },
     setclass(e) {
       if (e == "username") {

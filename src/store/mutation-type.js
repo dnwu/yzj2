@@ -1,3 +1,5 @@
 export const SET_USERNAME = 'SET_USERNAME'
 export const SET_TOKEN = 'SET_TOKEN'
 export const LOGOUT = 'LOGOUT'
+export const SET_USERTYPE = 'SET_USERTYPE'
+export const SET_ID = 'SET_ID'

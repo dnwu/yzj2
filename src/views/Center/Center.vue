@@ -11,7 +11,7 @@
         </div>
       </div>
       <div class="right">
-        <p>欢迎您！<span class="username">XXXXXXXXX</span>&nbsp;&nbsp;|&nbsp;&nbsp;<span class="logout">退出登录</span></p>
+        <p>欢迎您！<span class="username">{{username}}</span>&nbsp;&nbsp;|&nbsp;&nbsp;<span class="logout" @click="logout">退出登录</span></p>
       </div>
     </div>
     <div class="center-main">
@@ -48,6 +48,7 @@
   </div>
 </template>
 <script>
+import {mapGetters,mapMutations} from 'vuex'
 export default {
   data() {
     return {
@@ -116,15 +117,29 @@ export default {
     }
   },
   methods: {
+    ...mapMutations({
+      'setUsertype':'SET_USERTYPE',
+      'setToken':'SET_TOKEN',
+      'setUsername':'SET_USERNAME',
+      'setId':'SET_ID'
+    }),
     goto(index,path){
       this.$router.push(path)
       this.activeIndex = index
+    },
+    logout(){
+      this.$cookie.delete('username')
+      this.setUsername('')
+      this.setUsertype('')
+      this.setToken('')
+      this.setId('')
+      this.$router.push('/login')
     }
   },
-  watch:{
-    route(){
-      console.log('1213');
-    }
+  computed: {
+    ...mapGetters([
+      'username',
+    ])
   }
 };
 </script>

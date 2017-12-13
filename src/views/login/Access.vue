@@ -14,7 +14,7 @@
       </div>
     </template>
     <template v-else>
-      <p><span class="link" @click.stop="handleClick('login')">会员登录</span><span class="split">|</span><span class="link" @click.stop="handleClick('register')">注册</span></p>
+      <p><span class="link" @click.stop="handleClick('login')">会员登录</span><span class="split">|</span><span class="link" @click.stop="handleClick('login/register')">注册</span></p>
     </template>
   </div>
 </template>
@@ -30,11 +30,15 @@ export default {
     };
   },
   created () {
-    console.log('created',this.username);
+    // console.log('created',this.username);
   },
   methods: {
     ...mapMutations({
-      setcookie:'SET_USERNAME'
+      // 'setcookie':'SET_USERNAME',
+      'setUsertype':'SET_USERTYPE',
+      'setToken':'SET_TOKEN',
+      'setUsername':'SET_USERNAME',
+      'setId':'SET_ID'
     }),
     handleClick(path) {
       this.$router.push({ name: path });
@@ -44,7 +48,14 @@ export default {
       clearTimeout(this.timer)
     },
     goCenter() {
-      this.$router.push('/center')
+      console.log(this.usertype);
+      if(this.usertype === 'personal'){
+        this.$router.push('/center/account')
+
+      }else if(this.usertype === 'company'){
+
+        this.$router.push('/supplier/account')
+      }
     },
     toleave() {
       this.timer = setTimeout(() => {
@@ -54,12 +65,18 @@ export default {
     logout() {
       this.showOrhide = false;
       this.$cookie.delete('username')
-      this.setcookie('')
+      this.setUsername('')
+      this.setUsertype('')
+      this.setToken('')
+      this.setId('')
       this.$router.push('/login')
     }
   },
   computed: {
-    ...mapGetters(["username"])
+    ...mapGetters([
+      "username",
+      'usertype'
+    ])
   }
 };
 </script>

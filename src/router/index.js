@@ -35,6 +35,7 @@ import Join from '@/views/About/Join'
 // import Login from '@/views/Login/Login' import Register from
 // '@/views/Login/Register'
 import store from '@/store'
+import * as types from '@/store/mutation-type'
 
 const LoginIndex = () => import ('@/views/Login/Login')
 const Login = () => import ('@/views/Login/Login/Login')
@@ -270,6 +271,7 @@ let router = new Router({
           name: 'login/login'
         }, {
           path: '/login/register',
+          name:'login/register',
           component: Register
         }, {
           path: '/login/success',
@@ -290,120 +292,140 @@ let router = new Router({
           component: Account,
           meta: {
             requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'personal'
           }
         }, {
           path: '/center/change_password',
           component: Change_password,
           meta: {
             requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'personal'
           }
         }, {
           path: '/center/personal',
           component: Personal,
           meta: {
             requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'personal'
           }
         }, {
           path: '/center/company_info',
           component: Company_info,
           meta: {
             requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'personal'
           }
         }, {
           path: '/center/doings',
           component: Doings,
           meta: {
             requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'personal'
           }
         }, {
           path: '/center/experience',
           component: Experience,
           meta: {
             requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'personal'
           }
         }, {
           path: '/center/integral',
           component: Integral,
           meta: {
             requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'personal'
           }
         }, {
           path: '/center/address',
           component: Address,
           meta: {
             requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'personal'
           }
         }, {
           path: '/center/son_account',
           component: Son_account,
           meta: {
             requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'personal'
           }
         }, {
           path: '/center/online_product',
           component: Online_product,
           meta: {
             requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'personal'
           }
         }, {
           path: '/center/online_write',
           component: Online_write,
           meta: {
             requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'personal'
           }
         }, {
           path: '/center/online_check',
           component: Online_check,
           meta: {
             requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'personal'
           }
         }, {
           path: '/center/online_order_s',
           component: Online_order_s,
           meta: {
             requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'personal'
           }
         }, {
           path: '/center/online_pay_s',
           component: Online_pay_s,
           meta: {
             requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'personal'
           }
         }, {
           path: '/center/client_product',
           component: Client_product,
           meta: {
             requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'personal'
           }
         }, {
           path: '/center/order_search',
           component: Order_search,
           meta: {
             requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'personal'
           }
         }, {
           path: '/center/order_detail',
           component: Order_detail,
           meta: {
             requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'personal'
           }
         }, {
           path: '/center/order_track',
           component: Order_track,
           meta: {
             requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'personal'
           }
         }, {
           path: '/center/ticket_info_egis',
           component: Ticket_info_egis,
           meta: {
             requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'personal'
           }
         }, {
           path: '/center/bill_look',
           component: Bill_look,
           meta: {
             requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'personal'
           }
         }
       ]
@@ -416,68 +438,129 @@ let router = new Router({
         {
           path:'/supplier/account',
           component:Supplier_Account,
-          name:'supplier/account'
+          name:'supplier/account',
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'company' // 添加字段，判断用户权限
+          }
         },
         {
           path:'/supplier/company_info',
           component:Supplier_Company_info,
-          name:'supplier/company_info'
+          name:'supplier/company_info',
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'company' // 添加字段，判断用户权限
+          }
         },
         {
           path:'/supplier/server_info',
           component:Supplier_Server_info,
-          name:'supplier/server_info'
+          name:'supplier/server_info',
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'company' // 添加字段，判断用户权限
+          }
         },
         {
           path:'/supplier/son_account',
           component:Supplier_Son_account,
-          name:'supplier/son_account'
+          name:'supplier/son_account',
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'company' // 添加字段，判断用户权限
+          }
         },
         {
           path:'/supplier/order_taking',
           component:Supplier_Order_taking,
-          name:'supplier/order_taking'
+          name:'supplier/order_taking',
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'company' // 添加字段，判断用户权限
+          }
         },
         {
           path:'/supplier/booking_space',
           component:Supplier_Booking_space,
-          name:'supplier/booking_space'
+          name:'supplier/booking_space',
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'company' // 添加字段，判断用户权限
+          }
         },
         {
           path:'/supplier/making_bill',
           component:Supplier_Making_bill,
-          name:'supplier/making_bill'
+          name:'supplier/making_bill',
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'company' // 添加字段，判断用户权限
+          }
         },
         {
           path:'/supplier/airlift',
           component:Supplier_Airlift,
-          name:'supplier/airlift'
+          name:'supplier/airlift',
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'company' // 添加字段，判断用户权限
+          }
         },
         {
           path:'/supplier/land_transport',
           component:Supplier_Land_transport,
-          name:'supplier/land_transport'
+          name:'supplier/land_transport',
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'company' // 添加字段，判断用户权限
+          }
         },
         {
           path:'/supplier/airport_operation',
           component:Supplier_Airport_operation,
-          name:'supplier/airport_operation'
+          name:'supplier/airport_operation',
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'company' // 添加字段，判断用户权限
+          }
         },
         {
           path:'/supplier/value_add',
           component:Supplier_Value_add,
-          name:'supplier/value_add'
+          name:'supplier/value_add',
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'company' // 添加字段，判断用户权限
+          }
         }
       ]
     }
   ]
 });
 
+// 页面刷新时，重新赋值token
+if (window.localStorage.getItem('token')) {
+  // window.localStorage.setItem("usertype", usertype);
+  store.commit(types.SET_USERNAME, window.localStorage.getItem('username'))
+  store.commit(types.SET_TOKEN, window.localStorage.getItem('token'))
+  store.commit(types.SET_USERTYPE, window.localStorage.getItem('usertype'))
+  store.commit(types.SET_ID, window.localStorage.getItem('id'))
+}
+
 router.beforeEach((to, from, next) => {
+  // console.log('from',from);
+  // console.log('usertype',to.meta.usertype);
+  // console.log('storeusertype',store.state.usertype);
   if (to.meta.requireAuth) {
     // 判断是否需要登录
     if (store.state.token) {
-      next();
+      // console.log(store.state.usertype,to.meta.usertype);
+      if(store.state.usertype === to.meta.usertype){
+        next();
+      }else{
+        next({path: from.fullPath})
+      }
     } else {
       next({path: '/login'});
     }
