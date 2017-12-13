@@ -356,7 +356,6 @@ let router = new Router({
         }, {
           path: '/center/online_product',
           component: Online_product,
-<<<<<<< HEAD
           children: [
             {
               path: '/center/online_product',
@@ -370,13 +369,11 @@ let router = new Router({
               path: '/center/online_product/complete',
               component: productComplete
             }
-          ]
-=======
+          ],
           meta: {
             requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
             usertype:'personal'
           }
->>>>>>> 8f843bead6a99346b9f754c69f7c4a4b3456aeae
         }, {
           path: '/center/online_write',
           component: Online_write,
