@@ -72,6 +72,7 @@
           <div class="status">状态</div>
           <div class="operate">操作<el-button size="mini" type="warning">导出</el-button></div>
         </div>
+        <!-- 待支付 -->
         <div class="tbody">
           <div class="tbody-head">
             <div class="time">2017-09-09 12:00</div>
@@ -108,6 +109,7 @@
             </div>
           </div>
         </div>
+        <!-- 已支付 -->
         <div class="tbody">
           <div class="tbody-head">
             <div class="time">2017-09-09 12:00</div>
@@ -144,6 +146,7 @@
             </div>
           </div>
         </div>
+        <!-- 运送中 -->
         <div class="tbody">
           <div class="tbody-head">
             <div class="time">2017-09-09 12:00</div>
@@ -180,6 +183,7 @@
             </div>
           </div>
         </div>
+        <!-- 待受理 -->
         <div class="tbody">
           <div class="tbody-head">
             <div class="time">2017-09-09 12:00</div>
@@ -216,6 +220,7 @@
             </div>
           </div>
         </div>
+        <!-- 已完成 -->
         <div class="tbody">
           <div class="tbody-head">
             <div class="time">2017-09-09 12:00</div>
@@ -251,6 +256,15 @@
             </div>
           </div>
         </div>
+      </div>
+      <div class="page">
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          background
+          layout="prev, pager, next"
+          :total="1000">
+        </el-pagination>
       </div>
     </div>
   </div>
@@ -345,6 +359,14 @@ export default {
       ],
       orderStatu: ""
     };
+  },
+  methods: {
+    handleSizeChange(val) {
+      console.log(`每页 ${val} 条`);
+    },
+    handleCurrentChange(val) {
+      console.log(`当前页: ${val}`);
+    }
   }
 };
 </script>
@@ -557,6 +579,10 @@ export default {
           }
         }
       }
+    }
+    .page {
+      text-align: center;
+      margin-bottom: 100px;
     }
   }
 }

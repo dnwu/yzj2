@@ -2,23 +2,35 @@
   <div class="write-wrapper li-product-write">
     <div class="write-container">
       <div class="write-inner">
-        
+
         <div class="write-content">
           <div class="content-pic"></div>
           <div class="list list1">
-            <div class="list-text">订单编号:</div><span class="list-num">{{listIndex}}</span><div class="write-back" @click="back" style="cursor:pointer;">返回上一步</div>
+            <div class="list-text">订单编号:</div>
+            <span class="list-num">{{listIndex}}</span>
+            <div class="write-back" @click="back" style="cursor:pointer;">返回上一步</div>
           </div>
           <div class="list list2">
-            <div class="list-text">运输服务:</div><span class="list-land">{{startAddress}}-{{endAddress}}</span><span class="list-land"> 货物类型：{{listType}}</span><span class="listTime">航班起飞时间：{{listStart}}&nbsp;&nbsp;─&nbsp;&nbsp;{{listEnd}}</span>
+            <div class="list-text">运输服务:</div>
+            <span class="list-land">{{startAddress}}-{{endAddress}}</span>
+            <span class="list-land"> 货物类型：{{listType}}</span>
+            <span class="listTime">航班起飞时间：{{listStart}}&nbsp;&nbsp;─&nbsp;&nbsp;{{listEnd}}</span>
           </div>
           <div class="list list3">
-            <div class="list-text">基础服务:</div><span class="list-land"><product-select class="product-select"></product-select>  航空运输</span>
+            <div class="list-text">基础服务:</div>
+            <span class="list-land"><product-select class="product-select"></product-select>航空运输</span>
           </div>
           <div class="list list4">
-            <div class="list-text">更多服务:</div><span class="list-land"><product-select class="product-select"></product-select>  代交货</span><span class="list-land"><product-select class="product-select"></product-select>代提交</span><span class=" list-land"><product-select class="product-select"></product-select>上门取货</span><span class="list-land"><product-select  class="product-select"></product-select>落地配</span>
+            <div class="list-text">更多服务:</div>
+            <span class="list-land"><product-select @increment='crement' class="product-select"></product-select>代交货</span>
+            <span class="list-land"><product-select class="product-select"></product-select>代提交</span>
+            <span class=" list-land"><product-select class="product-select"></product-select>上门取货</span>
+            <span class="list-land"><product-select  class="product-select"></product-select>落地配</span>
           </div>
           <div class="list list5">
-            <div class="list-text">增值服务:</div><span class="list-land"><product-select class="product-select"></product-select>  报关报检</span><span class="list-land"><product-select class="product-select"></product-select>运输保险</span>
+            <div class="list-text">增值服务:</div>
+            <span class="list-land"><product-select class="product-select"></product-select>报关报检</span>
+            <span class="list-land"><product-select class="product-select"></product-select>运输保险</span>
           </div>
         </div>
       </div>
@@ -268,6 +280,9 @@
       VDistpicker
     },
     methods: {
+      crement(data){
+        console.log(data);
+      },
       completeGo () {
         this.$store.commit('minIndex')
         this.$router.push('/center/Online_product')
@@ -364,7 +379,7 @@
         -webkit-box-shadow:0, 0, 15px, #ccc;
         border:1px solid #fff;
         width:1060px;
-        
+
       .write-content {
         position:relative;
         background:#fff;
@@ -582,7 +597,7 @@
         .left-area {
           height:38px;
           margin-top:20px;
-          
+
           .left-name{
             display:flex;
             flex-direction:row;
@@ -827,7 +842,7 @@
         .left-area {
           height:38px;
           margin-top:20px;
-          
+
           .left-name{
             display:flex;
             flex-direction:row;
@@ -940,7 +955,7 @@
       }
       .address-img {
         flex:1;
-      
+
       }
     }
     .product-information{
@@ -1189,7 +1204,7 @@
         }
       }
     }
-    
+
   }
   .back-complete{
     margin-left:40px;
