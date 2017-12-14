@@ -1,12 +1,12 @@
 <template>
-  <div class="write-wrapper">
+  <div class="write-wrapper li-product-write">
     <div class="write-container">
       <div class="write-inner">
-        <div class="write-back" @click="back" style="cursor:pointer;">返回上一步</div>
+        
         <div class="write-content">
           <div class="content-pic"></div>
           <div class="list list1">
-            <div class="list-text">订单编号:</div><span class="list-num">{{listIndex}}</span>
+            <div class="list-text">订单编号:</div><span class="list-num">{{listIndex}}</span><div class="write-back" @click="back" style="cursor:pointer;">返回上一步</div>
           </div>
           <div class="list list2">
             <div class="list-text">运输服务:</div><span class="list-land">{{startAddress}}-{{endAddress}}</span><span class="list-land"> 货物类型：{{listType}}</span><span class="listTime">航班起飞时间：{{listStart}}&nbsp;&nbsp;─&nbsp;&nbsp;{{listEnd}}</span>
@@ -85,7 +85,7 @@
       </div>
       <div class="address-right">
         <div class="left-logo"></div>
-        <div class="logo-text">发</div>
+        <div class="logo-text">收</div>
         <div class="left-nav">
           <img src="../../../assets/product17.png">
         </div>
@@ -142,7 +142,7 @@
     <div class="product-title">货物信息</div>
     <div class="product-information">
       <div class="info-left">
-        <div class="info-list">
+        <div class="info-list info-list1">
           <span class="name-logo">*</span>
           <span class="name-nav">货物重量</span>
           <span class="name-text">{{userWeight}}</span>
@@ -159,7 +159,7 @@
           <span class="name-nav">货物名称</span>
           <span class="name-text">服装</span>
         </div>
-        <div class="info-list">
+        <div class="info-list info-list4">
           <span class="name-logo">*</span>
           <span class="name-nav">货物包装</span>
           <span class="name-text">纸箱</span>
@@ -197,7 +197,7 @@
     </div>
     <div class="product-title">活动信息</div>
     <div class="product-pre">
-      <input type="" name="" placeholder="邀请码">
+      <input type="" name="" placeholder="推荐人邀请码">
       <span class="product-preindex">验证</span>
     </div>
     <div class="product-title">发票信息</div>
@@ -207,18 +207,18 @@
       </div>
       <div class="con-change">
         <span class="con-text">深圳市迅捷有限公司|3252365435234234</span>
-        <span class="con-btn">更改</span>
+        <span class="con-btn">修改</span>
       </div>
     </div>
     <div class="product-title">费用信息</div>
     <div class="product-cost">
       <div class="cost-content">
-      <div class="cost-list">
+      <div class="cost-list cost-list1">
         <span class="cost-num">航空运费</span>
         <span class="cost-item">{{airIndex}}</span>
       </div>
       <div class="cost-list">
-        <span class="cost-num">燃油附加费费</span>
+        <span class="cost-num">燃油附加费</span>
         <span class="cost-item">{{fuelIndex}}</span>
       </div>
       <div class="cost-list">
@@ -253,7 +253,7 @@
         <div class="goback" @click="completeGo">返回上一步</div>
         <div class="gokeep">保存订单</div>
       </div>
-      <div class="cost-compete" @click="confirm" style="text-align:center;line-height:30px;margin-right:50px;height:30px;width:180px;background:red;color:#fff;border-radius:5px;cursor:pointer;">提交</div>
+      <div class="cost-compete" @click="confirm" style="text-align:center;line-height:30px;margin-right:50px;height:30px;width:180px;background:rgba(245,39,49,1);color:#fff;border-radius:2px;cursor:pointer;box-shadow:4px 4px 4px rgba(0,0,0,.1)">提交</div>
     </div>
   </div>
 </template>
@@ -348,6 +348,7 @@
 
 <style lang="scss" scoped>
   .write-wrapper {
+    color:rgba(153,153,153,1);
     width:1100px;
     .write-container {
       height:200px;
@@ -363,18 +364,12 @@
         -webkit-box-shadow:0, 0, 15px, #ccc;
         border:1px solid #fff;
         width:1060px;
-        .write-back {
-        height:30px;
-        display: flex;
-        align-items: center;
-        justify-content:flex-end;
-        margin-right:10px;
-      }
+        
       .write-content {
         position:relative;
         background:#fff;
-        box-shadow:0 0 15px #ccc;
-        height:170px;
+        box-shadow:0 5px 15px #ccc;
+        height:190px;
         display: flex;
         flex-direction: column;
         justify-content: space-around;
@@ -385,7 +380,22 @@
           height:5px;
           top:-5px;
           left:0;
-          background:linear-gradient(10deg,red,yellow,red,yellow,red,yellow,red,yellow,red,yellow,red,yellow,red,yellow,red,yellow,red,yellow,red,yellow,red,yellow,red,yellow,red,yellow,red,yellow,red,yellow,red,yellow,red,yellow,red,yellow,red,yellow,red,yellow,red,yellow);
+          background:linear-gradient(45deg, red 0%, red 50%,yellow 50%,yellow 100%);
+          background-size:6% 5px;
+        }
+        .list1 {
+          margin-top:20px;
+          .write-back {
+            height:30px;
+            display: flex;
+            align-items: flex-start;
+            margin-right:10px;
+            justify-content:flex-end;
+            flex:1;
+          }
+        }
+        .list5 {
+          margin-bottom:10px;
         }
         .list{
           height:26px;
@@ -396,6 +406,7 @@
             display:flex;
             justify-content:center;
             align-items:center;
+            margin-left:20px;
           }
           .list-num {
             width:190px;
@@ -426,10 +437,11 @@
     }
     .product-title {
       height:30px;
-      font-size:20px;
+      font-size:18px;
       width:100%;
       padding:10px 0 10px 20px;
-      color:#000;
+      color:rgba(93,93,93,1);
+      line-height:30px;
     }
     .product-address {
       width:100%;
@@ -487,8 +499,8 @@
             border-bottom:1px solid rgba(0,0,0,.1);
             .name-logo{
               color:rgba(252,29,26,1);
-              display:flex;
-              align-items:center;
+              margin-top:6px;
+              margin-right:5px;
             }
             .name-nav{
               width:64px;
@@ -531,11 +543,11 @@
             display:flex;
             flex-direction:row;
             align-items:center;
-            border-bottom:1px solid rgba(0,0,0,.1);
+            border-bottom:1px solid rgba(93,93,93,.1);
             .name-logo{
               color:rgba(252,29,26,1);
-              display:flex;
-              align-items:center;
+              margin-top:6px;
+              margin-right:5px;
             }
             .name-nav{
               width:64px;
@@ -581,8 +593,8 @@
             margin-right:20px;
             .name-logo{
               color:rgba(252,29,26,1);
-              display:flex;
-              align-items:center;
+              margin-top:6px;
+              margin-right:5px;
             }
             .name-nav{
               width:64px;
@@ -608,8 +620,8 @@
             border-bottom:1px solid rgba(0,0,0,.1);
             .name-logo{
               color:rgba(252,29,26,1);
-              display:flex;
-              align-items:center;
+              margin-top:6px;
+              margin-right:5px;
             }
             .name-nav{
               width:64px;
@@ -635,8 +647,8 @@
             border-bottom:1px solid rgba(0,0,0,.1);
             .name-logo{
               color:rgba(252,29,26,1);
-              display:flex;
-              align-items:center;
+              margin-top:6px;
+              margin-right:5px;
             }
             .name-nav{
               width:64px;
@@ -732,8 +744,8 @@
             border-bottom:1px solid rgba(0,0,0,.1);
             .name-logo{
               color:rgba(252,29,26,1);
-              display:flex;
-              align-items:center;
+              margin-top:6px;
+              margin-right:5px;
             }
             .name-nav{
               width:64px;
@@ -779,8 +791,8 @@
             border-bottom:1px solid rgba(0,0,0,.1);
             .name-logo{
               color:rgba(252,29,26,1);
-              display:flex;
-              align-items:center;
+              margin-top:6px;
+              margin-right:5px;
             }
             .name-nav{
               width:64px;
@@ -826,8 +838,8 @@
             margin-right:20px;
             .name-logo{
               color:rgba(252,29,26,1);
-              display:flex;
-              align-items:center;
+              margin-top:6px;
+              margin-right:5px;
             }
             .name-nav{
               width:64px;
@@ -853,8 +865,8 @@
             border-bottom:1px solid rgba(0,0,0,.1);
             .name-logo{
               color:rgba(252,29,26,1);
-              display:flex;
-              align-items:center;
+              margin-top:6px;
+              margin-right:5px;
             }
             .name-nav{
               width:64px;
@@ -880,8 +892,8 @@
             border-bottom:1px solid rgba(0,0,0,.1);
             .name-logo{
               color:rgba(252,29,26,1);
-              display:flex;
-              align-items:center;
+              margin-top:6px;
+              margin-right:5px;
             }
             .name-nav{
               width:64px;
@@ -935,7 +947,7 @@
       background:#fff;
       box-shadow:0 0 15px #ccc;
       margin:0 20px 0 20px;
-      height:200px;
+      height:180px;
       display:flex;
       flex-direction:row;
       align-items:center;
@@ -948,6 +960,12 @@
         flex-direction:column;
         justify-content:space-around;
         align-items:center;
+        .info-list1 {
+          margin-top:18px;
+        }
+        .info-list4 {
+          margin-bottom:18px;
+        }
         .info-list{
           height:30px;
           width:220px;
@@ -956,6 +974,8 @@
           .name-logo{
             color:red;
             width:10px;
+            margin-top:6px;
+            margin-right:5px;
           }
           .name-nav{
             width:80px;
@@ -967,7 +987,7 @@
             display:flex;
             justify-content:center;
             align-items:center;
-            color:#000;
+            color:rgba(93,93,93,1);
           }
         }
       }
@@ -990,6 +1010,7 @@
           border:1px solid #ccc;
           height:150px;
           width:140px;
+          padding-left:16px;
         }
         img{
           margin-left:20px;
@@ -998,7 +1019,8 @@
       }
       .info-right{
         width:260px;
-        height:180px;
+        height:100px;
+        margin-top:-40px;
         margin-right:20px;
         display:flex;
         flex-direction:column;
@@ -1011,6 +1033,8 @@
           .name-logo{
             color:red;
             width:10px;
+            margin-top:6px;
+            margin-right:5px;
           }
           .name-nav{
             width:80px;
@@ -1022,7 +1046,7 @@
             display:flex;
             justify-content:center;
             align-items:center;
-            color:#000;
+            color:rgba(93,93,93,1);
           }
         }
 
@@ -1038,10 +1062,11 @@
       align-items:center;
       input{
         margin-left:40px;
+        border:none;
       }
       .product-preindex{
-        margin-left:470px;
-        width:120px;
+        margin-left:460px;
+        width:130px;
         height:30px;
         border-radius:3px;
         background:rgba(252,207,0,1);
@@ -1050,6 +1075,10 @@
         justify-content:center;
         align-items:center;
         cursor:pointer;
+        box-shadow:5px 5px 5px rgba(0,0,0,.1);
+      }
+      .product-preindex:hover{
+        background:rgba(252,207,0,.8);
       }
     }
     .product-con{
@@ -1068,7 +1097,7 @@
         align-items:center;
         justify-content:flex-start;
         width:100%;
-        border-bottom:1px solid #ccc;
+        border-bottom:1px solid rgba(0,0,0,.1);
         .con-select{
           transform:scale(.6);
           margin-left:40px;
@@ -1083,6 +1112,7 @@
         align-items:center;
         .con-text{
           margin-left:40px;
+          color:rgba(93,93,93,1);
         }
         .con-btn{
           width:130px;
@@ -1090,11 +1120,15 @@
           display:flex;
           justify-content:center;
           align-items:center;
-          background:rgba(2252,207,0,2);
+          background:rgba(252,207,0,1);
           color:#fff;
           border-radius:3px;
           cursor:pointer;
           margin-left:380px;
+          box-shadow:5px 5px 5px rgba(0,0,0,.1);
+        }
+        .con-btn:hover{
+          background:rgba(252,207,0,.8);
         }
       }
     }
@@ -1102,7 +1136,7 @@
       background:#fff;
       box-shadow:0 0 15px #ccc;
       margin:0 20px 0 20px;
-      height:300px;
+      height:340px;
       display:flex;
       flex-direction:column;
       align-items:center;
@@ -1113,15 +1147,26 @@
         flex-direction:column;
         align-items:center;
         justify-content:space-around;
-        border-bottom:1px solid #ccc;
-        height:200px;
+        border-bottom:1px solid rgba(0,0,0,.1);
+        height:240px;
         width:100%;
+        .cost-list1 {
+          margin-top:20px;
+        }
         .cost-list{
-          width:80%;
+          width:88%;
           display:flex;
           flex-direction:row;
           align-items:center;
           justify-content:space-between;
+          .cost-item {
+            color:rgba(93,93,93,1);
+            margin-right:30px;
+          }
+          .cost-num {
+            width:90px;
+            text-align-last:justify;
+          }
         }
       }
       .cost-sum{
@@ -1140,6 +1185,7 @@
           color:rgba(252,207,0,1);
           margin-right:70px;
           margin-left:30px;
+          font-size:18px;
         }
       }
     }
@@ -1149,21 +1195,31 @@
     margin-left:40px;
     display:flex;
     height:100%;
-    width:200px;
+    width:190px;
     align-items:center;
     justify-content:space-between;
     .gokeep {
-      width:80px;
-      height:24px;
+      width:100px;
+      border-radius:3px;
+      height:26px;
       display:flex;
       justify-content:center;
       align-items:center;
       background:rgba(160,160,160,1);
       color:#fff;
       cursor:pointer;
+      box-shadow:4px 4px 4px rgba(0,0,0,.1)
     }
     .goback {
       cursor:pointer;
+    }
+  }
+</style>
+<style lang="scss">
+  .li-product-write {
+    select,input {
+      border:none;
+      outline:none;
     }
   }
 </style>

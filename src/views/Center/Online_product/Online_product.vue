@@ -5,7 +5,7 @@
       <div class="product-header-inner">
         <ul>
           <li v-for="(item, index) in chooselist" :key="index">
-            <div class="choose-list-left" @click="trumpIndex(index)">
+            <div class="choose-list-left">
               <div class="left-img-wrapper">
                 <div class="left-img-inner">
                   <img :src="(index >= nowIndex)?imgarr[index].active:imgarr[index].default" v-if="index <= nowIndex">
@@ -32,19 +32,19 @@ export default {
       return this.$store.getters.nowIndex
     }
   },
-  methods: {
-    trumpIndex (index) {
-      this.$store.commit('goIndex', index)
-      switch(index) {
-        case 0: this.$router.push('/center/online_product')
-                break;
-        case 1: this.$router.push('/center/online_product/write')
-                break;
-        case 2: this.$router.push('/center/online_product/complete')
-                break;
-      }
-    }
-  },
+  //methods: {
+  //  trumpIndex (index) {
+  //    this.$store.commit('goIndex', index)
+  //    switch(index) {
+  //      case 0: this.$router.push('/center/online_product')
+  //              break;
+  //      case 1: this.$router.push('/center/online_product/write')
+  //              break;
+  //      case 2: this.$router.push('/center/online_product/complete')
+  //              break;
+  //    }
+  //  }
+  //},
   data () {
     return {
       pp:3,
@@ -164,6 +164,7 @@ export default {
             }
             .choose-list-right {
               border:0.5px solid rgba(197,197,197,.5);
+              border-bottom:none;
               flex:1;
               margin-top:-19px;
             }

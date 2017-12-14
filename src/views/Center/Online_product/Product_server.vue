@@ -209,6 +209,7 @@
       this.$store.commit('dispatchForm', this.costDetail.dispatch1)
       this.$store.commit('insuranceForm', this.costDetail.insurance)
       this.$store.commit('safeForm', this.costDetail.safe)
+      this.$store.commit('airMount')
       //this.$store.commit('getWeight',this.$refs.Weight.querySelector('input').value)
       //this.$store.commit('getSum', parseInt(this.$store.getters.weight))
     }
@@ -233,6 +234,7 @@
     .title-line {
       flex:1;
       border:1px solid rgba(0,0,0,.1);
+      border-bottom:none;
       margin-right:30px;
     }
   }
@@ -333,6 +335,10 @@
           align-items:center;
           cursor:pointer;
           border-radius:3px;
+          box-shadow:0px 3px 4px rgba(0,0,0,.1)
+        }
+        .inner-right-btn:hover{
+          background:rgba(252,207,0,.8)
         }
       }
       .detail-img {
@@ -343,7 +349,6 @@
   .server-nav {
     width:100%;
     height: 130px;
-    border-bottom: 1px solid #ccc;
     display: flex;
     flex-direction: column;
     .server-nav-title {
@@ -360,6 +365,7 @@
       .title-line {
         flex:1;
         border:1px solid rgba(0,0,0,.1);
+        border-bottom:none;
         margin-right:30px;
       }
     }

@@ -1,16 +1,16 @@
 <template>
-  <div class="product-container">
+  <div class="product-container li-product-write-container">
       <div class="product-container-left">
         <div class="container-left-selection">
           <div class="selection-inner">
             <div class="selection-inner-left">
-              <div class="inner-left-list">
+              <div class="inner-left-list" id="left-list1">
                 <div class="left-list-name">运输路线</div>
-                <div class="left-list-selection" ref="list1"><v-distpicker only-province @selected="onBeginSelected"></v-distpicker></div>
-                <div class="left-list-selection"><v-distpicker only-province @selected="onEndSelected"></v-distpicker></div>
+                <div class="left-list-selection" ref="list1"><v-distpicker only-province @selected="onBeginSelected" :placeholders="distholders"></v-distpicker></div>
+                <div class="left-list-selection"><v-distpicker only-province @selected="onEndSelected" :placeholders="distholders"></v-distpicker></div>
               </div>
-              <div class="inner-left-list" ref="list2">
-                <div class="left-list-name1">航班起飞时间</div>
+              <div class="inner-left-list"id="left-list2">
+                <div class="left-list-name">航班起飞时间</div>
                 <div class="left-list-selection selection-date">
                   <div class="block">
                     <el-date-picker
@@ -31,10 +31,9 @@
                 </div>
                 <div class="inner-left-list" id="product-type-selection" ref="list3">
                   <div class="left-list-name">货物重量</div>
-                  <div class="left-list-selection"><el-input  v-model="liming" placeholder="请输入重量"></el-input></div>
-                  <span class="left-list-weight">KG</span>
-                  <div class="left-list-type">货物类型</div>
-                  <div class="left-list-selection">
+                  <div class="left-list-selection"><el-input  v-model="liming" placeholder="请输入重量" class="left-input"></el-input><span class="left-list-weight">KG</span></div>    
+                  <div class="left-list-selection" id="left-list3">
+                    <div class="left-list-type">货物类型</div>
                     <el-select v-model="value" placeholder="请选择">
                       <el-option
                         v-for="item in options"
@@ -52,8 +51,8 @@
             </div>
           </div>
           <div class="container-left-detail">
-            <div class="left-detail-inner">
-              <p-server :cost-detail="costList" v-if="searchShow" @costProductList="costComputed" @costExportList="exportComputed" @costLandList="landComputed" @costHomeList="homeComputed" @costDispatchList="dispatchComputed" @costSafeList="safeComputed" @costTrafficList="trafficComputed"></p-server>
+            <div class="left-detail-inner" v-if="searchShow">
+              <p-server :cost-detail="costList" @costProductList="costComputed" @costExportList="exportComputed" @costLandList="landComputed" @costHomeList="homeComputed" @costDispatchList="dispatchComputed" @costSafeList="safeComputed" @costTrafficList="trafficComputed"></p-server>
             </div>
           </div>
         </div>
@@ -134,6 +133,10 @@ export default {
       let d = this.value1.getDate()
       let h = this.value1.getHours()
       let f = this.value1.getMinutes()
+      if(m < 10) m = '0'+m
+      if(d < 10) d = '0'+d
+      if(h < 10) h = '0'+h
+      if(f < 10) f = '0'+f
       return y+'-'+m+'-'+d+' '+h+':'+f
     },
     landTime () {
@@ -142,6 +145,10 @@ export default {
       let d = this.value2.getDate()
       let h = this.value2.getHours()
       let f = this.value2.getMinutes()
+      if(m < 10) m = '0'+m
+      if(d < 10) d = '0'+d
+      if(h < 10) h = '0'+h
+      if(f < 10) f = '0'+f
       return y+'-'+m+'-'+d+' '+h+':'+f
     },
     airSelect () {
@@ -164,31 +171,31 @@ export default {
     },
     airLineCost () {
       if (!this.airFormCost) return 0
-      return this.weight * this.$store.getters.airCost
+      return this.$store.getters.weight * this.$store.getters.airCost
     },
     fuelLineCost () {
       if (!this.fuelFormCost) return 0
-      return this.weight * this.$store.getters.fuelCost
+      return this.$store.getters.weight * this.$store.getters.fuelCost
     },
     exportLineCost () {
       if (!this.exportFormCost) return 0
-      return this.weight * this.$store.getters.exportCost
+      return this.$store.getters.weight * this.$store.getters.exportCost
     },
     formLineCost () {
       if (!this.formFormCost) return 0
-      return this.weight * this.$store.getters.formCost
+      return this.$store.getters.weight * this.$store.getters.formCost
     },
     landLineCost () {
       if (!this.landFormCost) return 0
-      return this.weight * this.$store.getters.productCost
+      return this.$store.getters.weight * this.$store.getters.productCost
     },
     homeLineCost () {
       if (!this.homeFormCost) return 0
-      return this.weight * this.$store.getters.landCost
+      return this.$store.getters.weight * this.$store.getters.landCost
     },
     dispatchLineCost () {
       if (!this.dispatchFormCost) return 0
-      return this.weight * this.$store.getters.dispatchCost
+      return this.$store.getters.weight * this.$store.getters.dispatchCost
     },
     safeLineCost () {
       if (!this.safeFormCost) return 0
@@ -204,7 +211,7 @@ export default {
   },
   data () {
     return {
-      liming: 0,
+      liming: '',
       li:'',
       airFormCost:'',
       searchShow:false,
@@ -289,7 +296,10 @@ export default {
       destination: '',
       startTime: '',
       endTime: '',
-      productWeight: ''
+      productWeight: '',
+      distholders: {
+        province: '------- 省 --------'
+      }
     }
   },
   methods: {
@@ -356,21 +366,15 @@ export default {
     this.$router.push({ path: '/center/online_product', query: { page: 0 }})
     let num = location.href.split('?')[1].split('=')[1]
     this.$store.commit('goIndex',num)
-    //this.$store.commit('airForm', this.airLineCost)
-    //this.$store.commit('fuelForm', this.fuelLineCost)
-    //this.$store.commit('exportForm', this.exportLineCost)
-    //this.$store.commit('landForm', this.landLineCost)
-    //this.$store.commit('formForm', this.formLineCost)
-    //this.$store.commit('homeForm', this.homeLineCost)
-    //this.$store.commit('dispatchForm', this.costDetail.dispatch1)
-    //this.$store.commit('trafficForm', this.trafficLineCost)
-    //this.$store.commit('safeForm', this.costDetail.safe)
+    this.searchShow = false
+
   }
 }
 </script>
 
 <style lang="scss" scoped>
 .product-container {
+      color:rgba(153,153,153,1);
       flex:1;
       width:100%;
       display:flex;
@@ -398,37 +402,75 @@ export default {
               display:flex;
               flex-direction:column;
               justify-content: space-around;
+              #left-list1{
+                width:600px;
+                .left-list-selection {
+                  width:180px;
+                  transform:scale(.9);
+                }
+              }
+              #left-list2 {
+                .left-list-selection {
+                  width:180px;
+                }
+              }
               *{
                 border:none!important;
+              }
+              .inner-left-list:nth-child(1) {
+                margin-top:10px;
+              }
+              .inner-left-list:nth-child(3) {
+                margin-bottom:10px;
               }
               .inner-left-list {
                 display:flex;
                 flex-direction:row;
-                justify-content:space-around;
+                justify-content:space-between;
                 align-items:center;
                 .left-list-name {
-                  width:112px;
-                  letter-spacing: 14px;
+                  width:104px;
+                  display:inline-block;
+                  text-align-last:justify;
+                  margin-left:30px;
+                  font-size:15px;
                 }
-                .left-list-name1 {
-                  width:112px;
-                  letter-spacing:3px;
-                  margin-left:14px;
-                }
-
               }
               #product-type-selection {
+                display:felx;
+                flex-direction:row;
+                justify-content:space-between;
+                align-items:center;
+                width:600px;
                 .left-list-name {
-                  margin-left:10px;
+                  width:104px;
+                  display:inline-block;
+                  text-align-last:justify;
+                  margin-left:30px;
                 }
                 .left-list-selection {
                   width:104px;
+                  display:flex;
+                  flex-direction:row;
+                  align-items:center;
+                  justify-content:center;
+                  .left-input {
+                    width:100px;
+                    margin-left:-30px;
+                  }
+                  .left-list-weight {
+                  }
                 }
-                .left-list-weight {
-                  margin-left:-20px;
-                }
-                .left-list-selection:nth-child(2) {
-                  margin-left:20px;
+                #left-list3 {
+                  width:200px;
+                  display:flex;
+                  flex-direction:row;
+                  align-items:center;
+                  justify-content:center;
+                  .left-list-type{
+                    width:130px;
+                    margin-left:30px;
+                  }
                 }
               }
             }
@@ -447,6 +489,10 @@ export default {
                 border-radius:3px;
                 margin-top:100px;
                 margin-left:130px;
+                box-shadow:3px 3px 5px rgba(0,0,0,.1);
+              }
+              .inner-right-btn:hover {
+                background:rgba(252,207,0,.8)
               }
             }
           }
@@ -540,6 +586,50 @@ export default {
         background:rgba(245,39,39,1);
         color:#fff;
         cursor:pointer;
+        border-radius:3px;
+      }
+      .confirm:hover{
+        background:rgba(245,39,39,.9);
       }
     }
+</style>
+<style lang='scss'>
+  .li-product-write-container {
+    .left-list-selection {
+      *{
+        border:none;
+      }
+      *:focus{
+        border:none;
+      }
+      select{
+        border:none;
+        option {
+          border:none;
+        }
+      }
+      select:focus{
+        border:none;
+      }
+      input {
+        border:none;
+      }
+    }
+    #left-list1{
+      width:600px;
+      .left-list-selection {
+        width:180px;
+        transform:scale(.9);
+        select{
+          margin-left: -30px;
+          width:170px;
+          text-indent: 40px;
+        }
+      }
+    }
+    input,select,button,textarea{
+      outline: none;
+    }
+  }
+  
 </style>

@@ -20,6 +20,9 @@ const mutations = {
   dispatchShow (state) {
     state.dispatchSelect = !state.dispatchSelect
   },
+  airMount (state) {
+    state.airSelect = false
+  },
   airForm(state, price) {
     state.airCost = price
   },
