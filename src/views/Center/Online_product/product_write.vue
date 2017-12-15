@@ -215,30 +215,37 @@
       <div class="cost-content">
       <div class="cost-list cost-list1">
         <span class="cost-num">航空运费</span>
+        <span class="cost-line">································································································································································</span>
         <span class="cost-item">{{airIndex}}</span>
       </div>
       <div class="cost-list">
         <span class="cost-num">燃油附加费</span>
+        <span class="cost-line">································································································································································</span>
         <span class="cost-item">{{fuelIndex}}</span>
       </div>
       <div class="cost-list">
         <span class="cost-num">出港处置费</span>
+        <span class="cost-line">································································································································································</span>
         <span class="cost-item">{{exportIndex}}</span>
       </div>
       <div class="cost-list">
         <span class="cost-num">出港制单费</span>
+        <span class="cost-line">································································································································································</span>
         <span class="cost-item">{{formIndex}}</span>
       </div>
       <div class="cost-list">
         <span class="cost-num">运岗提货费</span>
+        <span class="cost-line">································································································································································</span>
         <span class="cost-item">{{landIndex}}</span>
       </div>
       <div class="cost-list">
         <span class="cost-num">上门提货费</span>
+        <span class="cost-line">································································································································································</span>
         <span class="cost-item">{{homeIndex}}</span>
       </div>
       <div class="cost-list">
         <span class="cost-num">派送费</span>
+        <span class="cost-line">································································································································································</span>
         <span class="cost-item">{{dispatchIndex}}</span>
       </div>
       </div>
@@ -253,7 +260,7 @@
         <div class="goback" @click="completeGo">返回上一步</div>
         <div class="gokeep">保存订单</div>
       </div>
-      <div class="cost-compete" @click="confirm" style="text-align:center;line-height:30px;margin-right:50px;height:30px;width:180px;background:rgba(245,39,49,1);color:#fff;border-radius:2px;cursor:pointer;box-shadow:4px 4px 4px rgba(0,0,0,.1)">提交</div>
+      <div class="cost-compete" @click="confirm" style="text-align:center;line-height:30px;margin-right:50px;height:30px;width:180px;background:rgba(245,39,49,1);color:#fff;border-radius:2px;cursor:pointer;box-shadow:4px 4px 4px rgba(244,244,244,1);">提交</div>
     </div>
   </div>
 </template>
@@ -496,7 +503,7 @@
             display:flex;
             flex-direction:row;
             align-items:center;
-            border-bottom:1px solid rgba(0,0,0,.1);
+            border-bottom:1px solid rgba(244,244,244,1);
             .name-logo{
               color:rgba(252,29,26,1);
               margin-top:6px;
@@ -567,7 +574,7 @@
             flex-direction:row;
             justify-content:space-between;
             align-items:center;
-            border-bottom:1px solid rgba(0,0,0,.1);
+            border-bottom:1px solid rgba(244,244,244,1);
             .name-nav{
               width:64px;
               display:inline-block;
@@ -617,7 +624,7 @@
             height:100%;
             margin-left:20px;
             margin-right:20px;
-            border-bottom:1px solid rgba(0,0,0,.1);
+            border-bottom:1px solid rgba(244,244,244,1);
             .name-logo{
               color:rgba(252,29,26,1);
               margin-top:6px;
@@ -644,7 +651,7 @@
             height:100%;
             margin-left:20px;
             margin-right:20px;
-            border-bottom:1px solid rgba(0,0,0,.1);
+            border-bottom:1px solid (244,244,244,1);
             .name-logo{
               color:rgba(252,29,26,1);
               margin-top:6px;
@@ -741,7 +748,7 @@
             display:flex;
             flex-direction:row;
             align-items:center;
-            border-bottom:1px solid rgba(0,0,0,.1);
+            border-bottom:1px solid rgba(244,244,244,1);
             .name-logo{
               color:rgba(252,29,26,1);
               margin-top:6px;
@@ -788,7 +795,7 @@
             display:flex;
             flex-direction:row;
             align-items:center;
-            border-bottom:1px solid rgba(0,0,0,.1);
+            border-bottom:1px solid rgba(244,244,244,1);
             .name-logo{
               color:rgba(252,29,26,1);
               margin-top:6px;
@@ -812,7 +819,7 @@
             flex-direction:row;
             justify-content:space-between;
             align-items:center;
-            border-bottom:1px solid rgba(0,0,0,.1);
+            border-bottom:1px solid rgba(244,244,244,1);
             .name-nav{
               width:64px;
               display:inline-block;
@@ -862,7 +869,7 @@
             height:100%;
             margin-left:20px;
             margin-right:20px;
-            border-bottom:1px solid rgba(0,0,0,.1);
+            border-bottom:1px solid rgba(244,244,244,1);
             .name-logo{
               color:rgba(252,29,26,1);
               margin-top:6px;
@@ -889,7 +896,7 @@
             height:100%;
             margin-left:20px;
             margin-right:20px;
-            border-bottom:1px solid rgba(0,0,0,.1);
+            border-bottom:1px solid rgba(244,244,244,1);
             .name-logo{
               color:rgba(252,29,26,1);
               margin-top:6px;
@@ -971,6 +978,7 @@
           width:220px;
           display:flex;
           align-items:center;
+          border-bottom:1px solid rgba(244,244,244,1);
           .name-logo{
             color:red;
             width:10px;
@@ -1030,6 +1038,7 @@
           width:220px;
           display:flex;
           align-items:center;
+          border-bottom:1px solid rgba(244,244,244,1);
           .name-logo{
             color:red;
             width:10px;
@@ -1063,6 +1072,8 @@
       input{
         margin-left:40px;
         border:none;
+        height:40px;
+        border-bottom:1px solid rgba(244,244,244,1)!important;
       }
       .product-preindex{
         margin-left:460px;
@@ -1075,7 +1086,7 @@
         justify-content:center;
         align-items:center;
         cursor:pointer;
-        box-shadow:5px 5px 5px rgba(0,0,0,.1);
+        box-shadow:5px 5px 5px rgba(244,244,244,1);
       }
       .product-preindex:hover{
         background:rgba(252,207,0,.8);
@@ -1096,8 +1107,8 @@
         flex-direction:row;
         align-items:center;
         justify-content:flex-start;
+        border-bottom:1px solid rgba(244,244,244,1);
         width:100%;
-        border-bottom:1px solid rgba(0,0,0,.1);
         .con-select{
           transform:scale(.6);
           margin-left:40px;
@@ -1125,7 +1136,7 @@
           border-radius:3px;
           cursor:pointer;
           margin-left:380px;
-          box-shadow:5px 5px 5px rgba(0,0,0,.1);
+          box-shadow:5px 5px 5px rgba(244,244,244,1);
         }
         .con-btn:hover{
           background:rgba(252,207,0,.8);
@@ -1147,7 +1158,7 @@
         flex-direction:column;
         align-items:center;
         justify-content:space-around;
-        border-bottom:1px solid rgba(0,0,0,.1);
+        border-bottom:1px solid rgba(244,244,244,1);
         height:240px;
         width:100%;
         .cost-list1 {
@@ -1166,6 +1177,9 @@
           .cost-num {
             width:90px;
             text-align-last:justify;
+          }
+          .cost-line {
+            color:rgba(0,0,0,.2);
           }
         }
       }
@@ -1208,7 +1222,7 @@
       background:rgba(160,160,160,1);
       color:#fff;
       cursor:pointer;
-      box-shadow:4px 4px 4px rgba(0,0,0,.1)
+      box-shadow:4px 4px 4px rgba(244,244,244,1);
     }
     .goback {
       cursor:pointer;
