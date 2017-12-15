@@ -185,7 +185,7 @@
       },
       btn3 () {
         this.dispatchCost = this.costDetail.dispatch3
-      }   
+      }
     },
     mounted () {
       this.airCost = this.costDetail.air
@@ -319,7 +319,7 @@
               border-radius:3px;
               cursor:pointer;
               display:inline-block;
-              
+
             }
             .btn-active {
               background: rgba(252,207,0,1);

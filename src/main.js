@@ -8,12 +8,14 @@ import router from './router'
 import store from './store'
 import VueCookie from 'vue-cookie'
 import axios from '@/config/axios'
+import EasyScroll from 'easyscroll'
 
 Vue.prototype.axios = axios
 
 Vue.config.productionTip = false;
 Vue.use(ElementUI)
 Vue.use(VueCookie)
+Vue.use(EasyScroll)
 
 /* eslint-disable no-new */
 new Vue({

@@ -9,7 +9,7 @@
         <div class="base-info">
           <div class="head-img"><img src="../../../assets/head_img.png" alt=""></div>
           <div class="info">
-            <p class="company-name">{{userInfo.account}}</p>
+            <p class="company-name">公司名称</p>
             <div class="star">
               <el-rate
                 v-model='starNum'
@@ -76,13 +76,13 @@
             <span class="title">手机号</span><span class="colon">:</span><span class="content">17688772007</span><span class="btn"><el-button type="info" size='mini'>修改</el-button></span>
           </div>
           <div class="email">
-            <span class="title">邮箱</span><span class="colon">:</span><span class="content">{{userInfo.email}}</span><span class="btn"><el-button type="info" size='mini'>修改</el-button></span>
+            <span class="title">邮箱</span><span class="colon">:</span><span class="content">12312312@qq.com</span><span class="btn"><el-button type="info" size='mini'>修改</el-button></span>
           </div>
           <div class="account-type">
-            <span class="title">账号类型</span><span class="colon">:</span><span class="content">{{userInfo.accountType}}</span>
+            <span class="title">账号类型</span><span class="colon">:</span><span class="content">个人货主</span>
           </div>
           <div class="account-level">
-             <span class="title">账号级别</span><span class="colon">:</span><span class="content">{{userInfo.accountLevel}}</span>
+             <span class="title">账号级别</span><span class="colon">:</span><span class="content">主账号</span>
           </div>
         </div>
         <div class="personal-info">
@@ -119,7 +119,7 @@ export default {
       confirmNum: 2,
       payNum: 3,
       receivedNum: 4,
-      userInfo:null
+      userInfo:{}
     };
   },
   created() {

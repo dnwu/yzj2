@@ -23,10 +23,23 @@
                     </el-date-picker>
                   </div>
                 </div>
+<<<<<<< HEAD
               </div>
               <div class="inner-left-list" id="product-type-selection">
+=======
+                <div class="left-list-selection selection-date">
+                  <div class="block">
+                   <el-date-picker
+                      v-model="value2"
+                      type="datetime"
+                      placeholder="选择日期时间">
+                    </el-date-picker>
+                  </div>
+                </div>
+                <div class="inner-left-list" id="product-type-selection" ref="list3">
+>>>>>>> cf9b5f113c002dd680aae21cd987ced97e8e154c
                   <div class="left-list-name">货物重量</div>
-                  <div class="left-list-selection"><el-input  v-model="liming" placeholder="请输入重量" class="left-input"></el-input><span class="left-list-weight">KG</span></div>    
+                  <div class="left-list-selection"><el-input  v-model="liming" placeholder="请输入重量" class="left-input"></el-input><span class="left-list-weight">KG</span></div>
                   <div class="left-list-selection" id="left-list3">
                     <div class="left-list-type">货物类型</div>
                     <el-select v-model="value" placeholder="请选择">
@@ -97,7 +110,7 @@
             <div class="right-content-free">
               <span class="cost-free">优惠</span>
               <span>
-                <span class="cost-index">-0</span>
+                <span class="cost-index">0</span>
                 <span>元</span>
               </span>
             </div>
@@ -516,6 +529,7 @@ export default {
           width: 100%;
           display:flex;
           justify-content:center;
+          margin-bottom: 100px;
           .left-detail-inner {
             background:#fff;
             width:860px;
@@ -645,5 +659,5 @@ export default {
       outline: none;
     }
   }
-  
+
 </style>
