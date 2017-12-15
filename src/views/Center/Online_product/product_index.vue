@@ -21,7 +21,7 @@
                   </div>
                 </div>
                 <div class="left-list-selection selection-date">
-                  <div class="block">
+                  <div class="block"
                    <el-date-picker
                       v-model="value2"
                       type="datetime"

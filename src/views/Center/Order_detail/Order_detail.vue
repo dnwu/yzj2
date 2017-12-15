@@ -291,14 +291,24 @@
               <p>单位：cm</p>
             </div>
             <div class="val">
-              <p>100*100*10/5</p>
-              <p>100*100*10/5</p>
-              <p>100*100*10/5</p>
-              <p>100*100*10/5</p>
-              <p>100*100*10/5</p>
-              <p>100*100*10/5</p>
-              <p>100*100*10/5</p>
-              <p>100*100*10/5</p>
+              <EasyScrollbar>
+                <div class="box" id="wrapper">
+                  <div>
+                    <p>100*100*10/5</p>
+                    <p>100*100*10/5</p>
+                    <p>100*100*10/5</p>
+                    <p>100*100*10/5</p>
+                    <p>100*100*10/5</p>
+                    <p>100*100*10/5</p>
+                    <p>100*100*10/5</p>
+                    <p>100*100*10/5</p>
+                    <p>100*100*10/5</p>
+                    <p>100*100*10/5</p>
+                    <p>100*100*10/5</p>
+                    <p>100*100*10/5</p>
+                  </div>
+                </div>
+              </EasyScrollbar>
             </div>
           </div>
         </div>
@@ -798,12 +808,15 @@ export default {
             text-align: center;
             color: #989898;
           }
+          .box{
+            height: 200px;
+          }
           .val {
-            margin-top: 15px;
             width: 200px;
             height: 200px;
+            overflow: hidden;
+            margin-top: 15px;
             border: 1px solid #989898;
-            overflow: auto;
             padding: 0 0 0 10px;
           }
         }

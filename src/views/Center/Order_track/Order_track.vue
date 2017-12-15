@@ -100,30 +100,34 @@
             </div>
           </div>
           <div class="content-right">
-            <div class="oneday">
-              <div class="data">2017-10-10</div>
-              <div class="time">
-                <div class="item"><span class="itme-time">15:48:22</span><span class="caption">【出港收运】</span><span class="who">陈丽</span></div>
-                <div class="item"><span class="itme-time">15:48:22</span><span class="caption">【出港收运】</span><span class="who">陈丽</span></div>
-                <div class="item"><span class="itme-time">15:48:22</span><span class="caption">【出港收运】</span><span class="who">陈丽</span></div>
-              </div>
-            </div>
-            <div class="oneday">
-              <div class="data">2017-10-10</div>
-              <div class="time">
-                <div class="item"><span class="itme-time">15:48:22</span><span class="caption">【出港收运】</span><span class="who">陈丽</span></div>
-                <div class="item"><span class="itme-time">15:48:22</span><span class="caption">【出港收运】</span><span class="who">陈丽</span></div>
-                <div class="item"><span class="itme-time">15:48:22</span><span class="caption">【出港收运】</span><span class="who">陈丽</span></div>
-              </div>
-            </div>
-            <div class="oneday">
-              <div class="data">2017-10-10</div>
-              <div class="time">
-                <div class="item"><span class="itme-time">15:48:22</span><span class="caption">【出港收运】</span><span class="who">陈丽</span></div>
-                <div class="item"><span class="itme-time">15:48:22</span><span class="caption">【出港收运】</span><span class="who">陈丽</span></div>
-                <div class="item"><span class="itme-time">15:48:22</span><span class="caption">【出港收运】</span><span class="who">陈丽</span></div>
-              </div>
-            </div>
+              <EasyScrollbar>
+                <div class="box" id="wrapper">
+                    <div class="oneday">
+                      <div class="data">2017-10-10</div>
+                      <div class="time">
+                        <div class="item"><span class="itme-time">15:48:22</span><span class="caption">【出港收运】</span><span class="who">陈丽</span></div>
+                        <div class="item"><span class="itme-time">15:48:22</span><span class="caption">【出港收运】</span><span class="who">陈丽</span></div>
+                        <div class="item"><span class="itme-time">15:48:22</span><span class="caption">【出港收运】</span><span class="who">陈丽</span></div>
+                      </div>
+                    </div>
+                    <div class="oneday">
+                      <div class="data">2017-10-10</div>
+                      <div class="time">
+                        <div class="item"><span class="itme-time">15:48:22</span><span class="caption">【出港收运】</span><span class="who">陈丽</span></div>
+                        <div class="item"><span class="itme-time">15:48:22</span><span class="caption">【出港收运】</span><span class="who">陈丽</span></div>
+                        <div class="item"><span class="itme-time">15:48:22</span><span class="caption">【出港收运】</span><span class="who">陈丽</span></div>
+                      </div>
+                    </div>
+                    <div class="oneday">
+                      <div class="data">2017-10-10</div>
+                      <div class="time">
+                        <div class="item"><span class="itme-time">15:48:22</span><span class="caption">【出港收运】</span><span class="who">陈丽</span></div>
+                        <div class="item"><span class="itme-time">15:48:22</span><span class="caption">【出港收运】</span><span class="who">陈丽</span></div>
+                        <div class="item"><span class="itme-time">15:48:22</span><span class="caption">【出港收运】</span><span class="who">陈丽</span></div>
+                      </div>
+                    </div>
+                </div>
+              </EasyScrollbar>
           </div>
         </div>
       </div>
@@ -276,9 +280,13 @@ export default {
         .content-right {
           flex: 1;
           padding: 40px;
-          overflow: auto;
+          // overflow: auto;
           height: 200px;
           color: #b3b3b3;
+          .box{
+            width: 100%;
+            height:200px;
+          }
           .oneday {
             &:first-child {
               .time {
@@ -291,15 +299,7 @@ export default {
             display: flex;
             .data {
               position: relative;
-              &::before {
-                content: "";
-                position: absolute;
-                left: -60px;
-                top: 0;
-                height: 100%;
-                width: 2px;
-                background-color: #e6e6e6;
-              }
+
             }
             .time {
               margin-left: 40px;
@@ -316,8 +316,17 @@ export default {
                   border-radius: 50%;
                   background-color: #b3b3b3;
                   background-color: #e6e6e6;
+                  z-index: 99;
                 }
-
+                &::after {
+                content: "";
+                position: absolute;
+                left: -171px;
+                top: 0;
+                height: 100%;
+                width: 2px;
+                background-color: #e6e6e6;
+              }
                 display: flex;
                 span {
                   margin: 0px 10px 20px;
