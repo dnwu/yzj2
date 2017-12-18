@@ -8,7 +8,7 @@
                 <div class="left-list-name">运输路线</div>
                 <div class="left-list-selection dist-list1"><v-distpicker only-province @selected="onBeginSelected" :placeholders="distholders"></v-distpicker></div>
                 <div class="dist-range">─────</div>
-                <div class="left-list-selection dist-list2"><v-distpicker only-province @selected="onEndSelected" :placeholders="distholders"></v-distpicker></div>
+                <div class="left-list-selection dist-list2"><v-distpicker only-province @selected="onEndSelected" :placeholders="distholders1"></v-distpicker></div>
               </div>
               <div class="inner-left-list" id="left-list2">
                 <div class="left-list-name">航班起飞时间</div>
@@ -50,7 +50,7 @@
               <p-server :cost-detail="costList" @costProductList="costComputed" @costExportList="exportComputed" @costLandList="landComputed" @costHomeList="homeComputed" @costDispatchList="dispatchComputed" @costSafeList="safeComputed" @costTrafficList="trafficComputed"></p-server>
             </div>
             <div class="left-detail-none" v-if="searchNone">
-              <div class="none-text">未查到任何数据</div>
+              <div class="none-text">还没有查到任何产品服务</div>
             </div>
           </div>
         </div>
@@ -297,7 +297,10 @@ export default {
       endTime: '',
       productWeight: '',
       distholders: {
-        province: '------- 省 --------'
+        province: '---湖北省---'
+      },
+      distholders1: {
+        province: '---广东省---'
       }
     }
   },
@@ -332,26 +335,32 @@ export default {
       this.trafficFormCost = data
     },
     productSearch () {
-      this.searchShow = true
-      this.costList = {
-        air: 4.5,
-        fuel: 0.2,
-        export: 3,
-        form: 10,
-        product: 2,
-        dispatch1: 300,
-        dispatch2: 500,
-        dispatch3: 1000,
-        land: 2,
-        min: 50,
-        insurance: 1000,
-        safe: 1
+      if (this.beginTime != undefined && this.endTime != undefined && this.value) {
+        console.log(this.value, 'va')
+        this.searchNone = false
+        this.searchShow = true
+        this.costList = {
+          air: 4.5,
+          fuel: 0.2,
+          export: 3,
+          form: 10,
+          product: 2,
+          dispatch1: 300,
+          dispatch2: 500,
+          dispatch3: 1000,
+          land: 2,
+          min: 50,
+          insurance: 1000,
+          safe: 1
+        }
+        this.$store.commit('getWeight',this.liming)
+      } else {
+        this.searchNone = true
       }
-      this.$store.commit('getWeight',this.liming)
+      
     },
     productConfirm () {
       if (this.beginTime != undefined && this.endTime != undefined) {
-        this.searchNone = false
         this.$store.commit('getIndex')
         this.$store.commit('type', this.value)
         this.$store.commit('startTime', this.beginTime)
@@ -359,7 +368,6 @@ export default {
         this.$router.push('/center/Online_product/write')
       } else {
         console.log(this.beginTime&&this.landTime)
-        this.searchNone = true
       }
     }
   },
@@ -522,6 +530,16 @@ export default {
             width:860px;
             margin-top:10px;
             box-shadow: 0 0 15px #ccc;
+          }
+          .left-detail-none {
+            background:#fff;
+            width:860px;
+            margin-top:10px;
+            box-shadow: 0 0 15px #ccc;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            font-size:20px;
           }
         }
       }
