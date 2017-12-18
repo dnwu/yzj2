@@ -6,30 +6,25 @@
             <div class="selection-inner-left">
               <div class="inner-left-list" id="left-list1">
                 <div class="left-list-name">运输路线</div>
-                <div class="left-list-selection" ref="list1"><v-distpicker only-province @selected="onBeginSelected" :placeholders="distholders"></v-distpicker></div>
-                <div class="left-list-selection"><v-distpicker only-province @selected="onEndSelected" :placeholders="distholders"></v-distpicker></div>
+                <div class="left-list-selection dist-list1"><v-distpicker only-province @selected="onBeginSelected" :placeholders="distholders"></v-distpicker></div>
+                <div class="dist-range">─────</div>
+                <div class="left-list-selection dist-list2"><v-distpicker only-province @selected="onEndSelected" :placeholders="distholders"></v-distpicker></div>
               </div>
-              <div class="inner-left-list"id="left-list2">
+              <div class="inner-left-list" id="left-list2">
                 <div class="left-list-name">航班起飞时间</div>
                 <div class="left-list-selection selection-date">
                   <div class="block">
-                    <el-date-picker
+                     <el-date-picker
                       v-model="value1"
-                      type="datetime"
-                      placeholder="选择日期时间" style="width:194px;">
+                      type="datetimerange"
+                      range-separator=" ───── "
+                      start-placeholder="开始日期"
+                      end-placeholder="结束日期">
                     </el-date-picker>
                   </div>
                 </div>
-                <div class="left-list-selection selection-date">
-                  <div class="block"
-                   <el-date-picker
-                      v-model="value2"
-                      type="datetime"
-                      placeholder="选择日期时间">
-                    </el-date-picker>
-                  </div>
-                </div>
-                <div class="inner-left-list" id="product-type-selection" ref="list3">
+              </div>
+              <div class="inner-left-list" id="product-type-selection" ref="list3">
                   <div class="left-list-name">货物重量</div>
                   <div class="left-list-selection"><el-input  v-model="liming" placeholder="请输入重量" class="left-input"></el-input><span class="left-list-weight">KG</span></div>
                   <div class="left-list-selection" id="left-list3">
@@ -43,8 +38,8 @@
                       </el-option>
                     </el-select>
                   </div>
-                </div>
               </div>
+            </div>
               <div class="selection-inner-right">
                 <span class="inner-right-btn" @click="productSearch">查询</span>
               </div>
@@ -53,6 +48,9 @@
           <div class="container-left-detail">
             <div class="left-detail-inner" v-if="searchShow">
               <p-server :cost-detail="costList" @costProductList="costComputed" @costExportList="exportComputed" @costLandList="landComputed" @costHomeList="homeComputed" @costDispatchList="dispatchComputed" @costSafeList="safeComputed" @costTrafficList="trafficComputed"></p-server>
+            </div>
+            <div class="left-detail-none" v-if="searchNone">
+              <div class="none-text">未查到任何数据</div>
             </div>
           </div>
         </div>
@@ -128,11 +126,11 @@ export default {
   },
   computed: {
     beginTime () {
-      let y = this.value1.getFullYear()
-      let m = this.value1.getMonth() + 1
-      let d = this.value1.getDate()
-      let h = this.value1.getHours()
-      let f = this.value1.getMinutes()
+      let y = this.value1[0].getFullYear()
+      let m = this.value1[0].getMonth() + 1
+      let d = this.value1[0].getDate()
+      let h = this.value1[0].getHours()
+      let f = this.value1[0].getMinutes()
       if(m < 10) m = '0'+m
       if(d < 10) d = '0'+d
       if(h < 10) h = '0'+h
@@ -140,11 +138,11 @@ export default {
       return y+'-'+m+'-'+d+' '+h+':'+f
     },
     landTime () {
-      let y = this.value2.getFullYear()
-      let m = this.value2.getMonth() + 1
-      let d = this.value2.getDate()
-      let h = this.value2.getHours()
-      let f = this.value2.getMinutes()
+      let y = this.value1[1].getFullYear()
+      let m = this.value1[1].getMonth() + 1
+      let d = this.value1[1].getDate()
+      let h = this.value1[1].getHours()
+      let f = this.value1[1].getMinutes()
       if(m < 10) m = '0'+m
       if(d < 10) d = '0'+d
       if(h < 10) h = '0'+h
@@ -215,6 +213,7 @@ export default {
       li:'',
       airFormCost:'',
       searchShow:false,
+      searchNone:false,
       costList: {},
       complete:{
         default: true
@@ -288,7 +287,7 @@ export default {
           }
         }]
       },
-      value1: '',
+      value1: [new Date(), new Date()],
       value2: '',
       value3: '',
       value4: '',
@@ -352,6 +351,7 @@ export default {
     },
     productConfirm () {
       if (this.beginTime != undefined && this.endTime != undefined) {
+        this.searchNone = false
         this.$store.commit('getIndex')
         this.$store.commit('type', this.value)
         this.$store.commit('startTime', this.beginTime)
@@ -359,6 +359,7 @@ export default {
         this.$router.push('/center/Online_product/write')
       } else {
         console.log(this.beginTime&&this.landTime)
+        this.searchNone = true
       }
     }
   },
@@ -403,31 +404,43 @@ export default {
               flex-direction:column;
               justify-content: space-around;
               #left-list1{
+                margin-top:10px;
+                position:relative;
                 width:600px;
                 .left-list-selection {
                   width:180px;
                   transform:scale(.9);
+                  margin-left:-20px;
+                }
+                .dist-range{
+                  width:30px;
+                  position:absolute;
+                  top:14px;
+                  left:370px;
+                  z-index:10000;
+                }
+                .dist-list1 {
+                  margin-left:-70px;
+                }
+                .dist-list2 {
+                  margin-left:-100px;
                 }
               }
               #left-list2 {
+                width:600px;
                 .left-list-selection {
-                  width:180px;
+                  width:410px;
                 }
               }
               *{
                 border:none!important;
-              }
-              .inner-left-list:nth-child(1) {
-                margin-top:10px;
-              }
-              .inner-left-list:nth-child(3) {
-                margin-bottom:10px;
               }
               .inner-left-list {
                 display:flex;
                 flex-direction:row;
                 justify-content:space-between;
                 align-items:center;
+                box-shadow:-1px 1px 1px rgba(222,222,222,.5);
                 .left-list-name {
                   width:104px;
                   display:inline-block;
@@ -437,6 +450,7 @@ export default {
                 }
               }
               #product-type-selection {
+                margin-bottom:10px;
                 display:felx;
                 flex-direction:row;
                 justify-content:space-between;

@@ -458,14 +458,36 @@
   </div>
 </template>
 <script>
+import { mapGetters } from "vuex";
 export default {
   data() {
-    return {};
+    return {
+      orderId: "",
+      orderNo: ""
+    };
+  },
+  created() {
+    this.orderId = this.$route.query.id;
+    this.orderNo = this.$route.query.orderNo;
+    this.getOrderDetail()
   },
   methods: {
     goto(path) {
       this.$router.push(path);
+    },
+    getOrderDetail() {
+      this.axios.post("/app/v1/order/getOrderDetail", {
+        id: this.id,
+        orderId: this.orderId,
+        orderNo: this.orderNo,
+        token: this.token
+      }).then(data=>{
+        console.log(data);
+      });
     }
+  },
+  computed: {
+    ...mapGetters(["id", "token"])
   }
 };
 </script>
@@ -808,7 +830,7 @@ export default {
             text-align: center;
             color: #989898;
           }
-          .box{
+          .box {
             height: 200px;
           }
           .val {
@@ -959,7 +981,7 @@ export default {
                   height: 0;
                 }
               }
-              .value{
+              .value {
                 color: #121212;
                 font-weight: 700;
               }

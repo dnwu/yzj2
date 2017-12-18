@@ -7,7 +7,7 @@
     <div class="main">
       <div class="main-top">
         <div class="base-info">
-          <div class="head-img"><img src="../../../assets/head_img.png" alt=""></div>
+          <div class="head-img"><img src="../../../assets/head_img.png"></div>
           <div class="info">
             <p class="company-name">公司名称</p>
             <div class="star">
@@ -22,7 +22,10 @@
             <div class="member">
               <div class="integral">会员积分：<span class="score">{{score}}</span></div>
               <div class="doings">
-                <el-badge :value="1" :max="10" class="item">
+                <el-badge
+                  :value="1"
+                  :max="10"
+                  class="item">
                   <el-button size="small">我的活动</el-button>
                 </el-badge>
               </div>
@@ -32,29 +35,29 @@
         <div class="goods-info">
           <div class="confirm">
             <el-badge :value="confirmNum" class="item">
-              <img src="../../../assets/account_icon1.png" alt="">
+              <img src="../../../assets/account_icon1.png">
             </el-badge>
-            <p>{{confirmNum}}</p>
-            <p>待确认</p>
+            <p>{{ confirmNum }}</p>
+            <p>代提交</p>
           </div>
           <div class="pay">
             <el-badge :value="payNum" class="item">
-              <img src="../../../assets/account_icon2.png" alt="">
+              <img src="../../../assets/account_icon2.png">
             </el-badge>
             <p>{{payNum}}</p>
             <p>待支付</p>
           </div>
           <div class="received">
             <el-badge :value="receivedNum" class="item">
-              <img src="../../../assets/account_icon3.png" alt="">
+              <img src="../../../assets/account_icon3.png">
             </el-badge>
-            <p>{{receivedNum}}</p>
+            <p>{{ receivedNum }}</p>
             <p>待收货</p>
           </div>
           <div class="done">
-            <img src="../../../assets/account_icon4.png" alt="">
+            <img src="../../../assets/account_icon4.png">
             <p>12</p>
-            <p>已完成</p>
+            <p>全部</p>
           </div>
         </div>
       </div>
@@ -82,7 +85,7 @@
             <span class="title">账号类型</span><span class="colon">:</span><span class="content">个人货主</span>
           </div>
           <div class="account-level">
-             <span class="title">账号级别</span><span class="colon">:</span><span class="content">主账号</span>
+            <span class="title">账号级别</span><span class="colon">:</span><span class="content">主账号</span>
           </div>
         </div>
         <div class="personal-info">
@@ -102,7 +105,9 @@
             <span class="title">详细地址</span><span class="colon">:</span><span class="content">北京市朝阳区长安大街</span>
           </div>
           <div class="revise">
-            <el-button type="info" size='mini'>修改</el-button>
+            <el-button
+              type="info"
+              size="mini">修改</el-button>
           </div>
         </div>
       </div>
@@ -119,11 +124,11 @@ export default {
       confirmNum: 2,
       payNum: 3,
       receivedNum: 4,
-      userInfo:{}
+      userInfo: {}
     };
   },
   created() {
-    this.getUserInfo()
+    this.getUserInfo();
   },
   methods: {
     getUserInfo() {
@@ -134,8 +139,8 @@ export default {
         })
         .then(data => {
           console.log(data.data);
-          if(data.data.code == '1'){
-            this.userInfo = data.data.data
+          if (data.data.code == "1") {
+            this.userInfo = data.data.data;
           }
         });
     }

@@ -73,44 +73,101 @@
           <div class="operate">操作<el-button size="mini" type="warning">导出</el-button></div>
         </div>
         <!-- 待支付 -->
-        <div class="tbody">
+        <div class="tbody" v-for="(item,index) in orderListData" :key="index">
           <div class="tbody-head">
-            <div class="time">2017-09-09 12:00</div>
-            <div class="orderNum">订单号：135165465</div>
-            <div class="mainOrderNum">主运单号：74459-4135465416</div>
+            <div class="time">{{item.createTime}}</div>
+            <div class="orderNum">订单号：{{item.orderNo}}</div>
+            <div class="mainOrderNum">主运单号：{{item.orderGoodsDetail.actualNumber}}</div>
           </div>
           <div class="wrapper">
             <div class="goodsName">
-              <p class="black">服装</p>
-              <p class="gray">(普货)</p>
+              <p class="black">{{item.orderGoodsDetail.goodsName}}</p>
+              <p class="gray">({{getGoodsType(item.orderGoodsDetail.goodsType)}})</p>
             </div>
             <div class="black address">
-              北京(PEK)——上海(PVG)
+              {{item.airportStart}}——{{item.airportEnd}}
             </div>
             <div class="num">
-              <p class="gray">预计：20</p>
-              <p class="black">实际：20</p>
+              <p class="gray">预计：{{item.orderGoodsDetail.goodsNumber}}</p>
+              <p class="black">实际：{{item.orderGoodsDetail.actualNumber}}</p>
             </div>
             <div class="weight">
-              <p class="gray">预计：2000</p>
-              <p class="black">实际：2000</p>
+              <p class="gray">预计：{{item.orderGoodsDetail.goodsWeight}}</p>
+              <p class="black">实际：{{item.orderGoodsDetail.actualWeight}}</p>
             </div>
             <div class="needPayWeight">
               <p class="gray">预计：2000</p>
-              <p class="black">实际：2000</p>
+              <p class="black">实际：{{item.orderGoodsDetail.valuationWeight}}</p>
             </div>
-            <div class="status">
-              <div class="red"><img src="../../../assets/needpay_icon.png" alt="">待支付</div>
-              <div><el-button size="mini" type="danger" plain>立即支付</el-button></div>
-            </div>
-            <div class="operate">
-              <div><span class="detail">详情</span><span>|</span><span class="track">跟踪</span></div>
-              <div><el-button size="mini" type="info">取消订单</el-button></div>
-            </div>
+            <!-- 待支付 -->
+            <template v-if="item.orderStatus=='3'">
+              <div class="status">
+                <div class="red"><img src="../../../assets/needpay_icon.png" alt="">待支付</div>
+                <div><el-button size="mini" type="danger" plain>立即支付</el-button></div>
+              </div>
+              <div class="operate">
+                <div><span class="detail" @click="goDetail(item.orderNo,item.id)">详情</span><span>|</span><span class="track" @click="goTrack(item.orderNo,item.id)">跟踪</span></div>
+                <div><el-button size="mini" type="info">取消订单</el-button></div>
+              </div>
+            </template>
+            <!-- 代提交 -->
+            <template v-if="item.orderStatus=='1'">
+              <div class="status">
+                <div class="gray"><img src="../../../assets/needpay_icon.png" alt="">待提交</div>
+                <div><el-button size="mini" type="danger" plain>立即提交</el-button></div>
+              </div>
+              <div class="operate">
+                <div><span class="detail" @click="goDetail(item.orderNo,item.id)">详情</span><span>|</span><span class="track" @click="goTrack(item.orderNo,item.id)">跟踪</span></div>
+                <div><el-button size="mini" type="info">取消订单</el-button></div>
+              </div>
+            </template>
+            <!-- 已支付 -->
+            <template v-else-if="item.orderStatus=='4'">
+              <div class="status">
+                <div class="black"><img src="../../../assets/hadpay_icon.png" alt="">已支付</div>
+                <div>总额¥1602</div>
+              </div>
+              <div class="operate">
+                <div><span class="detail" @click="goDetail(item.orderNo,item.id)">详情</span><span>|</span><span class="track" @click="goTrack(item.orderNo,item.id)">跟踪</span></div>
+                <div><el-button size="mini" type="info">取消订单</el-button></div>
+              </div>
+            </template>
+            <!-- 运送中 -->
+            <template v-else-if="item.orderStatus=='5'">
+              <div class="status">
+                <div class="orange"><img src="../../../assets/send_icon.png" alt="">运送中</div>
+                <div>总额¥1602</div>
+              </div>
+              <div class="operate">
+                <div><span class="detail" @click="goDetail(item.orderNo,item.id)">详情</span><span>|</span><span class="track" @click="goTrack(item.orderNo,item.id)">跟踪</span></div>
+                <div><el-button size="mini" type="warning">确认收货</el-button></div>
+              </div>
+            </template>
+            <!-- 待受理 -->
+            <template v-else-if="item.orderStatus=='2'">
+              <div class="status">
+                <div class="black"><img src="../../../assets/willcare.png" alt="">待受理</div>
+                <div>总额¥1602</div>
+              </div>
+              <div class="operate">
+                <div><span class="detail" @click="goDetail(item.orderNo,item.id)">详情</span><span>|</span><span class="track" @click="goTrack(item.orderNo,item.id)">跟踪</span></div>
+                <div><el-button size="mini" type="info">取消订单</el-button></div>
+              </div>
+            </template>
+            <!-- 已完成 -->
+            <template v-else-if="item.orderStatus=='7'">
+              <div class="status">
+                <div class="green"><img src="../../../assets/haddone.png" alt="">已完成</div>
+                <div>总额¥1602</div>
+              </div>
+              <div class="operate">
+                <div><span class="detail" @click="goDetail(item.orderNo,item.id)">详情</span><span>|</span><span class="track" @click="goTrack(item.orderNo,item.id)">跟踪</span></div>
+              </div>
+            </template>
           </div>
         </div>
         <!-- 已支付 -->
-        <div class="tbody">
+        <!-- <div class="tbody">
           <div class="tbody-head">
             <div class="time">2017-09-09 12:00</div>
             <div class="orderNum">订单号：135165465</div>
@@ -145,9 +202,9 @@
               <div><el-button size="mini" type="info">取消订单</el-button></div>
             </div>
           </div>
-        </div>
+        </div> -->
         <!-- 运送中 -->
-        <div class="tbody">
+        <!-- <div class="tbody">
           <div class="tbody-head">
             <div class="time">2017-09-09 12:00</div>
             <div class="orderNum">订单号：135165465</div>
@@ -182,9 +239,9 @@
               <div><el-button size="mini" type="warning">确认收货</el-button></div>
             </div>
           </div>
-        </div>
+        </div> -->
         <!-- 待受理 -->
-        <div class="tbody">
+        <!-- <div class="tbody">
           <div class="tbody-head">
             <div class="time">2017-09-09 12:00</div>
             <div class="orderNum">订单号：135165465</div>
@@ -219,9 +276,9 @@
               <div><el-button size="mini" type="info">取消订单</el-button></div>
             </div>
           </div>
-        </div>
+        </div> -->
         <!-- 已完成 -->
-        <div class="tbody">
+        <!-- <div class="tbody">
           <div class="tbody-head">
             <div class="time">2017-09-09 12:00</div>
             <div class="orderNum">订单号：135165465</div>
@@ -255,7 +312,7 @@
               <div><span class="detail">详情</span><span>|</span><span class="track">跟踪</span></div>
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
       <div class="page">
         <el-pagination
@@ -263,7 +320,7 @@
           @current-change="handleCurrentChange"
           background
           layout="prev, pager, next"
-          :total="1000">
+          :total='pageTotal'>
         </el-pagination>
       </div>
     </div>
@@ -271,11 +328,14 @@
 </template>
 <script>
 import VDistpicker from "v-distpicker";
+import { mapGetters } from "vuex";
 export default {
   components: { VDistpicker },
   data() {
     return {
       orderNum: "",
+      orderListData: [],
+      pageTotal: 60,
       goodsTypes: [
         {
           value: "选项1",
@@ -360,13 +420,75 @@ export default {
       orderStatu: ""
     };
   },
+  created() {
+    this.getOrderList(1, 10);
+  },
   methods: {
+    goDetail(orderNo, id) {
+      this.$router.push({
+        path: "/center/order_detail",
+        query: { orderNo: orderNo, id: id }
+      });
+    },
+    goTrack(orderNo, id) {
+      this.$router.push({
+        path: "/center/order_track",
+        query: { orderNo: orderNo, id: id }
+      });
+    },
+    getGoodsType(val) {
+      var type = "普货";
+      // (7-普货 8-冷链 9-重货 10-危险品
+      if (val == "7") {
+        type = "普货";
+      } else if (val == "8") {
+        type = "冷链";
+      } else if (val == "9") {
+        type = "重货";
+      } else if (val == "10") {
+        type = "危险品";
+      }
+      return type;
+    },
+    getOrderList(pageindex, size) {
+      this.orderListData = []
+      // size为页面显示数据量 ; pageindex为第几页
+      if (size == undefined) {
+        var _size = 10;
+      } else {
+        var _size = size;
+      }
+      var _pageindex = pageindex;
+      console.log("size", _size);
+      console.log('pageIndex', _pageindex);
+      this.axios
+        .post("/app/v1/order/getOrderList", {
+          id: this.id,
+          orderStatus: 0,
+          pageIndex: _pageindex,
+          size: _size,
+          token: this.token
+        })
+        .then(data => {
+          console.log(data.data.data.total);
+          if (data.data.code == 1) {
+            this.pageTotal = data.data.data.total;
+            var orderList = data.data.data.orderBaseDTOS;
+            this.orderListData.push(...orderList);
+            console.log(this.orderListData);
+          }
+        });
+    },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
     },
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
+      this.getOrderList(val, 10);
     }
+  },
+  computed: {
+    ...mapGetters(["token", "id"])
   }
 };
 </script>

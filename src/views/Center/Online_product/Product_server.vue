@@ -209,7 +209,7 @@
       this.$store.commit('dispatchForm', this.costDetail.dispatch1)
       this.$store.commit('insuranceForm', this.costDetail.insurance)
       this.$store.commit('safeForm', this.costDetail.safe)
-      this.$store.commit('airMount')
+      //this.$store.commit('airMount')
       //this.$store.commit('getWeight',this.$refs.Weight.querySelector('input').value)
       //this.$store.commit('getSum', parseInt(this.$store.getters.weight))
     }
@@ -219,6 +219,7 @@
 <style lang="scss" scoped>
 .product-server {
   background:#fff;
+  padding:0 15px;
 }
   .server-nav-title {
     width:100%;
@@ -251,7 +252,8 @@
       flex-direction:row;
       justify-content: space-around;
       align-items:center;
-      border-bottom:1px solid rgba(0,0,0,.1);
+      box-shadow:0 1px 4px rgba(0,0,0,.1);
+      margin:5px 0;
       .detail-logo {
         width:70px;
         display:flex;
