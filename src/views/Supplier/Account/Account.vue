@@ -65,12 +65,12 @@
             </h4>
             <div class="menu">
               <ul>
-                <li v-for="(item,index) in servers" v-if="isInArray(item.intro,infoOptions)" @click="toRouter(item.path)">
+                <li v-for="(item,index) in infoOptions" v-if="checkInArray(item,servers,'intro') !== -1" @click="toRouter(item.path)">
                   <span class="note" v-text="String.fromCharCode(65+index)"></span>
                   <div class="wrap">
-                    <img :src="item.src" alt="">
+                    <img :src="servers[checkInArray(item,servers,'intro')].src" alt="">
                   </div>
-                  <p v-text="item.intro"></p>
+                  <p v-text="servers[checkInArray(item,servers,'intro')].intro"></p>
                 </li>
               </ul>
             </div>
@@ -180,6 +180,7 @@ export default {
           }
         ]
       },
+      serverIndex: 0,
       servers: [
         {
           src: require("@/assets/detail_info_img1.png"),
@@ -220,8 +221,14 @@ export default {
     dialogChange() {
       this.dialogFormVisible = false;
     },
-    isInArray(info, arr) {
-      return arr && arr.indexOf(info) !== -1;
+    checkInArray(info, arr, name) {
+      for (var i = 0; i < arr.length; i++) {
+        if (info == arr[i][name]) {
+          this.serverIndex = i;
+          return i;
+        }
+      }
+      return -1;
     }
   },
   computed: {
