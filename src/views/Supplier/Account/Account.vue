@@ -313,8 +313,8 @@ export default {
       }
     }
 
-    $all-width: 1100px;
-    $info-width: 650px;
+    $all-width: 1150px;
+    $info-width: 600px;
     .info {
       display: flex;
       flex-direction: column;
@@ -343,8 +343,13 @@ export default {
           text-align: center;
           padding: 10px;
           cursor: pointer;
+          border-right: 1px dotted #ccc;
           .wrap {
             height: 45px;
+            width: 114px;
+          }
+          &:nth-child(4n) {
+            border-right: 0;
           }
         }
       }
