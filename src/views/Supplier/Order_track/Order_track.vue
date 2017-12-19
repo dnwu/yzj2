@@ -153,7 +153,7 @@
               </el-dialog>
             </div>
             <div class="addstatus">
-              <div class="add" @click="dialogFormVisible='true'"></div>
+              <div class="add" @click="dialogFormVisible=true"></div>
               <div class="word">新增状态</div>
             </div>
             <EasyScrollbar>
