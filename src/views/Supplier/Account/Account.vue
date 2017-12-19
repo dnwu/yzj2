@@ -17,9 +17,9 @@
         </div>
         <div class="menu">
           <!-- <el-badge :value="item.num" class="item"> -->
-            <span v-for="item in menus" @click="toRouter(item.path)">
+            <span v-for="(item,index) in menus" :key="index" @click="toRouter(item.path)">
               <img :src="item.src" alt="">
-              <p v-text="item.num"></p></p>
+              <p v-text="item.num"></p>
               <p v-text="item.intro"></p>
             </span>
           <!-- </el-badge> -->
