@@ -53,7 +53,7 @@
             <p>运送中</p>
           </div>
           <div class="right">
-            <el-button type="danger" @click="goto('/center/order_track')">订单跟踪</el-button>
+            <el-button type="danger" @click="goto('/supplier/order_track')">订单跟踪</el-button>
           </div>
         </div>
       </div>

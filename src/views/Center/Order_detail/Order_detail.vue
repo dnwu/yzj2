@@ -59,7 +59,7 @@
       </div>
       <div class="server-info">
         <div class="triangle">
-            <div><span>服</span><span>务</span><span>信</span><span>息</span></div>
+            <p>服务信息</p>
         </div>
         <div class="box airtrans">
           <div class="img"><img src="../../../assets/detail_info_img1.png" alt=""></div>
@@ -174,7 +174,7 @@
           <img src="../../../assets/plane_icon.png" alt="">
         </div>
         <div class="triangle">
-            <div><span>收</span><span>发</span><span>地</span><span>址</span></div>
+            <p>收发地址</p>
         </div>
         <div class="left">
           <div class="icon">发</div>
@@ -225,7 +225,7 @@
       </div>
       <div class="goodsInfo">
         <div class="triangle">
-            <div><span>跟</span><span>踪</span><span>信</span><span>息</span></div>
+            <p>跟踪信息</p>
         </div>
         <div class="content">
           <div class="content-left">
@@ -315,7 +315,7 @@
       </div>
       <div class="fee-info">
         <div class="triangle">
-            <div><span>费</span><span>用</span><span>信</span><span>息</span></div>
+            <p>费用信息</p>
         </div>
         <div class="fee-top">
           <div class="box left">
@@ -503,9 +503,9 @@ export default {
     height: 0;
     border: 38px solid #fccf00;
     border-color: #fccf00 transparent transparent #fccf00;
-    > div {
-      display: inline-block;
-      transform: rotate(-45deg) translate(-12px, -40px);
+    > p {
+      width: 100px;
+      transform: rotate(-45deg) translate(4px, -65px);
       color: #fff;
     }
   }

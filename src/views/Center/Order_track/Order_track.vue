@@ -1,5 +1,5 @@
 <template>
-  <div class="order_track">
+  <div class="order-track">
     <div class="head">
       <div class="title">
         <el-breadcrumb separator=">>>">
@@ -66,7 +66,7 @@
       </div>
       <div class="main-bottom">
         <div class="triangle">
-            <div><span>跟</span><span>踪</span><span>信</span><span>息</span></div>
+            <p>跟踪信息</p>
         </div>
         <div class="content">
           <div class="content-left">
@@ -139,15 +139,15 @@ export default {
   data() {
     return {};
   },
-  methods:{
-    goto(path){
-      this.$router.push(path)
+  methods: {
+    goto(path) {
+      this.$router.push(path);
     }
   }
 };
 </script>
 <style lang="scss" scoped>
-.order_track {
+.order-track {
   .head {
     height: 61px;
     display: flex;
@@ -249,9 +249,9 @@ export default {
         height: 0;
         border: 38px solid #fccf00;
         border-color: #fccf00 transparent transparent #fccf00;
-        > div {
-          display: inline-block;
-          transform: rotate(-45deg) translate(-12px, -40px);
+        > p {
+          width: 100px;
+          transform: rotate(-45deg) translate(4px, -65px);
           color: #fff;
         }
       }
@@ -283,9 +283,9 @@ export default {
           // overflow: auto;
           height: 200px;
           color: #b3b3b3;
-          .box{
+          .box {
             width: 100%;
-            height:200px;
+            height: 200px;
           }
           .oneday {
             &:first-child {
@@ -299,7 +299,6 @@ export default {
             display: flex;
             .data {
               position: relative;
-
             }
             .time {
               margin-left: 40px;
@@ -319,14 +318,14 @@ export default {
                   z-index: 99;
                 }
                 &::after {
-                content: "";
-                position: absolute;
-                left: -171px;
-                top: 0;
-                height: 100%;
-                width: 2px;
-                background-color: #e6e6e6;
-              }
+                  content: "";
+                  position: absolute;
+                  left: -171px;
+                  top: 0;
+                  height: 100%;
+                  width: 2px;
+                  background-color: #e6e6e6;
+                }
                 display: flex;
                 span {
                   margin: 0px 10px 20px;
