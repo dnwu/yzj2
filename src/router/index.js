@@ -32,8 +32,7 @@ import News from '@/views/About/News/News'
 import Promotion from '@/views/About/Promotion'
 import Member from '@/views/About/Member'
 import Join from '@/views/About/Join'
-// import Login from '@/views/Login/Login' import Register from
-// '@/views/Login/Register'
+
 import store from '@/store'
 import PIndex from '@/views/Center/Online_product/product_index'
 import productWrite from '@/views/Center/Online_product/product_write'
@@ -81,6 +80,8 @@ const Supplier_Company_info = () => import('@/views/Supplier/Company_info/Compan
 const Supplier_Server_info = () => import('@/views/Supplier/Server_info/Server_info')
 const Supplier_Son_account = () => import('@/views/Supplier/Son_account/Son_account')
 const Supplier_Order_taking = () => import('@/views/Supplier/Order_taking/Order_taking')
+const Supplier_Order_deal = () => import('@/views/Supplier/Order_deal/Order_deal')
+const Supplier_Order_track = () => import('@/views/Supplier/Order_track/Order_track')
 const Supplier_Booking_space = () => import('@/views/Supplier/Booking_space/Booking_space')
 const Supplier_Making_bill = () => import('@/views/Supplier/Making_bill/Making_bill')
 const Supplier_Airlift = () => import('@/views/Supplier/Airlift/Airlift')
@@ -483,6 +484,24 @@ let router = new Router({
           path:'/supplier/son_account',
           component:Supplier_Son_account,
           name:'supplier/son_account',
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'company' // 添加字段，判断用户权限
+          }
+        },
+        {
+          path:'/supplier/order_deal',
+          component:Supplier_Order_deal,
+          name:'supplier/order_deal',
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'company' // 添加字段，判断用户权限
+          }
+        },
+        {
+          path:'/supplier/order_track',
+          component:Supplier_Order_track,
+          name:'supplier/order_track',
           meta: {
             requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
             usertype:'company' // 添加字段，判断用户权限

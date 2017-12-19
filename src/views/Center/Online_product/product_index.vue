@@ -10,7 +10,7 @@
                 <div class="dist-range">─────</div>
                 <div class="left-list-selection dist-list2"><v-distpicker only-province @selected="onEndSelected" :placeholders="distholders1"></v-distpicker></div>
               </div>
-              <div class="inner-left-list"id="left-list2">
+              <div class="inner-left-list" id="left-list2">
                 <div class="left-list-name">航班起飞时间</div>
                 <div class="left-list-selection selection-date">
                   <div class="block">
@@ -23,7 +23,7 @@
                     </el-date-picker>
                   </div>
                 </div>
-              </div>    
+              </div>
               <div class="inner-left-list" id="product-type-selection" ref="list3">
                   <div class="left-list-name">货物重量</div>
                   <div class="left-list-selection"><el-input  v-model="liming" placeholder="请输入重量" class="left-input"></el-input><span class="left-list-weight">KG</span></div>

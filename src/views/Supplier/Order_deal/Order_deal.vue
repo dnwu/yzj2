@@ -1,9 +1,9 @@
 <template>
-  <div class="order_detail">
+  <div class="order-deal">
     <div class="head">
       <div class="title">
         <el-breadcrumb separator=">>>">
-          <el-breadcrumb-item :to="{ path: '/center/order_search' }">订单查询</el-breadcrumb-item>
+          <el-breadcrumb-item :to="{ path: '/supplier/order_taking' }">接单管理</el-breadcrumb-item>
           <el-breadcrumb-item>订单详情</el-breadcrumb-item>
         </el-breadcrumb>
       </div>
@@ -13,7 +13,7 @@
         <div class="linear"></div>
         <div class="main-top-title">
           <div class="time">2017-10-10 10:10:10</div>
-          <div class="btn"><span class="reset">修改订单</span><span>|</span><span class="cancle">取消订单</span></div>
+          <div class="btn"><span class="refuse">拒绝订单</span></div>
         </div>
         <div class="content">
           <div class="left">
@@ -53,7 +53,7 @@
             <p>运送中</p>
           </div>
           <div class="right">
-            <el-button type="danger" @click="goto('/center/order_track')">订单跟踪</el-button>
+            <el-button type="danger" @click="goto('/supplier/order_track')">订单跟踪</el-button>
           </div>
         </div>
       </div>
@@ -62,6 +62,75 @@
             <p>服务信息</p>
         </div>
         <div class="box airtrans">
+          <!-- 航空运输服务信息调整模态框 -->
+          <el-dialog width="951px" title="服务信息调整" :visible.sync="serverInfoModel.airtrans">
+            <p><span>产品类型：</span><span class="type">航空运输服务</span></p>
+            <div class="model-main">
+              <div class="left">
+                <div class="item flightNumber">
+                  <span class="key">预定航班：</span><span class="value">HU7211</span>
+                </div>
+                <div class="item flightData">
+                  <span class="key">航班时间：</span><span class="value">2017-10-10</span>
+                </div>
+                <div class="item flighttime">
+                  <span class="key">航班时刻：</span><span class="value">10:10</span>
+                </div>
+                <div class="item transNum">
+                  <span class="key">运单号码：</span><span class="value">80-135464</span>
+                </div>
+              </div>
+              <div class="middle">
+                <img src="../../../assets/arrow_icon.png" alt="">
+              </div>
+              <div class="right">
+                <div class="item flightNumber">
+                  <div class="key">预定航班：</div>
+                  <div class="value">
+                    <input type="text">
+                  </div>
+                </div>
+                <div class="item flightData">
+                  <div class="key">航班时间：</div>
+                  <div class="value">
+                    <el-date-picker
+                      size="mini"
+                      v-model="flightData"
+                      type="date"
+                      placeholder="选择日期">
+                    </el-date-picker>
+                  </div>
+                  <div class="arrow el-icon-arrow-down"></div>
+                </div>
+                <div class="item flighttime">
+                  <div class="key">航班时刻：</div>
+                  <div class="value">
+                    <el-time-picker
+                      size="mini"
+                      is-range
+                      v-model="flighttime"
+                      range-separator="--"
+                      start-placeholder="开始时间"
+                      end-placeholder="结束时间"
+                      placeholder="选择时间范围">
+                    </el-time-picker>
+                  </div>
+                  <div class="arrow el-icon-arrow-down"></div>
+                </div>
+                <div class="item transNum">
+                  <div class="key">运单号码：</div>
+                  <div class="value">
+                    <input type="text">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div slot="footer" class="dialog-footer">
+              <span class="cancel" @click="dialogFormVisible = false">取 消</span>
+              <el-button size="mini" class="sure" type="warning" @click="dialogFormVisible = false">确 定</el-button>
+            </div>
+          </el-dialog>
+          <div class="reset"><img src="../../../assets/reset_icon.png"></div>
           <div class="img"><img src="../../../assets/detail_info_img1.png" alt=""></div>
           <div class="title">航空运输服务</div>
           <div class="content">
@@ -80,6 +149,15 @@
           </div>
         </div>
         <div class="box beginport">
+          <!-- 始发港地面操作服务信息调整模态框 -->
+          <el-dialog title="始发港地面操作服务" :visible.sync="serverInfoModel.beginport">
+
+            <div slot="footer" class="dialog-footer">
+              <el-button @click="dialogFormVisible = false">取 消</el-button>
+              <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+            </div>
+          </el-dialog>
+          <div class="reset"><img src="../../../assets/reset_icon.png"></div>
           <div class="img"><img src="../../../assets/detail_info_img2.png" alt=""></div>
           <div class="title">始发港地面操作服务</div>
           <div class="content">
@@ -98,6 +176,15 @@
           </div>
         </div>
         <div class="box endport">
+          <!-- 目的港地面操作服务信息调整模态框 -->
+          <el-dialog title="目的港地面操作服务" :visible.sync="serverInfoModel.endport">
+
+            <div slot="footer" class="dialog-footer">
+              <el-button @click="dialogFormVisible = false">取 消</el-button>
+              <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+            </div>
+          </el-dialog>
+          <div class="reset"><img src="../../../assets/reset_icon.png"></div>
           <div class="img"><img src="../../../assets/detail_info_img3.png" alt=""></div>
           <div class="title">目的港地面操作服务</div>
           <div class="content">
@@ -115,7 +202,16 @@
             </div>
           </div>
         </div>
-        <div class="box pickup ">
+        <div class="box pickup">
+          <!-- 上门取货服务信息调整模态框 -->
+          <el-dialog title="上门取货服务" :visible.sync="serverInfoModel.pickup">
+
+            <div slot="footer" class="dialog-footer">
+              <el-button @click="dialogFormVisible = false">取 消</el-button>
+              <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+            </div>
+          </el-dialog>
+          <div class="reset"><img src="../../../assets/reset_icon.png"></div>
           <div class="img"><img src="../../../assets/detail_info_img4.png" alt=""></div>
           <div class="title">上门取货服务</div>
           <div class="content">
@@ -140,6 +236,15 @@
           </div>
         </div>
         <div class="box landing">
+          <!-- 落地配服务信息调整模态框 -->
+          <el-dialog title="落地配服务" :visible.sync="serverInfoModel.landing">
+
+            <div slot="footer" class="dialog-footer">
+              <el-button @click="dialogFormVisible = false">取 消</el-button>
+              <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+            </div>
+          </el-dialog>
+          <div class="reset"><img src="../../../assets/reset_icon.png"></div>
           <div class="img"><img src="../../../assets/detail_info_img5.png" alt=""></div>
           <div class="title">落地配服务</div>
           <div class="content">
@@ -153,7 +258,7 @@
               <span>运输方式：</span><span>一般配送</span>
             </div>
             <div class="item transNum">
-              <span>运输车辆：</span><span>5吨箱式火车</span>
+              <span>运输车辆：</span><span>5吨箱式货车</span>
             </div>
             <div class="item transNum">
               <span>取货位置：</span><span>上海市爱国区爱国路21号</span>
@@ -310,6 +415,9 @@
                 </div>
               </EasyScrollbar>
             </div>
+            <div class="reInspect">
+              <el-button size="mini" type="warning">货物复核</el-button>
+            </div>
           </div>
         </div>
       </div>
@@ -355,6 +463,12 @@
           </div>
           <div class="box center">
             <h3>临时费用</h3>
+            <div class="btn-add">
+              <el-button size="mini" type="warning">费用补充</el-button>
+            </div>
+            <div class="btn-pay">
+              <el-button size="mini" type="warning">执行补缴</el-button>
+            </div>
           </div>
           <div class="box right">
             <h3>发票信息</h3>
@@ -454,6 +568,10 @@
           </div>
         </div>
       </div>
+      <div class="submit-btn">
+        <div class="btn-refuse"><el-button size="mini" type="info">拒绝订单</el-button></div>
+        <div class="btn-accept"><el-button size="mini" type="danger">接受订单</el-button></div>
+      </div>
     </div>
   </div>
 </template>
@@ -462,6 +580,15 @@ import { mapGetters } from "vuex";
 export default {
   data() {
     return {
+      serverInfoModel: {
+        airtrans: true,
+        beginport: false,
+        endport: false,
+        pickup: false,
+        landing: false
+      },
+      flightData: "2017-10-10",
+      flighttime: [new Date(2016, 9, 10, 8, 40), new Date(2016, 9, 10, 9, 40)],
       orderId: "",
       orderNo: ""
     };
@@ -469,21 +596,23 @@ export default {
   created() {
     this.orderId = this.$route.query.id;
     this.orderNo = this.$route.query.orderNo;
-    this.getOrderDetail()
+    // this.getOrderDetail()
   },
   methods: {
     goto(path) {
       this.$router.push(path);
     },
     getOrderDetail() {
-      this.axios.post("/app/v1/order/getOrderDetail", {
-        id: this.id,
-        orderId: this.orderId,
-        orderNo: this.orderNo,
-        token: this.token
-      }).then(data=>{
-        console.log(data);
-      });
+      this.axios
+        .post("", {
+          id: this.id,
+          orderId: this.orderId,
+          orderNo: this.orderNo,
+          token: this.token
+        })
+        .then(data => {
+          console.log(data);
+        });
     }
   },
   computed: {
@@ -491,8 +620,8 @@ export default {
   }
 };
 </script>
-<style lang="scss" scoped>
-.order_detail {
+<style lang="scss">
+.order-deal {
   // 左上角的三角
   .triangle {
     display: inline-block;
@@ -543,8 +672,7 @@ export default {
         .btn {
           width: 200px;
           text-align: right;
-          .reset,
-          .cancle {
+          .refuse {
             cursor: pointer;
             margin: 10px;
             &:hover {
@@ -625,6 +753,132 @@ export default {
         height: 340px;
         border-right: 1px dashed #e0e0e0;
         border-bottom: 1px dashed #e0e0e0;
+        position: relative;
+        .el-dialog {
+          .el-dialog__header {
+            background-color: #fccf00;
+            .el-dialog__title {
+              color: #fff;
+            }
+          }
+          .el-dialog__body {
+            padding: 0;
+            p {
+              text-align: center;
+              margin: 10px 0;
+              .type {
+                color: #f65057;
+              }
+            }
+            .model-main {
+              display: flex;
+              // padding: 0 100px;
+              .left {
+                // flex: 1;
+                width: 360px;
+                box-sizing: border-box;
+                padding-left: 100px;
+                .item {
+                  display: flex;
+                  margin: 20px 0;
+                  color: #9f9f9f;
+                  .key {
+                    width: 100px;
+                    text-align-last: justify;
+                  }
+                }
+              }
+              .middle {
+                width: 200px;
+                text-align: center;
+                img {
+                  transform: translateY(20px);
+                }
+              }
+              .right {
+                // flex: 1;
+                padding-left: 50px;
+                .item {
+                  margin: 20px 0;
+                  display: flex;
+                  border-bottom: 1px solid #e0e0e0;
+                  .key {
+                    width: 100px;
+                    color: #9f9f9f;
+                    text-align-last: justify;
+                  }
+                }
+                .flightNumber {
+                  input {
+                    border: none;
+                    outline: none;
+                    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+                  }
+                }
+                .flightData {
+                  .arrow {
+                    line-height: 28px;
+                  }
+                  .value {
+                    .el-date-editor {
+                      width: 130px;
+                      input {
+                        border: none;
+                      }
+                      .el-input__prefix,
+                      .el-input__suffix {
+                        display: none;
+                      }
+                    }
+                  }
+                }
+                .flighttime {
+                  .arrow {
+                    line-height: 28px;
+                  }
+                  .el-date-editor {
+                    width: 200px;
+                    border: none;
+                  }
+                  .el-input__icon,
+                  .el-input__icon {
+                    // visibility: hidden;
+                    display: none;
+                  }
+                }
+                .transNum {
+                  input {
+                    border: none;
+                    outline: none;
+                    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+                  }
+                }
+              }
+            }
+          }
+          .el-dialog__footer {
+            .dialog-footer {
+              text-align: center;
+              position: relative;
+              .sure {
+                padding: 6px 80px;
+              }
+              .cancel {
+                cursor: pointer;
+                position: absolute;
+                line-height: 26px;
+                right: 300px;
+                color: #b4b4b4;
+              }
+            }
+          }
+        }
+        .reset {
+          cursor: pointer;
+          position: absolute;
+          top: 10px;
+          right: 10px;
+        }
         &:nth-of-type(4n) {
           border-right: none;
         }
@@ -825,7 +1079,7 @@ export default {
           display: flex;
           .title {
             padding-top: 50px;
-            width: 200px;
+            width: 140px;
             vertical-align: middle;
             text-align: center;
             color: #989898;
@@ -840,6 +1094,12 @@ export default {
             margin-top: 15px;
             border: 1px solid #989898;
             padding: 0 0 0 10px;
+          }
+          .reInspect {
+            button {
+              margin: 90px 0 0 20px;
+              box-shadow: 4px 4px 4px #e0e0e0;
+            }
           }
         }
       }
@@ -891,6 +1151,21 @@ export default {
           flex: 2;
           border-right: 1px dotted #e4e4e4;
           padding-left: 20px;
+          position: relative;
+          .btn-add,
+          .btn-pay {
+            position: absolute;
+            right: 10px;
+            button {
+              box-shadow: 4px 4px 4px #e0e0e0;
+            }
+          }
+          .btn-add {
+            bottom: 50px;
+          }
+          .btn-pay {
+            bottom: 10px;
+          }
         }
         .right {
           flex: 3;
@@ -987,6 +1262,21 @@ export default {
               }
             }
           }
+        }
+      }
+    }
+    .submit-btn {
+      margin: 20px 0 200px 0;
+      display: flex;
+      justify-content: flex-end;
+      .btn-accept,
+      .btn-refuse {
+        box-shadow: 4px 4px 4px #e0e0e0;
+      }
+      .btn-accept {
+        margin-left: 20px;
+        button {
+          padding: 7px 80px;
         }
       }
     }
