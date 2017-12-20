@@ -351,34 +351,34 @@
           </div>
           <div>
             <div class="key">重量</div>
-            <div class="value">1000</div>
+            <div class="value"><el-input size="mini" placeholder="6688668866"></el-input></div>
             <div class="unit">KG</div>
           </div>
           <div>
             <div class="key">件数</div>
-            <div class="value">10</div>
+            <div class="value"><el-input size="mini" placeholder="6688668866"></el-input></div>
             <div class="unit">件</div>
           </div>
           <div>
             <div class="key">体积</div>
-            <div class="value">10</div>
+            <div class="value"><el-input size="mini" placeholder="6688668866"></el-input></div>
             <div class="unit">立方米</div>
           </div>
           <div>
             <div class="key">货物名称</div>
-            <div class="value">服装</div>
+            <div class="value"><el-input size="mini" placeholder="6688668866"></el-input></div>
           </div>
           <div>
             <div class="key">货物代码</div>
-            <div class="value">SDSDOIJ</div>
+            <div class="value"><el-input size="mini" placeholder="6688668866"></el-input></div>
           </div>
           <div>
             <div class="key">代理人代码</div>
-            <div class="value">1221</div>
+            <div class="value"><el-input size="mini" placeholder="6688668866"></el-input></div>
           </div>
           <div>
             <div class="key">计费重量</div>
-            <div class="yellow value">1221</div>
+            <div class="yellow value"><el-input size="mini" placeholder="6688668866"></el-input></div>
             <div class="unit">KG</div>
           </div>
         </div>
@@ -764,6 +764,14 @@ export default {
               color: #5e5e5e;
               width: 80px;
               text-align: center;
+              .el-input {
+                input {
+                  padding: 0;
+                  border: none;
+                  transform: translateY(-4px);
+                  margin-left: 4px;
+                }
+              }
             }
             .unit {
               color: #a8a8a8;
