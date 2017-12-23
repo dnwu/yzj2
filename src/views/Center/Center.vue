@@ -30,7 +30,7 @@
             <li @click.stop="goto(5,'/center/address')" :class="activeIndex == '5'?'active':''"><span class="icon"><img :src="activeIndex == '5'?iconARR[5].active:iconARR[5].default" alt=""></span><span class="title">地址簿</span></li>
             <li @click.stop="goto(6,'/center/son_account')" :class="activeIndex == '6'?'active':''"><span class="icon"><img :src="activeIndex == '6'?iconARR[6].active:iconARR[6].default" alt=""></span><span class="title">子账号管理</span></li>
             <li class="title">马上下单</li>
-            <li @click.stop="goto(7,'/center/online_product')" :class="activeIndex == '7'?'active':''"><span class="icon"><img :src="activeIndex == '7'?iconARR[7].active:iconARR[7].default" alt=""></span><span class="title">网上下单</span></li>
+            <li @click.stop="goto(7,'/center/online_product?step=1')" :class="activeIndex == '7'?'active':''"><span class="icon"><img :src="activeIndex == '7'?iconARR[7].active:iconARR[7].default" alt=""></span><span class="title">网上下单</span></li>
             <li @click.stop="goto(8,'/center/client_product')" :class="activeIndex == '8'?'active':''"><span class="icon"><img :src="activeIndex == '8'?iconARR[8].active:iconARR[8].default" alt=""></span><span class="title">客户端下单</span></li>
             <li class="title">订单管理</li>
             <li @click.stop="goto(9,'/center/order_search')" :class="activeIndex == '9'?'active':''"><span class="icon"><img :src="activeIndex == '9'?iconARR[9].active:iconARR[9].default" alt=""></span><span class="title">订单查询</span></li>
@@ -72,7 +72,7 @@ export default {
   },
   created() {
     this.fullPath = this.$route.fullPath;
-    console.log(this.fullPath);
+    // console.log(this.fullPath);
     switch(this.fullPath){
       case '/center/account':
       this.activeIndex = 0
