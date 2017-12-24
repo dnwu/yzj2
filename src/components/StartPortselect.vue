@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-select @change="change" v-model="value" filterable placeholder="始发港">
+    <el-select size="mini" @change="change" v-model="value" filterable placeholder="始发港">
       <el-option
         v-for="item in portList"
         :key="item.id"
@@ -39,7 +39,6 @@ export default {
     change(data){
       this.$emit('startportvalue',data)
     }
-
   }
 };
 </script>

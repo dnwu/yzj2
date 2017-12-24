@@ -9,14 +9,15 @@
         <div class="start">
           <div class="key">始发港</div>
           <div class="value">
-            <el-select size="mini" v-model="searchData.start" placeholder="请选择">
+            <!--<el-select size="mini" v-model="searchData.start" placeholder="请选择">
               <el-option
                 v-for="item in starts"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value">
               </el-option>
-            </el-select>
+            </el-select>-->
+            <StartPortselect @startportvalue='startPortValue'></StartPortselect>
           </div>
         </div>
         <div class="plane-num">
@@ -30,14 +31,15 @@
         <div class="end">
           <div class="key">目的港</div>
           <div class="value">
-            <el-select size="mini" v-model="searchData.end" placeholder="请选择">
+            <!--<el-select size="mini" v-model="searchData.end" placeholder="请选择">
               <el-option
                 v-for="item in ends"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value">
               </el-option>
-            </el-select>
+            </el-select>-->
+            <EndPortselect></EndPortselect>
           </div>
         </div>
         <div class="order-num">
@@ -424,8 +426,15 @@
 </div>
 </template>
 <script>
-export default {
-  data() {
+  import StartPortselect from "@/components/StartPortselect";
+  import EndPortselect from "@/components/EndPortselect";
+
+  export default {
+    components: {
+      StartPortselect,
+      EndPortselect,
+    },
+    data() {
     return {
       searchData: {
         start: "",
@@ -507,7 +516,22 @@ export default {
         }
       ]
     };
-  }
+  },
+    created() {
+      this.getOrderList();
+    },
+    methods: {
+      getOrderList() {
+        this.axios.get("",{
+            params: {}
+        }).then(data => {
+          console.log(data.data);
+        });
+      },
+      startPortValue (data){
+        console.log(data)
+      },
+    },
 };
 </script>
 <style lang="scss">

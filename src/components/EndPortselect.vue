@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-select @change="change" v-model="value" filterable placeholder="目的港">
+    <el-select size="mini" @change="change" v-model="value" filterable placeholder="目的港">
       <el-option
         v-for="item in portList"
         :key="item.id"

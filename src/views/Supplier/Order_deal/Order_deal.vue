@@ -12,18 +12,18 @@
       <div class="main-top">
         <div class="linear"></div>
         <div class="main-top-title">
-          <div class="time">2017-10-10 10:10:10</div>
+          <div class="time">{{hnaOrder.createTime}}</div>
           <div class="btn"><span class="refuse">拒绝订单</span></div>
         </div>
         <div class="content">
           <div class="left">
             <div class="box orderNum">
               <div class="title">订单编号:</div>
-              <div class="detail">46464646464164</div>
+              <div class="detail">{{hnaOrder.orderNo}}</div>
             </div>
             <div class="box transLine">
               <div class="title">运输线路:</div>
-              <div class="detail">北京(PEK)——上海(PVG)</div>
+              <div class="detail">{{hnaOrder.airportStart}}——{{hnaOrder.airportEnd}}</div>
             </div>
             <div class="box baseserve">
               <div class="title">基础服务:</div>
@@ -34,23 +34,23 @@
             <div class="box moreserver">
               <div class="title">更多服务:</div>
               <div class="detail">
-                <div class="item"><span class="get el-icon-circle-check"></span><span>代交货</span></div>
-                <div class="item"><span class="get el-icon-circle-check"></span><span>代提交</span></div>
-                <div class="item"><span class="get el-icon-circle-check"></span><span>上门取货</span></div>
-                <div class="item not"><span class="get el-icon-circle-check"></span><span>落地配</span></div>
+                <div class="item" :class="{not:!serviceStatus.serviceB}"><span class="get el-icon-circle-check"></span><span>始发港交货</span></div>
+                <div class="item" :class="{not:!serviceStatus.serviceC}"><span class="get el-icon-circle-check"></span><span>目的港提货</span></div>
+                <div class="item" :class="{not:!serviceStatus.serviceD}"><span class="get el-icon-circle-check"></span><span>上门取货</span></div>
+                <div class="item" :class="{not:!serviceStatus.serviceE}"><span class="get el-icon-circle-check"></span><span>落地配送</span></div>
               </div>
             </div>
-            <div class="box increaseserver">
+            <!--<div class="box increaseserver">
               <div class="title">增值服务:</div>
               <div class="detail">
                 <div class="item"><span class="get el-icon-circle-check"></span><span>报关报检</span></div>
                 <div class="item not"><span class="get el-icon-circle-check"></span><span>运输保险</span></div>
               </div>
-            </div>
+            </div>-->
           </div>
           <div class="middle">
             <img src="../../../assets/send.png" alt="">
-            <p>运送中</p>
+            <p>{{hnaOrder.statusName}}</p>
           </div>
           <div class="right">
             <el-button type="danger" @click="goto('/supplier/order_track')">订单跟踪</el-button>
@@ -126,29 +126,29 @@
               </div>
             </div>
             <div slot="footer" class="dialog-footer">
-              <span class="cancel" @click="dialogFormVisible = false">取 消</span>
-              <el-button size="mini" class="sure" type="warning" @click="dialogFormVisible = false">确 定</el-button>
+              <span class="cancel" @click="serverInfoModel.airtrans = false">取 消</span>
+              <el-button size="mini" class="sure" type="warning" @click="modifyServiceInfo">确 定</el-button>
             </div>
           </el-dialog>
-          <div class="reset"><img src="../../../assets/reset_icon.png"></div>
+          <div class="reset"><img :class="{hide:!statusAdmin.serviceAdjustment}" @click="serverInfoModel.airtrans = true" src="../../../assets/reset_icon.png"></div>
           <div class="img"><img src="../../../assets/detail_info_img1.png" alt=""></div>
           <div class="title">航空运输服务</div>
           <div class="content">
             <div class="item flightNumber">
-              <span>预定航班：</span><span>HU7211</span>
+              <span>预定航班：</span><span>{{hnaOrder.flightNo}}</span>
             </div>
             <div class="item flightData">
-              <span>航班时间：</span><span>2017-10-10</span>
+              <span>航班时间：</span><span>{{hnaOrder.flightDate}}</span>
             </div>
             <div class="item flighttime">
-              <span>航班时刻：</span><span>10:10</span>
+              <span>航班时刻：</span><span>{{hnaOrder.starHour}}</span>
             </div>
             <div class="item transNum">
-              <span>运单号码：</span><span>80-135464</span>
+              <span>运单号码：</span><span>{{hnaOrder.aviationNumber}}</span>
             </div>
           </div>
         </div>
-        <div class="box beginport">
+        <div v-if="serviceStatus.serviceB" class="box beginport">
           <!-- 始发港地面操作服务信息调整模态框 -->
           <el-dialog title="始发港地面操作服务" :visible.sync="serverInfoModel.beginport">
 
@@ -157,25 +157,25 @@
               <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
             </div>
           </el-dialog>
-          <div class="reset"><img src="../../../assets/reset_icon.png"></div>
+          <div class="reset"><img :class="{hide:!statusAdmin.serviceAdjustment}" src="../../../assets/reset_icon.png"></div>
           <div class="img"><img src="../../../assets/detail_info_img2.png" alt=""></div>
           <div class="title">始发港地面操作服务</div>
           <div class="content">
             <div class="item flightNumber">
-              <span>最晚交货时间：</span><span>2017-10-10</span>
+              <span>最晚交货时间：</span><span>{{airportStartAgent.arrivalTime}}</span>
             </div>
             <div class="item flightData">
-              <span>货运代理：</span><span>海航速运北京分公司</span>
+              <span>货运代理：</span><span>{{airportStartAgent.agentCompany}}</span>
             </div>
             <div class="item flighttime">
-              <span>交货位置：</span><span>北京市朝阳区爱国路21号</span>
+              <span>交货位置：</span><span>{{airportStartAgent.deliveryAddress}}</span>
             </div>
             <div class="item transNum">
-              <span>联系方式：</span><span>13468465435</span>
+              <span>联系方式：</span><span>{{airportStartAgent.agentContactPhone}}</span>
             </div>
           </div>
         </div>
-        <div class="box endport">
+        <div v-if="serviceStatus.serviceC" class="box endport">
           <!-- 目的港地面操作服务信息调整模态框 -->
           <el-dialog title="目的港地面操作服务" :visible.sync="serverInfoModel.endport">
 
@@ -184,25 +184,25 @@
               <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
             </div>
           </el-dialog>
-          <div class="reset"><img src="../../../assets/reset_icon.png"></div>
+          <div class="reset"><img :class="{hide:!statusAdmin.serviceAdjustment}" src="../../../assets/reset_icon.png"></div>
           <div class="img"><img src="../../../assets/detail_info_img3.png" alt=""></div>
           <div class="title">目的港地面操作服务</div>
           <div class="content">
             <div class="item flightNumber">
-              <span>预计取货时间：</span><span>2017-11-11</span>
+              <span>预计取货时间：</span><span>{{airportEndAgent.arrivalTime}}</span>
             </div>
             <div class="item flightData">
-              <span>货运代理：</span><span>海航速运北京分公司</span>
+              <span>货运代理：</span><span>{{airportEndAgent.agentCompany}}</span>
             </div>
             <div class="item flighttime">
-              <span>交货位置：</span><span>北京市朝阳区爱国路21号</span>
+              <span>交货位置：</span><span>{{airportEndAgent.deliveryAddress}}</span>
             </div>
             <div class="item transNum">
-              <span>联系方式：</span><span>15156556666</span>
+              <span>联系方式：</span><span>{{airportEndAgent.agentContactPhone}}</span>
             </div>
           </div>
         </div>
-        <div class="box pickup">
+        <div v-if="serviceStatus.serviceD" class="box pickup">
           <!-- 上门取货服务信息调整模态框 -->
           <el-dialog title="上门取货服务" :visible.sync="serverInfoModel.pickup">
 
@@ -211,31 +211,31 @@
               <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
             </div>
           </el-dialog>
-          <div class="reset"><img src="../../../assets/reset_icon.png"></div>
+          <div class="reset"><img :class="{hide:!statusAdmin.serviceAdjustment}" src="../../../assets/reset_icon.png"></div>
           <div class="img"><img src="../../../assets/detail_info_img4.png" alt=""></div>
           <div class="title">上门取货服务</div>
           <div class="content">
             <div class="item flightNumber">
-              <span>预计取货时间：</span><span>2017-10-10</span>
+              <span>预计取货时间：</span><span>{{pickUpAgent.arrivalTime}}</span>
             </div>
             <div class="item flightData">
-              <span>货运代理：</span><span>海航速运北京分公司</span>
+              <span>货运代理：</span><span>{{pickUpAgent.agentCompany}}</span>
             </div>
             <div class="item flighttime">
-              <span>运输方式：</span><span>专车配送</span>
+              <span>运输方式：</span><span></span>
             </div>
             <div class="item transNum">
-              <span>运输车辆：</span><span>1吨金杯车</span>
+              <span>运输车辆：</span><span></span>
             </div>
             <div class="item transNum">
-              <span>取货位置：</span><span>北京市朝阳区爱国路21号</span>
+              <span>取货位置：</span><span>{{pickUpAgent.deliveryAddress}}</span>
             </div>
             <div class="item transNum">
-              <span>联系方式:</span><span>13215645468</span>
+              <span>联系方式:</span><span>{{pickUpAgent.agentContactPhone}}</span>
             </div>
           </div>
         </div>
-        <div class="box landing">
+        <div v-if="serviceStatus.serviceE" class="box landing">
           <!-- 落地配服务信息调整模态框 -->
           <el-dialog title="落地配服务" :visible.sync="serverInfoModel.landing">
 
@@ -244,27 +244,27 @@
               <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
             </div>
           </el-dialog>
-          <div class="reset"><img src="../../../assets/reset_icon.png"></div>
+          <div class="reset"><img :class="{hide:!statusAdmin.serviceAdjustment}" src="../../../assets/reset_icon.png"></div>
           <div class="img"><img src="../../../assets/detail_info_img5.png" alt=""></div>
           <div class="title">落地配服务</div>
           <div class="content">
             <div class="item flightNumber">
-              <span>预计取货时间：</span><span>2017-10-10</span>
+              <span>预计取货时间：</span><span>{{deliveryAgent.arrivalTime}}</span>
             </div>
             <div class="item flightData">
-              <span>货运代理：</span><span>海航速运上海分公司</span>
+              <span>货运代理：</span><span>{{deliveryAgent.agentCompany}}</span>
             </div>
             <div class="item flighttime">
-              <span>运输方式：</span><span>一般配送</span>
+              <span>运输方式：</span><span></span>
             </div>
             <div class="item transNum">
-              <span>运输车辆：</span><span>5吨箱式货车</span>
+              <span>运输车辆：</span><span></span>
             </div>
             <div class="item transNum">
-              <span>取货位置：</span><span>上海市爱国区爱国路21号</span>
+              <span>取货位置：</span><span>{{deliveryAgent.deliveryAddress}}</span>
             </div>
             <div class="item transNum">
-              <span>联系方式:</span><span>156465465645</span>
+              <span>联系方式:</span><span>{{deliveryAgent.agentContactPhone}}</span>
             </div>
           </div>
         </div>
@@ -285,108 +285,108 @@
           <div class="icon">发</div>
           <div class="box name-id">
             <div class="key">姓名</div>
-            <div class="value">陈悠悠</div>
+            <div class="value">{{senderAddress.contactName}}</div>
             <div class="key">身份证</div>
-            <div class="value">186431351654646644654</div>
+            <div class="value">{{senderAddress.identityCard}}</div>
           </div>
           <div class="box phone-cellphone">
             <div class="key">手机号</div>
-            <div class="value">17655556666</div>
+            <div class="value">{{senderAddress.contactMobile}}</div>
             <div class="key">固定电话</div>
-            <div class="value">200-54646541</div>
+            <div class="value">{{senderAddress.contactPhone}}</div>
           </div>
           <div class="box address-detial">
             <div class="key">详细地址</div>
-            <div class="value">北京市朝阳区爱国路20号</div>
+            <div class="value">{{senderAddress.detailAddress}}</div>
           </div>
           <div class="box postal">
             <div class="key">邮政编码</div>
-            <div class="value">518100</div>
+            <div class="value">{{senderAddress.postCode}}</div>
           </div>
         </div>
         <div class="right">
           <div class="icon">收</div>
           <div class="box name-id">
             <div class="key">姓名</div>
-            <div class="value">陈悠悠</div>
+            <div class="value">{{receiverAddress.contactName}}</div>
             <div class="key">身份证</div>
-            <div class="value">186431351654646644654</div>
+            <div class="value">{{receiverAddress.identityCard}}</div>
           </div>
           <div class="box phone-cellphone">
             <div class="key">手机号</div>
-            <div class="value">17655556666</div>
+            <div class="value">{{receiverAddress.contactMobile}}</div>
             <div class="key">固定电话</div>
-            <div class="value">200-54646541</div>
+            <div class="value">{{receiverAddress.contactPhone}}</div>
           </div>
           <div class="box address-detial">
             <div class="key">详细地址</div>
-            <div class="value">北京市朝阳区爱国路20号</div>
+            <div class="value">{{receiverAddress.detailAddress}}</div>
           </div>
           <div class="box postal">
             <div class="key">邮政编码</div>
-            <div class="value">518100</div>
+            <div class="value">{{receiverAddress.postCode}}</div>
           </div>
         </div>
       </div>
       <div class="goodsInfo">
         <div class="triangle">
-            <p>跟踪信息</p>
+            <p>货物信息</p>
         </div>
         <div class="content">
           <div class="content-left">
             <div class="box weight">
               <span class="title">货物重量</span>
-              <span class="detial">1000</span>
+              <span class="detial">{{orderGoodsDetail.goodsWeight}}</span>
               <span class="unit">千克</span>
             </div>
             <div class="box num">
               <span class="title">货物件数</span>
-              <span class="detial">10</span>
+              <span class="detial">{{orderGoodsDetail.goodsNumber}}</span>
               <span class="unit">件</span>
             </div>
             <div class="box size">
               <span class="title">货物体积</span>
-              <span class="detial">0.50</span>
+              <span class="detial">{{orderGoodsDetail.goodsVolume}}</span>
               <span class="unit">立方米</span>
             </div>
             <div class="box payWeight">
               <span class="title">计费重量</span>
-              <span class="detial">1000.00</span>
+              <span class="detial">{{orderGoodsDetail.valuationWeight}}</span>
               <span class="unit">千克</span>
             </div>
             <div class="box type">
               <span class="title">货物类型</span>
-              <span class="detial">普货</span>
+              <span class="detial">{{orderGoodsDetail.goodsTypeName}}</span>
             </div>
             <div class="box name">
               <span class="title">货物名称</span>
-              <span class="detial">服装</span>
+              <span class="detial">{{orderGoodsDetail.goodsName}}</span>
             </div>
           </div>
           <div class="content-middle">
             <div class="box weight">
               <span class="title">实际重量</span>
-              <span class="detial">1000.00</span>
+              <span class="detial">{{orderGoodsDetail.actualWeight}}</span>
               <span class="unit">千克</span>
             </div>
             <div class="box num">
               <span class="title">实际件数</span>
-              <span class="detial">10</span>
+              <span class="detial">{{orderGoodsDetail.actualNumber}}</span>
               <span class="unit">件</span>
             </div>
             <div class="box size">
               <span class="title">实际体积</span>
-              <span class="detial">0.50</span>
+              <span class="detial">{{orderGoodsDetail.actualVolume}}</span>
               <span class="unit">立方米</span>
             </div>
             <div class="box payWeight">
               <span class="title">实际计费重量</span>
-              <span class="detial">1000.00</span>
+              <span class="detial">{{orderGoodsDetail.reviewWeight}}</span>
               <span class="unit">千克</span>
             </div>
             <div class="box pack">
               <span class="title">货物包装</span>
-              <span class="detial">纸箱</span>
+              <span class="detial">{{orderGoodsDetail.goodsPackage}}</span>
             </div>
           </div>
           <div class="content-right">
@@ -399,24 +399,25 @@
               <EasyScrollbar>
                 <div class="box" id="wrapper">
                   <div>
-                    <p>100*100*10/5</p>
-                    <p>100*100*10/5</p>
-                    <p>100*100*10/5</p>
-                    <p>100*100*10/5</p>
-                    <p>100*100*10/5</p>
-                    <p>100*100*10/5</p>
-                    <p>100*100*10/5</p>
-                    <p>100*100*10/5</p>
-                    <p>100*100*10/5</p>
-                    <p>100*100*10/5</p>
-                    <p>100*100*10/5</p>
-                    <p>100*100*10/5</p>
+                    <p v-for="list in goodsSizeList">{{list}}</p>
                   </div>
                 </div>
               </EasyScrollbar>
             </div>
             <div class="reInspect">
-              <el-button size="mini" type="warning">货物复核</el-button>
+              <el-button :class="{hide:!statusAdmin.toReview}" @click="addSizeDialogFormVisible = true" size="mini" type="warning">货物复核</el-button>
+            </div>
+            <div class="addSize">
+              <el-dialog width="520px" title="增加货物尺寸" :visible.sync="addSizeDialogFormVisible">
+                <input type="number" v-model="addSizeDialogFormData.length" placeholder="长">
+                <input type="number" v-model="addSizeDialogFormData.width" placeholder="宽">
+                <input type="number" v-model="addSizeDialogFormData.height" placeholder="高">
+                <input type="number" v-model="addSizeDialogFormData.num" placeholder="件数">
+                <div slot="footer" class="dialog-footer">
+                  <el-button @click="addSizeDialogFormVisible = false">取 消</el-button>
+                  <el-button @click="addGoodsSize">确 定</el-button>
+                </div>
+              </el-dialog>
             </div>
           </div>
         </div>
@@ -428,85 +429,61 @@
         <div class="fee-top">
           <div class="box left">
             <h3>固定费用</h3>
-            <div>
-              <div class="key">航空运费</div>
-              <div class="value">¥300.00</div>
-            </div>
-            <div>
-              <div class="key">燃油附加费</div>
-              <div class="value">¥120.00</div>
-            </div>
-            <div>
-              <div class="key">出港处置费</div>
-              <div class="value">¥10.00</div>
-            </div>
-            <div>
-              <div class="key">出港制单费</div>
-              <div class="value">¥100.00</div>
-            </div>
-            <div>
-              <div class="key">进港提货费</div>
-              <div class="value">¥100.00</div>
-            </div>
-            <div>
-              <div class="key">上门提货费</div>
-              <div class="value">¥10000.00</div>
-            </div>
-            <div>
-              <div class="key">派送费</div>
-              <div class="value">¥100.00</div>
+            <div v-for="list in productPriceList">
+              <div class="key">{{list.name}}</div>
+              <div class="value">¥{{list.price}}</div>
             </div>
             <div class="total">
               <div class="key">合计</div>
-              <div class="value">¥8800.00</div>
+              <div class="value">¥{{hnaOrder.amount}}</div>
             </div>
           </div>
           <div class="box center">
             <h3>临时费用</h3>
             <div class="btn-add">
-              <el-button size="mini" type="warning">费用补充</el-button>
+              <el-button :class="{hide:!statusAdmin.temporaryCost}" size="mini" type="warning">费用补充</el-button>
             </div>
             <div class="btn-pay">
-              <el-button size="mini" type="warning">执行补缴</el-button>
+              <el-button :class="{hide:!statusAdmin.temporaryCost}" size="mini" type="warning">执行补缴</el-button>
             </div>
           </div>
           <div class="box right">
             <h3>发票信息</h3>
             <div>
               <div class="key">企业名称：</div>
-              <div class="value">深圳运捷讯息系统有限公司</div>
+              <div class="value">{{invoiceDTO.companyName}}</div>
             </div>
             <div>
               <div class="key">纳税人识别号：</div>
-              <div class="value">46546546464655465</div>
+              <div class="value">{{invoiceDTO.taxpayerNo}}</div>
             </div>
             <div>
               <div class="key">注册地址：</div>
-              <div class="value">深圳市福田区深南中路什么大厦1122</div>
+              <div class="value">{{invoiceDTO.registerAddress}}</div>
             </div>
             <div>
               <div class="key">联系电话：</div>
-              <div class="value">0755-156546465</div>
+              <div class="value">{{invoiceDTO.telephone}}</div>
             </div>
             <div>
               <div class="key">开户行：</div>
-              <div class="value">中国建设银行</div>
+              <div class="value">{{invoiceDTO.bankName}}</div>
             </div>
             <div>
               <div class="key">开户行账号：</div>
-              <div class="value">4135465416546464641654</div>
+              <div class="value">{{invoiceDTO.bankCard}}</div>
             </div>
             <div>
               <div class="key">开票人：</div>
-              <div class="value">刘嬷嬷</div>
+              <div class="value">{{invoiceDTO.issuerName}}</div>
             </div>
             <div>
               <div class="key">开票人电话：</div>
-              <div class="value">13546655454</div>
+              <div class="value">{{invoiceDTO.issuerMobile}}</div>
             </div>
             <div>
               <div class="key">开票人地址：</div>
-              <div class="value">北京市朝阳区建国路</div>
+              <div class="value">{{invoiceDTO.issuerAddress}}</div>
             </div>
 
           </div>
@@ -514,63 +491,42 @@
         <div class="fee-mid">
           <div class="had">
             <span class="title">已支付</span>
-            <span class="value">¥8300.00</span>
+            <span class="value">¥{{hnaOrder.paidAmount||'0.00'}}</span>
           </div>
           <div class="need">
             <span class="title">待支付</span>
-            <span class="value">¥0.00</span>
+            <span class="value">¥{{hnaOrder.needMakeUpAmount||'0.00'}}</span>
           </div>
         </div>
-        <div class="fee-bot">
-          <div class="box">
+        <div v-if="statusAdmin.tradingFlow"  class="fee-bot">
+          <div v-for="list in payDTOS" class="box">
             <div>
               <div>
                 <span class="key">系统交易流水号：</span>
-                <span class="value">1354646464646854685468</span>
+                <span class="value">{{list.payNo}}</span>
               </div>
               <div>
                 <span class="key">交易时间：</span>
-                <span class="value">2017-10-10 10:10:10</span>
+                <span class="value">{{list.payTime }}</span>
               </div>
             </div>
             <div>
               <div>
                 <span class="key">交易金额：</span>
-                <span class="value">¥800</span>
+                <span class="value">¥{{list.payAmount}}</span>
               </div>
               <div>
                 <span class="key">支付渠道：</span>
-                <span class="value">新生支付</span>
-              </div>
-            </div>
-          </div>
-          <div class="box">
-            <div>
-              <div>
-                <span class="key">系统交易流水号：</span>
-                <span class="value">1354646464646854685468</span>
-              </div>
-              <div>
-                <span class="key">交易时间：</span>
-                <span class="value">2017-10-10 10:10:10</span>
-              </div>
-            </div>
-            <div>
-              <div>
-                <span class="key">交易金额：</span>
-                <span class="value">¥80</span>
-              </div>
-              <div>
-                <span class="key">支付渠道：</span>
-                <span class="value">支付宝</span>
+                <span class="value"></span>
               </div>
             </div>
           </div>
         </div>
       </div>
       <div class="submit-btn">
-        <div class="btn-refuse"><el-button size="mini" type="info">拒绝订单</el-button></div>
-        <div class="btn-accept"><el-button size="mini" type="danger">接受订单</el-button></div>
+        <div :class="{hide:!statusAdmin.submitOrder}" class="btn-refuse"><el-button @click="acceptOrder(9)" size="mini" type="info">拒绝订单</el-button></div>
+        <div :class="{hide:!statusAdmin.submitOrder}" class="btn-accept"><el-button @click="acceptOrder(3)" size="mini" type="danger">接受订单</el-button></div>
+        <div :class="{hide:!statusAdmin.completeOrder}" class="btn-accept"><el-button @click="acceptOrder(7)" size="mini" type="danger">完成订单</el-button></div>
       </div>
     </div>
   </div>
@@ -581,38 +537,324 @@ export default {
   data() {
     return {
       serverInfoModel: {
-        airtrans: true,
+        airtrans: false,
         beginport: false,
         endport: false,
         pickup: false,
-        landing: false
+        landing: false,
+      },
+      addSizeDialogFormVisible: false, //货物符合模态框状态
+      addSizeDialogFormData: {
+        length: "",
+        width: "",
+        height: "",
+        num: ""
+      },
+      hnaOrder: {},
+      senderAddress: {}, //发货人信息
+      receiverAddress: {}, //发货人信息
+      orderGoodsDetail: {}, //货物信息
+      goodsSizeList: [], //货物尺寸表
+      productPriceList: [], //价格信息
+      invoiceDTO: {}, //发票信息
+      payDTOS: [], //交易流水
+      airportStartAgent: {}, //始发港服务代理商信息 B
+      airportEndAgent: {}, //目的地港服务代理商信息 C
+      pickUpAgent: {}, //上门取货服务代理商信息 D
+      deliveryAgent: {}, //送货上门服务代理商信息 E
+      serviceStatus: {//服务是否选中
+        serviceA: false,
+        serviceB: false,
+        serviceC: false,
+        serviceD: false,
+        serviceE: false
+      },
+      statusAdmin: { //不同状态改变不同显示
+        serviceAdjustment: true, //服务调整功能
+        toReview: false, //货物复核
+        temporaryCost: false, //临时费用功能
+        tradingFlow: false, //交易流水
+        completeOrder: false, //完成订单按钮
+        submitOrder: true, //提交，取消订单按钮
       },
       flightData: "2017-10-10",
       flighttime: [new Date(2016, 9, 10, 8, 40), new Date(2016, 9, 10, 9, 40)],
       orderId: "",
-      orderNo: ""
+      orderNo: "",
+      orderStatus: "",
     };
   },
   created() {
-    this.orderId = this.$route.query.id;
+    this.orderId = this.$route.query.orderId;
     this.orderNo = this.$route.query.orderNo;
-    // this.getOrderDetail()
+    this.getOrderDetail()
+  },
+  watch: {
+    orderStatus (){
+      this.getOrderDetail()
+    }
   },
   methods: {
     goto(path) {
       this.$router.push(path);
     },
-    getOrderDetail() {
-      this.axios
-        .post("", {
-          id: this.id,
-          orderId: this.orderId,
-          orderNo: this.orderNo,
-          token: this.token
-        })
-        .then(data => {
-          console.log(data);
+    getOrderDetail () {
+      this.axios.post("/app/v1/order/getOrderDetail",{
+        "id": this.id,
+        "orderId": this.orderId,
+        "orderNo": this.orderNo,
+        "token": this.token,
+      }).then(data => {
+        if(data.data.code === 1){
+          let res = data.data.data;
+          let statusNmae = '';
+          //this.orderStatus = res.orderStatus;
+          switch (res.orderStatus){
+            case 2:
+                statusNmae = '待受理';
+                this.statusAdmin = {
+                  serviceAdjustment: true,
+                  toReview: false,
+                  temporaryCost: false,
+                  tradingFlow: false,
+                  completeOrder: false,
+                  submitOrder: true,
+                };
+                break;
+            case 3:
+                statusNmae = '待支付';
+                this.statusAdmin = {
+                  serviceAdjustment: false,
+                  toReview: false,
+                  temporaryCost: false,
+                  tradingFlow: false,
+                  completeOrder: true,
+                  submitOrder: false,
+                };
+                break;
+            case 4:
+                statusNmae = '已支付';
+                this.statusAdmin = {
+                  serviceAdjustment: true,
+                  toReview: true,
+                  temporaryCost: true,
+                  tradingFlow: true,
+                  completeOrder: true,
+                  submitOrder: false,
+                };
+                break;
+            case 5:
+                statusNmae = '运送中';
+                this.statusAdmin = {
+                  serviceAdjustment: true,
+                  toReview: false,
+                  temporaryCost: true,
+                  tradingFlow: true,
+                  completeOrder: true,
+                  submitOrder: false,
+                };
+                break;
+            case 6:
+                statusNmae = '待补缴';
+                this.statusAdmin = {
+                  serviceAdjustment: true,
+                  toReview: false,
+                  temporaryCost: false,
+                  tradingFlow: true,
+                  completeOrder: true,
+                  submitOrder: false,
+                };
+                //完成订单禁用
+                break;
+            case 7:
+                statusNmae = '已完成';
+                this.statusAdmin = {
+                  serviceAdjustment: false,
+                  toReview: false,
+                  temporaryCost: false,
+                  tradingFlow: true,
+                  completeOrder: false,
+                  submitOrder: false,
+                };
+                break;
+            case 8:
+                statusNmae = '已取消';
+                this.statusAdmin = {
+                  serviceAdjustment: false,
+                  toReview: false,
+                  temporaryCost: false,
+                  tradingFlow: false,
+                  completeOrder: false,
+                  submitOrder: false,
+                };
+                break;
+            case 9:
+              statusNmae = '已拒绝';
+              this.statusAdmin = {
+                serviceAdjustment: false,
+                toReview: false,
+                temporaryCost: false,
+                tradingFlow: false,
+                completeOrder: false,
+                submitOrder: false,
+              };
+              break;
+          }
+          res.statusName = statusNmae;
+          this.hnaOrder = res;
+          this.senderAddress = res.senderAddress||{};
+          this.receiverAddress = res.receiverAddress||{};
+          if(res.orderGoodsDetail){
+            let goodsTypeName = '';
+            switch (parseInt(res.orderGoodsDetail.goodsType)){
+              case 7: goodsTypeName = '普货'; break;
+              case 8: goodsTypeName = '冷链'; break;
+              case 9: goodsTypeName = '重货'; break;
+              case 10: goodsTypeName = '危险品'; break;
+            }
+            res.orderGoodsDetail.goodsTypeName = goodsTypeName;
+            this.orderGoodsDetail = res.orderGoodsDetail;
+            if(res.orderGoodsDetail.goodsSize){
+                this.goodsSizeList = res.orderGoodsDetail.goodsSize.split(',');
+            }
+          }
+          this.productPriceList = res.productPriceList||[];
+          this.invoiceDTO = res.invoiceDTO||{};
+          this.payDTOS = res.payDTOS||[];
+          this.airportStartAgent = res.airportStartAgent||{};
+          this.deliveryAgent = res.deliveryAgent||{};
+          this.pickUpAgent = res.pickUpAgent||{};
+          this.airportEndAgent = res.airportEndAgent||{};
+
+          if(res.productCode){
+            let serviceList = [];
+            serviceList = res.productCode.split('/');
+            for(let i=0;i<serviceList.length;i++){
+                switch (serviceList[i]){
+                  case 'B': this.serviceStatus.serviceB = true; break;
+                  case 'C': this.serviceStatus.serviceC = true; break;
+                  case 'D': this.serviceStatus.serviceD = true; break;
+                  case 'E': this.serviceStatus.serviceE = true; break;
+                }
+            }
+          }
+        }
+      })
+    },
+    acceptOrder (status){
+      if(status === 9){
+        this.$confirm('此操作将拒绝该订单, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$message({
+            type: 'success',
+            message: '已经拒绝了该订单！'
+          });
+          this.axios.post("/web/v1/supplier/order/accepting",{
+            "id": this.id,
+            "status": status,
+            "orderNo": this.orderNo,
+            "token": this.token,
+          }).then(data => {
+            if(data.data.code === 1&&data.data.msg === "操作成功"){
+              this.orderStatus = 3;
+              this.$message({
+                showClose: true,
+                message: '已经拒绝了该订单！',
+                type: 'success'
+              });
+            }else{
+              this.$message({
+                showClose: true,
+                message: '出错啦，操作失败，请重新提交！',
+                type: 'error',
+                duration: 0
+              });
+            }
+          })
+        }).catch(() => {
+
         });
+      }else{
+        this.axios.post("/web/v1/supplier/order/accepting",{
+          "id": this.id,
+          "status": status,
+          "orderNo": this.orderNo,
+          "token": this.token,
+        }).then(data => {
+          if(data.data.code === 1&&data.data.msg === "操作成功"){
+            this.orderStatus = 3;
+            this.$message({
+              showClose: true,
+              message: '操作订单成功！',
+              type: 'success'
+            });
+          }else{
+            this.$message({
+              showClose: true,
+              message: '出错啦，操作失败，请重新提交！',
+              type: 'error',
+              duration: 0
+            });
+          }
+        })
+      }
+    },
+    modifyServiceInfo (){ //修改服务信息的确定按钮
+      this.axios.post("",{
+        "id": this.id,
+        "status": parseInt(this.orderStatus),
+        "orderNo": this.orderNo,
+        "token": this.token,
+      }).then(data => {
+        if(data.data.code === 1&&data.data.msg === "操作成功"){
+          this.$message({
+            showClose: true,
+            message: '修改信息成功！',
+            type: 'success'
+          });
+          this.serverInfoModel.airtrans = false;
+        }else{
+          this.$message({
+            showClose: true,
+            message: '出错啦，修改信息失败，请重新提交！',
+            type: 'error',
+            duration: 0
+          });
+        }
+      });
+    },
+    addGoodsSize() {
+      console.log(typeof this.addSizeDialogFormData.length);
+      if (
+        !this.addSizeDialogFormData.length ||
+        !this.addSizeDialogFormData.width ||
+        !this.addSizeDialogFormData.height ||
+        !this.addSizeDialogFormData.num
+      ) {
+        return;
+      }
+      let str =
+        this.addSizeDialogFormData.length +
+        "*" +
+        this.addSizeDialogFormData.width +
+        "*" +
+        this.addSizeDialogFormData.height +
+        "/" +
+        this.addSizeDialogFormData.num;
+      this.goodsInfo.size.push(str);
+      this.addSizeDialogFormVisible = false;
+    },
+    dateTransform(time){
+      let newTime = new Date(time);
+      let year = newTime.getFullYear();
+      let month = (newTime.getMonth() + 1)<10?'0'+(newTime.getMonth() + 1):(newTime.getMonth() + 1);
+      let date = newTime.getDate()<10?'0'+newTime.getDate():newTime.getDate();
+      let hour = newTime.getHours()<10?'0'+newTime.getHours():newTime.getHours();
+      let minutes = newTime.getMinutes()<10?'0'+newTime.getMinutes():newTime.getMinutes();
+      return year+'-'+month+'-'+date+' '+hour+':'+minutes
     }
   },
   computed: {
@@ -878,6 +1120,9 @@ export default {
           position: absolute;
           top: 10px;
           right: 10px;
+          .hide{
+            display: none;
+          }
         }
         &:nth-of-type(4n) {
           border-right: none;
@@ -1084,6 +1329,31 @@ export default {
             text-align: center;
             color: #989898;
           }
+          .addSize {
+            .el-dialog__wrapper {
+              .el-dialog__header {
+                background-color: #fccf00;
+                .el-dialog__title {
+                  color: #fff;
+                }
+              }
+              .el-dialog__body {
+                display: flex;
+                input {
+                  width: 25%;
+                  border-right: 1px solid #e0e0e0;
+                  border-bottom: 1px solid #e0e0e0;
+                  margin-right: 10px;
+                  -moz-appearance: textfield;
+                  &::-webkit-inner-spin-button,
+                  &::-webkit-outer-spin-button {
+                    -webkit-appearance: none;
+                    margin: 0;
+                  }
+                }
+              }
+            }
+          }
           .box {
             height: 200px;
           }
@@ -1099,6 +1369,9 @@ export default {
             button {
               margin: 90px 0 0 20px;
               box-shadow: 4px 4px 4px #e0e0e0;
+            }
+            .hide{
+              display: none;
             }
           }
         }
@@ -1162,9 +1435,15 @@ export default {
           }
           .btn-add {
             bottom: 50px;
+            .hide{
+              display: none;
+            }
           }
           .btn-pay {
             bottom: 10px;
+            .hide{
+              display: none;
+            }
           }
         }
         .right {
@@ -1269,6 +1548,9 @@ export default {
       margin: 20px 0 200px 0;
       display: flex;
       justify-content: flex-end;
+      .hide{
+        display: none;
+      }
       .btn-accept,
       .btn-refuse {
         box-shadow: 4px 4px 4px #e0e0e0;

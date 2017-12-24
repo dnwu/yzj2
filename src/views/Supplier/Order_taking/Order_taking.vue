@@ -11,6 +11,7 @@
           <div class="value">
             <el-input
               placeholder="请输入内容"
+              :clearable = true
               prefix-icon="el-icon-search"
               v-model="orderNum">
             </el-input>
@@ -19,30 +20,32 @@
         <div class="box start-port">
           <div class="key">始发港</div>
           <div class="value">
-            <el-select v-model="startPort" clearable placeholder="请选择">
+            <!--<el-select v-model="startPort" clearable placeholder="请选择">
               <el-option
                 v-for="item in startPortData"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value">
               </el-option>
-            </el-select>
+            </el-select>-->
+            <StartPortselect @startportvalue='startPortValue'></StartPortselect>
           </div>
         </div>
         <div class="box end-port">
           <div class="key">目的港</div>
           <div class="value">
-            <el-select v-model="endPort" clearable placeholder="请选择">
+            <!--<el-select v-model="endPort" clearable placeholder="请选择">
               <el-option
                 v-for="item in endPortData"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value">
               </el-option>
-            </el-select>
+            </el-select>-->
+            <EndPortselect @endportvalue='endPortValue'></EndPortselect>
           </div>
         </div>
-        <div class="search-botton"><el-button type="danger">查询</el-button></div>
+        <div class="search-botton"><el-button @click="queryOrder" type="danger">查询</el-button></div>
       </div>
       <div class="input-bottom">
         <div class="box goods-type">
@@ -78,6 +81,7 @@
               v-model="orderTime"
               type="daterange"
               size="mini"
+              value-format = "yyyy-MM-dd"
               range-separator="-"
               start-placeholder="开始日期"
               end-placeholder="结束日期">
@@ -98,214 +102,312 @@
         <div class="status">状态</div>
         <div class="operate">操作</div>
       </div>
-      <!-- 已支付 -->
-      <div class="tbody">
-        <div class="tbody-head">
-          <div class="time">2017-09-09 12:00</div>
-          <div class="orderNum">订单号：135165465</div>
-          <div class="mainOrderNum"><span>主运单号：</span><span class="value">74459-4135465416</span></div>
-          <div class="examine"><span @click="examine">查看</span></div>
+      <div v-if="orderList.length" >
+        <div v-for="list in orderList" class="tbody">
+          <!-- 待受理 -->
+          <div v-if="list.orderStatus === 2">
+            <div class="tbody-head">
+              <div class="time">{{dateTransform(list.createDate)}}</div>
+              <div class="orderNum"><span>订单号：</span><span @click="examine" class="value">{{list.orderNo}}</span></div>
+              <div class="mainOrderNum">主运单号：</div>
+              <div class="examine"><span @click="viewOrder">查看</span></div>
+            </div>
+            <div class="wrapper">
+              <div class="goodsName">
+                <p class="black">{{list.goodsName}}</p>
+                <p class="gray">({{list.goodsTypeName}})</p>
+              </div>
+              <div class="black address">
+                <p class="start">{{list.cityStart}}</p>
+                <p class="end">{{list.cityEnd }}</p>
+                <!-- 北京(PEK)——上海(PVG) -->
+              </div>
+              <div class="num">
+                <p class="gray">预计：{{list.goodsNumber}}</p>
+                <p class="black">实际：{{list.actualNumber}}</p>
+              </div>
+              <div class="weight">
+                <p class="gray">预计：{{list.goodsWeight}}</p>
+                <p class="black">实际：{{list.actualWeight}}</p>
+              </div>
+              <div class="needPayWeight">
+                <p class="gray">预计：{{list.actualWeight}}</p>
+                <p class="black">实际：{{list.actualCalcWeight}}</p>
+              </div>
+              <div class="server">
+                <p>{{list.productCode}}</p>
+              </div>
+              <div class="status willcare">
+                <div class="black"><img :src="listIcon['willcare']" alt="">待受理</div>
+                <div>总额¥{{list.amount}}</div>
+              </div>
+              <div class="operate">
+                <div><el-button @click="dealwith(list.orderNo,list.id)"  size="mini" type="danger">处理订单</el-button></div>
+              </div>
+            </div>
+          </div>
+          <!-- 待支付 -->
+          <div v-else-if="list.orderStatus === 3">
+            <div class="tbody-head">
+              <div class="time">{{dateTransform(list.createDate)}}</div>
+              <div class="orderNum"><span>订单号：</span><span @click="examine" class="value">{{list.orderNo}}</span></div>
+              <div class="mainOrderNum">主运单号：</div>
+              <div class="examine"><span @click="viewOrder">查看</span></div>
+            </div>
+            <div class="wrapper">
+              <div class="goodsName">
+                <p class="black">{{list.goodsName}}</p>
+                <p class="gray">({{list.goodsTypeName}})</p>
+              </div>
+              <div class="black address">
+                <p class="start">{{list.cityStart}}</p>
+                <p class="end">{{list.cityEnd }}</p>
+                <!-- 北京(PEK)——上海(PVG) -->
+              </div>
+              <div class="num">
+                <p class="gray">预计：{{list.goodsNumber}}</p>
+                <p class="black">实际：{{list.actualNumber}}</p>
+              </div>
+              <div class="weight">
+                <p class="gray">预计：{{list.goodsWeight}}</p>
+                <p class="black">实际：{{list.actualWeight}}</p>
+              </div>
+              <div class="needPayWeight">
+                <p class="gray">预计：{{list.actualWeight}}</p>
+                <p class="black">实际：{{list.actualCalcWeight}}</p>
+              </div>
+              <div class="server">
+                <p>{{list.productCode}}</p>
+              </div>
+              <div class="status needpay">
+                <div class="black"><img :src="listIcon['needpay']" alt="">待支付</div>
+              </div>
+              <div class="operate">
+                <div><el-button @click="dealwith(list.orderNo,list.id)" size="mini" type="danger">处理订单</el-button></div>
+              </div>
+            </div>
+          </div>
+          <!-- 已支付 -->
+          <div v-else-if="list.orderStatus === 4">
+            <div class="tbody-head">
+              <div class="time">{{dateTransform(list.createDate)}}</div>
+              <div class="orderNum"><span>订单号：</span><span @click="examine" class="value">{{list.orderNo}}</span></div>
+              <div class="mainOrderNum">主运单号：</div>
+              <div class="examine"><span @click="viewOrder">查看</span></div>
+            </div>
+            <div class="wrapper">
+              <div class="goodsName">
+                <p class="black">{{list.goodsName}}</p>
+                <p class="gray">({{list.goodsTypeName}})</p>
+              </div>
+              <div class="black address">
+                <p class="start">{{list.cityStart}}</p>
+                <p class="end">{{list.cityEnd }}</p>
+                <!-- 北京(PEK)——上海(PVG) -->
+              </div>
+              <div class="num">
+                <p class="gray">预计：{{list.goodsNumber}}</p>
+                <p class="black">实际：{{list.actualNumber}}</p>
+              </div>
+              <div class="weight">
+                <p class="gray">预计：{{list.goodsWeight}}</p>
+                <p class="black">实际：{{list.actualWeight}}</p>
+              </div>
+              <div class="needPayWeight">
+                <p class="gray">预计：{{list.actualWeight}}</p>
+                <p class="black">实际：{{list.actualCalcWeight}}</p>
+              </div>
+              <div class="server">
+                <p>{{list.productCode}}</p>
+              </div>
+              <div class="status hadpay">
+                <div class="black"><img :src="listIcon['hadpay']" alt="">已支付</div>
+                <div>总额¥{{list.amount}}</div>
+              </div>
+              <div class="operate">
+                <div><el-button @click="dealwith(list.orderNo,list.id)" size="mini" type="danger">处理订单</el-button></div>
+              </div>
+            </div>
+          </div>
+          <!-- 运送中 -->
+          <div v-else-if="list.orderStatus === 5">
+            <div class="tbody-head">
+              <div class="time">{{dateTransform(list.createDate)}}</div>
+              <div class="orderNum"><span>订单号：</span><span @click="examine" class="value">{{list.orderNo}}</span></div>
+              <div class="mainOrderNum">主运单号：</div>
+              <div class="examine"><span @click="viewOrder">查看</span></div>
+            </div>
+            <div class="wrapper">
+              <div class="goodsName">
+                <p class="black">{{list.goodsName}}</p>
+                <p class="gray">({{list.goodsTypeName}})</p>
+              </div>
+              <div class="black address">
+                <p class="start">{{list.cityStart}}</p>
+                <p class="end">{{list.cityEnd }}</p>
+                <!-- 北京(PEK)——上海(PVG) -->
+              </div>
+              <div class="num">
+                <p class="gray">预计：{{list.goodsNumber}}</p>
+                <p class="black">实际：{{list.actualNumber}}</p>
+              </div>
+              <div class="weight">
+                <p class="gray">预计：{{list.goodsWeight}}</p>
+                <p class="black">实际：{{list.actualWeight}}</p>
+              </div>
+              <div class="needPayWeight">
+                <p class="gray">预计：{{list.actualWeight}}</p>
+                <p class="black">实际：{{list.actualCalcWeight}}</p>
+              </div>
+              <div class="server">
+                <p>{{list.productCode}}</p>
+              </div>
+              <div class="status send">
+                <div class="black"><img :src="listIcon['send']" alt="">运送中</div>
+                <div>总额¥{{list.amount}}</div>
+              </div>
+              <div class="operate">
+                <div><el-button @click="dealwith(list.orderNo,list.id)" size="mini" type="danger">处理订单</el-button></div>
+              </div>
+            </div>
+          </div>
+          <!-- 待补缴 -->
+          <div v-else-if="list.orderStatus === 6">
+            <div class="tbody-head">
+              <div class="time">{{dateTransform(list.createDate)}}</div>
+              <div class="orderNum"><span>订单号：</span><span @click="examine" class="value">{{list.orderNo}}</span></div>
+              <div class="mainOrderNum">主运单号：</div>
+              <div class="examine"><span @click="viewOrder">查看</span></div>
+            </div>
+            <div class="wrapper">
+              <div class="goodsName">
+                <p class="black">{{list.goodsName}}</p>
+                <p class="gray">({{list.goodsTypeName}})</p>
+              </div>
+              <div class="black address">
+                <p class="start">{{list.cityStart}}</p>
+                <p class="end">{{list.cityEnd }}</p>
+                <!-- 北京(PEK)——上海(PVG) -->
+              </div>
+              <div class="num">
+                <p class="gray">预计：{{list.goodsNumber}}</p>
+                <p class="black">实际：{{list.actualNumber}}</p>
+              </div>
+              <div class="weight">
+                <p class="gray">预计：{{list.goodsWeight}}</p>
+                <p class="black">实际：{{list.actualWeight}}</p>
+              </div>
+              <div class="needPayWeight">
+                <p class="gray">预计：{{list.actualWeight}}</p>
+                <p class="black">实际：{{list.actualCalcWeight}}</p>
+              </div>
+              <div class="server">
+                <p>{{list.productCode}}</p>
+              </div>
+              <div class="status willcare">
+                <div class="black"><img :src="listIcon['willcare']" alt="">待补缴</div>
+                <div>总额¥{{list.amount}}</div>
+              </div>
+              <div class="operate">
+                <div><el-button @click="dealwith(list.orderNo,list.id)" size="mini" type="danger">处理订单</el-button></div>
+              </div>
+            </div>
+          </div>
+          <!-- 已完成 -->
+          <div v-else-if="list.orderStatus === 7">
+            <div class="tbody-head">
+              <div class="time">{{dateTransform(list.createDate)}}</div>
+              <div class="orderNum"><span>订单号：</span><span @click="examine" class="value">{{list.orderNo}}</span></div>
+              <div class="mainOrderNum">主运单号：</div>
+              <div class="examine"><span @click="viewOrder">查看</span></div>
+            </div>
+            <div class="wrapper">
+              <div class="goodsName">
+                <p class="black">{{list.goodsName}}</p>
+                <p class="gray">({{list.goodsTypeName}})</p>
+              </div>
+              <div class="black address">
+                <p class="start">{{list.cityStart}}</p>
+                <p class="end">{{list.cityEnd }}</p>
+                <!-- 北京(PEK)——上海(PVG) -->
+              </div>
+              <div class="num">
+                <p class="gray">预计：{{list.goodsNumber}}</p>
+                <p class="black">实际：{{list.actualNumber}}</p>
+              </div>
+              <div class="weight">
+                <p class="gray">预计：{{list.goodsWeight}}</p>
+                <p class="black">实际：{{list.actualWeight}}</p>
+              </div>
+              <div class="needPayWeight">
+                <p class="gray">预计：{{list.actualWeight}}</p>
+                <p class="black">实际：{{list.actualCalcWeight}}</p>
+              </div>
+              <div class="server">
+                <p>{{list.productCode}}</p>
+              </div>
+              <div class="status haddone">
+                <div class="black"><img :src="listIcon['haddone']">已完成</div>
+                <div>总额¥{{list.amount}}</div>
+              </div>
+              <div class="operate">
+                <div><el-button @click="dealwith(list.orderNo,list.id)" size="mini" type="info">处理订单</el-button></div>
+              </div>
+            </div>
+          </div>
+          <!-- 已取消 -->
+          <div v-else-if="list.orderStatus === 8">
+            <div class="tbody-head">
+              <div class="time">{{dateTransform(list.createDate)}}</div>
+              <div class="orderNum"><span>订单号：</span><span @click="examine" class="value">{{list.orderNo}}</span></div>
+              <div class="mainOrderNum">主运单号：</div>
+              <div class="examine"><span @click="viewOrder">查看</span></div>
+            </div>
+            <div class="wrapper">
+              <div class="goodsName">
+                <p class="black">{{list.goodsName}}</p>
+                <p class="gray">({{list.goodsTypeName}})</p>
+              </div>
+              <div class="black address">
+                <p class="start">{{list.cityStart}}</p>
+                <p class="end">{{list.cityEnd }}</p>
+                <!-- 北京(PEK)——上海(PVG) -->
+              </div>
+              <div class="num">
+                <p class="gray">预计：{{list.goodsNumber}}</p>
+                <p class="black">实际：{{list.actualNumber}}</p>
+              </div>
+              <div class="weight">
+                <p class="gray">预计：{{list.goodsWeight}}</p>
+                <p class="black">实际：{{list.actualWeight}}</p>
+              </div>
+              <div class="needPayWeight">
+                <p class="gray">预计：{{list.actualWeight}}</p>
+                <p class="black">实际：{{list.actualCalcWeight}}</p>
+              </div>
+              <div class="server">
+                <p>{{list.productCode}}</p>
+              </div>
+              <div class="status needpay">
+                <div class="black"><img :src="listIcon['needpay']" alt="">已取消</div>
+              </div>
+              <div class="operate">
+                <div><el-button @click="dealwith(list.orderNo,list.id)" size="mini" type="danger">处理订单</el-button></div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="wrapper">
-          <div class="goodsName">
-            <p class="black">服装</p>
-            <p class="gray">(普货)</p>
-          </div>
-          <div class="black address">
-            <p class="start">北京(PEK)</p>
-            <p class="end">上海(PVG)</p>
-            <!-- 北京(PEK)——上海(PVG) -->
-          </div>
-          <div class="num">
-            <p class="gray">预计：20</p>
-            <p class="black">实际：20</p>
-          </div>
-          <div class="weight">
-            <p class="gray">预计：2000</p>
-            <p class="black">实际：2000</p>
-          </div>
-          <div class="needPayWeight">
-            <p class="gray">预计：2000</p>
-            <p class="black">实际：2000</p>
-          </div>
-          <div class="server">
-            <p>A/B/C/D/E/F/G</p>
-          </div>
-          <div class="status hadpay">
-            <div class="black"><img :src="listIcon['hadpay']" alt="">已支付</div>
-            <div>总额¥1602</div>
-          </div>
-          <div class="operate">
-            <div><el-button @click="dealwith(11)" size="mini" type="danger">处理订单</el-button></div>
-          </div>
+        <div class="block pagination">
+          <el-pagination
+            layout="prev, pager, next"
+            :page-size = 5
+            @current-change = "flipList"
+            :total="pageTotal">
+          </el-pagination>
         </div>
       </div>
-      <!-- 待支付 -->
-      <div class="tbody">
-        <div class="tbody-head">
-          <div class="time">2017-09-09 12:00</div>
-          <div class="orderNum">订单号：135165465</div>
-          <div class="mainOrderNum"><span>主运单号：</span><span class="value">74459-4135465416</span></div>
-          <div class="examine"><span>查看</span></div>
-        </div>
-        <div class="wrapper">
-          <div class="goodsName">
-            <p class="black">服装</p>
-            <p class="gray">(普货)</p>
-          </div>
-          <div class="black address">
-            <p class="start">北京(PEK)</p>
-            <p class="end">上海(PVG)</p>
-            <!-- 北京(PEK)——上海(PVG) -->
-          </div>
-          <div class="num">
-            <p class="gray">预计：20</p>
-            <p class="black">实际：20</p>
-          </div>
-          <div class="weight">
-            <p class="gray">预计：2000</p>
-            <p class="black">实际：2000</p>
-          </div>
-          <div class="needPayWeight">
-            <p class="gray">预计：2000</p>
-            <p class="black">实际：2000</p>
-          </div>
-          <div class="server">
-            <p>A/B/C/D/E/F/G</p>
-          </div>
-          <div class="status needpay">
-            <div class="black"><img :src="listIcon['needpay']" alt="">待支付</div>
-          </div>
-          <div class="operate">
-            <div><el-button size="mini" type="danger">处理订单</el-button></div>
-          </div>
-        </div>
-      </div>
-      <!-- 运送中 -->
-      <div class="tbody">
-        <div class="tbody-head">
-          <div class="time">2017-09-09 12:00</div>
-          <div class="orderNum">订单号：135165465</div>
-          <div class="mainOrderNum"><span>主运单号：</span><span class="value">74459-4135465416</span></div>
-          <div class="examine"><span>查看</span></div>
-        </div>
-        <div class="wrapper">
-          <div class="goodsName">
-            <p class="black">服装</p>
-            <p class="gray">(普货)</p>
-          </div>
-          <div class="black address">
-            <p class="start">北京(PEK)</p>
-            <p class="end">上海(PVG)</p>
-            <!-- 北京(PEK)——上海(PVG) -->
-          </div>
-          <div class="num">
-            <p class="gray">预计：20</p>
-            <p class="black">实际：20</p>
-          </div>
-          <div class="weight">
-            <p class="gray">预计：2000</p>
-            <p class="black">实际：2000</p>
-          </div>
-          <div class="needPayWeight">
-            <p class="gray">预计：2000</p>
-            <p class="black">实际：2000</p>
-          </div>
-          <div class="server">
-            <p>A/B/C/D/E/F/G</p>
-          </div>
-          <div class="status send">
-            <div class="black"><img :src="listIcon['send']" alt="">运送中</div>
-            <div>总额¥1602</div>
-          </div>
-          <div class="operate">
-            <div><el-button size="mini" type="danger">处理订单</el-button></div>
-          </div>
-        </div>
-      </div>
-      <!-- 待受理 -->
-      <div class="tbody">
-        <div class="tbody-head">
-          <div class="time">2017-09-09 12:00</div>
-          <div class="orderNum">订单号：135165465</div>
-          <div class="mainOrderNum"><span>主运单号：</span><span class="value">74459-4135465416</span></div>
-          <div class="examine"><span>查看</span></div>
-        </div>
-        <div class="wrapper">
-          <div class="goodsName">
-            <p class="black">服装</p>
-            <p class="gray">(普货)</p>
-          </div>
-          <div class="black address">
-            <p class="start">北京(PEK)</p>
-            <p class="end">上海(PVG)</p>
-            <!-- 北京(PEK)——上海(PVG) -->
-          </div>
-          <div class="num">
-            <p class="gray">预计：20</p>
-            <p class="black">实际：20</p>
-          </div>
-          <div class="weight">
-            <p class="gray">预计：2000</p>
-            <p class="black">实际：2000</p>
-          </div>
-          <div class="needPayWeight">
-            <p class="gray">预计：2000</p>
-            <p class="black">实际：2000</p>
-          </div>
-          <div class="server">
-            <p>A/B/C/D/E/F/G</p>
-          </div>
-          <div class="status willcare">
-            <div class="black"><img :src="listIcon['willcare']" alt="">待受理</div>
-            <div>总额¥1602</div>
-          </div>
-          <div class="operate">
-            <div><el-button size="mini" type="danger">处理订单</el-button></div>
-          </div>
-        </div>
-      </div>
-      <!-- 已完成 -->
-      <div class="tbody">
-        <div class="tbody-head">
-          <div class="time">2017-09-09 12:00</div>
-          <div class="orderNum">订单号：135165465</div>
-          <div class="mainOrderNum"><span>主运单号：</span><span class="value">74459-4135465416</span></div>
-          <div class="examine"><span>查看</span></div>
-        </div>
-        <div class="wrapper">
-          <div class="goodsName">
-            <p class="black">服装</p>
-            <p class="gray">(普货)</p>
-          </div>
-          <div class="black address">
-            <p class="start">北京(PEK)</p>
-            <p class="end">上海(PVG)</p>
-            <!-- 北京(PEK)——上海(PVG) -->
-          </div>
-          <div class="num">
-            <p class="gray">预计：20</p>
-            <p class="black">实际：20</p>
-          </div>
-          <div class="weight">
-            <p class="gray">预计：2000</p>
-            <p class="black">实际：2000</p>
-          </div>
-          <div class="needPayWeight">
-            <p class="gray">预计：2000</p>
-            <p class="black">实际：2000</p>
-          </div>
-          <div class="server">
-            <p>A/B/C/D/E/F/G</p>
-          </div>
-          <div class="status haddone">
-            <div class="black"><img :src="listIcon['haddone']">已完成</div>
-            <div>总额¥1602</div>
-          </div>
-          <div class="operate">
-            <div><el-button size="mini" type="info">处理订单</el-button></div>
-          </div>
-        </div>
+      <div v-else>
+        <p style="text-align: center;margin-top: 50px">没有找到相关订单信息</p>
       </div>
     </div>
     <!-- 查看订单的模态框 -->
@@ -520,7 +622,14 @@
 </div>
 </template>
 <script>
+  import StartPortselect from "@/components/StartPortselect";
+  import EndPortselect from "@/components/EndPortselect";
+  import { mapGetters } from "vuex";
 export default {
+  components: {
+    StartPortselect,
+    EndPortselect,
+  },
   data() {
     return {
       dialogFormVisible: false,
@@ -581,61 +690,123 @@ export default {
       endPort: "",
       goodsTypeData: [
         {
-          value: "选项1",
-          label: "黄金糕"
+          value: 7,
+          label: "普货"
         },
         {
-          value: "选项2",
-          label: "双皮奶"
+          value: 8,
+          label: "冷链"
         },
         {
-          value: "选项3",
-          label: "蚵仔煎"
+          value: 9,
+          label: "重货"
         },
         {
-          value: "选项4",
-          label: "龙须面"
+          value: 10,
+          label: "危险品"
         },
-        {
-          value: "选项5",
-          label: "北京烤鸭"
-        }
       ],
       goodsType: "",
       orderStatusData: [
         {
-          value: "选项1",
-          label: "黄金糕"
+          value: 2,
+          label: "待受理"
         },
         {
-          value: "选项2",
-          label: "双皮奶"
+          value: 3,
+          label: "待支付"
         },
         {
-          value: "选项3",
-          label: "蚵仔煎"
+          value: 4,
+          label: "已支付"
         },
         {
-          value: "选项4",
-          label: "龙须面"
+          value: 5,
+          label: "运送中"
         },
         {
-          value: "选项5",
-          label: "北京烤鸭"
-        }
+          value: 6,
+          label: "待补缴"
+        },
+        {
+          value: 7,
+          label: "已完成"
+        },
+        {
+          value: 8,
+          label: "已取消"
+        },
       ],
       orderStatus: "",
-      orderTime: []
+      orderTime: [],
+      startAddress:'',
+      endAddress:'',
+      pageTotal: 0,
+      orderList: []
     };
   },
+  created() {
+    this.getOrderList(1);
+  },
   methods:{
+    getOrderList(page) {
+      let _this = this;
+      let goodsType = _this.goodsType || -1;
+      let orderStatus = _this.orderStatus || -1;
+      _this.axios.post("/web/v1/supplier/order/orderList",{
+          "cityEnd": _this.endAddress,
+          "cityStart": _this.startAddress,
+          "endTime": _this.orderTime[0],
+          "goodType": goodsType,
+          "id": parseInt(_this.id),
+          "orderNo": _this.orderNum,
+          "orderStatus": orderStatus,
+          "pageIndex": page,
+          "size": 10,
+          "startTime": _this.orderTime[1],
+          "token": _this.token
+      }).then(data => {
+          if(data.data.code === 1){
+            _this.orderList = data.data.data;
+            _this.pageTotal = data.data.total;
+          }
+      });
+    },
+    dateTransform(time){
+      let newTime = new Date(time);
+      let year = newTime.getFullYear();
+      let month = (newTime.getMonth() + 1)<10?'0'+(newTime.getMonth() + 1):(newTime.getMonth() + 1);
+      let date = newTime.getDate()<10?'0'+newTime.getDate():newTime.getDate();
+      let hour = newTime.getHours()<10?'0'+newTime.getHours():newTime.getHours();
+      let minutes = newTime.getMinutes()<10?'0'+newTime.getMinutes():newTime.getMinutes();
+      return year+'-'+month+'-'+date+' '+hour+':'+minutes
+    },
+    queryOrder (){
+        this.getOrderList(1);
+    },
+    flipList (page){
+      this.getOrderList(page)
+    },
+    startPortValue (value){
+        this.startAddress = value
+    },
+    endPortValue (value){
+      this.endAddress = value
+    },
     examine(){
       this.dialogFormVisible = true
     },
-    dealwith(data){
-      console.log(data);
-      this.$router.push('/supplier/order_deal')
+    dealwith (no,id){
+      //this.$router.push('/supplier/order_deal')
+      this.$router.push({ path: '/supplier/order_deal', query: { orderNo: no,orderId: id}})
+
+    },
+    viewOrder (){
+      this.$router.push('/supplier/order_track')
     }
+  },
+  computed: {
+    ...mapGetters(["id", "token"])
   }
 };
 </script>
@@ -730,9 +901,13 @@ export default {
           > div {
             margin-left: 30px;
           }
-          .mainOrderNum {
+          .orderNum {
             .value {
               color: #40b4e5;
+            }
+            .value:hover{
+              cursor: pointer;
+              text-decoration: underline;
             }
           }
           .examine {
@@ -748,7 +923,7 @@ export default {
           }
         }
         .wrapper {
-          height: 100px;
+          //height: 100px;
           // text-align: center;
           justify-items: center;
           align-items: center;
@@ -835,6 +1010,10 @@ export default {
             }
           }
         }
+      }
+      .pagination{
+        text-align: center;
+        margin-top: 20px;
       }
     }
     .el-dialog__wrapper {
