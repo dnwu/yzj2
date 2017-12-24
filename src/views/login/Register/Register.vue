@@ -97,6 +97,7 @@
 </div>
 </template>
 <script>
+import getmd5 from "@/api/getmd5";
 export default {
   data() {
     var validatePass = (rule, value, callback) => {
@@ -218,7 +219,7 @@ export default {
               email: this.registerForm.email,
               identityCard: this.registerForm.id,
               name: this.registerForm.name,
-              password: this.registerForm.pass,
+              password: getmd5(this.registerForm.pass),
               phone: this.registerForm.mobile,
               smsCode: this.registerForm.testNum,
               telephone: this.registerForm.phone,

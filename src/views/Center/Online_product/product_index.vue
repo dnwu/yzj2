@@ -810,7 +810,7 @@ export default {
           }
         } else if (serverType == 2) {
           if (ele.productType == 2) {
-            let priceList = ele.list;
+            let priceList = ele.list[0];
             this.selectServer.landStartPrice.price = priceList.price;
             this.selectServer.landStartPrice.minPrice = priceList.minPrice;
           }
@@ -1303,7 +1303,7 @@ export default {
               justify-content: space-around;
               -webkit-text-size-adjust: none;
               .detail-list1 {
-                margin-bottom: -25px;
+                // margin-bottom: -25px;
               }
               .detail-list3 {
                 width: 300px;
