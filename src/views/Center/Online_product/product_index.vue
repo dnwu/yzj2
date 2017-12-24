@@ -1538,7 +1538,7 @@ export default {
     width: 600px;
     .left-list-selection {
       width: 180px;
-      transform: scale(0.9);
+      // transform: scale(0.9);
       select {
         margin-left: -30px;
         width: 170px;

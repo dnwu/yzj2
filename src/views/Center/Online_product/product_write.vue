@@ -557,7 +557,7 @@ export default {
                 this.sendAddressData.tellPhone2,
               detailAddress: this.sendAddressData.detailAddress,
               id: this.id,
-              identityCard: this.sendAddressData.postal,
+              identityCard: this.sendAddressData.id,
               postCode: this.sendAddressData.postal,
               region:
                 this.sendAddressData.address.province +
@@ -594,7 +594,7 @@ export default {
                 this.receiveAddressData.tellPhone2,
               detailAddress: this.receiveAddressData.detailAddress,
               id: this.id,
-              identityCard: this.receiveAddressData.postal,
+              identityCard: this.receiveAddressData.id,
               postCode: this.receiveAddressData.postal,
               region:
                 this.receiveAddressData.address.province +

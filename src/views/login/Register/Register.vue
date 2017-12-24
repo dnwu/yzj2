@@ -218,12 +218,12 @@ export default {
             .post("/app/v1/user/userRegister", {
               email: this.registerForm.email,
               identityCard: this.registerForm.id,
-              name: this.registerForm.name,
+              userName: this.registerForm.name,
               password: getmd5(this.registerForm.pass),
               phone: this.registerForm.mobile,
               smsCode: this.registerForm.testNum,
               telephone: this.registerForm.phone,
-              userName: this.registerForm.realname
+              name: this.registerForm.realname
             })
             .then(data => {
               // console.log(data);

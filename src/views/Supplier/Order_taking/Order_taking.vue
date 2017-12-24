@@ -400,7 +400,7 @@
         <div class="block pagination">
           <el-pagination
             layout="prev, pager, next"
-            :page-size = 5
+            :page-size = 10
             @current-change = "flipList"
             :total="pageTotal">
           </el-pagination>
