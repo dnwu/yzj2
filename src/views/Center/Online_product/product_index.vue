@@ -19,7 +19,7 @@
               <div class="left-list-selection selection-date">
                 <div class="block">
                   <el-date-picker
-                    value-format="yyyy-MM-DD"
+                    value-format="yyyy-MM-dd"
                     size="mini"
                     v-model="searchData.planeData"
                     type="date"
@@ -64,7 +64,7 @@
           <div class="product-server">
             <div class="server-nav">
               <span class="server-nav-title"><span class="title-text">基础服务</span><span class="title-line"></span></span>
-              <div class="server-nav-select select-little">
+              <div class="server-nav-select select-little" v-if="'airfreightDTO' in productSearchResult">
                 <img src="../../../assets/product1.png" class="detail-logo">
                 <span class="nav-select-text">航空运输</span>
                 <div class="nav-select-detail">
@@ -72,55 +72,46 @@
                   <div class="detail-list2 detail-list"><span class="detail-name">燃油附加费</span><span class="detail-cost">{{productSearchResult.airfreightDTO.fuelCharge}}元/千克</span></div>
                 </div>
                 <div class="detail-btn-box"><span class="inner-right-btn">运价申请</span></div>
-                <div class="detail-img active el-icon-success">
+                <div class="detail-img active el-icon-success" :class="selectServer.baseServer?'active':''">
                 </div>
               </div>
             </div>
             <div class="server-more">
               <span class="server-nav-title"><span class="title-text">更多服务</span><span class="title-line"></span></span>
-              <div class="server-nav-select select-little">
+              <!-- 始发港交货 -->
+              <div class="server-nav-select select-little" v-if="'airportStart' in productSearchResult">
                 <div class="detail-logo"><img src="../../../assets/product2.png"></div>
-                <span class="nav-select-text">始发港交货</span>
+                <span class="nav-select-text">{{productSearchResult.airportStart.name}}</span>
                 <div class="nav-select-detail">
-                  <div class="detail-list1 detail-list">
-                    <span class="detail-name">
-                      {{productSearchResult.airportStart.priceDTOS[0].name}}
-                    </span>
-                    <span class="detail-cost">
-                      {{productSearchResult.airportStart.priceDTOS[0].price}}
-                    元/千克</span>
+                  <div class="detail-list1 detail-list" v-for="(item,index) in productSearchResult.airportStart.priceDTOS" :key="index">
+                    <span class="detail-name">{{item.name}}</span>
+                    <span class="detail-cost">{{item.price}}元/千克</span>
                   </div>
-                  <div class="detail-list2 detail-list">
-                    <span class="detail-name">
-                      {{productSearchResult.airportStart.priceDTOS[1].name}}
-                    </span>
-                    <span class="detail-cost">
-                      {{productSearchResult.airportStart.priceDTOS[1].price}}
-                    元/千克</span>
-                  </div>
+                  <!-- <div class="detail-list2 detail-list">
+                    <span class="detail-name">{{productSearchResult.airportStart.priceDTOS[1].name}}</span>
+                    <span class="detail-cost">{{productSearchResult.airportStart.priceDTOS[1].price}}元/千克</span>
+                  </div> -->
                 </div>
                 <div class="detail-btn-box"></div>
                 <div class="detail-img el-icon-success" @click="toggleSelect('airportStart')" :class="selectServer.airportStart?'active':''">
                 </div>
               </div>
-              <div class="server-nav-select select-little">
+              <!-- 目的港提货 -->
+              <div class="server-nav-select select-little" v-if="'airportEnd' in productSearchResult">
                 <div class="detail-logo"><img src="../../../assets/product3.png"></div>
-                <span class="nav-select-text">目的港提货</span>
+                <span class="nav-select-text">{{productSearchResult.airportEnd.name}}</span>
                 <div class="nav-select-detail">
-                  <div class="detail-list">
-                    <span class="detail-name">
-                      {{productSearchResult.airportStart.priceDTOS[0].name}}
-                    </span>
-                    <span class="detail-cost">
-                      {{productSearchResult.airportStart.priceDTOS[0].price}}
-                    元/千克</span>
+                  <div class="detail-list" v-for="(item,index) in productSearchResult.airportEnd.priceDTOS" :key="index">
+                    <span class="detail-name">{{item.name}}</span>
+                    <span class="detail-cost">{{item.price}}元/千克</span>
                   </div>
                 </div>
                 <div class="detail-btn-box"></div>
                 <div class="detail-img el-icon-success" @click="toggleSelect('airportEnd')" :class="selectServer.airportEnd?'active':''">
                 </div>
               </div>
-              <div class="server-nav-select select-big">
+              <!-- 上门取货 -->
+              <div class="server-nav-select select-big" v-if="'landStart' in productSearchResult">
                 <div class="detail-logo"><img src="../../../assets/product4.png"></div>
                 <span class="nav-select-text">上门取货</span>
                 <div class="nav-select-detail">
@@ -166,7 +157,8 @@
                 <div class="detail-img el-icon-success" @click="toggleSelect('landStart')" :class="selectServer.landStart?'active':''">
                 </div>
               </div>
-              <div class="server-nav-select select-big">
+              <!-- 落地配送 -->
+              <div class="server-nav-select select-big" v-if="'landEnd' in productSearchResult">
                 <div class="detail-logo"><img src="../../../assets/product5.png"></div>
                 <span class="nav-select-text">落地配送</span>
                 <div class="nav-select-detail">
@@ -257,8 +249,33 @@
             <span class="cost-text">燃油附加费</span>
             <span class="cost-number">{{airOilAnnexFee}}元</span>
           </div>
+
         </div>
         <div class="right-content-nav" v-if="selectServer.airportStart">
+          <div class="right-content-cost">
+            <span class="cost-text">始发港交货</span>
+            <span class="cost-number">{{airportStartFee}}元</span>
+          </div>
+        </div>
+        <div class="right-content-nav" v-if="selectServer.airportEnd">
+          <div class="right-content-cost">
+            <span class="cost-text">目的港提货</span>
+            <span class="cost-number">{{airportEndFee}}元</span>
+          </div>
+        </div>
+        <div class="right-content-nav" v-if="selectServer.landStart">
+          <div class="right-content-cost">
+            <span class="cost-text">上门取货</span>
+            <span class="cost-number">{{landStartGetGoodsFee}}元</span>
+          </div>
+        </div>
+        <div class="right-content-nav" v-if="selectServer.landEnd">
+          <div class="right-content-cost">
+            <span class="cost-text">落地配送</span>
+            <span class="cost-number">{{landEndTranFee}}元</span>
+          </div>
+        </div>
+        <!-- <div class="right-content-nav" v-if="selectServer.airportStart">
           <div class="right-content-cost">
             <span class="cost-text">出港服务费</span>
             <span class="cost-number">{{landStartServerFee}}元</span>
@@ -284,7 +301,7 @@
             <span class="cost-text">落地配送费</span>
             <span class="cost-number">{{landEndTranFee}}元</span>
           </div>
-        </div>
+        </div> -->
         <div class="right-content-free">
           <span class="cost-free">优惠</span>
           <span>
@@ -300,7 +317,7 @@
           </span>
         </div>
       </div>
-      <div class="confirm" @click="productConfirm">确认下单</div>
+      <div class="confirm" @click="productConfirm">下一步</div>
     </div>
   </div>
 </template>
@@ -329,12 +346,17 @@ export default {
       },
       //  选择的服务
       selectServer: {
+        baseServer:true,    // 基础服务
         airportStart: false, // 始发港交货
         airportEnd: false, // 目的港提货
         landStart: false, // 上门取货
         landEnd: false, //落地送货
         customs: false, // 报关报检
         insurance: false, // 运输保险
+        airfreightProductId: 0, // 航空运输产品ID
+        airportProductIds:[], // 始发，目的港提货服务ID
+        landCarriageProductIds:[], //上门取货，落地配送 路面运输产品ID列表,
+        flightRecordId:'',
         landStartGeneral: false, // 上门取货服务类一般服务
         landStartPrice: {
           // 上门取货服务费
@@ -380,14 +402,22 @@ export default {
       searchNone: false,
       saveStartLandCarriageSales: {}, // 储存一级选择时候变化后的选择的地区对象,计算价格
       saveEndLandCarriageSales: {}, // 储存一级选择时候变化后的选择的地区对象，计算价格
-      controlSubimt:false,           // 控制提交按钮的提交
-      ControlIncreaseInValueServer:false,       // 控制增值服务隐藏
+      controlSubimt: false, // 控制提交按钮的提交
+      ControlIncreaseInValueServer: false // 控制增值服务隐藏
     };
   },
   created() {
     this.getGoodsTypeList();
   },
   methods: {
+    // 弹出窗
+    prompt(title) {
+      this.$notify.error({
+        title: "错误",
+        message: title,
+        duration: 2000
+      });
+    },
     landStartLevel1Change() {
       this.setlandStartLevel2Data(this.landStartLevel1);
       // this.setlandStartLevel2Placeholder(this.landStartLevel1);
@@ -397,6 +427,11 @@ export default {
       this.saveStartLandCarriageSales = this.productSearchResult.landStart.landCarriageSales[
         this.landStartLevel1
       ];
+      // 每次变化的时候。重置服务项为false
+      this.landStartGeneral = false
+      this.landStart1Ton = false
+      this.landStart2Ton = false
+      this.landStart3Ton = false
       // console.log(this.saveStartLandCarriageSales);
     },
     landStartLevel2Change() {
@@ -429,6 +464,11 @@ export default {
         this.landEndLevel1
       ];
       // console.log(this.saveEndLandCarriageSales);
+      // 每次变化的时候。重置服务项为false
+      this.landEndGeneral = false
+      this.landEnd1Ton = false
+      this.landEnd2Ton = false
+      this.landEnd3Ton = false
     },
     landEndLevel2Change() {
       // console.log("landEndLevel2Change", this.landEndLevel2);
@@ -522,6 +562,7 @@ export default {
         });
     },
     productSearch() {
+      console.log(this.searchData);
       this.axios
         .post("/app/v1/product/queryProduct", {
           airportEnd: this.searchData.endPort,
@@ -535,23 +576,32 @@ export default {
         .then(data => {
           this.productSearchResult = {};
           if (data.data.code == 1) {
+            this.selectServer.flightRecordId = data.data.data.flightRecordId
             Object.assign(this.productSearchResult, data.data.data);
             // this.productSearchResult =  data.data.data
             this.getResultSuccess = true;
             this.searchNone = false;
             this.searchShow = true;
             // 这里初始化一下二级选择项
-            this.setlandStartLevel2Data(0);
-            this.setlandEndLevel2Data(0);
+            if (this.productSearchResult.landStart) {
+              this.setlandStartLevel2Data(0);
+            }
+            if (this.productSearchResult.landEnd) {
+              this.setlandEndLevel2Data(0);
+            }
             // 查询成功 ， 就可以提交
-            this.controlSubimt = true
+            this.controlSubimt = true;
           } else {
+            // console.log(data);
+            this.prompt(data.data.msg);
             this.getResultSuccess = false;
             this.searchShow = false;
             this.searchNone = true;
           }
         })
         .catch(data => {
+          // console.log('失败',data);
+          this.prompt("请求失败");
           if (data.status) {
             this.getResultSuccess = false;
             this.searchShow = false;
@@ -560,6 +610,171 @@ export default {
         });
     },
     productConfirm() {
+      // 点击前重置
+      this.selectServer.airportProductIds = []
+      this.selectServer.landCarriageProductIds = []
+      // 这里提交前判断所选择的服务，然后把id复制给data里边的对应项，然后把data储存在浏览器中
+      // 判断是否有航空运输服务
+      this.selectServer.airfreightProductId = this.productSearchResult.airfreightDTO.id;
+      // 判断是否有始发港交货
+      if (this.selectServer.airportStart) {
+        // this.airportProductIds
+        let idArr = this.productSearchResult.airportStart.priceDTOS;
+        idArr.forEach(ele => {
+          this.selectServer.airportProductIds.push(ele.id);
+        });
+      }
+      // 判断是否有目的港提货
+      if (this.selectServer.airportEnd) {
+        let idArr = this.productSearchResult.airportEnd.priceDTOS;
+        idArr.forEach(ele => {
+          this.selectServer.airportProductIds.push(ele.id);
+        });
+      }
+      // 判断是否上门取货服务
+      if (this.selectServer.landStart) {
+        let idArr = this.productSearchResult.landStart.landCarriageSales[this.landStartLevel1].landProductTypeDTOS;
+        // 上门取货服务中的具体服务
+        // 一般配送
+        if (this.selectServer.landStartGeneral) {
+          idArr.forEach(ele => {
+            if (ele.productType == 2) {
+              this.selectServer.landCarriageProductIds.push({
+                priceId: ele.list[0].id,
+                productId: ele.id
+              });
+            }
+          });
+        }
+        // 1吨金杯车
+        if (this.selectServer.landStart1Ton) {
+          // let idArr = this.productSearchResult.landStart.landCarriageSales.landProductTypeDTOS;
+          let newObj = {};
+          idArr.forEach(ele => {
+            if (ele.productType == 1) {
+              newObj["productId"] = ele.id;
+              ele.list.forEach(e => {
+                if (e.name == "1吨金杯车") {
+                  newObj["priceId"] = e.id;
+                }
+              });
+            }
+          });
+          this.selectServer.landCarriageProductIds.push(newObj);
+        }
+        // 2吨厢式货车
+        if (this.selectServer.landStart2Ton) {
+          // let idArr = this.productSearchResult.landStart.landCarriageSales.landProductTypeDTOS;
+          let newObj = {};
+          idArr.forEach(ele => {
+            if (ele.productType == 1) {
+              newObj["productId"] = ele.id;
+              ele.list.forEach(e => {
+                if (e.name == "2吨厢式货车") {
+                  newObj["priceId"] = e.id;
+                }
+              });
+            }
+          });
+          this.selectServer.landCarriageProductIds.push(newObj);
+        }
+        // 3吨厢式货车
+        if (this.selectServer.landStart3Ton) {
+          // let idArr = this.productSearchResult.landStart.landCarriageSales.landProductTypeDTOS;
+          let newObj = {};
+          idArr.forEach(ele => {
+            if (ele.productType == 1) {
+              newObj["productId"] = ele.id;
+              ele.list.forEach(e => {
+                if (e.name == "3吨厢式货车") {
+                  newObj["priceId"] = e.id;
+                }
+              });
+            }
+          });
+          this.selectServer.landCarriageProductIds.push(newObj);
+        }
+      }
+      // 判断是否落地配送
+      if (this.selectServer.landEnd) {
+        let idArr = this.productSearchResult.landEnd.landCarriageSales[this.landEndLevel1].landProductTypeDTOS;
+        //  落地配送服务中的具体服务
+        // 一般配送
+        if (this.selectServer.landEndGeneral) {
+          idArr.forEach(ele => {
+            if (ele.productType == 2) {
+              this.selectServer.landCarriageProductIds.push({
+                priceId: ele.list[0].id,
+                productId: ele.id
+              });
+            }
+          });
+        }
+        // 1吨金杯车
+        if (this.selectServer.landEnd1Ton) {
+          // let idArr = this.productSearchResult.landEnd.landCarriageSales.landProductTypeDTOS;
+          let newObj = {};
+          idArr.forEach(ele => {
+            if (ele.productType == 1) {
+              newObj["productId"] = ele.id;
+              ele.list.forEach(e => {
+                if (e.name == "1吨金杯车") {
+                  newObj["priceId"] = e.id;
+                }
+              });
+            }
+          });
+          this.selectServer.landCarriageProductIds.push(newObj);
+        }
+        // 2吨厢式货车
+        if (this.selectServer.landEnd2Ton) {
+          // let idArr = this.productSearchResult.landEnd.landCarriageSales.landProductTypeDTOS;
+          let newObj = {};
+          idArr.forEach(ele => {
+            if (ele.productType == 1) {
+              newObj["productId"] = ele.id;
+              ele.list.forEach(e => {
+                if (e.name == "2吨厢式货车") {
+                  newObj["priceId"] = e.id;
+                }
+              });
+            }
+          });
+          this.selectServer.landCarriageProductIds.push(newObj);
+        }
+        // 3吨厢式货车
+        if (this.selectServer.landEnd3Ton) {
+          // let idArr = this.productSearchResult.landEnd.landCarriageSales.landProductTypeDTOS;
+          let newObj = {};
+          idArr.forEach(ele => {
+            if (ele.productType == 1) {
+              newObj["productId"] = ele.id;
+              ele.list.forEach(e => {
+                if (e.name == "3吨厢式货车") {
+                  newObj["priceId"] = e.id;
+                }
+              });
+            }
+          });
+          this.selectServer.landCarriageProductIds.push(newObj);
+        }
+      }
+
+      // 收集数据， 传到下一步
+      var transObj = {
+        searchData:this.searchData,
+        selectServer:this.selectServer,
+        FeeInfo:{
+          airTransFee:this.airTransFee,
+          airOilAnnexFee:this.airOilAnnexFee,
+          airportStartFee:this.airportStartFee,
+          airportEndFee:this.airportEndFee,
+          landStartGetGoodsFee:this.landStartGetGoodsFee,
+          landEndTranFee:this.landEndTranFee,
+          totalFee:this.totalFee
+        }
+      }
+      window.localStorage.setItem('productIndex',JSON.stringify(transObj))
       if(this.controlSubimt){
         this.$router.push({
           path: "/center/Online_product/write",
@@ -568,6 +783,9 @@ export default {
           }
         });
       }
+      // console.log(1, this.selectServer.airfreightProductId);
+      // console.log(2, this.selectServer.airportProductIds);
+      // console.log(3, this.selectServer.landCarriageProductIds);
     },
     getLandStartPrice(obj, serverType) {
       // 获取对象中的landProductTypeDTOS
@@ -689,10 +907,59 @@ export default {
         return 0;
       }
     },
-    // 出港服务费
-    landStartServerFee() {
+
+    // 始发港交货费
+    airportStartFee() {
       if (this.getResultSuccess) {
-        if(this.selectServer.airportStart){
+        if (this.selectServer.airportStart) {
+          let priceDTOS = this.productSearchResult.airportStart.priceDTOS;
+          let totalUnivalent = 0;
+          let totalWeight = this.searchData.goodsWeight;
+          let arr = [];
+          priceDTOS.forEach(ele => {
+            if (ele.minPrice < ele.price * totalWeight) {
+              arr.push(ele.price * totalWeight);
+            } else {
+              arr.push(ele.minPrice);
+            }
+          });
+          for (let i = 0; i < arr.length; i++) {
+            totalUnivalent += parseFloat(arr[i]);
+          }
+          return totalUnivalent
+        }
+      } else {
+        return 0;
+      }
+    },
+    // 目的港提货费
+    airportEndFee() {
+      if (this.getResultSuccess) {
+        if (this.selectServer.airportEnd) {
+          let priceDTOS = this.productSearchResult.airportEnd.priceDTOS;
+          let totalUnivalent = 0;
+          let totalWeight = this.searchData.goodsWeight;
+          let arr = [];
+          priceDTOS.forEach(ele => {
+            if (ele.minPrice < ele.price * totalWeight) {
+              arr.push(ele.price * totalWeight);
+            } else {
+              arr.push(ele.minPrice);
+            }
+          });
+          for (let i = 0; i < arr.length; i++) {
+            totalUnivalent += parseFloat(arr[i]);
+          }
+          return totalUnivalent;
+        }
+      } else {
+        return 0;
+      }
+    },
+
+    /*landStartServerFee() {
+      if (this.getResultSuccess) {
+        if (this.selectServer.airportStart) {
           let priceDTOS = this.productSearchResult.airportStart.priceDTOS;
           let totalUnivalent = null;
           priceDTOS.forEach(ele => {
@@ -710,7 +977,7 @@ export default {
     // 制单代理费
     landStartMakeBillFee() {
       if (this.getResultSuccess) {
-        if(this.selectServer.airportStart){
+        if (this.selectServer.airportStart) {
           let priceDTOS = this.productSearchResult.airportStart.priceDTOS;
           let totalUnivalent = null;
           priceDTOS.forEach(ele => {
@@ -728,7 +995,7 @@ export default {
     // 进港提货费
     landEndGetGoodsFee() {
       if (this.getResultSuccess) {
-        if(this.selectServer.airportEnd){
+        if (this.selectServer.airportEnd) {
           let priceDTOS = this.productSearchResult.airportEnd.priceDTOS;
           let totalUnivalent = null;
           priceDTOS.forEach(ele => {
@@ -742,11 +1009,11 @@ export default {
       } else {
         return 0;
       }
-    },
+    },*/
     // 上门提货费
     landStartGetGoodsFee() {
       if (this.getResultSuccess) {
-        if(this.selectServer.landStart){
+        if (this.selectServer.landStart) {
           var totalWeight = this.searchData.goodsWeight;
           var minPrice = this.selectServer.landStartPrice.minPrice;
           var totalFee = null;
@@ -773,7 +1040,7 @@ export default {
     // 落地配送费
     landEndTranFee() {
       if (this.getResultSuccess) {
-        if(this.selectServer.landEnd){
+        if (this.selectServer.landEnd) {
           var totalWeight = this.searchData.goodsWeight;
           var minPrice = this.selectServer.landEndPrice.minPrice;
           var totalFee = null;
@@ -800,14 +1067,21 @@ export default {
     // 总费用
     totalFee() {
       // console.log(this.airTransFee,this.airOilAnnexFee,this.landStartServerFee,this.landStartMakeBillFee,this.landEndGetGoodsFee,this.landStartGetGoodsFee,this.landEndTranFee);
-      var airTransFee = this.airTransFee == undefined ? 0 : parseFloat(this.airTransFee)
-      var airOilAnnexFee = this.airOilAnnexFee == undefined?0:parseFloat(this.airOilAnnexFee)
-      var landStartServerFee = this.landStartServerFee == undefined?0:parseFloat(this.landStartServerFee)
-      var landStartMakeBillFee = this.landStartMakeBillFee == undefined?0:parseFloat(this.landStartMakeBillFee)
-      var landEndGetGoodsFee = this.landEndGetGoodsFee == undefined?0:parseFloat(this.landEndGetGoodsFee)
-      var landStartGetGoodsFee = this.landStartGetGoodsFee == undefined?0:parseFloat(this.landStartGetGoodsFee)
-      var landEndTranFee = this.landEndTranFee == undefined?0:parseFloat(this.landEndTranFee)
-      return (airTransFee+airOilAnnexFee+landStartServerFee+landStartMakeBillFee+landEndGetGoodsFee+landStartGetGoodsFee+landEndTranFee)
+      var airTransFee = this.airTransFee == undefined ? 0 : parseFloat(this.airTransFee);
+      var airOilAnnexFee =this.airOilAnnexFee == undefined ? 0 : parseFloat(this.airOilAnnexFee);
+      var airportStartFee =this.airportStartFee == undefined? 0: parseFloat(this.airportStartFee);
+      var airportEndFee =this.airportEndFee == undefined? 0: parseFloat(this.airportEndFee);
+
+      var landStartGetGoodsFee =this.landStartGetGoodsFee == undefined? 0: parseFloat(this.landStartGetGoodsFee);
+      var landEndTranFee = this.landEndTranFee == undefined ? 0 : parseFloat(this.landEndTranFee);
+      return (
+        airTransFee +
+        airOilAnnexFee +
+        airportStartFee +
+        airportEndFee +
+        landStartGetGoodsFee +
+        landEndTranFee
+      );
     }
   }
 };
@@ -979,10 +1253,10 @@ export default {
 
         .product-server {
           background: #fff;
-          padding: 0 15px;
+          padding: 10px 15px;
           .server-nav-title {
             width: 100%;
-            height: 50px;
+            // height: 50px;
             display: flex;
             flex-direction: row;
             justify-content: space-around;
@@ -1007,6 +1281,7 @@ export default {
             align-items: center;
             box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
             margin: 5px 0;
+            padding-bottom: 10px;
             .detail-logo {
               width: 70px;
               display: flex;
@@ -1157,7 +1432,7 @@ export default {
     box-shadow: 0 0 15px #ccc;
     position: relative;
     margin-top: 50px;
-    height: 500px;
+    height: 600px;
     width: 300px;
     .right-nav {
       height: 50px;
@@ -1167,7 +1442,7 @@ export default {
       align-items: center;
     }
     .right-content {
-      height: 310px;
+      // min-height: 310px;
       .right-content-nav {
         height: 60px;
         margin-top: 10px;

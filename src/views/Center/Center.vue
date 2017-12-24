@@ -72,48 +72,33 @@ export default {
   },
   created() {
     this.fullPath = this.$route.fullPath;
-    // console.log(this.fullPath);
-    switch(this.fullPath){
-      case '/center/account':
+    console.log(this.fullPath);
+    if(this.fullPath.includes('/center/account')){
       this.activeIndex = 0
-      break;
-      case '/center/company_info':
+    }else if(this.fullPath.includes('/center/company_info')){
       this.activeIndex = 1
-      break;
-      case '/center/doings':
+    }else if(this.fullPath.includes('/center/doings')){
       this.activeIndex = 2
-      break;
-      case '/center/experience':
+    }else if(this.fullPath.includes('/center/experience')){
       this.activeIndex = 3
-      break;
-      case '/center/integral':
+    }else if(this.fullPath.includes('/center/integral')){
       this.activeIndex = 4
-      break;
-      case '/center/address':
+    }else if(this.fullPath.includes('/center/address')){
       this.activeIndex = 5
-      break;
-      case '/center/son_account':
+    }else if(this.fullPath.includes('/center/son_account')){
       this.activeIndex = 6
-      break;
-      case '/center/online_product':
+    }else if(this.fullPath.includes('/center/online_product')){
       this.activeIndex = 7
-      break;
-      case '/center/client_product':
+    }else if(this.fullPath.includes('/center/client_product')){
       this.activeIndex = 8
-      break;
-      case '/center/order_search':
+    }else if(this.fullPath.includes('/center/order_search')){
       this.activeIndex = 9
-      break;
-      case '/center/order_track':
+    }else if(this.fullPath.includes('/center/order_track')){
       this.activeIndex = 10
-      break;
-      case '/center/ticket_info_egis':
+    }else if(this.fullPath.includes('/center/ticket_info_egis')){
       this.activeIndex = 11
-      break;
-      case '/center/bill_look':
+    }else if(this.fullPath.includes('/center/bill_look')){
       this.activeIndex = 12
-      break;
-
     }
   },
   methods: {

@@ -5,182 +5,236 @@
         <div class="write-content">
           <div class="content-pic"></div>
           <div class="list list1">
-            <div class="list-text">订单编号:</div>
-            <span class="list-num">464689648</span>
+            <!-- <div class="list-text">订单编号:</div>
+            <span class="list-num">464689648</span> -->
             <div class="write-back" @click="back" style="cursor:pointer;">返回上一步</div>
           </div>
           <div class="list list2">
             <div class="list-text">运输服务:</div>
-            <span class="list-land">北京-上海</span>
-            <span class="list-land"> 货物类型：普货</span>
-            <span class="listTime">航班起飞时间：201-10:10 10:10&nbsp;&nbsp;─&nbsp;&nbsp;201-10:10 10:10</span>
+            <span class="list-land">{{getProductIndexData.searchData.startPort}}-{{getProductIndexData.searchData.endPort}}</span>
+            <span class="list-land"> 货物类型：{{ goodsType }}</span>
+            <span class="listTime">航班起飞时间：{{getProductIndexData.searchData.planeData}} {{getProductIndexData.searchData.planeTime[0]}}--{{getProductIndexData.searchData.planeTime[1]}}</span>
           </div>
           <div class="list list3">
             <div class="list-text">基础服务:</div>
-            <span class="list-land"><product-select class="product-select"></product-select>航空运输</span>
+            <span class="list-land"><span class="icon el-icon-success" :class="getProductIndexData.selectServer.baseServer?'active':''"></span>航空运输</span>
           </div>
           <div class="list list4">
             <div class="list-text">更多服务:</div>
-            <span class="list-land"><product-select @increment='crement' class="product-select"></product-select>代交货</span>
-            <span class="list-land"><product-select class="product-select"></product-select>代提交</span>
-            <span class=" list-land"><product-select class="product-select"></product-select>上门取货</span>
-            <span class="list-land"><product-select  class="product-select"></product-select>落地配</span>
+            <span class="list-land"><span class="icon el-icon-success" :class="getProductIndexData.selectServer.airportStart?'active':''"></span>代交货</span>
+            <span class="list-land"><span class="icon el-icon-success" :class="getProductIndexData.selectServer.airportEnd?'active':''"></span>代提交</span>
+            <span class=" list-land"><span class="icon el-icon-success" :class="getProductIndexData.selectServer.landStart?'active':''"></span>上门取货</span>
+            <span class="list-land"><span class="icon el-icon-success" :class="getProductIndexData.selectServer.landEnd?'active':''"></span>落地配</span>
           </div>
           <div class="list list5">
             <div class="list-text">增值服务:</div>
-            <span class="list-land"><product-select class="product-select"></product-select>报关报检</span>
-            <span class="list-land"><product-select class="product-select"></product-select>运输保险</span>
+            <span class="list-land"><span class="icon el-icon-success" :class="getProductIndexData.selectServer.customs?'active':''"></span>报关报检</span>
+            <span class="list-land"><span class="icon el-icon-success" :class="getProductIndexData.selectServer.insurance?'active':''"></span>运输保险</span>
           </div>
         </div>
       </div>
     </div>
     <div class="product-title">收发地址</div>
-    <div class="product-address">
-      <div class="address-left">
-        <div class="left-logo"></div>
-        <div class="logo-text">发</div>
-        <div class="left-nav">
-          <img src="../../../assets/product17.png">
-        </div>
-        <div class="left-info">
-          <div class="left-name">
-            <span class="name-logo">*</span>
-            <span class="name-nav">姓名</span>
-            <span class="name-text"><el-input size="mini" v-model="sendAddressData.name" placeholder="请输入姓名"></el-input></span>
+      <div class="product-address">
+        <el-form :model="sendAddressData" :rules="sendAddressRules" ref="sendAddress" label-width="100px" class="sendAddress">
+          <div class="address-left">
+            <div class="left-logo"></div>
+            <div class="logo-text">发</div>
+            <div class="left-nav">
+              <img src="../../../assets/product17.png">
+            </div>
+            <div class="left-info">
+              <div class="left-name">
+                <span class="name-logo">*</span>
+                <span class="name-nav">姓名</span>
+                <span class="name-text">
+                  <el-form-item prop="name">
+                    <el-input size="mini" v-model="sendAddressData.name" placeholder="请输入姓名"></el-input>
+                  </el-form-item>
+                </span>
+              </div>
+              <div class="right-name">
+                <span class="name-nav">身份证</span>
+                <span class="name-text">
+                  <el-form-item prop="id">
+                    <el-input size="mini" v-model="sendAddressData.id" placeholder="请输入身份证"></el-input>
+                  </el-form-item>
+                </span>
+              </div>
+            </div>
+            <div class="left-phone">
+              <div class="left-name">
+                <span class="name-logo">*</span>
+                <span class="name-nav">手机号</span>
+                <span class="name-text">
+                  <el-form-item prop="mobile">
+                    <el-input size="mini" v-model="sendAddressData.mobile" placeholder="请输入手机号"></el-input>
+                  </el-form-item>
+                </span>
+              </div>
+              <div class="right-name">
+                <span class="name-nav">固定电话</span>
+                <span class="name-text">
+                  <el-form-item prop="tellPhone1">
+                    <el-input class="left" size="mini" v-model="sendAddressData.tellPhone1" placeholder="888"></el-input>
+                  </el-form-item>
+                  <el-form-item prop="tellPhone2">
+                    <el-input class="right" size="mini" v-model="sendAddressData.tellPhone2" placeholder="88886666"></el-input>
+                  </el-form-item>
+                </span>
+              </div>
+            </div>
+            <div class="left-area">
+              <div class="left-name">
+                <span class="name-logo">&nbsp;</span>
+                <span class="name-nav">所在区域</span>
+                <span class="name-text">
+                  <v-distpicker @province='sendProvince' @city='sendCity' @area='sendArea' :paceholder='sendPlaceholders'></v-distpicker>
+                </span>
+              </div>
+            </div>
+            <div class="left-detail">
+              <div class="left-name">
+                <span class="name-logo">&nbsp;</span>
+                <span class="name-nav">详细地址</span>
+                <span class="name-text"><el-input size="mini" v-model="sendAddressData.detailAddress" placeholder="请输入详细地址"></el-input></span>
+              </div>
+            </div>
+            <div class="left-index">
+              <div class="left-name">
+                <span class="name-logo">&nbsp;</span>
+                <span class="name-nav">邮编</span>
+                <span class="name-text"><el-input size="mini" v-model="sendAddressData.postal" placeholder="请输入邮编"></el-input></span>
+              </div>
+            </div>
+            <div class="left-btn">
+              <span class="btn-box box1">添加地址簿</span>
+              <span class="btn-box box2">设为默认</span>
+              <span class="btn-box box3" @click="submitSendAddressForm('sendAddress')">确定</span>
+            </div>
           </div>
-          <div class="right-name">
-            <span class="name-nav">身份证</span>
-            <span class="name-text"><el-input size="mini" v-model="sendAddressData.id" placeholder="请输入身份证"></el-input></span>
-          </div>
+        </el-form>
+        <div class="address-img">
+          <img src="../../../assets/product2.png">
         </div>
-        <div class="left-phone">
-          <div class="left-name">
-            <span class="name-logo">*</span>
-            <span class="name-nav">手机号</span>
-            <span class="name-text"><el-input size="mini" v-model="sendAddressData.mobile" placeholder="请输入手机号"></el-input></span>
+        <el-form :model="receiveAddressData" :rules="receiveAddressRules" ref="receiveAddress" label-width="100px" class="receiveAddress">
+          <div class="address-right">
+            <div class="left-logo"></div>
+            <div class="logo-text">收</div>
+            <div class="left-nav">
+              <img src="../../../assets/product17.png">
+            </div>
+            <div class="left-info">
+              <div class="left-name">
+                <span class="name-logo">*</span>
+                <span class="name-nav">姓名</span>
+                <span class="name-text">
+                  <el-form-item prop="name">
+                    <el-input size="mini" v-model="receiveAddressData.name" placeholder="请输入姓名"></el-input>
+                  </el-form-item>
+                </span>
+              </div>
+              <div class="right-name">
+                <span class="name-nav">身份证</span>
+                <span class="name-text">
+                  <el-form-item prop="id">
+                    <el-input size="mini" v-model="receiveAddressData.id" placeholder="请输入身份证"></el-input>
+                  </el-form-item>
+                </span>
+              </div>
+            </div>
+            <div class="left-phone">
+              <div class="left-name">
+                <span class="name-logo">*</span>
+                <span class="name-nav">手机号</span>
+                <span class="name-text">
+                  <el-form-item prop="mobile">
+                    <el-input size="mini" v-model="receiveAddressData.mobile" placeholder="请输入手机号"></el-input>
+                  </el-form-item>
+                </span>
+              </div>
+              <div class="right-name">
+                <span class="name-nav">固定电话</span>
+                <span class="name-text">
+                  <el-form-item prop="tellPhone1">
+                    <el-input class="left" size="mini" v-model="receiveAddressData.tellPhone1" placeholder="888"></el-input>
+                  </el-form-item>
+                  <el-form-item prop="tellPhone2">
+                    <el-input class="right" size="mini" v-model="receiveAddressData.tellPhone2" placeholder="88886666"></el-input>
+                  </el-form-item>
+                </span>
+              </div>
+            </div>
+            <div class="left-area">
+              <div class="left-name">
+                <span class="name-logo">&nbsp;</span>
+                <span class="name-nav">所在区域</span>
+                <span class="name-text"><v-distpicker @province='receiveProvince' @city='receiveCity' @area='receiveArea' :paceholder='receivePlaceholders'></v-distpicker></span>
+              </div>
+            </div>
+            <div class="left-detail">
+              <div class="left-name">
+                <span class="name-logo">&nbsp;</span>
+                <span class="name-nav">详细地址</span>
+                <span class="name-text"><el-input size="mini" v-model="receiveAddressData.detailAddress" placeholder="请输入详细地址"></el-input></span>
+              </div>
+            </div>
+            <div class="left-index">
+              <div class="left-name">
+                <span class="name-logo">&nbsp;</span>
+                <span class="name-nav">邮编</span>
+                <span class="name-text"><el-input size="mini" v-model="receiveAddressData.postal" placeholder="请输入邮编"></el-input></span>
+              </div>
+            </div>
+            <div class="left-btn">
+              <span class="btn-box box1">添加地址簿</span>
+              <span class="btn-box box2">设为默认</span>
+              <span class="btn-box box3" @click="submitReceiveAddressForm('receiveAddress')">确定</span>
+            </div>
           </div>
-          <div class="right-name">
-            <span class="name-nav">固定电话</span>
-            <span class="name-text">
-              <el-input class="left" size="mini" v-model="sendAddressData.tellPhone1" placeholder="888"></el-input>
-              <el-input class="right" size="mini" v-model="sendAddressData.tellPhone2" placeholder="88886666"></el-input>
-            </span>
-          </div>
-        </div>
-        <div class="left-area">
-          <div class="left-name">
-            <span class="name-logo">&nbsp;</span>
-            <span class="name-nav">所在区域</span>
-            <span class="name-text"><v-distpicker  :province="sendAddressData.address.province" :city="sendAddressData.address.city" :area="sendAddressData.address.area"></v-distpicker></span>
-          </div>
-        </div>
-        <div class="left-detail">
-          <div class="left-name">
-            <span class="name-logo">&nbsp;</span>
-            <span class="name-nav">详细地址</span>
-            <span class="name-text"><el-input size="mini" v-model="sendAddressData.detailAddress" placeholder="请输入详细地址"></el-input></span>
-          </div>
-        </div>
-        <div class="left-index">
-          <div class="left-name">
-            <span class="name-logo">*</span>
-            <span class="name-nav">邮编</span>
-            <span class="name-text"><el-input size="mini" v-model="sendAddressData.postal" placeholder="请输入邮编"></el-input></span>
-          </div>
-        </div>
-        <div class="left-btn">
-          <span class="btn-box box1">添加地址簿</span>
-          <span class="btn-box box2">设为默认</span>
-          <span class="btn-box box3">确定</span>
-        </div>
+        </el-form>
       </div>
-      <div class="address-img">
-        <img src="../../../assets/product2.png">
-      </div>
-      <div class="address-right">
-        <div class="left-logo"></div>
-        <div class="logo-text">收</div>
-        <div class="left-nav">
-          <img src="../../../assets/product17.png">
-        </div>
-        <div class="left-info">
-          <div class="left-name">
-            <span class="name-logo">*</span>
-            <span class="name-nav">姓名</span>
-            <span class="name-text"><el-input size="mini" v-model="receiveAddressData.name" placeholder="请输入姓名"></el-input></span>
-          </div>
-          <div class="right-name">
-            <span class="name-nav">身份证</span>
-            <span class="name-text"><el-input size="mini" v-model="receiveAddressData.id" placeholder="请输入身份证"></el-input></span>
-          </div>
-        </div>
-        <div class="left-phone">
-          <div class="left-name">
-            <span class="name-logo">*</span>
-            <span class="name-nav">手机号</span>
-            <span class="name-text"><el-input size="mini" v-model="receiveAddressData.mobile" placeholder="请输入手机号"></el-input></span>
-          </div>
-          <div class="right-name">
-            <span class="name-nav">固定电话</span>
-            <span class="name-text">
-              <el-input class="left" size="mini" v-model="receiveAddressData.tellPhone1" placeholder="888"></el-input>
-              <el-input class="right" size="mini" v-model="receiveAddressData.tellPhone2" placeholder="88886666"></el-input>
-            </span>
-          </div>
-        </div>
-        <div class="left-area">
-          <div class="left-name">
-            <span class="name-logo">*</span>
-            <span class="name-nav">所在区域</span>
-            <span class="name-text"><v-distpicker :province="receiveAddressData.address.province" :city="receiveAddressData.address.city" :area="receiveAddressData.address.area"></v-distpicker></span>
-          </div>
-        </div>
-        <div class="left-detail">
-          <div class="left-name">
-            <span class="name-logo">*</span>
-            <span class="name-nav">详细地址</span>
-            <span class="name-text"><el-input size="mini" v-model="receiveAddressData.detailAddress" placeholder="请输入详细地址"></el-input></span>
-          </div>
-        </div>
-        <div class="left-index">
-          <div class="left-name">
-            <span class="name-logo">*</span>
-            <span class="name-nav">邮编</span>
-            <span class="name-text"><el-input size="mini" v-model="receiveAddressData.postal" placeholder="请输入邮编"></el-input></span>
-          </div>
-        </div>
-        <div class="left-btn">
-          <span class="btn-box box1">添加地址簿</span>
-          <span class="btn-box box2">设为默认</span>
-          <span class="btn-box box3">确定</span>
-        </div>
-      </div>
-    </div>
     <div class="product-title">货物信息</div>
     <div class="product-information">
       <div class="info-left">
-        <div class="info-list info-list1">
-          <span class="name-logo">*</span>
-          <span class="name-nav">货物重量</span>
-          <span class="name-text"><el-input size="mini" v-model="goodsInfo.weight" placeholder="请输入货物重量"></el-input></span>
-          <span class="name-num">千克</span>
-        </div>
-        <div class="info-list">
-          <span class="name-logo">*</span>
-          <span class="name-nav">货物件数</span>
-          <span class="name-text"><el-input size="mini" v-model="goodsInfo.num" placeholder="请输入货物件数"></el-input></span>
-          <span class="name-num">件</span>
-        </div>
-        <div class="info-list">
-          <span class="name-logo">*</span>
-          <span class="name-nav">货物名称</span>
-          <span class="name-text"><el-input size="mini" v-model="goodsInfo.name" placeholder="请输入货物名称"></el-input></span>
-        </div>
-        <div class="info-list info-list4">
-          <span class="name-logo">*</span>
-          <span class="name-nav">货物包装</span>
-          <span class="name-text"><el-input size="mini" v-model="goodsInfo.pack" placeholder="请输入货物包装"></el-input></span>
-        </div>
+        <el-form :model="goodsInfo" :rules="goodsInfoRules" ref="goodsInfo" class="goodsInfo">
+          <div class="info-list info-list1">
+            <span class="name-logo">*</span>
+            <span class="name-nav">货物重量</span>
+            <span class="name-text">
+              <el-form-item prop="weight">
+                <el-input size="mini" v-model="goodsInfo.weight" placeholder="请输入货物重量"></el-input>
+              </el-form-item>
+            </span>
+            <span class="name-num">千克</span>
+          </div>
+          <div class="info-list">
+            <span class="name-logo">*</span>
+            <span class="name-nav">货物件数</span>
+            <span class="name-text">
+              <el-form-item prop="num">
+                <el-input size="mini" v-model="goodsInfo.num" placeholder="请输入货物件数"></el-input>
+              </el-form-item>
+            </span>
+            <span class="name-num">件</span>
+          </div>
+          <div class="info-list">
+            <span class="name-logo">*</span>
+            <span class="name-nav">货物名称</span>
+            <span class="name-text">
+              <el-form-item prop="name">
+                <el-input size="mini" v-model="goodsInfo.name" placeholder="请输入货物名称"></el-input>
+              </el-form-item>
+            </span>
+          </div>
+          <div class="info-list info-list4">
+            <span class="name-logo">&nbsp;</span>
+            <span class="name-nav">货物包装</span>
+            <span class="name-text">
+              <el-input size="mini" v-model="goodsInfo.pack" placeholder="请输入货物包装"></el-input>
+            </span>
+          </div>
+        </el-form>
       </div>
       <div class="info-mid">
         <span class="mid-text">
@@ -232,161 +286,467 @@
     </div>
     <div class="product-title">活动信息</div>
     <div class="product-pre">
-      <input type="" name="" placeholder="推荐人邀请码">
-      <span class="product-preindex">验证</span>
+      <input type="text" v-model="inviteCode" name="" placeholder="推荐人邀请码">
+      <span class="product-preindex" @click="verificationCode">验证</span>
     </div>
     <div class="product-title">发票信息</div>
     <div class="product-con">
       <div class="con-nav">
-        <product-select class="con-select"></product-select>不需要发票<product-select class="con-select"></product-select>普票<product-select class="con-select"></product-select>专票
+        <span class="icon el-icon-success" :class="invoiceServerInfo.notNeed?'active':''" ></span>不需要发票
+        <!-- <span class="icon el-icon-success" :class="invoiceServerInfo.general?'active':''" @click="invoiceServerInfo.general = !invoiceServerInfo.general"></span>普票
+        <span class="icon el-icon-success" :class="invoiceServerInfo.special?'active':''" @click="invoiceServerInfo.special = !invoiceServerInfo.special"></span>专票 -->
       </div>
       <div class="con-change">
-        <span class="con-text">深圳市迅捷有限公司|3252365435234234</span>
-        <span class="con-btn">修改</span>
+        <!-- <span class="con-text">深圳市迅捷有限公司|3252365435234234</span>
+        <span class="con-btn">修改</span> -->
       </div>
     </div>
     <div class="product-title">费用信息</div>
     <div class="product-cost">
       <div class="cost-content">
-      <div class="cost-list cost-list1">
-        <span class="cost-num">航空运费</span>
-        <span class="cost-line"></span>
-        <span class="cost-item">312</span>
-      </div>
-      <div class="cost-list">
-        <span class="cost-num">燃油附加费</span>
-        <span class="cost-line"></span>
-        <span class="cost-item">22</span>
-      </div>
-      <div class="cost-list">
-        <span class="cost-num">出港处置费</span>
-        <span class="cost-line"></span>
-        <span class="cost-item">33</span>
-      </div>
-      <div class="cost-list">
-        <span class="cost-num">出港制单费</span>
-        <span class="cost-line"></span>
-        <span class="cost-item">44</span>
-      </div>
-      <div class="cost-list">
-        <span class="cost-num">运岗提货费</span>
-        <span class="cost-line"></span>
-        <span class="cost-item">55</span>
-      </div>
-      <div class="cost-list">
-        <span class="cost-num">上门提货费</span>
-        <span class="cost-line"></span>
-        <span class="cost-item">66</span>
-      </div>
-      <div class="cost-list">
-        <span class="cost-num">派送费</span>
-        <span class="cost-line"></span>
-        <span class="cost-item">77</span>
-      </div>
+        <div class="cost-list cost-list1" v-if="'airTransFee' in getProductIndexData.FeeInfo">
+          <span class="cost-num">航空运费</span>
+          <span class="cost-line"></span>
+          <span class="cost-item">¥{{getProductIndexData.FeeInfo.airTransFee}}</span>
+        </div>
+        <div class="cost-list" v-if="'airOilAnnexFee' in getProductIndexData.FeeInfo">
+          <span class="cost-num">燃油附加费</span>
+          <span class="cost-line"></span>
+          <span class="cost-item">¥{{getProductIndexData.FeeInfo.airOilAnnexFee}}</span>
+        </div>
+        <div class="cost-list" v-if="'airportStartFee' in getProductIndexData.FeeInfo">
+          <span class="cost-num">始发港交货费</span>
+          <span class="cost-line"></span>
+          <span class="cost-item">¥{{getProductIndexData.FeeInfo.airportStartFee}}</span>
+        </div>
+        <div class="cost-list" v-if="'airportEndFee' in getProductIndexData.FeeInfo">
+          <span class="cost-num">目的港提货费</span>
+          <span class="cost-line"></span>
+          <span class="cost-item">¥{{getProductIndexData.FeeInfo.airportEndFee}}</span>
+        </div>
+        <div class="cost-list" v-if="'landStartGetGoodsFee' in getProductIndexData.FeeInfo">
+          <span class="cost-num">上门提货费</span>
+          <span class="cost-line"></span>
+          <span class="cost-item">¥{{getProductIndexData.FeeInfo.landStartGetGoodsFee}}</span>
+        </div>
+        <div class="cost-list" v-if="'landEndTranFee' in getProductIndexData.FeeInfo">
+          <span class="cost-num">落地配送费</span>
+          <span class="cost-line"></span>
+          <span class="cost-item">¥{{getProductIndexData.FeeInfo.landEndTranFee}}</span>
+        </div>
       </div>
       <div class="cost-sum">
         <span class="sum-text">合计</span>
-        <span class="sum-num">88</span>
+        <span class="sum-num">¥{{getProductIndexData.FeeInfo.totalFee}}</span>
       </div>
     </div>
     <div class="product-complete">
       <div class="back-complete">
         <div class="goback" @click="completeGo">返回上一步</div>
-        <div class="gokeep"><el-button size="mini" type="info">保存订单</el-button></div>
+        <div class="gokeep"><el-button size="mini" type="info" @click="saveOrder('goodsInfo')">保存订单</el-button></div>
       </div>
-      <div class="cost-complete" @click="confirm"><el-button size="mini" type="danger">提交</el-button></div>
+      <div class="cost-complete" @click="confirm"><el-button size="mini" type="danger" @click="submitOrder('goodsInfo')">提交</el-button></div>
     </div>
   </div>
 </template>
 
 <script type="text/javascript">
-import productSelect from "./product_select";
+// import productSelect from "./product_select";
 import VDistpicker from "v-distpicker";
-
+import { mapGetters } from "vuex";
 export default {
   components: {
-    productSelect,
+    // productSelect,
     VDistpicker
   },
   data() {
     return {
-      addSizeDialogFormVisible:false,
-      addSizeDialogFormData:{
-        length:'',
-        width:'',
-        height:'',
-        num:''
-      },
-      sendAddressData:{
-        name:'',
-        id:'',
-        mobile:'',
-        tellPhone1:'',
-        tellPhone2:'',
-        address:{
-          province: '省',
-          city: '市',
-          area: '区'
-        },
-        detailAddress:'',
-        postal:''
+      getProductIndexData: {}, // 获取上一步传过来的数据
+      goodsTypesList: {},
+      goodsType: "",
+      addSizeDialogFormVisible: false,
 
+      invoiceServerInfo: {
+        notNeed: true, // 不需要
+        general: false, // 普通
+        special: false //  专票
       },
-      receiveAddressData:{
-        name:'',
-        id:'',
-        mobile:'',
-        tellPhone1:'',
-        tellPhone2:'',
-        address:{
-          province: '省',
-          city: '市',
-          area: '区'
+      addSizeDialogFormData: {
+        length: "",
+        width: "",
+        height: "",
+        num: ""
+      },
+      sendAddressData: {
+        name: "",
+        id: "",
+        mobile: "",
+        tellPhone1: "",
+        tellPhone2: "",
+        address: {
+          province: "省",
+          city: "市",
+          area: "区"
         },
-        detailAddress:'',
-        postal:''
-
+        detailAddress: "",
+        postal: ""
       },
-      goodsInfo:{
-        weight:'',
-        num:'',
-        name:'',
-        pack:'',
-        size:[
-          '100*15*10/5',
-        ],
-        bulk:'',
-        payWeight:'',
-        mark:''
+      sendAddressRules: {
+        name: [{ required: true, message: "请输入姓名", trigger: "blur" }],
+        // id: [{ required: true, message: "请输入身份证号", trigger: "blur" }],
+        mobile: [{ required: true, message: "请输入手机号", trigger: "blur" }]
+        // tellPhone1: [{ required: true, message: "请输入区号", trigger: "blur" }],
+        // tellPhone2: [{ required: true, message: "请输入座机号", trigger: "blur" }]
+      },
+      receiveAddressRules: {
+        name: [{ required: true, message: "请输入姓名", trigger: "blur" }],
+        // id: [{ required: true, message: "请输入身份证号", trigger: "blur" }],
+        mobile: [{ required: true, message: "请输入手机号", trigger: "blur" }]
+        // tellPhone1: [{ required: true, message: "请输入区号", trigger: "blur" }],
+        // tellPhone2: [{ required: true, message: "请输入座机号", trigger: "blur" }]
+      },
+      goodsInfoRules: {
+        weight: [{ required: true, message: "请输入货物重量", trigger: "blur" }],
+        num: [{ required: true, message: "请输入货物件数", trigger: "blur" }],
+        name: [{ required: true, message: "请输入货物名称", trigger: "blur" }]
+      },
+      receiveAddressData: {
+        name: "",
+        id: "",
+        mobile: "",
+        tellPhone1: "",
+        tellPhone2: "",
+        address: {
+          province: "省",
+          city: "市",
+          area: "区"
+        },
+        detailAddress: "",
+        postal: ""
+      },
+      sendPlaceholders: {
+        province: "省",
+        city: "市",
+        area: "区"
+      },
+      receivePlaceholders: {
+        province: "省",
+        city: "市",
+        area: "区"
+      },
+      goodsInfo: {
+        weight: "",
+        num: "",
+        name: "",
+        pack: "",
+        size: [],
+        bulk: "",
+        payWeight: "",
+        remark: ""
+      },
+      inviteCode: "",
+      addressId: {
+        sendId: "",
+        receiveId: ""
       }
     };
   },
+  created() {
+    this.getProductIndexData = JSON.parse(
+      window.localStorage.getItem("productIndex")
+    );
+    if(!this.getProductIndexData){
+      this.$router.push('/center/Online_product')
+    }
+    this.getGoodsTypeList();
+    // window.localStorage.removeItem('productIndex')
+  },
+  destroyed(){
+    window.localStorage.removeItem('productIndex')
+    console.log('刷新出发了吗');
+  },
   methods: {
-    addGoodsSize(){
-      console.log(typeof this.addSizeDialogFormData.length);
-      if(!this.addSizeDialogFormData.length || !this.addSizeDialogFormData.width || !this.addSizeDialogFormData.height || !this.addSizeDialogFormData.num){
-        return
-      }
-      var str = this.addSizeDialogFormData.length +'*'+ this.addSizeDialogFormData.width +'*'+ this.addSizeDialogFormData.height +'/'+ this.addSizeDialogFormData.num
-      this.goodsInfo.size.push(str)
-      this.addSizeDialogFormVisible = false
+    // 弹出窗
+    prompt(title) {
+      this.$notify.error({
+        title: "错误",
+        message: title,
+        duration: 2000
+      });
     },
-    crement(data) {
-      console.log(data);
+    promptsuccess(title) {
+      this.$message({
+        message: title,
+        type: "success"
+      });
+    },
+
+    promptwarning(title) {
+      this.$message({
+        message: title,
+        type: "warning"
+      });
+    },
+    getGoodsTypeList() {
+      this.goodsTypesList = {};
+      var newObj = {};
+      this.axios
+        .post("/app/v1/common/queryDict", { dataType: 2 })
+        .then(data => {
+          // console.log(data.data.data.detailDTOS);
+          var TypesList = data.data.data.detailDTOS;
+          TypesList.forEach(ele => {
+            newObj[ele["id"]] = ele["dataName"];
+          });
+          Object.assign(this.goodsTypesList, newObj);
+          this.getGoodsType();
+        });
+    },
+    getGoodsType() {
+      var index = this.getProductIndexData.searchData.goodsType;
+      this.goodsType = this.goodsTypesList[index];
+    },
+    addGoodsSize() {
+      console.log(typeof this.addSizeDialogFormData.length);
+      if (
+        !this.addSizeDialogFormData.length ||
+        !this.addSizeDialogFormData.width ||
+        !this.addSizeDialogFormData.height ||
+        !this.addSizeDialogFormData.num
+      ) {
+        return;
+      }
+      var str =
+        this.addSizeDialogFormData.length +
+        "*" +
+        this.addSizeDialogFormData.width +
+        "*" +
+        this.addSizeDialogFormData.height +
+        "/" +
+        this.addSizeDialogFormData.num;
+      this.goodsInfo.size.push(str);
+      this.addSizeDialogFormVisible = false;
+    },
+    verificationCode() {
+      // inviteCode
+      if (this.inviteCode) {
+        this.axios
+          .post("/app/v1/common/validateInviteCode", {
+            inviteCode: this.inviteCode
+          })
+          .then(data => {
+            if (data.data.code == 1) {
+              console.log(data);
+            } else {
+              this.prompt("邀请码不存在");
+            }
+          });
+      }
+    },
+    submitSendAddressForm(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.axios
+            .post("/app/v1/address/addAddress", {
+              addressId: 0,
+              addressType: 0, // 发货地址
+              contactMobile: this.sendAddressData.mobile,
+              contactName: this.sendAddressData.name,
+              contactPhone:
+                this.sendAddressData.tellPhone1 +
+                this.sendAddressData.tellPhone2,
+              detailAddress: this.sendAddressData.detailAddress,
+              id: this.id,
+              identityCard: this.sendAddressData.postal,
+              postCode: this.sendAddressData.postal,
+              region:
+                this.sendAddressData.address.province +
+                this.sendAddressData.address.city +
+                this.sendAddressData.address.area,
+              token: this.token
+            })
+            .then(data => {
+              console.log(data);
+              if (data.data.code == 1) {
+                this.addressId.sendId = data.data.data.id;
+                this.promptsuccess("地址添加成功");
+              } else {
+                this.promptwarning("地址添加失败");
+              }
+            });
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
+    submitReceiveAddressForm(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.axios
+            .post("/app/v1/address/addAddress", {
+              addressId: 0,
+              addressType: 1, // 收货地址
+              contactMobile: this.receiveAddressData.mobile,
+              contactName: this.receiveAddressData.name,
+              contactPhone:
+                this.receiveAddressData.tellPhone1 +
+                this.receiveAddressData.tellPhone2,
+              detailAddress: this.receiveAddressData.detailAddress,
+              id: this.id,
+              identityCard: this.receiveAddressData.postal,
+              postCode: this.receiveAddressData.postal,
+              region:
+                this.receiveAddressData.address.province +
+                this.receiveAddressData.address.city +
+                this.receiveAddressData.address.area,
+              token: this.token
+            })
+            .then(data => {
+              console.log(data);
+              if (data.data.code == 1) {
+                this.addressId.receiveId = data.data.data.id;
+                this.promptsuccess("地址添加成功");
+              } else {
+                this.promptwarning("地址添加失败");
+              }
+            });
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
+    saveOrder(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          // alert("saveOrder!");
+          if (this.addressId.sendId == "" || this.addressId.receiveId == "") {
+            this.prompt("请输入地址，点击确定");
+            return;
+          }
+          this.axios.post("/app/v1/order/saveOrder", {
+            agentCode: "",
+            airfreightProductId: this.getProductIndexData.selectServer.airfreightProductId,
+            airportProductIds:  this.getProductIndexData.selectServer.airportProductIds,
+            aviationNo: "",
+            delegateOrderId: "",
+            flightRecordId: this.getProductIndexData.selectServer.flightRecordId,
+            goodsName: this.goodsInfo.name,
+            goodsNumber: this.goodsInfo.num,
+            goodsPackage: this.goodsInfo.pack,
+            goodsSize: this.goodsInfo.size.join(),
+            goodsVolume: this.goodsInfo.bulk,
+            goodsWeight: this.goodsInfo.weight,
+            id: this.id,
+            incrementProductIds: [],
+            inviteCode: this.inviteCode,
+            invoiceType: 0,
+            landCarriageProductIds: this.getProductIndexData.selectServer.landCarriageProductIds,
+            opt: 0,  // 保存
+            orderNo: "",
+            receiverAddressId: this.addressId.receiveId,
+            remark: this.goodsInfo.remark,
+            senderAddressId: this.addressId.sendId,
+            token: this.token
+          }).then(data=>{
+            console.log(data);
+            if(data.data.code == 1){
+              this.promptsuccess('订单保存成功！')
+            }
+            if(data.data.code == 10203){
+              this.promptwarning("货物尺寸格式错误")
+            }
+          });
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
+    submitOrder(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          // alert("submitOrder!");
+          if (this.addressId.sendId == "" || this.addressId.receiveId == "") {
+            this.prompt("请输入地址，点击确定");
+            return;
+          }
+          this.axios.post("/app/v1/order/saveOrder", {
+            agentCode: "",
+            airfreightProductId: this.getProductIndexData.selectServer.airfreightProductId,
+            airportProductIds:  this.getProductIndexData.selectServer.airportProductIds,
+            aviationNo: "",
+            delegateOrderId: "",
+            flightRecordId: this.getProductIndexData.selectServer.flightRecordId,
+            goodsName: this.goodsInfo.name,
+            goodsNumber: this.goodsInfo.num,
+            goodsPackage: this.goodsInfo.pack,
+            goodsSize: this.goodsInfo.size.join(),
+            goodsVolume: this.goodsInfo.bulk,
+            goodsWeight: this.goodsInfo.weight,
+            id: this.id,
+            incrementProductIds: [],
+            inviteCode: this.inviteCode,
+            invoiceType: 0,
+            landCarriageProductIds: this.getProductIndexData.selectServer.landCarriageProductIds,
+            opt: 1,    //提交
+            orderNo: "",
+            receiverAddressId: this.addressId.receiveId,
+            remark: this.goodsInfo.remark,
+            senderAddressId: this.addressId.sendId,
+            token: this.token
+          }).then(data=>{
+            console.log(data);
+            if(data.data.code == 10203){
+              this.promptwarning("货物尺寸格式错误")
+            }
+            if(data.data.code == 10212){
+              this.prompt('供应商信息维护错误,请重新下单')
+              setTimeout(()=>{
+                this.$router.push('/center/online_product')
+              },2000)
+            }
+            if(data.data.code ==1){
+              this.promptsuccess('下单成功')
+              setTimeout(()=>{
+                this.$router.push('/center/online_product/complete')
+              },1000)
+            }
+          });
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
     },
     completeGo() {
       this.$router.push("/center/Online_product");
     },
-    back() {
-      // this.$store.commit("minIndex");
-      // this.$router.push("/center/Online_product");
+    back() {},
+    confirm() {},
+    sendProvince(data) {
+      this.sendAddressData.address.province = data.value;
     },
-    confirm() {
-      // this.$store.commit("getIndex");
-      // this.$router.push("/center/Online_product/complete");
+    sendCity(data) {
+      this.sendAddressData.address.city = data.value;
+    },
+    sendArea(data) {
+      this.sendAddressData.address.area = data.value;
+    },
+    receiveProvince(data) {
+      this.receiveAddressData.address.province = data.value;
+    },
+    receiveCity(data) {
+      this.receiveAddressData.address.city = data.value;
+    },
+    receiveArea(data) {
+      this.receiveAddressData.address.area = data.value;
     }
   },
-
+  computed: {
+    ...mapGetters(["id", "token"])
+  }
 };
 </script>
 
@@ -470,6 +830,12 @@ export default {
             display: flex;
             justify-content: flex-start;
             align-items: center;
+            .icon {
+              margin-right: 4px;
+              &.active {
+                color: #8cc63f;
+              }
+            }
             .product-select {
               transform: scale(0.4);
               cursor: pointer;
@@ -509,6 +875,28 @@ export default {
       position: relative;
       display: flex;
       flex-direction: column;
+      // 公共样式
+      .name-nav {
+        margin-right: 10px;
+      }
+      .name-text {
+        .el-form-item {
+          margin: 0;
+          .el-form-item__content {
+            margin: 0 !important;
+            .el-form-item__error {
+              z-index: 999;
+              width: 100px;
+              top: 61%;
+            }
+            .el-input {
+              input {
+                padding: 0;
+              }
+            }
+          }
+        }
+      }
       .left-logo {
         position: absolute;
         width: 0;
@@ -559,9 +947,9 @@ export default {
           }
           .name-text {
             width: 80px;
-            margin-left: 20px;
+            margin-left: 10px;
 
-            input{
+            input {
               padding: 0;
             }
           }
@@ -570,12 +958,12 @@ export default {
           height: 100%;
           width: 220px;
           margin-right: 20px;
-          color: rgba(255, 220, 68, 1);
+          // color: rgba(255, 220, 68, 1);
           display: flex;
           flex-direction: row;
           justify-content: space-between;
           align-items: center;
-          border-bottom: 1px solid rgba(255, 220, 68, 0.3);
+          border-bottom: 1px solid rgba(244, 244, 244, 1);
           .name-nav {
             width: 64px;
             display: inline-block;
@@ -610,7 +998,7 @@ export default {
           .name-text {
             flex: 1;
             text-indent: 10px;
-            input{
+            input {
               padding: 0;
             }
           }
@@ -633,9 +1021,9 @@ export default {
             flex: 1;
             text-indent: 10px;
             display: flex;
-            .left{
+            .left {
               width: 45px;
-              input{
+              input {
                 padding: 0;
                 padding-right: 5px;
                 border-right: 1px solid #e0e0e0;
@@ -672,10 +1060,10 @@ export default {
             // transform: scale(0.8);
             transform: translateY(-2px);
             overflow: hidden;
-            .address{
+            .address {
               display: flex;
               width: 380px;
-              select{
+              select {
                 text-align: center;
                 padding: 0;
               }
@@ -780,6 +1168,27 @@ export default {
       display: flex;
       flex-direction: column;
       margin-right: 20px;
+      .name-nav {
+        margin-right: 10px;
+      }
+      .name-text {
+        .el-form-item {
+          margin: 0;
+          .el-form-item__content {
+            margin: 0 !important;
+            .el-form-item__error {
+              z-index: 999;
+              width: 100px;
+              top: 61%;
+            }
+            .el-input {
+              input {
+                padding: 0;
+              }
+            }
+          }
+        }
+      }
       .left-logo {
         position: absolute;
         width: 0;
@@ -830,8 +1239,8 @@ export default {
           }
           .name-text {
             width: 80px;
-            margin-left: 20px;
-            input{
+            margin-left: 10px;
+            input {
               padding: 0;
             }
           }
@@ -840,12 +1249,11 @@ export default {
           height: 100%;
           width: 220px;
           margin-right: 20px;
-          color: rgba(255, 220, 68, 1);
           display: flex;
           flex-direction: row;
           justify-content: space-between;
           align-items: center;
-          border-bottom: 1px solid rgba(255, 220, 68, 0.3);
+          border-bottom: 1px solid rgba(244, 244, 244, 1);
           .name-nav {
             width: 64px;
             display: inline-block;
@@ -900,9 +1308,9 @@ export default {
             flex: 1;
             text-indent: 10px;
             display: flex;
-            .left{
+            .left {
               width: 50px;
-              input{
+              input {
                 padding: 0;
                 border-radius: 0;
                 border-right: 1px solid #e0e0e0;
@@ -938,10 +1346,10 @@ export default {
             // transform: scale(0.8);
             transform: translateY(-2px);
             overflow: hidden;
-            .address{
+            .address {
               display: flex;
               width: 380px;
-              select{
+              select {
                 text-align: center;
                 padding: 0;
               }
@@ -1085,6 +1493,16 @@ export default {
           justify-content: center;
           align-items: center;
           color: rgba(93, 93, 93, 1);
+          .el-form-item {
+            margin: 0;
+            .el-form-item__content {
+              .el-form-item__error {
+                z-index: 99;
+                left: 15px;
+                top: 66%;
+              }
+            }
+          }
         }
       }
     }
@@ -1108,27 +1526,27 @@ export default {
         height: 150px;
         width: 140px;
         padding-left: 16px;
-        .wrapper{
+        .wrapper {
           height: 135px;
         }
-        .addSize{
-          .el-dialog__wrapper{
-            .el-dialog__header{
-              background-color: #FCCF00;
-              .el-dialog__title{
+        .addSize {
+          .el-dialog__wrapper {
+            .el-dialog__header {
+              background-color: #fccf00;
+              .el-dialog__title {
                 color: #fff;
               }
             }
-            .el-dialog__body{
+            .el-dialog__body {
               display: flex;
-              input{
+              input {
                 width: 25%;
                 border-right: 1px solid #e0e0e0;
                 border-bottom: 1px solid #e0e0e0;
                 margin-right: 10px;
-                -moz-appearance:textfield;
+                -moz-appearance: textfield;
                 &::-webkit-inner-spin-button,
-                &::-webkit-outer-spin-button{
+                &::-webkit-outer-spin-button {
                   -webkit-appearance: none;
                   margin: 0;
                 }
@@ -1175,7 +1593,7 @@ export default {
           color: rgba(93, 93, 93, 1);
         }
       }
-      .mark{
+      .mark {
         display: flex;
       }
     }
@@ -1228,6 +1646,13 @@ export default {
       justify-content: flex-start;
       border-bottom: 1px solid rgba(244, 244, 244, 1);
       width: 100%;
+      .icon {
+        margin: 0 10px;
+        cursor: pointer;
+        &.active {
+          color: #8cc63f;
+        }
+      }
       .con-select {
         transform: scale(0.6);
         margin-left: 40px;
@@ -1338,16 +1763,16 @@ export default {
       .gokeep {
         margin-left: 40px;
         box-shadow: 4px 4px 4px #e0e0e0;
-        button{
+        button {
           padding: 6px 30px;
         }
       }
     }
-    .cost-complete{
+    .cost-complete {
       flex: 1;
       text-align: right;
       padding-right: 100px;
-      button{
+      button {
         padding: 6px 80px;
         box-shadow: 4px 4px 4px #e0e0e0;
       }
