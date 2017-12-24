@@ -71,6 +71,8 @@
                   <div class="detail-list1 detail-list"><span class="detail-name">航空运费</span><span class="detail-cost">{{productSearchResult.airfreightDTO.airfreightCharge}}元/千克</span></div>
                   <div class="detail-list2 detail-list"><span class="detail-name">燃油附加费</span><span class="detail-cost">{{productSearchResult.airfreightDTO.fuelCharge}}元/千克</span></div>
                 </div>
+                <!-- 运价申请模态框 -->
+
                 <div class="detail-btn-box"><span class="inner-right-btn">运价申请</span></div>
                 <div class="detail-img active el-icon-success" :class="selectServer.baseServer?'active':''">
                 </div>
@@ -562,7 +564,7 @@ export default {
         });
     },
     productSearch() {
-      console.log(this.searchData);
+      // console.log(this.searchData);
       this.axios
         .post("/app/v1/product/queryProduct", {
           airportEnd: this.searchData.endPort,
@@ -574,6 +576,7 @@ export default {
           weight: this.searchData.goodsWeight
         })
         .then(data => {
+          console.log(data);
           this.productSearchResult = {};
           if (data.data.code == 1) {
             this.selectServer.flightRecordId = data.data.data.flightRecordId

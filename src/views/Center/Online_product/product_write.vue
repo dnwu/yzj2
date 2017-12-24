@@ -109,7 +109,7 @@
             </div>
             <div class="left-btn">
               <span class="btn-box box1">添加地址簿</span>
-              <span class="btn-box box2">设为默认</span>
+              <span class="btn-box box2" @click="setDefaultAddress(0)">设为默认</span>
               <span class="btn-box box3" @click="submitSendAddressForm('sendAddress')">确定</span>
             </div>
           </div>
@@ -188,7 +188,7 @@
             </div>
             <div class="left-btn">
               <span class="btn-box box1">添加地址簿</span>
-              <span class="btn-box box2">设为默认</span>
+              <span class="btn-box box2" @click="setDefaultAddress(1)">设为默认</span>
               <span class="btn-box box3" @click="submitReceiveAddressForm('receiveAddress')">确定</span>
             </div>
           </div>
@@ -463,7 +463,7 @@ export default {
   },
   destroyed(){
     window.localStorage.removeItem('productIndex')
-    console.log('刷新出发了吗');
+    // console.log('刷新出发了吗');
   },
   methods: {
     // 弹出窗

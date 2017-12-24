@@ -105,25 +105,25 @@
                     <div class="oneday">
                       <div class="data">2017-10-10</div>
                       <div class="time">
-                        <div class="item"><span class="itme-time">15:48:22</span><span class="caption">【出港收运】</span><span class="who">陈丽</span></div>
-                        <div class="item"><span class="itme-time">15:48:22</span><span class="caption">【出港收运】</span><span class="who">陈丽</span></div>
-                        <div class="item"><span class="itme-time">15:48:22</span><span class="caption">【出港收运】</span><span class="who">陈丽</span></div>
+                        <div class="item"><span class="itme-time">15:48:22</span><span class="caption">【运输中】</span><span class="who">陈丽</span></div>
+                        <div class="item"><span class="itme-time">15:48:22</span><span class="caption">【出发上门】</span><span class="who">陈丽</span></div>
+                        <div class="item"><span class="itme-time">15:48:22</span><span class="caption">【到达目的站】</span><span class="who">陈丽</span></div>
                       </div>
                     </div>
                     <div class="oneday">
                       <div class="data">2017-10-10</div>
                       <div class="time">
                         <div class="item"><span class="itme-time">15:48:22</span><span class="caption">【出港收运】</span><span class="who">陈丽</span></div>
-                        <div class="item"><span class="itme-time">15:48:22</span><span class="caption">【出港收运】</span><span class="who">陈丽</span></div>
-                        <div class="item"><span class="itme-time">15:48:22</span><span class="caption">【出港收运】</span><span class="who">陈丽</span></div>
+                        <div class="item"><span class="itme-time">15:48:22</span><span class="caption">【补缴费用】</span><span class="who">王全</span></div>
+                        <div class="item"><span class="itme-time">15:48:22</span><span class="caption">【货物复核】</span><span class="who">陈小丽</span></div>
                       </div>
                     </div>
                     <div class="oneday">
                       <div class="data">2017-10-10</div>
                       <div class="time">
-                        <div class="item"><span class="itme-time">15:48:22</span><span class="caption">【出港收运】</span><span class="who">陈丽</span></div>
-                        <div class="item"><span class="itme-time">15:48:22</span><span class="caption">【出港收运】</span><span class="who">陈丽</span></div>
-                        <div class="item"><span class="itme-time">15:48:22</span><span class="caption">【出港收运】</span><span class="who">陈丽</span></div>
+                        <div class="item"><span class="itme-time">15:48:22</span><span class="caption">【订单支付】</span><span class="who">黎明</span></div>
+                        <div class="item"><span class="itme-time">15:48:22</span><span class="caption">【订单受理】</span><span class="who">陈丽</span></div>
+                        <div class="item"><span class="itme-time">15:48:22</span><span class="caption">【订单提交】</span><span class="who">陈悠悠</span></div>
                       </div>
                     </div>
                 </div>

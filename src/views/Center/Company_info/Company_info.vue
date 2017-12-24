@@ -1,6 +1,6 @@
 <template>
   <div class="company-info">
-    <div class="header">公司基本信息</div>
+    <!-- <div class="header">公司基本信息</div>
     <div class="company-name">
       <div>公司名称</div>
       <div><el-input v-model="companyName" placeholder="公司名称"></el-input></div>
@@ -167,7 +167,7 @@
     <div class="save">
       <el-button type="success">保存</el-button>
       <el-button type="warning">企业注册</el-button>
-    </div>
+    </div> -->
   </div>
 </template>
 <script>

@@ -59,7 +59,7 @@
           </div>
         </div>
         <div class="search">
-          <el-button size="mini" type="danger">查询</el-button>
+          <el-button size="mini" type="danger" @click="searchList()">查询</el-button>
         </div>
       </div>
       <div class="main-body">
@@ -96,14 +96,25 @@
               <p class="black">实际：{{item.orderGoodsDetail.actualWeight}}</p>
             </div>
             <div class="needPayWeight">
-              <p class="gray">预计：2000</p>
+              <p class="gray">预计：{{item.orderGoodsDetail.valuationWeight}}</p>
               <p class="black">实际：{{item.orderGoodsDetail.valuationWeight}}</p>
             </div>
             <!-- 待支付 -->
             <template v-if="item.orderStatus=='3'">
               <div class="status">
                 <div class="red"><img src="../../../assets/needpay_icon.png" alt="">待支付</div>
-                <div><el-button size="mini" type="danger" plain>立即支付</el-button></div>
+                <div><el-button size="mini" type="danger" plain @click="pay(item.orderNo,1)">立即支付</el-button></div>
+              </div>
+              <div class="operate">
+                <div><span class="detail" @click="goDetail(item.orderNo,item.id)">详情</span><span>|</span><span class="track" @click="goTrack(item.orderNo,item.id)">跟踪</span></div>
+                <div><el-button size="mini" type="info">取消订单</el-button></div>
+              </div>
+            </template>
+            <!-- 待补缴 -->
+            <template v-if="item.orderStatus=='6'">
+              <div class="status">
+                <div class="red"><img src="../../../assets/needpay_icon.png" alt="">待补缴</div>
+                <div><el-button size="mini" type="danger" plain @click="pay(item.orderNo,2)">立即支付</el-button></div>
               </div>
               <div class="operate">
                 <div><span class="detail" @click="goDetail(item.orderNo,item.id)">详情</span><span>|</span><span class="track" @click="goTrack(item.orderNo,item.id)">跟踪</span></div>
@@ -329,6 +340,7 @@
 <script>
 import VDistpicker from "v-distpicker";
 import { mapGetters } from "vuex";
+import pay from '@/api/pay'
 export default {
   components: { VDistpicker },
   data() {
@@ -393,27 +405,31 @@ export default {
       orderTime: "",
       orderStatus: [
         {
-          value: "选项1",
+          value: "-1",
           label: "全部"
         },
         {
-          value: "选项2",
+          value: "3",
           label: "待支付"
         },
         {
-          value: "选项3",
+          value: "4",
           label: "已支付"
         },
         {
-          value: "选项4",
+          value: "5",
           label: "运送中"
         },
         {
-          value: "选项5",
+          value: "6",
+          label: "待补缴"
+        },
+        {
+          value: "2",
           label: "待受理"
         },
         {
-          value: "选项6",
+          value: "7",
           label: "已完成"
         }
       ],
@@ -424,6 +440,12 @@ export default {
     this.getOrderList(1, 10);
   },
   methods: {
+    pay(orderNo,status){
+      pay(orderNo,status)
+    },
+    searchList(){
+      this.getOrderList(1,10,this.orderStatu)
+    },
     goDetail(orderNo, id) {
       this.$router.push({
         path: "/center/order_detail",
@@ -450,7 +472,7 @@ export default {
       }
       return type;
     },
-    getOrderList(pageindex, size) {
+    getOrderList(pageindex, size,orderStatus) {
       this.orderListData = []
       // size为页面显示数据量 ; pageindex为第几页
       if (size == undefined) {
@@ -459,23 +481,23 @@ export default {
         var _size = size;
       }
       var _pageindex = pageindex;
-      console.log("size", _size);
-      console.log('pageIndex', _pageindex);
+      // console.log("size", _size);
+      // console.log('pageIndex', _pageindex);
       this.axios
         .post("/app/v1/order/getOrderList", {
           id: this.id,
-          orderStatus: 0,
+          orderStatus: orderStatus,
           pageIndex: _pageindex,
           size: _size,
           token: this.token
         })
         .then(data => {
-          console.log(data.data.data.total);
+          // console.log(data.data.data.total);
           if (data.data.code == 1) {
             this.pageTotal = data.data.data.total;
             var orderList = data.data.data.orderBaseDTOS;
             this.orderListData.push(...orderList);
-            console.log(this.orderListData);
+            // console.log(this.orderListData);
           }
         });
     },
