@@ -9,7 +9,7 @@
         <div class="base-info">
           <div class="head-img"><img src="../../../assets/head_img.png"></div>
           <div class="info">
-            <p class="company-name">公司名称</p>
+            <p class="company-name">公司名称 {{userInfo.fullName}}</p>
             <div class="star">
               <el-rate
                 v-model='starNum'
@@ -20,10 +20,10 @@
               </el-rate>
             </div>
             <div class="member">
-              <div class="integral">会员积分：<span class="score">{{score}}</span></div>
+              <div class="integral">会员积分：<span class="score">{{userInfo.level.experience}}</span></div>
               <div class="doings">
                 <el-badge
-                  :value="1"
+                  :value='activity'
                   :max="10"
                   class="item">
                   <el-button size="small">我的活动</el-button>
@@ -34,29 +34,31 @@
         </div>
         <div class="goods-info">
           <div class="confirm">
-            <el-badge :value="confirmNum" class="item">
+            <el-badge :value="userInfo.waitSubmitOrders " class="item">
               <img src="../../../assets/account_icon1.png">
             </el-badge>
-            <p>{{ confirmNum }}</p>
+            <p>{{ userInfo.waitSubmitOrders   }}</p>
             <p>代提交</p>
           </div>
           <div class="pay">
-            <el-badge :value="payNum" class="item">
+            <el-badge :value="userInfo.waitPayOrders" class="item">
               <img src="../../../assets/account_icon2.png">
             </el-badge>
-            <p>{{payNum}}</p>
+            <p>{{userInfo.waitPayOrders }}</p>
             <p>待支付</p>
           </div>
           <div class="received">
-            <el-badge :value="receivedNum" class="item">
+            <el-badge :value="userInfo.waitReceiveOrders" class="item">
               <img src="../../../assets/account_icon3.png">
             </el-badge>
-            <p>{{ receivedNum }}</p>
+            <p>{{ userInfo.waitReceiveOrders }}</p>
             <p>待收货</p>
           </div>
           <div class="done">
-            <img src="../../../assets/account_icon4.png">
-            <p>12</p>
+            <el-badge :value="userInfo.totalOrders" class="item">
+              <img src="../../../assets/account_icon4.png">
+            </el-badge>
+            <p>{{userInfo.totalOrders}}</p>
             <p>全部</p>
           </div>
         </div>
@@ -67,25 +69,25 @@
             <div><span>账</span><span>号</span><span>信</span><span>息</span></div>
           </div>
           <div class="account-coding">
-            <span class="title">会员编码</span><span class="colon">:</span><span class="content">HH000001</span>
+            <span class="title">会员编码</span><span class="colon">:</span><span class="content">无</span>
           </div>
           <div class="account">
-            <span class="title">会员账号</span><span class="colon">:</span><span class="content">YOY2017</span>
+            <span class="title">会员账号</span><span class="colon">:</span><span class="content">{{userInfo.account}}</span>
           </div>
           <div class="pass">
-            <span class="title">会员密码</span><span class="colon">:</span><span class="btn"><el-button type="info" size='mini'>修改</el-button></span>
+            <span class="title">会员密码</span><span class="colon">:</span><span class="btn"><el-button type="info" size='mini' @click="resetPassword(userInfo.id)">修改</el-button></span>
           </div>
           <div class="phonenum">
-            <span class="title">手机号</span><span class="colon">:</span><span class="content">17688772007</span><span class="btn"><el-button type="info" size='mini'>修改</el-button></span>
+            <span class="title">手机号</span><span class="colon">:</span><span class="content">{{userInfo.phone}}</span><span class="btn"><el-button type="info" size='mini'>修改</el-button></span>
           </div>
           <div class="email">
-            <span class="title">邮箱</span><span class="colon">:</span><span class="content">12312312@qq.com</span><span class="btn"><el-button type="info" size='mini'>修改</el-button></span>
+            <span class="title">邮箱</span><span class="colon">:</span><span class="content">{{userInfo.email}}</span><span class="btn"><el-button type="info" size='mini'>修改</el-button></span>
           </div>
           <div class="account-type">
-            <span class="title">账号类型</span><span class="colon">:</span><span class="content">个人货主</span>
+            <span class="title">账号类型</span><span class="colon">:</span><span class="content">{{userInfo.accountType}}</span>
           </div>
           <div class="account-level">
-            <span class="title">账号级别</span><span class="colon">:</span><span class="content">主账号</span>
+            <span class="title">账号级别</span><span class="colon">:</span><span class="content">{{userInfo.accountLevel}}</span>
           </div>
         </div>
         <div class="personal-info">
@@ -93,16 +95,16 @@
             <div><span>个</span><span>人</span><span>信</span><span>息</span></div>
           </div>
           <div class="name">
-            <span class="title">会员姓名</span><span class="colon">:</span><span class="content">陈悠悠</span>
+            <span class="title">会员姓名</span><span class="colon">:</span><span class="content">{{userInfo.fullName}}</span>
           </div>
           <div class="id">
-            <span class="title">身份证号码</span><span class="colon">:</span><span class="content">4654646354634646</span>
+            <span class="title">身份证号码</span><span class="colon">:</span><span class="content">{{userInfo.identityCard}}</span>
           </div>
           <div class="cellphone">
-            <span class="title">固定电话</span><span class="colon">:</span><span class="content">010-154654654</span>
+            <span class="title">固定电话</span><span class="colon">:</span><span class="content">{{userInfo.telephone}}</span>
           </div>
           <div class="detial">
-            <span class="title">详细地址</span><span class="colon">:</span><span class="content">北京市朝阳区长安大街</span>
+            <span class="title">详细地址</span><span class="colon">:</span><span class="content">无</span>
           </div>
           <div class="revise">
             <el-button
@@ -119,10 +121,11 @@ import { mapGetters } from "vuex";
 export default {
   data() {
     return {
-      starNum: 3,
+      starNum: 3,  //等级
       score: 3450,
       confirmNum: 2,
       payNum: 3,
+      activity:0,  // 活动
       receivedNum: 4,
       userInfo: {}
     };
@@ -131,6 +134,9 @@ export default {
     this.getUserInfo();
   },
   methods: {
+    resetPassword(id){
+      this.$router.push('/center/change_password')
+    },
     getUserInfo() {
       this.axios
         .post("/app/v1/user/userInfo", {
@@ -138,7 +144,7 @@ export default {
           token: this.token
         })
         .then(data => {
-          console.log(data.data);
+          console.log(data.data.data);
           if (data.data.code == "1") {
             this.userInfo = data.data.data;
           }

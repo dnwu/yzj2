@@ -1,5 +1,5 @@
 <template>
-  <div class="online_product">
+  <div class="online-product">
     <div class="product-header">
       <span class="product-header-logo">网上下单</span>
       <div class="product-header-inner">
@@ -39,7 +39,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-  .online_product {
+  .online-product {
     color: rgba(197,197,197,1);
     display:flex;
     flex-direction:column;
@@ -103,22 +103,40 @@ export default {
                   letter-spacing:3px;
                   margin-left:14px;
                 }
+                .left-list-selection{
+                  &.dist-list1{
+                    transform: scale(1.2);
+                    .el-input{
+                      .el-select{
+                        input{
+                          font-size: 16px;
+                        }
+                      }
+                    }
+                  }
+                }
 
               }
-              #product-type-selection {
-                .left-list-name {
-                  margin-left:10px;
-                }
-                .left-list-selection {
-                  width:104px;
-                }
-                .left-list-weight {
-                  margin-left:-20px;
-                }
-                .left-list-selection:nth-child(2) {
-                  margin-left:20px;
-                }
-              }
+
+              // #product-type-selection {
+              //   .left-list-name {
+              //     margin-left:10px;
+              //   }
+              //   .left-list-selection {
+              //     width:104px;
+              //     .el-input{
+              //       input{
+              //         font-size: 16px;
+              //       }
+              //     }
+              //   }
+              //   .left-list-weight {
+              //     margin-left:-20px;
+              //   }
+              //   .left-list-selection:nth-child(2) {
+              //     margin-left:20px;
+              //   }
+              // }
             }
             .selection-inner-right {
               flex:1;

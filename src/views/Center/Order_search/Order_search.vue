@@ -443,6 +443,12 @@ export default {
     pay(orderNo,status){
       pay(orderNo,status)
     },
+    errorAlert(title) {
+      this.$notify.error({
+        title: '错误',
+        message: title
+      });
+    },
     searchList(){
       this.getOrderList(1,10,this.orderStatu)
     },
@@ -498,6 +504,9 @@ export default {
             var orderList = data.data.data.orderBaseDTOS;
             this.orderListData.push(...orderList);
             // console.log(this.orderListData);
+          }
+          if(data.data.code == 10001){
+            this.errorAlert('登录已失效，请重新登录')
           }
         });
     },

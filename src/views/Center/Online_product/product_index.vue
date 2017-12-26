@@ -1,5 +1,5 @@
 <template>
-  <div class="product-container li-product-write-container">
+  <div class="m-product-container m-li-product-write-container">
     <div class="product-container-left">
       <div class="container-left-selection">
         <div class="selection-inner">
@@ -1091,7 +1091,7 @@ export default {
 </script>
 
 <style lang="scss">
-.product-container {
+.m-product-container {
   color: rgba(153, 153, 153, 1);
   flex: 1;
   width: 100%;
@@ -1126,7 +1126,7 @@ export default {
             width: 700px;
             .left-list-selection {
               width: 250px;
-              transform: scale(0.9);
+              // transform: scale(0.9);
               margin-left: -20px;
               .el-select {
                 width: 250px;
@@ -1513,7 +1513,7 @@ export default {
 }
 </style>
 <style lang='scss'>
-.li-product-write-container {
+.m-li-product-write-container {
   .left-list-selection {
     * {
       border: none;
