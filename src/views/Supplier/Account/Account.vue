@@ -4,22 +4,21 @@
     <el-card class="box-card">
       <div class="card-one">
         <div class="ico">
-          <img :src="fire.ico" alt="">
+          <img :src="firm.ico" alt="">
         </div>
         <div class="msg" style="display">
-          <p v-text="fire.name"></p>
+          <p v-text="firm.name"></p>
           <p>供应商编码：
-            <span v-text="fire.num"></span>
+            <span v-text="firm.num"></span>
           </p>
           <p>业务类型：
-            <span v-text="fire.type"></span>
+            <span v-text="firm.type"></span>
           </p>
         </div>
         <div class="menu">
-          <span v-for="(item,index) in menus" :key="index" @click="toRouter(item.path)">
+          <span v-for="(item,index) in menus" :key="index"><!-- @click="toRouter(item.path)" -->
             <img :src="item.src" alt="">
             <p v-text="item.num"></p>
-            </p>
             <p v-text="item.intro"></p>
           </span>
         </div>
@@ -36,7 +35,7 @@
             <span class="info-font" v-text="item.name"></span>
             <span class="colon">:</span>
             <span class="content" v-text="item.value" v-if="item.value"></span>
-            <el-button type="info" @click="alter(key)" v-if="item.alter">修改</el-button>
+            <el-button type="info" v-if="item.alter">修改</el-button><!--  @click="alter(key)" -->
           </p>
         </div>
       </el-card>
@@ -54,10 +53,11 @@
             <span class="info-font">服务范围</span>
             <span class="colon">:</span>
             <span class="ud-selectBox">
-              <input :class="['ud-input',{'ud-is-focus':udIsFocus}]" v-model="infoOption" @click="udShow(['udSelectOpt','udIsFocus'])" type="text" placeholder="请选择" readonly>
-              <div class="contentBox" v-show="udSelectOpt">
+              <input :class="['ud-input']" v-model="infoOption"
+                type="text" placeholder="请选择" readonly>
+              <div class="contentBox">
                 <ul>
-                  <li v-for="item in info.range" v-text="item.label"  @click="udItem(item.label)"></li>
+                  <li v-for="item in info.range" v-text="item.label" @click="udItem(item.label)"></li>
                 </ul>
               </div>
             </span>
@@ -68,7 +68,7 @@
             </h4>
             <div class="menu">
               <ul>
-                <li v-for="(item,index) in infoOptions" v-if="checkIndexArray(item,servers,'intro') !== -1" @click="toRouter(servers[checkIndexArray(item,servers,'intro')].path)">
+                <li v-for="(item,index) in infoOptions" v-if="checkIndexArray(item,servers,'intro') !== -1"> <!--  @click="toRouter(servers[checkIndexArray(item,servers,'intro')].path)" -->
                   <span class="note" v-text="String.fromCharCode(65+index)"></span>
                   <div class="wrap">
                     <img :src="servers[checkIndexArray(item,servers,'intro')].src" alt="">
@@ -85,7 +85,7 @@
     <el-dialog title="会员信息修改" :visible.sync="dialogFormVisible">
       <el-form>
         <el-form-item :label="'请输入新的'+account[dialogType].name">
-          <el-input auto-complete="off"></el-input>
+          <el-input auto-complete="off" v-model="newMsg"></el-input>{{newMsg}}
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -102,7 +102,7 @@ export default {
     return {
       dialogFormVisible: false,
       dialogType: "email",
-      fire: {
+      firm: {
         ico: require("../../../assets/head_img.png"),
         name: "海航速运（北京）优先责任公司",
         num: "YZJ271939392900101",
@@ -110,24 +110,28 @@ export default {
       },
       menus: [
         {
+          coding: { num: "orderNum1" },
           src: require("@/assets/account_icon1.png"),
           num: 0,
           intro: "待接单",
           path: "/"
         },
         {
+          coding: { num: "orderNum2" },
           src: require("@/assets/account_icon2.png"),
           num: 2,
           intro: "待收货",
           path: "/"
         },
         {
+          coding: { num: "orderNum3" },
           src: require("@/assets/account_icon3.png"),
           num: 0,
           intro: "运输中",
           path: "/"
         },
         {
+          coding: { num: "orderNum4" },
           src: require("@/assets/account_icon4.png"),
           num: 0,
           intro: "已完成",
@@ -135,11 +139,11 @@ export default {
         }
       ],
       account: {
-        code: {
+        supplierName: {
           name: "供应商简称",
           value: "HH00001"
         },
-        id: {
+        account: {
           name: "账号",
           value: "YOYO2017"
         },
@@ -148,7 +152,7 @@ export default {
           value: "",
           alter: true
         },
-        tel: {
+        phone: {
           name: "手机号",
           value: "13900000000",
           alter: true
@@ -158,22 +162,52 @@ export default {
           value: "123456@qq.com",
           alter: true
         },
-        power: {
+        version: {
           name: "账户级别",
           value: "主账号"
         }
       },
-      infoOption: "",
+      infoOption: "深圳市",
       info: {
         way: "月结",
         range: [
           {
             label: "深圳市",
             value: "001",
-            options: ["航空运输服务", "始发港地面运输", "上面取货"]
+            options: ["航空运输服务", "始发港地面运输", "目的港地面运输", "上面取货", "落地配送"]
           },
           {
             label: "上海市",
+            value: "002",
+            options: ["航空运输服务", "上面取货"]
+          },
+          {
+            label: "广州市",
+            value: "002",
+            options: ["目的港地面运输", "始发港地面运输"]
+          },
+          {
+            label: "汕头市",
+            value: "002",
+            options: ["航空运输服务", "目的港地面运输", "上面取货"]
+          },
+          {
+            label: "北京市",
+            value: "002",
+            options: ["目的港地面运输", "落地配送"]
+          },
+          {
+            label: "肇庆市",
+            value: "002",
+            options: ["航空运输服务", "目的港地面运输", "上面取货", "落地配送"]
+          },
+          {
+            label: "揭阳市",
+            value: "002",
+            options: ["目的港地面运输", "上面取货", "落地配送"]
+          },
+          {
+            label: "重庆市",
             value: "002",
             options: ["目的港地面运输", "上面取货"]
           }
@@ -182,32 +216,31 @@ export default {
       servers: [
         {
           src: require("@/assets/detail_info_img1.png"),
-          intro: "航空运输服务",
-          path: "/"
+          intro: "航空运输服务"
+          /* path: "/" */
         },
         {
           src: require("@/assets/detail_info_img2.png"),
-          intro: "始发港地面运输",
-          path: "/"
+          intro: "始发港地面运输"
+          /* path: "/" */
         },
         {
           src: require("@/assets/detail_info_img3.png"),
-          intro: "目的港地面运输",
-          path: "/"
+          intro: "目的港地面运输"
+          /* path: "/" */
         },
         {
           src: require("@/assets/detail_info_img4.png"),
-          intro: "上面取货",
-          path: "/"
+          intro: "上面取货"
+          /* path: "/" */
         },
         {
           src: require("@/assets/detail_info_img5.png"),
-          intro: "落地配送",
-          path: "/"
+          intro: "落地配送"
+          /* path: "/" */
         }
       ],
-      udIsFocus: false,
-      udSelectOpt: false
+      newMsg: ""
     };
   },
   methods: {
@@ -236,7 +269,6 @@ export default {
     },
     udItem(label) {
       this.infoOption = label;
-      this.udShow(["udSelectOpt", "udIsFocus"]);
     }
   },
   computed: {
@@ -252,14 +284,49 @@ export default {
       }
       return options;
     }
+  },
+  mounted() {
+    function setData(obj, dataJson, objKey) {
+      if (obj instanceof Array) {
+        let arr = obj;
+        for (let i = 0; i < arr.length; i++) {
+          var coding = arr[i][objKey] || arr[i]["coding"];
+          for (let name in coding) {
+            arr[i][name] = dataJson[coding[name]];
+          }
+        }
+      } else {
+        for (let name in obj) {
+          var coding = name;
+          coding && (obj[name][objKey] = dataJson[coding]);
+        }
+      }
+    }
+    this.axios
+      .post("/web/v1/supplier/info", {
+        id: this.$store.state.id,
+        token: this.$store.state.token
+      })
+      .then(res => {
+        console.log(res);
+        var data = res.data.data;
+        this.firm.name = data.supplierFullName;
+        // 订单数量数据设置
+        setData(this.menus, data);
+        // 账号信息设置
+        setData(this.account, data, "value");
+
+        var version = this.account.version;
+        version.value = version.value == 1 ? "主账号" : "子账号";
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 };
 </script>
 <style lang="scss" scoped>
 @mixin font {
-  display: inline-block;
-  width: 90px;
-  height: 20px;
   font-size: 16px;
   font-weight: bold;
   text-align: justify;
@@ -282,14 +349,13 @@ export default {
   flex-direction: column;
   $dotted: 1px dotted #cfcfcf;
   @mixin card {
-    width: 100%;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
   }
   .card-one {
     @include card;
-    /* padding-bottom: 20px; */
+    width: 100%;
     justify-content: space-around;
     align-items: center;
     .ico {
@@ -322,6 +388,7 @@ export default {
   .card-two {
     @include card;
     margin-top: 40px;
+    min-height: 407px;
     justify-content: space-between;
     .triangle {
       position: absolute;
@@ -349,6 +416,9 @@ export default {
       $padTB: 20px;
       padding-top: $padTB;
       .info-font {
+        width: 90px;
+        height: 20px;
+        display: inline-block;
         @include font;
       }
       .content {
@@ -371,7 +441,8 @@ export default {
       flex-direction: column;
       justify-content: space-around;
       width: $info-width;
-      height: 100%; /* 是否跟据父级进行拓展 */
+      height: 100%;
+      /* 是否跟据父级进行拓展 */
       padding-left: 60px;
       padding-bottom: 15px;
       p {
@@ -407,12 +478,15 @@ export default {
           &:nth-child(4n) {
             border-right: 0;
           }
-          &:nth-child(4n + 1):nth-last-child(-n + 4) {
-            border-bottom: 0;
-            ~ li {
-              border-bottom: 0;
-            }
+          &:last-child {
+            border-right: 0;
           }
+          /* &:nth-child(4n + 1):nth-last-child(-n + 4) {
+              border-bottom: 0;
+              ~li {
+                border-bottom: 0;
+              }
+            } */
         }
       }
       .note {
@@ -435,17 +509,22 @@ export default {
       padding: 0 5px;
       border-radius: 5px;
     }
-    .ud-is-focus {
-      border-color: $orange;
-    }
     .contentBox {
-      margin-top: 10px;
       position: absolute;
       width: 80px*5;
       background: #fff;
       color: #3d85ff;
       font-weight: 14px;
       transform: translate(-40%);
+      display: none;
+    }
+    &:hover {
+      .ud-input {
+        border-color: $orange;
+      }
+      .contentBox {
+        display: block;
+      }
     }
     ul {
       list-style: none;
