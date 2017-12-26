@@ -6,73 +6,73 @@
         <div class="input"><i class="el-icon-search"></i><el-input v-model="searchkey" placeholder="请输入内容"></el-input></div>
       </div>
       <div class="add">
-        <el-button type="warning" @click="dialogTableVisible = true">新增地址</el-button>
+        <el-button type="warning" @click="newAddressModel = true">新增地址</el-button>
         <!-- 添加地址弹出窗 -->
-        <el-dialog :visible.sync="dialogTableVisible">
+        <el-dialog :visible.sync="newAddressModel">
           <div class="head"><img src="../../../assets/addAddress_icon.png" alt="">添加地址</div>
           <div class="main">
-            <div class="box addressCode">
+            <!-- <div class="box addressCode">
               <div class="title">地址编码</div>
               <div class="code">F1234</div>
-            </div>
-            <div class="box addressType">
-              <div class="title">地址类型</div>
-              <div class="type">
-                <div class="receive" :class="newAddressData['type']=='receive'?'active':''" @click="newAddressData['type']='receive'">收</div>
-                <div class="send" :class="newAddressData['type']=='send'?'active':''"  @click="newAddressData['type']='send'">发</div>
+            </div> -->
+            <el-form :model="newAddressData" :rules="newAddress" ref="newAddress" class="newAddress">
+              <div class="box addressType">
+                <div class="title">地址类型</div>
+                <div class="type">
+                  <div class="receive" :class="newAddressData['type']=='receive'?'active':''" @click="newAddressData['type']='receive'">收</div>
+                  <div class="send" :class="newAddressData['type']=='send'?'active':''"  @click="newAddressData['type']='send'">发</div>
+                </div>
               </div>
-            </div>
-            <div class="message">
-              <el-row>
-                <el-col :span="12">
+              <div class="message">
+                <div class="row">
                   <div class="name">
                     <div class="title">姓名</div>
-                    <el-input v-model="newAddressData['name']" placeholder="请输入内容"></el-input>
+                      <el-form-item prop="name">
+                        <el-input v-model="newAddressData.name" placeholder="请输入姓名"></el-input>
+                      </el-form-item>
                   </div>
-                </el-col>
-                <el-col :span="12">
                   <div class="id">
                     <div class="title">身份证</div>
-                    <el-input v-model="newAddressData['id']" placeholder="请输入内容"></el-input>
+                    <el-input v-model="newAddressData.id" placeholder="请输入内容"></el-input>
                   </div>
-                </el-col>
-                <el-col :span="12">
+                </div>
+                <div class="row">
                   <div class="phone">
                     <div class="title">手机号</div>
-                    <el-input v-model="newAddressData['phone']" placeholder="请输入内容"></el-input>
+                    <el-form-item prop="phone">
+                      <el-input v-model="newAddressData.phone" placeholder="请输入内容"></el-input>
+                    </el-form-item>
                   </div>
-                </el-col>
-                <el-col :span="12">
                   <div class="cellPhone">
                     <div class="title">固定电话</div>
-                    <el-input class="front" v-model="newAddressData['cellPhoneF']" placeholder="区号"></el-input>
-                    <el-input class="behind" v-model="newAddressData['cellPhoneB']" placeholder="号码"></el-input>
+                    <el-input class="front" v-model="newAddressData.cellPhoneF" placeholder="区号"></el-input>
+                    <el-input class="behind" v-model="newAddressData.cellPhoneB" placeholder="号码"></el-input>
                   </div>
-                </el-col>
-              </el-row>
-            </div>
-            <div class="box address">
-              <div class="title">所在区域</div>
-              <v-distpicker :province="newAddressData.address.province" :city="newAddressData.address.city" :area="newAddressData.address.area" @selected="onSelected"></v-distpicker>
-            </div>
-            <div class="addressDetial">
-              <div class="title">详细地址</div>
-              <el-input v-model="newAddressData['addressDetial']" placeholder="请输入内容"></el-input>
-            </div>
-            <div class="postalnum">
-              <div class="title">邮政编码</div>
-              <el-input v-model="newAddressData['postalnum']" placeholder="请输入内容"></el-input>
-            </div>
-            <div class="saveSubmit"><el-button type="warning">保存地址</el-button></div>
+                </div>
+              </div>
+              <div class="box address">
+                <div class="title">所在区域</div>
+                <v-distpicker @province='province' @city="city" @area="area" :province='newAddressData.province' :city='newAddressData.city' :area='newAddressData.area'></v-distpicker>
+              </div>
+              <div class="addressDetial">
+                <div class="title">详细地址</div>
+                <el-input v-model="newAddressData.addressDetial" placeholder="请输入内容"></el-input>
+              </div>
+              <div class="postalnum">
+                <div class="title">邮政编码</div>
+                <el-input v-model="newAddressData.postalnum" placeholder="请输入内容"></el-input>
+              </div>
+              <div class="saveSubmit"><el-button type="warning" @click="saveAddress('newAddress')">保存地址</el-button></div>
+            </el-form>
           </div>
         </el-dialog>
       </div>
       <div class="remove">
-        <div class="select" v-show="selectType">
+        <div class="select" v-show="editStatus">
           <el-button @click="toggle()" type="danger">选择</el-button>
         </div>
-        <div class="cancelSelect" v-show="!selectType">
-          <el-button type="info">删除</el-button>
+        <div class="cancelSelect" v-show="!editStatus">
+          <el-button type="info" @click="removeAddress">删除</el-button>
           <el-button type="danger"  @click="toggle()">取消选择</el-button>
         </div>
       </div>
@@ -91,7 +91,7 @@
             </el-dropdown-menu>
           </el-dropdown>
         </div>
-        <div class="number">编号</div>
+        <!-- <div class="number">编号</div> -->
         <div class="name">姓名</div>
         <div class="phone">手机号码</div>
         <div class="cellPhone">固定电话</div>
@@ -100,121 +100,239 @@
         <div class="addressDetial">纤细地址</div>
         <div class="postalcode">邮政编码</div>
       </div>
+      <!-- 删除地址模态框 -->
+      <div class="removeAddressModel">
+        <el-dialog width='500px' title="删除选中地址" :visible.sync="removeAddressModel">
+          <p>是否删除选中的<span>{{removeAddressNo}}</span>条记录</p>
+          <div slot="footer" class="dialog-footer">
+            <el-button type="info" size="mini" @click="removeAddressModel = false">取 消</el-button>
+            <el-button type="warning" size="mini" @click="removeAddressSubmit">确 定</el-button>
+          </div>
+        </el-dialog>
+      </div>
       <div @click="selectItem(index)" class="body wrapper" v-for="(item,index) in toggleTableData" :key='index'>
         <div class="addresstype">
           <img :src="getAddressTypeImg(item.type)" alt="">
         </div>
-        <div class="number">{{item.number}}</div>
-        <div class="name">{{item.name}}</div>
-        <div class="phone">{{item.phone}}</div>
-        <div class="cellPhone">{{item.cellPhone}}</div>
-        <div class="id">{{item.id}}</div>
-        <div class="address">{{item.address}}</div>
-        <div class="addressDetial">{{item.addressDetial}}</div>
-        <div class="postalcode">{{item.postalcode}}<i v-show="editStatus" class="el-icon-edit-outline"></i><i class="deleticon" v-show="!editStatus&&tableData[index].remove"></i></div>
+        <!-- <div class="number">{{item.number}}</div> -->
+        <div class="name">{{item.contactName}}</div>
+        <div class="phone">{{item.contactMobile}}</div>
+        <div class="cellPhone">{{item.contactPhone}}</div>
+        <div class="id">{{item.identityCard}}</div>
+        <div class="address">{{item.region}}</div>
+        <div class="addressDetial">{{item.detailAddress}}</div>
+        <div class="postalcode">{{item.postCode}}<i v-show="editStatus" class="el-icon-edit-outline"></i><i class="deleticon" v-show="!editStatus&&toggleTableData[index].remove"></i></div>
       </div>
     </div>
   </div>
 </template>
 <script>
 import VDistpicker from "v-distpicker";
+import { mapGetters } from "vuex";
 export default {
   components: {
     VDistpicker
   },
   data() {
     return {
-      newAddressData:{
-        type:'receive',
-        name:'',
-        id:'',
-        phone:'',
-        cellPhoneF:'', // 区号
-        cellPhoneB:'', // 号码
-        address:{ province: '广东省', city: '广州市', area: '海珠区' },
-        addressDetial:'',
-        postalnum:''
+      newAddressData: {
+        type: "receive",
+        name: "",
+        id: "",
+        phone: "",
+        cellPhoneF: "", // 区号
+        cellPhoneB: "", // 号码
+        province: "",
+        city: "",
+        area: "",
+        addressDetial: "",
+        postalnum: ""
       },
-      dialogTableVisible: false,
+      newAddressModel: false,
+      newAddress: {
+        name: [{ required: true, message: "请输入姓名", trigger: "blur" }],
+        phone: [{ required: true, message: "请输入手机号", trigger: "blur" }]
+      },
       searchkey: "",
       editStatus: true,
       addressTypeImg: {
         receive: require("../../../assets/type1.png"), // 收
         send: require("../../../assets/type2.png") // 发
       },
-      selectType: true,
+      // selectType: true,
       addressType: "all", //  all , send , receive
-      tableData: [
-        {
-          remove: false,
-          type: "receive",
-          number: "F001",
-          name: "李雷雷",
-          phone: "18299099009",
-          cellPhone: "010-88886666",
-          id: "1234567890123456",
-          address: "北京市-顺义区",
-          addressDetial: "顺高路北法信段2号",
-          postalcode: "100043"
-        },
-        {
-          remove: false,
-          type: "receive",
-          number: "F001",
-          name: "李雷雷",
-          phone: "18299099009",
-          cellPhone: "010-88886666",
-          id: "1234567890123456",
-          address: "北京市-顺义区",
-          addressDetial: "顺高路北法信段2号",
-          postalcode: "100043"
-        },
-        {
-          remove: false,
-          type: "send",
-          number: "F001",
-          name: "李雷雷",
-          phone: "18299099009",
-          cellPhone: "010-88886666",
-          id: "1234567890123456",
-          address: "北京市-顺义区",
-          addressDetial: "顺高路北法信段2号",
-          postalcode: "100043"
-        },
-        {
-          remove: false,
-          type: "send",
-          number: "F001",
-          name: "李雷雷",
-          phone: "18299099009",
-          cellPhone: "010-88886666",
-          id: "1234567890123456",
-          address: "北京市-顺义区",
-          addressDetial: "顺高路北法信段2号",
-          postalcode: "100043"
-        }
-      ]
+      sendAddressList: [],
+      receiveAddressList: [],
+      storeRemoveAddress: [], // 储存要删除地址的id和type
+      removeAddressModel: false, // 删除地址模态框控制显示
+      removeAddressNo: 0 //删除地址的个数
     };
   },
   mounted() {
-    let length = this.tableData.length;
-    for (let i = 0; i < length; i++) {
-      // this.removeItems.push(false);
-      this.$set(this.tableData, "remove", false);
-    }
+    this.getSendAddressList();
+    this.getReceiveAddressList();
   },
   methods: {
-    onSelected(data) {
-      console.log(data);
+    province(data) {
+      this.newAddressData.province = data.value == '省'?'':data.value;
+    },
+    city(data) {
+      this.newAddressData.city = data.value == '市'?'':data.value;
+    },
+    area(data) {
+      this.newAddressData.area = data.value == '区'?'':data.value;
+    },
+    saveAddress(formName) {
+
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          if (this.newAddressData.type == "send") {
+            var addressType = 0;
+          } else if (this.newAddressData.type == "receive") {
+            var addressType = 1;
+          }
+          this.axios
+            .post("/app/v1/address/addAddress", {
+              addressId: 0,
+              addressType: addressType,
+              contactMobile: this.newAddressData.phone,
+              contactName: this.newAddressData.name,
+              contactPhone:
+                this.newAddressData.cellPhoneF + this.newAddressData.cellPhoneB,
+              detailAddress: this.newAddressData.addressDetial,
+              id: this.id,
+              identityCard: this.newAddressData.id,
+              postCode: this.newAddressData.postalnum,
+              region:
+                this.newAddressData.province +
+                this.newAddressData.city +
+                this.newAddressData.area,
+              token: this.token
+            })
+            .then(data => {
+              if (data.data.code == 1) {
+
+                this.newAddressModel = false;
+                this.getSendAddressList();
+                this.getReceiveAddressList();
+              }
+              if (data.data.code == 10110) {
+                this.this.$message({
+                  message: "身份证格式错误",
+                  type: "warning"
+                });
+              }
+              if (data.data.code == 10101) {
+                if (data.data.code == 10110) {
+                  this.this.$message({
+                    message: "手机号格式错误",
+                    type: "warning"
+                  });
+                }
+              }
+            });
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
+    removeAddress() {
+      this.storeRemoveAddress = [];
+      this.removeAddressModel = true;
+      this.toggleTableData.forEach(ele => {
+        if (ele.remove == true) {
+          this.storeRemoveAddress.push({
+            addressId: ele.id,
+            addressType: ele.type
+          });
+        }
+      });
+      this.removeAddressNo = this.storeRemoveAddress.length;
+    },
+    removeAddressSubmit() {
+      this.storeRemoveAddress.forEach(ele => {
+        this.axios
+          .post("/app/v1/address/deleteAddress", {
+            addressId: ele.addressId,
+            addressType: ele.addressType,
+            id: this.id,
+            token: this.token
+          })
+          .then(data => {
+            this.removeAddressModel = false;
+            if (data.data.code == 1) {
+              this.$message({
+                message: `成功删除${this.removeAddressNo}条地址`,
+                type: "success"
+              });
+              this.editStatus = true;
+              this.getSendAddressList();
+              this.getReceiveAddressList();
+            } else {
+              this.editStatus = true;
+              this.$message({
+                message: "删除地址失败",
+                type: "error"
+              });
+            }
+          });
+      });
+    },
+    getSendAddressList() {
+      this.axios
+        .post("/app/v1/address/queryAddress", {
+          addressId: 0,
+          addressType: 0,
+          id: this.id,
+          token: this.token
+        })
+        .then(data => {
+          if (data.data.code == 1) {
+            this.sendAddressList = data.data.data;
+            let length = this.sendAddressList.senderList.length;
+            for (let i = 0; i < length; i++) {
+              this.$set(this.sendAddressList.senderList[i], "remove", false);
+            }
+          }
+          if (data.data.code == 10001) {
+            this.$message.error("登录已失效，请重新登录");
+          }
+        });
+    },
+    getReceiveAddressList() {
+      this.axios
+        .post("/app/v1/address/queryAddress", {
+          addressId: 0,
+          addressType: 1,
+          id: this.id,
+          token: this.token
+        })
+        .then(data => {
+          if (data.data.code == 1) {
+            this.receiveAddressList = data.data.data;
+            let length = this.receiveAddressList.receiverList.length;
+            for (let i = 0; i < length; i++) {
+              this.$set(
+                this.receiveAddressList.receiverList[i],
+                "remove",
+                false
+              );
+            }
+          }
+          if (data.data.code == 10001) {
+            this.$message.error("登录已失效，请重新登录");
+          }
+        });
     },
     toggle() {
-      let length = this.tableData.length;
+      let length = this.toggleTableData.length;
       if (this.editStatus == false) {
         for (let i = 0; i < length; i++) {
-          this.tableData[i]["remove"] = false;
+          this.toggleTableData[i]["remove"] = false;
         }
       }
-      this.selectType = !this.selectType;
+      // this.selectType = !this.selectType;
       this.editStatus = !this.editStatus;
     },
     handleCommand(command) {
@@ -222,10 +340,10 @@ export default {
       this.addressType = command;
     },
     getAddressTypeImg(type) {
-      if (type == "receive") {
+      if (type == "1") {
         return this.addressTypeImg.receive;
       }
-      if (type == "send") {
+      if (type == "0") {
         return this.addressTypeImg.send;
       }
     },
@@ -233,18 +351,27 @@ export default {
       if (this.editStatus) {
         return;
       }
-      this.tableData[index].remove = !this.tableData[index].remove;
+      this.toggleTableData[index].remove = !this.toggleTableData[index].remove;
     }
   },
   computed: {
+    ...mapGetters(["id", "token"]),
     toggleTableData() {
       if (this.addressType == "all") {
-        return this.tableData;
+        if (
+          "senderList" in this.sendAddressList &&
+          "receiverList" in this.receiveAddressList
+        ) {
+          return [
+            ...this.sendAddressList.senderList,
+            ...this.receiveAddressList.receiverList
+          ];
+        }
       }
       if (this.addressType == "receive") {
         let newTableData = [];
-        this.tableData.forEach(element => {
-          if (element.type == "receive") {
+        this.receiveAddressList.receiverList.forEach(element => {
+          if (element.type == "1") {
             newTableData.push(element);
           }
         });
@@ -252,8 +379,8 @@ export default {
       }
       if (this.addressType == "send") {
         let newTableData = [];
-        this.tableData.forEach(element => {
-          if (element.type == "send") {
+        this.sendAddressList.senderList.forEach(element => {
+          if (element.type == "0") {
             newTableData.push(element);
           }
         });
@@ -356,13 +483,13 @@ export default {
                 }
               }
             }
-            .addressCode {
-              .code {
-                color: #f52831;
-                font-weight: 700;
-                font-size: 16px;
-              }
-            }
+            // .addressCode {
+            //   .code {
+            //     color: #f52831;
+            //     font-weight: 700;
+            //     font-size: 16px;
+            //   }
+            // }
             .addressType {
               .type {
                 flex: 1;
@@ -381,61 +508,61 @@ export default {
                 }
                 .receive.active,
                 .send.active {
-                  background-color:#F52831;
+                  background-color: #f52831;
                 }
               }
             }
             .message {
-              .name,
-              .id,
-              .phone,
-              .cellPhone {
-                position: relative;
-                padding-right: 40px;
-                .el-input {
-                  input {
-                    border: none;
-                    border-bottom: 1px solid #f0f0f0;
-                    padding-left: 120px;
-                  }
-                }
-                .title {
-                  position: absolute;
-                  top: 10px;
-                  left: 0px;
-                  z-index: 99;
-                  width: 100px;
-                  text-align: justify;
-                  &::after {
-                    content: "";
-                    display: inline-block;
-                    width: 100%;
-                    overflow: hidden;
-                    height: 0;
-                  }
-                }
-              }
-              .cellPhone {
+              .row {
                 display: flex;
-                .el-input {
-                  width: 50%;
-                }
-                .front {
+                .name,
+                .id,
+                .phone,
+                .cellPhone {
+                  flex: 1;
                   position: relative;
-                  &::after {
-                    content: "";
-                    display: inline-block;
-                    width: 1px;
-                    height: 50%;
-                    background-color: #e0e0e0;
+                  padding-right: 40px;
+                  .el-input {
+                    input {
+                      border: none;
+                      border-bottom: 1px solid #f0f0f0;
+                      padding-left: 120px;
+                    }
+                  }
+                  .title {
                     position: absolute;
                     top: 10px;
-                    right: 0;
+                    left: 0px;
+                    z-index: 99;
+                    width: 100px;
+                    text-align-last: justify;
+                  }
+                  .el-form-item__error {
+                    left: 120px;
                   }
                 }
-                .behind {
-                  input {
-                    padding-left: 20px;
+                .cellPhone {
+                  display: flex;
+                  .el-input {
+                    width: 50%;
+                  }
+                  .front {
+                    position: relative;
+                    &::after {
+                      content: "";
+                      display: inline-block;
+                      width: 1px;
+                      height: 50%;
+                      background-color: #e0e0e0;
+                      position: absolute;
+                      top: 10px;
+                      right: 0;
+                    }
+                  }
+                  .behind {
+                    input {
+                      padding-left: 20px;
+                    }
                   }
                 }
               }
@@ -511,12 +638,31 @@ export default {
     padding: 20px 30px 0 30px;
     .wrapper {
       display: grid;
-      grid-template-columns: 80px 80px 80px 80px repeat(5, 1fr);
+      grid-template-columns: 80px 80px 80px repeat(5, 1fr);
     }
     .head {
       height: 40px;
       line-height: 40px;
       text-align: center;
+    }
+    .removeAddressModel {
+      .el-dialog {
+        .el-dialog__header {
+          background-color: #fccf00;
+        }
+        .el-dialog__body {
+          padding: 10px 20px;
+          p {
+            text-align: center;
+            color: #0b0b0b;
+            font-size: 18px;
+            span {
+              color: #f52831;
+              margin: 0 4px;
+            }
+          }
+        }
+      }
     }
     .body {
       background-color: #fff;
