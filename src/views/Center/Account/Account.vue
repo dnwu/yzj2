@@ -20,7 +20,7 @@
               </el-rate>
             </div>
             <div class="member">
-              <div class="integral">会员积分：<span class="score">{{userInfo.level.experience}}</span></div>
+              <div class="integral">会员积分：<span class="score" v-if="'level' in userInfo">{{userInfo.level.experience}}</span></div>
               <div class="doings">
                 <el-badge
                   :value='activity'
@@ -66,7 +66,7 @@
       <div class="main-bottom">
         <div class="account-info">
           <div class="triangle">
-            <div><span>账</span><span>号</span><span>信</span><span>息</span></div>
+            <p>账号信息</p>
           </div>
           <div class="account-coding">
             <span class="title">会员编码</span><span class="colon">:</span><span class="content">无</span>
@@ -92,7 +92,7 @@
         </div>
         <div class="personal-info">
           <div class="triangle">
-            <div><span>个</span><span>人</span><span>信</span><span>息</span></div>
+            <p>个人信息</p>
           </div>
           <div class="name">
             <span class="title">会员姓名</span><span class="colon">:</span><span class="content">{{userInfo.fullName}}</span>
@@ -121,11 +121,11 @@ import { mapGetters } from "vuex";
 export default {
   data() {
     return {
-      starNum: 3,  //等级
+      starNum: 3, //等级
       score: 3450,
       confirmNum: 2,
       payNum: 3,
-      activity:0,  // 活动
+      activity: 0, // 活动
       receivedNum: 4,
       userInfo: {}
     };
@@ -134,8 +134,8 @@ export default {
     this.getUserInfo();
   },
   methods: {
-    resetPassword(id){
-      this.$router.push('/center/change_password')
+    resetPassword(id) {
+      this.$router.push("/center/change_password");
     },
     getUserInfo() {
       this.axios
@@ -276,9 +276,9 @@ export default {
         height: 0;
         border: 38px solid #fccf00;
         border-color: #fccf00 transparent transparent #fccf00;
-        > div {
-          display: inline-block;
-          transform: rotate(-45deg) translate(-12px, -40px);
+        > p {
+          width: 100px;
+          transform: rotate(-45deg) translate(4px, -65px);
           color: #fff;
         }
       }

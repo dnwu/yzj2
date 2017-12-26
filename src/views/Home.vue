@@ -8,7 +8,7 @@
       </el-carousel>
       <div class="search-input">
         <el-input placeholder="请输入订单号进行查询" icon="search" v-model="search" :on-icon-click="searchOrder"></el-input>
-        <button class="search-btn" type="button">马上查单</button>
+        <button class="search-btn" @click="getOrderTrack('/home/order_track_home')" type="button">马上查单</button>
       </div>
     </div>
     <div class="service-container">
@@ -118,6 +118,14 @@
       }
     },
     methods: {
+      getOrderTrack(path){
+        this.$router.push({
+          path:path,
+          query:{
+            orderNo:this.search
+          }
+        })
+      },
       getHeadImgHeight (){
         let width = document.body.clientWidth;
         return width / 1920 * 650 + 'px';

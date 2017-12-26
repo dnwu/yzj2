@@ -99,7 +99,9 @@ export default {
         }
       });
     },
-    cancle() {}
+    cancle() {
+      this.$router.go(-1)
+    }
   },
   computed: {
     ...mapGetters([
