@@ -2,7 +2,7 @@
   <div class="account">
     <div class="head">
       <div class="title">账号信息</div>
-      <div class="sign"><span>每日签到</span></div>
+      <!-- <div class="sign"><span>每日签到</span></div> -->
     </div>
     <div class="main">
       <div class="main-top">
@@ -75,7 +75,10 @@
             <span class="title">会员账号</span><span class="colon">:</span><span class="content">{{userInfo.account}}</span>
           </div>
           <div class="pass">
-            <span class="title">会员密码</span><span class="colon">:</span><span class="btn"><el-button type="info" size='mini' @click="resetPassword(userInfo.id)">修改</el-button></span>
+            <span class="title">会员密码</span>
+            <span class="colon">:</span>
+            <div class="content"></div>
+            <span class="btn"><el-button type="info" size='mini' @click="resetPassword(userInfo.id)">修改</el-button></span>
           </div>
           <div class="phonenum">
             <span class="title">手机号</span><span class="colon">:</span><span class="content">{{userInfo.phone}}</span><span class="btn"><el-button type="info" size='mini'>修改</el-button></span>
@@ -284,6 +287,12 @@ export default {
       }
       .account-info {
         flex: 3;
+        >div{
+          display: flex;
+          .content{
+            width: 200px;
+          }
+        }
       }
       .personal-info {
         flex: 2;

@@ -148,7 +148,7 @@ export default {
         repass: [{ validator: validaterepass, trigger: "blur" }],
         phone: [
           { required: false, message: "请输入固定电话", trigger: "blur" },
-          { min: 3, max: 60, message: "长度在 3 到 60 个字符", trigger: "blur" }
+          { min: 3, max: 60, message: "请输入合适正确的座机号", trigger: "blur" }
         ],
         email: [
           { required: true, message: "请输入电子邮箱", trigger: "blur" },
@@ -216,14 +216,14 @@ export default {
         if (valid) {
           this.axios
             .post("/app/v1/user/userRegister", {
-              email: this.registerForm.email,
-              identityCard: this.registerForm.id,
-              userName: this.registerForm.name,
-              password: getmd5(this.registerForm.pass),
-              phone: this.registerForm.mobile,
-              smsCode: this.registerForm.testNum,
-              telephone: this.registerForm.phone,
-              name: this.registerForm.realname
+              email: this.registerForm.email,       //邮件
+              identityCard: this.registerForm.id,   //身份证
+              userName: this.registerForm.name,    //用户名
+              password: getmd5(this.registerForm.pass),    // 密码
+              phone: this.registerForm.mobile,    // 手机号
+              smsCode: this.registerForm.testNum,   // 验证码
+              telephone: this.registerForm.phone,   //固定电话
+              name: this.registerForm.realname    // 姓名
             })
             .then(data => {
               // console.log(data);

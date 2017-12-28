@@ -313,11 +313,7 @@ export default {
             this.receiveAddressList = data.data.data;
             let length = this.receiveAddressList.receiverList.length;
             for (let i = 0; i < length; i++) {
-              this.$set(
-                this.receiveAddressList.receiverList[i],
-                "remove",
-                false
-              );
+              this.$set(this.receiveAddressList.receiverList[i],"remove",false);
             }
           }
           if (data.data.code == 10001) {

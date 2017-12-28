@@ -68,47 +68,28 @@ export default {
   created() {
     this.fullPath = this.$route.fullPath;
     console.log(this.fullPath);
-    switch(this.fullPath){
-      case '/center/account':
+    if(this.fullPath.includes('account')){
       this.activeIndex = 0
-      break;
-      case '/center/company_info':
+    }else if(this.fullPath.includes('company_info')){
       this.activeIndex = 1
-      break;
-      case '/center/doings':
+    }else if(this.fullPath.includes('server_info')){
       this.activeIndex = 2
-      break;
-      case '/center/experience':
+    }else if(this.fullPath.includes('son_account')){
       this.activeIndex = 3
-      break;
-      case '/center/integral':
+    }else if(this.fullPath.includes('order_taking')){
       this.activeIndex = 4
-      break;
-      case '/center/address':
+    }else if(this.fullPath.includes('booking_space')){
       this.activeIndex = 5
-      break;
-      case '/center/son_account':
+    }else if(this.fullPath.includes('making_bill')){
       this.activeIndex = 6
-      break;
-      case '/center/online_product':
+    }else if(this.fullPath.includes('airlift')){
       this.activeIndex = 7
-      break;
-      case '/center/client_product':
+    }else if(this.fullPath.includes('land_transport')){
       this.activeIndex = 8
-      break;
-      case '/center/order_search':
+    }else if(this.fullPath.includes('airport_operation')){
       this.activeIndex = 9
-      break;
-      case '/center/order_track':
+    }else if(this.fullPath.includes('value_add')){
       this.activeIndex = 10
-      break;
-      case '/center/ticket_info_egis':
-      this.activeIndex = 11
-      break;
-      case '/center/bill_look':
-      this.activeIndex = 12
-      break;
-
     }
   },
   methods: {
