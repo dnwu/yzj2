@@ -8,6 +8,7 @@ import router from './router'
 import store from './store'
 import VueCookie from 'vue-cookie'
 import axios from '@/config/axios'
+import '@/config/number'
 import EasyScroll from 'easyscroll'
 
 Vue.prototype.axios = axios

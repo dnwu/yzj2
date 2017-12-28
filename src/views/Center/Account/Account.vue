@@ -9,18 +9,19 @@
         <div class="base-info">
           <div class="head-img"><img src="../../../assets/head_img.png"></div>
           <div class="info">
-            <p class="company-name">公司名称 {{userInfo.fullName}}</p>
-            <div class="star">
+            <p class="company-name">会员名称 {{userInfo.fullName}}</p>
+            <p class="account-type">会员类型 {{userInfo.accountType}}</p>
+            <div class="star" v-if="'level' in this.userInfo">
               <el-rate
-                v-model='starNum'
+                v-model='starNo'
                 disabled
-                :max='starNum'
+                :max='starNo'
                 text-color="#ff9900"
                 score-template="{value}">
               </el-rate>
             </div>
             <div class="member">
-              <div class="integral">会员积分：<span class="score" v-if="'level' in userInfo">{{userInfo.level.experience}}</span></div>
+              <div class="integral">会员积分：<span class="score" v-if="'integral' in userInfo">{{userInfo.integral}}</span></div>
               <div class="doings">
                 <el-badge
                   :value='activity'
@@ -34,24 +35,24 @@
         </div>
         <div class="goods-info">
           <div class="confirm">
-            <el-badge :value="userInfo.waitSubmitOrders " class="item">
+            <el-badge :value="userInfo.waitSubmitOrders" class="item">
               <img src="../../../assets/account_icon1.png">
             </el-badge>
-            <p>{{ userInfo.waitSubmitOrders   }}</p>
+            <p>{{userInfo.waitSubmitOrders}}</p>
             <p>代提交</p>
           </div>
           <div class="pay">
             <el-badge :value="userInfo.waitPayOrders" class="item">
               <img src="../../../assets/account_icon2.png">
             </el-badge>
-            <p>{{userInfo.waitPayOrders }}</p>
+            <p>{{userInfo.waitPayOrders}}</p>
             <p>待支付</p>
           </div>
           <div class="received">
             <el-badge :value="userInfo.waitReceiveOrders" class="item">
               <img src="../../../assets/account_icon3.png">
             </el-badge>
-            <p>{{ userInfo.waitReceiveOrders }}</p>
+            <p>{{ userInfo.waitReceiveOrders}}</p>
             <p>待收货</p>
           </div>
           <div class="done">
@@ -69,15 +70,15 @@
             <p>账号信息</p>
           </div>
           <div class="account-coding">
-            <span class="title">会员编码</span><span class="colon">:</span><span class="content">无</span>
+            <span class="title">会员编码</span><span class="colon">:</span><span class="content"></span>
           </div>
           <div class="account">
-            <span class="title">会员账号</span><span class="colon">:</span><span class="content">{{userInfo.account}}</span>
+            <span class="title">账号</span><span class="colon">:</span><span class="content">{{userInfo.account}}</span>
           </div>
           <div class="pass">
-            <span class="title">会员密码</span>
+            <span class="title">密码</span>
             <span class="colon">:</span>
-            <div class="content"></div>
+            <div class="content">***********</div>
             <span class="btn"><el-button type="info" size='mini' @click="resetPassword(userInfo.id)">修改</el-button></span>
           </div>
           <div class="phonenum">
@@ -86,9 +87,9 @@
           <div class="email">
             <span class="title">邮箱</span><span class="colon">:</span><span class="content">{{userInfo.email}}</span><span class="btn"><el-button type="info" size='mini'>修改</el-button></span>
           </div>
-          <div class="account-type">
+          <!-- <div class="account-type">
             <span class="title">账号类型</span><span class="colon">:</span><span class="content">{{userInfo.accountType}}</span>
-          </div>
+          </div> -->
           <div class="account-level">
             <span class="title">账号级别</span><span class="colon">:</span><span class="content">{{userInfo.accountLevel}}</span>
           </div>
@@ -98,16 +99,16 @@
             <p>个人信息</p>
           </div>
           <div class="name">
-            <span class="title">会员姓名</span><span class="colon">:</span><span class="content">{{userInfo.fullName}}</span>
+            <span class="title">姓名</span><span class="colon">:</span><span class="content">{{userInfo.fullName}}</span>
           </div>
           <div class="id">
             <span class="title">身份证号码</span><span class="colon">:</span><span class="content">{{userInfo.identityCard}}</span>
           </div>
           <div class="cellphone">
-            <span class="title">固定电话</span><span class="colon">:</span><span class="content">{{userInfo.telephone}}</span>
+            <span class="title">固定电话</span><span class="colon">:</span><span class="content" v-if="'telephone' in userInfo">{{userInfo.telephone}}</span>
           </div>
           <div class="detial">
-            <span class="title">详细地址</span><span class="colon">:</span><span class="content">无</span>
+            <span class="title">详细地址</span><span class="colon">:</span><span class="content" v-if="'address' in userInfo">{{userInfo.address}}</span>
           </div>
           <div class="revise">
             <el-button
@@ -121,20 +122,18 @@
 </template>
 <script>
 import { mapGetters } from "vuex";
+// import { logout } from '@/tools/logout'
 export default {
+  // mixins:[ logout ],
   data() {
     return {
-      starNum: 3, //等级
-      score: 3450,
-      confirmNum: 2,
-      payNum: 3,
-      activity: 0, // 活动
-      receivedNum: 4,
+      activity:'',
       userInfo: {}
     };
   },
   created() {
     this.getUserInfo();
+    console.log(0.1.add(0.2));
   },
   methods: {
     resetPassword(id) {
@@ -150,12 +149,19 @@ export default {
           console.log(data.data.data);
           if (data.data.code == "1") {
             this.userInfo = data.data.data;
+          }else if(data.data.code == 10001){
+            // this.logout()
           }
         });
     }
   },
   computed: {
-    ...mapGetters(["token", "id"])
+    ...mapGetters(["token", "id"]),
+    starNo(){
+      if('level' in this.userInfo){
+        return parseInt(this.userInfo.level.level)
+      }
+    }
   }
 };
 </script>
@@ -219,7 +225,7 @@ export default {
         }
         .info {
           flex: 1;
-          .company-name {
+          .company-name,.account-type {
             font-size: 16px;
             color: #999999;
           }
@@ -287,9 +293,11 @@ export default {
       }
       .account-info {
         flex: 3;
-        >div{
+        > div:not(".triangle") {
           display: flex;
-          .content{
+        }
+        > div {
+          .content {
             width: 200px;
           }
         }

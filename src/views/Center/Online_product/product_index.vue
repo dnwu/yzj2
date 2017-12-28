@@ -86,8 +86,14 @@
                 <span class="nav-select-text">{{productSearchResult.airportStart.name}}</span>
                 <div class="nav-select-detail">
                   <div class="detail-list1 detail-list" v-for="(item,index) in productSearchResult.airportStart.priceDTOS" :key="index">
-                    <span class="detail-name">{{item.name}}</span>
-                    <span class="detail-cost">{{item.price}}元/千克</span>
+                    <template v-if="item.priceType == 11">
+                      <span class="detail-name">{{item.name}}</span>
+                      <span class="detail-cost">{{item.price}}元/千克</span>
+                    </template>
+                    <template v-if="item.priceType == 12">
+                      <span class="detail-name">{{item.name}}</span>
+                      <span class="detail-cost">{{item.price}}元/单</span>
+                    </template>
                   </div>
                   <!-- <div class="detail-list2 detail-list">
                     <span class="detail-name">{{productSearchResult.airportStart.priceDTOS[1].name}}</span>
@@ -104,8 +110,14 @@
                 <span class="nav-select-text">{{productSearchResult.airportEnd.name}}</span>
                 <div class="nav-select-detail">
                   <div class="detail-list" v-for="(item,index) in productSearchResult.airportEnd.priceDTOS" :key="index">
-                    <span class="detail-name">{{item.name}}</span>
-                    <span class="detail-cost">{{item.price}}元/千克</span>
+                    <template v-if="item.priceType == 11">
+                      <span class="detail-name">{{item.name}}</span>
+                      <span class="detail-cost">{{item.price}}元/千克</span>
+                    </template>
+                    <template v-if="item.priceType == 12">
+                      <span class="detail-name">{{item.name}}</span>
+                      <span class="detail-cost">{{item.price}}元/单</span>
+                    </template>
                   </div>
                 </div>
                 <div class="detail-btn-box"></div>
@@ -912,6 +924,7 @@ export default {
     },
 
     // 始发港交货费
+    // 这里要用number.js里边的封装的函数 。精确浮点数
     airportStartFee() {
       if (this.getResultSuccess) {
         if (this.selectServer.airportStart) {
@@ -919,23 +932,29 @@ export default {
           let totalUnivalent = 0;
           let totalWeight = this.searchData.goodsWeight;
           let arr = [];
+          let fixPay = 0
           priceDTOS.forEach(ele => {
-            if (ele.minPrice < ele.price * totalWeight) {
-              arr.push(ele.price * totalWeight);
-            } else {
-              arr.push(ele.minPrice);
+            if(ele.priceType == 12){
+              fixPay = fixPay.add(parseFloat(ele.price))
+            }else if(ele.priceType == 11){
+              if (ele.minPrice < parseFloat(ele.price).mul(totalWeight)) {
+                arr.push(parseFloat(ele.price).mul(totalWeight));
+              } else {
+                arr.push(ele.minPrice);
+              }
             }
           });
           for (let i = 0; i < arr.length; i++) {
-            totalUnivalent += parseFloat(arr[i]);
+            totalUnivalent =totalUnivalent.add(parseFloat(arr[i]));
           }
-          return totalUnivalent
+          return parseFloat(totalUnivalent).add(parseFloat(fixPay))
         }
       } else {
         return 0;
       }
     },
     // 目的港提货费
+    // 这里要用number.js里边的封装的函数 。精确浮点数
     airportEndFee() {
       if (this.getResultSuccess) {
         if (this.selectServer.airportEnd) {
@@ -943,17 +962,22 @@ export default {
           let totalUnivalent = 0;
           let totalWeight = this.searchData.goodsWeight;
           let arr = [];
+          let fixPay = 0
           priceDTOS.forEach(ele => {
-            if (ele.minPrice < ele.price * totalWeight) {
-              arr.push(ele.price * totalWeight);
-            } else {
-              arr.push(ele.minPrice);
+            if(ele.priceType == 12){
+              fixPay = fixPay.add(parseFloat(ele.price))
+            }else if(ele.priceType == 11){
+              if (ele.minPrice < parseFloat(ele.price).mul(totalWeight)) {
+                arr.push(parseFloat(ele.price).mul(totalWeight));
+              } else {
+                arr.push(ele.minPrice);
+              }
             }
           });
           for (let i = 0; i < arr.length; i++) {
-            totalUnivalent += parseFloat(arr[i]);
+            totalUnivalent =totalUnivalent.add(parseFloat(arr[i]));
           }
-          return totalUnivalent;
+          return parseFloat(totalUnivalent).add(parseFloat(fixPay))
         }
       } else {
         return 0;
