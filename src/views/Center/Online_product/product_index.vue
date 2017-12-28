@@ -904,10 +904,9 @@ export default {
     // 航空运费
     airTransFee() {
       if (this.getResultSuccess) {
-        let totalUnivalent = this.productSearchResult.airfreightDTO
-          .airfreightCharge;
-        let totalWeight = this.searchData.goodsWeight;
-        return totalUnivalent * totalWeight;
+        let totalUnivalent = this.productSearchResult.airfreightDTO.airfreightCharge;
+        let totalWeight = parseFloat(this.searchData.goodsWeight);
+        return parseFloat(totalUnivalent).mul(totalWeight);
       } else {
         return 0;
       }
@@ -916,8 +915,8 @@ export default {
     airOilAnnexFee() {
       if (this.getResultSuccess) {
         let totalUnivalent = this.productSearchResult.airfreightDTO.fuelCharge;
-        let totalWeight = this.searchData.goodsWeight;
-        return totalUnivalent * totalWeight;
+        let totalWeight = parseFloat(this.searchData.goodsWeight);
+        return parseFloat(totalUnivalent).mul(totalWeight);
       } else {
         return 0;
       }
@@ -930,7 +929,7 @@ export default {
         if (this.selectServer.airportStart) {
           let priceDTOS = this.productSearchResult.airportStart.priceDTOS;
           let totalUnivalent = 0;
-          let totalWeight = this.searchData.goodsWeight;
+          let totalWeight =parseFloat(this.searchData.goodsWeight);
           let arr = [];
           let fixPay = 0
           priceDTOS.forEach(ele => {
@@ -960,7 +959,7 @@ export default {
         if (this.selectServer.airportEnd) {
           let priceDTOS = this.productSearchResult.airportEnd.priceDTOS;
           let totalUnivalent = 0;
-          let totalWeight = this.searchData.goodsWeight;
+          let totalWeight = parseFloat(this.searchData.goodsWeight);
           let arr = [];
           let fixPay = 0
           priceDTOS.forEach(ele => {

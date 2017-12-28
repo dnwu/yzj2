@@ -133,7 +133,7 @@ export default {
   },
   created() {
     this.getUserInfo();
-    console.log(0.1.add(0.2));
+    // console.log(0.000001.div(0.0001));  // number.js浮点数精度问题
   },
   methods: {
     resetPassword(id) {
