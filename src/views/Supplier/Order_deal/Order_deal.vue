@@ -37,7 +37,7 @@
                 <div class="item" :class="{not:!serviceStatus.serviceB}"><span class="get el-icon-circle-check"></span><span>始发港交货</span></div>
                 <div class="item" :class="{not:!serviceStatus.serviceC}"><span class="get el-icon-circle-check"></span><span>目的港提货</span></div>
                 <div class="item" :class="{not:!serviceStatus.serviceD}"><span class="get el-icon-circle-check"></span><span>上门取货</span></div>
-                <div class="item" :class="{not:!serviceStatus.serviceE}"><span class="get el-icon-circle-check"></span><span>落地配送</span></div>
+                <div class="item" :class="{not:!serviceStatus.serviceE}"><span class="get el-icon-circle-check"></span><span>落地配</span></div>
               </div>
             </div>
             <!--<div class="box increaseserver">
@@ -53,7 +53,7 @@
             <p>{{hnaOrder.statusName}}</p>
           </div>
           <div class="right">
-            <el-button type="danger" @click="goto('/supplier/order_track')">订单跟踪</el-button>
+            <el-button type="danger" @click="viewOrder">订单跟踪</el-button>
           </div>
         </div>
       </div>
@@ -68,16 +68,16 @@
             <div class="model-main">
               <div class="left">
                 <div class="item flightNumber">
-                  <span class="key">预定航班：</span><span class="value">HU7211</span>
+                  <span class="key">预定航班：</span><span class="value">{{hnaOrder.flightNo}}</span>
                 </div>
                 <div class="item flightData">
-                  <span class="key">航班时间：</span><span class="value">2017-10-10</span>
+                  <span class="key">航班时间：</span><span class="value">{{hnaOrder.flightDate}}</span>
                 </div>
                 <div class="item flighttime">
-                  <span class="key">航班时刻：</span><span class="value">10:10</span>
+                  <span class="key">航班时刻：</span><span class="value">{{hnaOrder.starHour}}-{{hnaOrder.endHour}}</span>
                 </div>
                 <div class="item transNum">
-                  <span class="key">运单号码：</span><span class="value">80-135464</span>
+                  <span class="key">运单号码：</span><span class="value">{{hnaOrder.aviationNumber}}</span>
                 </div>
               </div>
               <div class="middle">
@@ -87,7 +87,7 @@
                 <div class="item flightNumber">
                   <div class="key">预定航班：</div>
                   <div class="value">
-                    <input type="text">
+                    <input v-model="flightNo" type="text" placeholder="请输入航班号">
                   </div>
                 </div>
                 <div class="item flightData">
@@ -95,8 +95,9 @@
                   <div class="value">
                     <el-date-picker
                       size="mini"
-                      v-model="flightData"
+                      v-model="flightDate"
                       type="date"
+                      value-format = "yyyy-MM-dd"
                       placeholder="选择日期">
                     </el-date-picker>
                   </div>
@@ -109,6 +110,7 @@
                       size="mini"
                       is-range
                       v-model="flighttime"
+                      value-format = "HH:mm"
                       range-separator="--"
                       start-placeholder="开始时间"
                       end-placeholder="结束时间"
@@ -120,7 +122,7 @@
                 <div class="item transNum">
                   <div class="key">运单号码：</div>
                   <div class="value">
-                    <input type="text">
+                    <input v-model="transNum" type="text" placeholder="请输入运单号">
                   </div>
                 </div>
               </div>
@@ -141,7 +143,7 @@
               <span>航班时间：</span><span>{{hnaOrder.flightDate}}</span>
             </div>
             <div class="item flighttime">
-              <span>航班时刻：</span><span>{{hnaOrder.starHour}}</span>
+              <span>航班时刻：</span><span>{{hnaOrder.starHour}}-{{hnaOrder.endHour}}</span>
             </div>
             <div class="item transNum">
               <span>运单号码：</span><span>{{hnaOrder.aviationNumber}}</span>
@@ -151,7 +153,6 @@
         <div v-if="serviceStatus.serviceB" class="box beginport">
           <!-- 始发港地面操作服务信息调整模态框 -->
           <el-dialog title="始发港地面操作服务" :visible.sync="serverInfoModel.beginport">
-
             <div slot="footer" class="dialog-footer">
               <el-button @click="dialogFormVisible = false">取 消</el-button>
               <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
@@ -169,6 +170,9 @@
             </div>
             <div class="item flighttime">
               <span>交货位置：</span><span>{{airportStartAgent.deliveryAddress}}</span>
+            </div>
+            <div class="item flightData">
+              <span>联系人：</span><span>{{airportStartAgent.agentContactName}}</span>
             </div>
             <div class="item transNum">
               <span>联系方式：</span><span>{{airportStartAgent.agentContactPhone}}</span>
@@ -195,7 +199,10 @@
               <span>货运代理：</span><span>{{airportEndAgent.agentCompany}}</span>
             </div>
             <div class="item flighttime">
-              <span>交货位置：</span><span>{{airportEndAgent.deliveryAddress}}</span>
+              <span>提货位置：</span><span>{{airportEndAgent.deliveryAddress}}</span>
+            </div>
+            <div class="item flightData">
+              <span>联系人：</span><span>{{airportEndAgent.agentContactName}}</span>
             </div>
             <div class="item transNum">
               <span>联系方式：</span><span>{{airportEndAgent.agentContactPhone}}</span>
@@ -405,7 +412,81 @@
               </EasyScrollbar>
             </div>
             <div class="reInspect">
-              <el-button :class="{hide:!statusAdmin.toReview}" @click="addSizeDialogFormVisible = true" size="mini" type="warning">货物复核</el-button>
+              <el-button :class="{hide:!statusAdmin.toReview}" @click="reviewOfGoods=true" size="mini" type="warning">货物复核</el-button>
+            </div>
+            <!--货物复核模态框-->
+            <div class="reviewOfGoods-model">
+              <el-dialog width="1150px" title="货物信息复核" :visible.sync="reviewOfGoods">
+                <div class="content">
+                  <div class="title">
+                    <p>货物尺寸</p>
+                    <p>(长*宽*高/件数)</p>
+                    <p>单位：cm</p>
+                  </div>
+                  <div class="val">
+                    <EasyScrollbar>
+                      <div class="box">
+                        <div>
+                          <p v-for="(list,index) in actualGoodsSizeList">
+                            <span>{{list}}</span><img @click="actualGoodsSizeList.splice(index,1)" src="../../../assets/minus_sign_delete.png">
+                          </p>
+                        </div>
+                      </div>
+                    </EasyScrollbar>
+                  </div>
+                  <div class="center-btn">
+                    <button @click="addSizeDialogFormVisible=true" class="add"></button>
+                    <p>
+                      <button @click="calculationWeight" class="calculation"></button>
+                      <span>计算</span>
+                    </p>
+
+                  </div>
+                  <div class="original">
+                    <p>
+                      <span class="title">货物重量：</span>
+                      <span class="detial">{{orderGoodsDetail.goodsWeight}}</span>
+                      <span class="unit">千克</span></p>
+                    <p>
+                      <span class="title">货物件数：</span>
+                      <span class="detial">{{orderGoodsDetail.goodsNumber}}</span>
+                      <span class="unit">件</span>
+                    </p>
+                    <p>
+                      <span class="title">货物体积：</span>
+                      <span class="detial">{{orderGoodsDetail.goodsVolume}}</span>
+                      <span class="unit">立方米</span>
+                    </p>
+                  </div>
+                  <div class="actual">
+                    <p>
+                      <span class="title">实际重量：</span>
+                      <input @focusout="calculationWeight" v-model="actualGoodsSize.weight" class="detial" type="number" placeholder="输入重量">
+                      <span class="unit">千克</span></p>
+                    <p>
+                      <span class="title">实际件数：</span>
+                      <input v-model="actualGoodsSize.num" class="detial" type="number" placeholder="输入件数">
+                      <span class="unit">件</span>
+                    </p>
+                    <p>
+                      <span class="title">实际体积：</span>
+                      <input @focusout="calculationWeight" v-model="actualGoodsSize.volume" class="detial" type="number" placeholder="输入体积">
+                      <span class="unit">立方米</span>
+                    </p>
+                  </div>
+                </div>
+                <div class="actualWeight">
+                  <p>
+                    <span class="title">实际计费重量</span>
+                    <span class="detial">{{actualWeight}}</span>
+                    <span class="unit">千克</span>
+                  </p>
+                </div>
+                <div slot="footer" class="dialog-footer">
+                  <span class="cancel" @click="reviewOfGoods = false">取 消</span>
+                  <el-button @click="reviewOfGoodsData" size="mini" class="sure" type="warning">确 定</el-button>
+                </div>
+              </el-dialog>
             </div>
             <div class="addSize">
               <el-dialog width="520px" title="增加货物尺寸" :visible.sync="addSizeDialogFormVisible">
@@ -439,12 +520,69 @@
             </div>
           </div>
           <div class="box center">
+            <div class="costAdd-model">
+              <el-dialog width="800px" title="费用补充" :visible.sync="costAdd">
+                <div class="content">
+                  <p class="yellow">
+                    <span class="title">状态名称：</span>
+                    <el-select size="small" v-model="goodsType" placeholder="请选择">
+                      <el-option
+                        v-for="item in options2"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
+                        :disabled="item.disabled">
+                      </el-option>
+                    </el-select>
+                  </p>
+                  <p>
+                    <span class="title">金额：</span>
+                    <input v-model="costAddData.money" class="num" type="number">
+                    <span class="unit">元</span>
+                  </p>
+                  <p>
+                    <span class="title">费用备注：</span>
+                    <input v-model="costAddData.Remarks" type="text">
+                  </p>
+                </div>
+                <div slot="footer" class="dialog-footer">
+                  <span class="cancel" @click="costAdd = false">取 消</span>
+                  <el-button @click="getCostAdd" size="mini" class="sure" type="warning">确 定</el-button>
+                </div>
+              </el-dialog>
+            </div>
+            <div class="costPay-model">
+              <el-dialog width="800px" title="费用补缴" :visible.sync="costPay">
+                <div class="content">
+                  <p>
+                    <span class="title">订单总额：</span>
+                    <span class="detail">{{hnaOrder.amount||'0.00'}}</span>
+                    <span class="unit">元</span>
+                  </p>
+                  <p>
+                    <span class="title">已付金额：</span>
+                    <span class="detail">{{hnaOrder.paidAmount||'0.00'}}</span>
+                    <span class="unit">元</span>
+                  </p>
+                  <p class="yellow">
+                    <span class="title">待付金额：</span>
+                    <span class="detail">{{hnaOrder.needMakeUpAmount||'0.00'}}</span>
+                    <span class="unit">元</span>
+                  </p>
+                </div>
+                <p class="costPay-Msg">确认费用无误，提交后将无法撤销或修改</p>
+                <div slot="footer" class="dialog-footer">
+                  <span class="cancel" @click="costPay = false">取 消</span>
+                  <el-button @click="getCostPay" size="mini" class="sure" type="warning">确 定</el-button>
+                </div>
+              </el-dialog>
+            </div>
             <h3>临时费用</h3>
             <div class="btn-add">
-              <el-button :class="{hide:!statusAdmin.temporaryCost}" size="mini" type="warning">费用补充</el-button>
+              <el-button @click="costAdd = true" :class="{hide:!statusAdmin.temporaryCost}" size="mini" type="warning">费用补充</el-button>
             </div>
             <div class="btn-pay">
-              <el-button :class="{hide:!statusAdmin.temporaryCost}" size="mini" type="warning">执行补缴</el-button>
+              <el-button @click="costPay = true" :class="{hide:!statusAdmin.temporaryCost}" size="mini" type="warning">执行补缴</el-button>
             </div>
           </div>
           <div class="box right">
@@ -536,6 +674,39 @@ import { mapGetters } from "vuex";
 export default {
   data() {
     return {
+      options2: [{
+        value: 7,
+        label: '普货'
+      }, {
+        value: 8,
+        label: '冷链'
+      }, {
+        value: 9,
+        label: '重货'
+      }, {
+        value: 10,
+        label: '危险品'
+      }],
+      goodsType: 7,
+      goodsTypeData: [
+        {
+          value: 7,
+          label: "普货"
+        },
+        {
+          value: 8,
+          label: "冷链"
+        },
+        {
+          value: 9,
+          label: "重货"
+        },
+        {
+          value: 10,
+          label: "危险品"
+        },
+      ],
+      value: 7,
       serverInfoModel: {
         airtrans: false,
         beginport: false,
@@ -544,15 +715,13 @@ export default {
         landing: false,
       },
       addSizeDialogFormVisible: false, //货物符合模态框状态
-      addSizeDialogFormData: {
-        length: "",
-        width: "",
-        height: "",
-        num: ""
-      },
+      addSizeDialogFormData: {}, //复核输入模态框
+      costAdd: false, //费用补充模态框
+      costAddData: {}, //费用补充数据
+      costPay: false, //费用补缴
       hnaOrder: {},
       senderAddress: {}, //发货人信息
-      receiverAddress: {}, //发货人信息
+      receiverAddress: {}, //收货人信息
       orderGoodsDetail: {}, //货物信息
       goodsSizeList: [], //货物尺寸表
       productPriceList: [], //价格信息
@@ -563,7 +732,6 @@ export default {
       pickUpAgent: {}, //上门取货服务代理商信息 D
       deliveryAgent: {}, //送货上门服务代理商信息 E
       serviceStatus: {//服务是否选中
-        serviceA: false,
         serviceB: false,
         serviceC: false,
         serviceD: false,
@@ -577,11 +745,18 @@ export default {
         completeOrder: false, //完成订单按钮
         submitOrder: true, //提交，取消订单按钮
       },
-      flightData: "2017-10-10",
-      flighttime: [new Date(2016, 9, 10, 8, 40), new Date(2016, 9, 10, 9, 40)],
+      reviewOfGoods: false,
+      actualGoodsSizeList: [], //复核货物尺寸表
+      actualGoodsSize: {},
+      actualWeight: '0.00',
       orderId: "",
       orderNo: "",
       orderStatus: "",
+
+      flightNo: '',
+      flightDate: '',
+      flighttime: '',
+      transNum: ''
     };
   },
   created() {
@@ -592,6 +767,28 @@ export default {
   watch: {
     orderStatus (){
       this.getOrderDetail()
+    },
+    actualGoodsSizeList (){
+      let volume = 0;
+      if(this.actualGoodsSizeList.length){
+        for(let i=0;i<this.actualGoodsSizeList.length;i++){
+          let size = this.actualGoodsSizeList[i].split('*');
+          let long = parseInt(size[0]);
+          let width = parseInt(size[1]);
+          let height = parseInt(size[2].split('/')[0]);
+          let num = parseInt(size[2].split('/')[1]);
+          volume += (long*width*height*num)
+        }
+        volume = volume/1000000
+      }else{
+        volume  = 0;
+      }
+      this.actualGoodsSize.volume = volume.toFixed(2);
+    },
+    reviewOfGoods (){
+      this.actualGoodsSizeList = [];
+      this.actualGoodsSize ={};
+      this.actualWeight = '0.00';
     }
   },
   methods: {
@@ -608,12 +805,15 @@ export default {
         if(data.data.code === 1){
           let res = data.data.data;
           let statusNmae = '';
-          //this.orderStatus = res.orderStatus;
+          this.flightNo = res.flightNo;
+          this.flightDate = res.flightDate;
+          this.transNum = res.aviationNumber;
+          this.flighttime = [res.starHour,res.endHour];
           switch (res.orderStatus){
             case 2:
                 statusNmae = '待受理';
                 this.statusAdmin = {
-                  serviceAdjustment: true,
+                  serviceAdjustment: false,
                   toReview: false,
                   temporaryCost: false,
                   tradingFlow: false,
@@ -661,10 +861,9 @@ export default {
                   toReview: false,
                   temporaryCost: false,
                   tradingFlow: true,
-                  completeOrder: true,
+                  completeOrder: false,
                   submitOrder: false,
                 };
-                //完成订单禁用
                 break;
             case 7:
                 statusNmae = '已完成';
@@ -759,12 +958,12 @@ export default {
             "token": this.token,
           }).then(data => {
             if(data.data.code === 1&&data.data.msg === "操作成功"){
-              this.orderStatus = 3;
               this.$message({
                 showClose: true,
                 message: '已经拒绝了该订单！',
                 type: 'success'
               });
+              this.getOrderDetail();
             }else{
               this.$message({
                 showClose: true,
@@ -775,7 +974,6 @@ export default {
             }
           })
         }).catch(() => {
-
         });
       }else{
         this.axios.post("/web/v1/supplier/order/accepting",{
@@ -785,7 +983,7 @@ export default {
           "token": this.token,
         }).then(data => {
           if(data.data.code === 1&&data.data.msg === "操作成功"){
-            this.orderStatus = 3;
+            this.getOrderDetail();
             this.$message({
               showClose: true,
               message: '操作订单成功！',
@@ -803,49 +1001,182 @@ export default {
       }
     },
     modifyServiceInfo (){ //修改服务信息的确定按钮
-      this.axios.post("",{
+      if(this.flightNo && this.flightDate && this.flighttime[0] && this.flighttime[1]){
+        this.axios.post("/web/v1/supplier/order/infoSupplement",{
+          "id": this.id,
+          "orderNo": this.orderNo,
+          "token": this.token,
+          "flightDate": this.flightDate,
+          "departureTime": this.flighttime[0],
+          "arrivalTime": this.flighttime[1],
+          "flightNumber": this.flightNo,
+          "aviationNumber": this.transNum,
+        }).then(data => {
+          if(data.data.code === 1&&data.data.msg === "操作成功"){
+            this.$message({
+              showClose: true,
+              message: '修改信息成功！',
+              type: 'success'
+            });
+            this.getOrderDetail();
+            this.serverInfoModel.airtrans = false;
+          }else{
+            this.$message({
+              showClose: true,
+              message: '出错啦，操作失败，请重新提交！',
+              type: 'error',
+              duration: 0
+            });
+          }
+        });
+      }else{
+        this.$message({
+          showClose: true,
+          message: '填写不正确，请重新填写!',
+          type: 'error',
+        });
+      }
+    },
+    calculationWeight (){
+      let chargWeight = this.actualGoodsSize.volume*167;
+      if(parseInt(this.actualGoodsSize.weight)>chargWeight){
+        this.actualWeight = parseInt(this.actualGoodsSize.weight).toFixed(2);
+      }else{
+        this.actualWeight = chargWeight.toFixed(2);
+      }
+    },
+    reviewOfGoodsData (){
+      let goodsSize = '';
+      if(this.actualGoodsSizeList.length && this.actualGoodsSize.weight){
+        for(let i=0;i<this.actualGoodsSizeList.length;i++){
+          goodsSize += this.actualGoodsSizeList[i]+',';
+        }
+        this.axios.post("/web/v1/supplier/order/reviewSave",{
+          "id": this.id,
+          "orderNo": this.orderNo,
+          "token": this.token,
+          "actualCalcWeight": this.actualWeight,
+          "actualNumber": this.actualGoodsSize.num,
+          "actualVolume": this.actualGoodsSize.volume,
+          "actualWeight": this.actualGoodsSize.weight,
+          "goodsSize": goodsSize
+        }).then(data => {
+          if(data.data.code === 1&&data.data.msg === "操作成功"){
+            this.$message({
+              showClose: true,
+              message: '货物复核成功！',
+              type: 'success'
+            });
+            this.getOrderDetail();
+            this.reviewOfGoods = false;
+          }else{
+            this.$message({
+              showClose: true,
+              message: '出错啦，操作失败，请重新提交！',
+              type: 'error',
+              duration: 0
+            });
+          }
+        })
+      }else{
+        this.$message({
+          showClose: true,
+          message: '填写不正确，请重新填写!',
+          type: 'error',
+        });
+      }
+    },
+    getCostPay (){
+      this.axios.post("/web/v1/supplier/order/executivePay",{
         "id": this.id,
-        "status": parseInt(this.orderStatus),
         "orderNo": this.orderNo,
         "token": this.token,
+        status: 6
       }).then(data => {
         if(data.data.code === 1&&data.data.msg === "操作成功"){
           this.$message({
             showClose: true,
-            message: '修改信息成功！',
+            message: '操作成功！',
             type: 'success'
           });
-          this.serverInfoModel.airtrans = false;
+          this.getOrderDetail();
+          this.costPay = false;
         }else{
           this.$message({
             showClose: true,
-            message: '出错啦，修改信息失败，请重新提交！',
+            message: '出错啦，操作失败，请重新提交！',
             type: 'error',
             duration: 0
           });
         }
-      });
+      })
+    },
+    getCostAdd (){
+      if(this.costAddData.money && this.costAddData.goodsType){
+        this.$message({
+          showClose: true,
+          message: '填写不正确，请重新填写!',
+          type: 'error',
+        });
+        return
+      }
+      this.axios.post("/web/v1/supplier/order/costSave",{
+        "id": this.id,
+        "orderNo": this.orderNo,
+        "token": this.token,
+        "amount": this.costAddData.money,
+        "remarks": this.costAddData.Remarks,
+        "costType": this.goodsType,
+      }).then(data => {
+        if(data.data.code === 1&&data.data.msg === "操作成功"){
+          this.$message({
+            showClose: true,
+            message: '操作成功！',
+            type: 'success'
+          });
+          this.getOrderDetail();
+          this.costAdd = false;
+        }else{
+          this.$message({
+            showClose: true,
+            message: '出错啦，操作失败，请重新提交！',
+            type: 'error',
+            duration: 0
+          });
+        }
+      })
     },
     addGoodsSize() {
-      console.log(typeof this.addSizeDialogFormData.length);
       if (
-        !this.addSizeDialogFormData.length ||
-        !this.addSizeDialogFormData.width ||
-        !this.addSizeDialogFormData.height ||
-        !this.addSizeDialogFormData.num
+        this.addSizeDialogFormData.length &&
+        this.addSizeDialogFormData.width &&
+        this.addSizeDialogFormData.height &&
+        this.addSizeDialogFormData.num &&
+        this.addSizeDialogFormData.length !=0 &&
+        this.addSizeDialogFormData.width !=0 &&
+        this.addSizeDialogFormData.num !=0
       ) {
-        return;
+        let str =
+          this.addSizeDialogFormData.length +
+          "*" +
+          this.addSizeDialogFormData.width +
+          "*" +
+          this.addSizeDialogFormData.height +
+          "/" +
+          this.addSizeDialogFormData.num;
+        this.actualGoodsSizeList.push(str);
+        this.addSizeDialogFormData = {};
+        this.addSizeDialogFormVisible = false;
+      }else{
+        this.$message({
+          showClose: true,
+          message: '填写有误,请重新填写',
+          type: 'error',
+        });
       }
-      let str =
-        this.addSizeDialogFormData.length +
-        "*" +
-        this.addSizeDialogFormData.width +
-        "*" +
-        this.addSizeDialogFormData.height +
-        "/" +
-        this.addSizeDialogFormData.num;
-      this.goodsInfo.size.push(str);
-      this.addSizeDialogFormVisible = false;
+    },
+    viewOrder (){
+      this.$router.push({path:'/supplier/order_track',query:{orderNo: this.orderNo,orderStatus: this.orderStatus}})
     },
     dateTransform(time){
       let newTime = new Date(time);
@@ -1329,6 +1660,270 @@ export default {
             text-align: center;
             color: #989898;
           }
+          .reviewOfGoods-model{
+            .el-dialog {
+              .el-dialog__header {
+                background-color: #fccf00;
+                .el-dialog__title {
+                  color: #fff;
+                }
+              }
+              .el-dialog__body {
+                padding: 0;
+                .content{
+                  padding-top: 20px;
+                  .title {
+                    padding-top: 30px;
+                  }
+                  .box {
+                    height: 115px;
+                  }
+                  .val {
+                    width: 200px;
+                    height: 120px;
+                    overflow: hidden;
+                    margin-top: 15px;
+                    border: 1px solid #989898;
+                    padding: 0 0 0 10px;
+                    p {
+                      height: 24px;
+                      width: 100%;
+                      line-height: 24px;
+                      margin: 5px 0px;
+                      text-align: left;
+                      span{
+                        display: inline-block;
+                        margin-right: 10px;
+                      }
+                      img{
+                        cursor: pointer;
+                        display: inline-block;
+                      }
+                    }
+                  }
+                  .center-btn{
+                    width: 260px;
+                    .add{
+                      float: left;
+                      width: 30px;
+                      height: 30px;
+                      border: 0;
+                      margin-top: 57px;
+                      margin-left: 30px;
+                      margin-right: 80px;
+                      cursor: pointer;
+                      background-color: #E6A23C;
+                      background-image: url("../../../assets/addgoods.png");
+                    }
+                    .add:hover{
+                      background-color: #FCCF00;
+                    }
+                    p{
+                      float: left;
+                      width: 45px;
+                      margin-top: 45px;
+                      .calculation{
+                        width: 41px;
+                        height: 42px;
+                        border: 0;
+                        cursor: pointer;
+                        background-color: #E6A23C;
+                        background-image: url("../../../assets/calculation.png");
+                      }
+                      .calculation:hover{
+                        background-color: #FCCF00;
+                      }
+                      span{
+                        font-size: 12px;
+                        color: #989898;
+                      }
+                    }
+
+                  }
+                  .original{
+                    margin-right: 30px;
+                    p{
+                      text-align: left;
+                      span {
+                        display: inline-block;
+                        padding: 0;
+                        color: #989898;
+                      }
+                      .title{
+                        width: 80px;
+                      }
+                      .detial{
+                        width: 100px;
+                        text-align: center;
+                      }
+                      .unit {
+                        width: 50px;
+                        text-align: center;
+                      }
+                    }
+                  }
+                  .actual{
+                    p{
+                      text-align: left;
+                      span {
+                        display: inline-block;
+                        padding: 0;
+                        color: #606266;
+                      }
+                      .title{
+                        width: 80px;
+                      }
+                      .detial{
+                        width: 100px;
+                        color: #ffdb44;
+                        height: 25px;
+                        border: 1px solid #989898;
+                        border-radius: 3px;
+                        text-align: center;
+                      }
+                      .unit {
+                        width: 50px;
+                        text-align: center;
+                      }
+                    }
+                  }
+                }
+                .actualWeight{
+                  p{
+                    margin-left: 680px;
+                    width: 300px;
+                    margin-top: 0;
+                    margin-bottom: 30px;
+                    span{
+                      display: inline-block;
+                      padding: 0;
+                    }
+                    .title{
+                      width: 90px;
+                    }
+                    .detial {
+                      width: 100px;
+                      color: #ffdb44;
+                      text-align: center;
+                    }
+                    .unit {
+                      width: 40px;
+                      text-align: center;
+                      color: #989898;
+                    }
+                  }
+                }
+                p {
+                  text-align: center;
+                  margin: 10px 0;
+                  .type {
+                    color: #f65057;
+                  }
+                }
+                .model-main {
+                  display: flex;
+                  // padding: 0 100px;
+                  .left {
+                    // flex: 1;
+                    width: 360px;
+                    box-sizing: border-box;
+                    padding-left: 100px;
+                    .item {
+                      display: flex;
+                      margin: 20px 0;
+                      color: #9f9f9f;
+                      .key {
+                        width: 100px;
+                        text-align-last: justify;
+                      }
+                    }
+                  }
+                  .middle {
+                    width: 200px;
+                    text-align: center;
+                    img {
+                      transform: translateY(20px);
+                    }
+                  }
+                  .right {
+                    // flex: 1;
+                    padding-left: 50px;
+                    .item {
+                      margin: 20px 0;
+                      display: flex;
+                      border-bottom: 1px solid #e0e0e0;
+                      .key {
+                        width: 100px;
+                        color: #9f9f9f;
+                        text-align-last: justify;
+                      }
+                    }
+                    .flightNumber {
+                      input {
+                        border: none;
+                        outline: none;
+                        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+                      }
+                    }
+                    .flightData {
+                      .arrow {
+                        line-height: 28px;
+                      }
+                      .value {
+                        .el-date-editor {
+                          width: 130px;
+                          input {
+                            border: none;
+                          }
+                          .el-input__prefix,
+                          .el-input__suffix {
+                            display: none;
+                          }
+                        }
+                      }
+                    }
+                    .flighttime {
+                      .arrow {
+                        line-height: 28px;
+                      }
+                      .el-date-editor {
+                        width: 200px;
+                        border: none;
+                      }
+                      .el-input__icon,
+                      .el-input__icon {
+                        // visibility: hidden;
+                        display: none;
+                      }
+                    }
+                    .transNum {
+                      input {
+                        border: none;
+                        outline: none;
+                        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+                      }
+                    }
+                  }
+                }
+              }
+              .el-dialog__footer {
+                .dialog-footer {
+                  text-align: center;
+                  position: relative;
+                  .sure {
+                    padding: 6px 80px;
+                  }
+                  .cancel {
+                    cursor: pointer;
+                    position: absolute;
+                    line-height: 26px;
+                    right: 380px;
+                    color: #b4b4b4;
+                  }
+                }
+              }
+            }
+          }
           .addSize {
             .el-dialog__wrapper {
               .el-dialog__header {
@@ -1341,8 +1936,9 @@ export default {
                 display: flex;
                 input {
                   width: 25%;
-                  border-right: 1px solid #e0e0e0;
-                  border-bottom: 1px solid #e0e0e0;
+                  height: 25px;
+                  border: 1px solid #e0e0e0;
+                  padding-left: 3px;
                   margin-right: 10px;
                   -moz-appearance: textfield;
                   &::-webkit-inner-spin-button,
@@ -1425,6 +2021,126 @@ export default {
           border-right: 1px dotted #e4e4e4;
           padding-left: 20px;
           position: relative;
+          .costAdd-model{
+            .el-dialog {
+              .el-dialog__header {
+                background-color: #fccf00;
+                .el-dialog__title {
+                  color: #fff;
+                }
+              }
+              .el-dialog__body {
+                .content{
+                  margin: 0px auto;
+                  width: 254px;
+                  p{
+                    span{
+                      color: #989898;
+                    }
+                    .title{
+                      width: 80px;
+                      display: inline-block;
+                      text-align-last: justify;
+                    }
+                    .num{
+                      width: 150px;
+                      height: 30px;
+                    }
+                    input{
+                      width:170px;
+                      height: 30px;
+                      border: 0;
+                    }
+                  }
+                  .yellow{
+                    border-bottom: 1px solid #fccf00;
+                    span{
+                      color: #fccf00;
+                    }
+                    input{
+                      color: #fccf00;
+                    }
+                  }
+                }
+              }
+              .el-dialog__footer {
+                .dialog-footer {
+                  text-align: center;
+                  position: relative;
+                  .sure {
+                    padding: 6px 80px;
+                  }
+                  .cancel {
+                    cursor: pointer;
+                    position: absolute;
+                    line-height: 26px;
+                    right: 240px;
+                    color: #b4b4b4;
+                  }
+                }
+              }
+            }
+          }
+          .costPay-model{
+            .el-dialog {
+              .el-dialog__header {
+                background-color: #fccf00;
+                .el-dialog__title {
+                  color: #fff;
+                }
+              }
+              .el-dialog__body {
+                padding-bottom: 10px;
+                .content{
+                  margin: 0px auto;
+                  width: 260px;
+                  p{
+                    span{
+                      color: #989898;
+                    }
+                    .title{
+                      width: 80px;
+                      display: inline-block;
+                      text-align-last: justify;
+                    }
+                    .detail{
+                      width: 150px;
+                      display: inline-block;
+                      text-align: center;
+                    }
+                  }
+                  .yellow{
+                    span{
+                      color: #fccf00;
+                    }
+                  }
+                }
+                .costPay-Msg{
+                  text-align: center;
+                  color: red;
+                  font-size: 12px;
+                  margin-bottom: 0;
+                  margin-top: 30px;
+                }
+              }
+              .el-dialog__footer {
+                .dialog-footer {
+                  text-align: center;
+                  position: relative;
+                  .sure {
+                    padding: 6px 80px;
+                  }
+                  .cancel {
+                    cursor: pointer;
+                    position: absolute;
+                    line-height: 26px;
+                    right: 240px;
+                    color: #b4b4b4;
+                  }
+                }
+              }
+            }
+          }
           .btn-add,
           .btn-pay {
             position: absolute;

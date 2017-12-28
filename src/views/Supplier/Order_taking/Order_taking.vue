@@ -108,9 +108,9 @@
           <div v-if="list.orderStatus === 2">
             <div class="tbody-head">
               <div class="time">{{dateTransform(list.createDate)}}</div>
-              <div class="orderNum"><span>订单号：</span><span @click="examine" class="value">{{list.orderNo}}</span></div>
-              <div class="mainOrderNum">主运单号：</div>
-              <div class="examine"><span @click="viewOrder">查看</span></div>
+              <div class="mainOrderNum">订单号：{{list.orderNo}}</div>
+              <div class="orderNum"><span>主运单号：</span><span @click="examine(list.orderNo,list.id)" class="value">{{list.aviationNumber}}</span></div>
+              <div class="examine"><span @click="viewOrder(list.orderNo,list.orderStatus)">查看</span></div>
             </div>
             <div class="wrapper">
               <div class="goodsName">
@@ -150,9 +150,9 @@
           <div v-else-if="list.orderStatus === 3">
             <div class="tbody-head">
               <div class="time">{{dateTransform(list.createDate)}}</div>
-              <div class="orderNum"><span>订单号：</span><span @click="examine" class="value">{{list.orderNo}}</span></div>
-              <div class="mainOrderNum">主运单号：</div>
-              <div class="examine"><span @click="viewOrder">查看</span></div>
+              <div class="mainOrderNum">订单号：{{list.orderNo}}</div>
+              <div class="orderNum"><span>主运单号：</span><span @click="examine(list.orderNo,list.id)" class="value">{{list.aviationNumber}}</span></div>
+              <div class="examine"><span @click="viewOrder(list.orderNo,list.orderStatus)">查看</span></div>
             </div>
             <div class="wrapper">
               <div class="goodsName">
@@ -191,9 +191,9 @@
           <div v-else-if="list.orderStatus === 4">
             <div class="tbody-head">
               <div class="time">{{dateTransform(list.createDate)}}</div>
-              <div class="orderNum"><span>订单号：</span><span @click="examine" class="value">{{list.orderNo}}</span></div>
-              <div class="mainOrderNum">主运单号：</div>
-              <div class="examine"><span @click="viewOrder">查看</span></div>
+              <div class="mainOrderNum">订单号：{{list.orderNo}}</div>
+              <div class="orderNum"><span>主运单号：</span><span @click="examine(list.orderNo,list.id)" class="value">{{list.aviationNumber}}</span></div>
+              <div class="examine"><span @click="viewOrder(list.orderNo,list.orderStatus)">查看</span></div>
             </div>
             <div class="wrapper">
               <div class="goodsName">
@@ -233,9 +233,9 @@
           <div v-else-if="list.orderStatus === 5">
             <div class="tbody-head">
               <div class="time">{{dateTransform(list.createDate)}}</div>
-              <div class="orderNum"><span>订单号：</span><span @click="examine" class="value">{{list.orderNo}}</span></div>
-              <div class="mainOrderNum">主运单号：</div>
-              <div class="examine"><span @click="viewOrder">查看</span></div>
+              <div class="mainOrderNum">订单号：{{list.orderNo}}</div>
+              <div class="orderNum"><span>主运单号：</span><span @click="examine(list.orderNo,list.id)" class="value">{{list.aviationNumber}}</span></div>
+              <div class="examine"><span @click="viewOrder(list.orderNo,list.orderStatus)">查看</span></div>
             </div>
             <div class="wrapper">
               <div class="goodsName">
@@ -275,9 +275,9 @@
           <div v-else-if="list.orderStatus === 6">
             <div class="tbody-head">
               <div class="time">{{dateTransform(list.createDate)}}</div>
-              <div class="orderNum"><span>订单号：</span><span @click="examine" class="value">{{list.orderNo}}</span></div>
-              <div class="mainOrderNum">主运单号：</div>
-              <div class="examine"><span @click="viewOrder">查看</span></div>
+              <div class="mainOrderNum">订单号：{{list.orderNo}}</div>
+              <div class="orderNum"><span>主运单号：</span><span @click="examine(list.orderNo,list.id)" class="value">{{list.aviationNumber}}</span></div>
+              <div class="examine"><span @click="viewOrder(list.orderNo,list.orderStatus)">查看</span></div>
             </div>
             <div class="wrapper">
               <div class="goodsName">
@@ -317,9 +317,9 @@
           <div v-else-if="list.orderStatus === 7">
             <div class="tbody-head">
               <div class="time">{{dateTransform(list.createDate)}}</div>
-              <div class="orderNum"><span>订单号：</span><span @click="examine" class="value">{{list.orderNo}}</span></div>
-              <div class="mainOrderNum">主运单号：</div>
-              <div class="examine"><span @click="viewOrder">查看</span></div>
+              <div class="mainOrderNum">订单号：{{list.orderNo}}</div>
+              <div class="orderNum"><span>主运单号：</span><span @click="examine(list.orderNo,list.id)" class="value">{{list.aviationNumber}}</span></div>
+              <div class="examine"><span @click="viewOrder(list.orderNo,list.orderStatus)">查看</span></div>
             </div>
             <div class="wrapper">
               <div class="goodsName">
@@ -359,9 +359,9 @@
           <div v-else-if="list.orderStatus === 8">
             <div class="tbody-head">
               <div class="time">{{dateTransform(list.createDate)}}</div>
-              <div class="orderNum"><span>订单号：</span><span @click="examine" class="value">{{list.orderNo}}</span></div>
-              <div class="mainOrderNum">主运单号：</div>
-              <div class="examine"><span @click="viewOrder">查看</span></div>
+              <div class="mainOrderNum">订单号：{{list.orderNo}}</div>
+              <div class="orderNum"><span>主运单号：</span><span @click="examine(list.orderNo,list.id)" class="value">{{list.aviationNumber}}</span></div>
+              <div class="examine"><span @click="viewOrder(list.orderNo,list.orderStatus)">查看</span></div>
             </div>
             <div class="wrapper">
               <div class="goodsName">
@@ -400,7 +400,7 @@
         <div class="block pagination">
           <el-pagination
             layout="prev, pager, next"
-            :page-size = 5
+            :page-size = 10
             @current-change = "flipList"
             :total="pageTotal">
           </el-pagination>
@@ -416,35 +416,35 @@
         <div class="top">
           <div class="order">
             <div class="key">主运单号:</div>
-            <div class="value">800-1861646416</div>
+            <div class="value">{{hnaOrder.aviationNumber}}</div>
           </div>
           <div class="plane-num">
             <div class="key">航班号:</div>
-            <div class="value">HU2030</div>
+            <div class="value">{{hnaOrder.flightNo}}</div>
           </div>
           <div class="plane-time">
             <div class="key">航班日期:</div>
-            <div class="value">2017-11-12</div>
+            <div class="value">{{hnaOrder.flightDate}}</div>
           </div>
           <div class="name">
             <div class="key">承运人:</div>
-            <div class="value">HU</div>
+            <div class="value"></div>
           </div>
         </div>
         <div class="mid">
           <div class="start">
             <div class="key">出发站:</div>
-            <div class="value">PEK</div>
+            <div class="value">{{hnaOrder.airportStart}}</div>
           </div>
           <div class="end">
             <div class="key">目的站:</div>
-            <div class="value">PVG</div>
+            <div class="value">{{hnaOrder.airportEnd}}</div>
           </div>
         </div>
         <div class="bottom">
           <div class="proxy">
             <div class="key">开单代理:</div>
-            <div class="value">海航速运</div>
+            <div class="value"></div>
           </div>
         </div>
       </div>
@@ -457,46 +457,46 @@
             <div class="icon">发</div>
             <div class="box name-id">
               <div class="key">姓名</div>
-              <div class="value">陈悠悠</div>
+              <div class="value">{{senderAddress.contactName}}</div>
               <div class="key">身份证</div>
-              <div class="value">186431351654646644654</div>
+              <div class="value">{{senderAddress.identityCard}}</div>
             </div>
             <div class="box phone-cellphone">
               <div class="key">手机号</div>
-              <div class="value">17655556666</div>
+              <div class="value">{{senderAddress.contactMobile}}</div>
               <div class="key">固定电话</div>
-              <div class="value">200-54646541</div>
+              <div class="value">{{senderAddress.contactPhone}}</div>
             </div>
             <div class="box address-detial">
               <div class="key">详细地址</div>
-              <div class="value">北京市朝阳区爱国路20号</div>
+              <div class="value">{{senderAddress.detailAddress}}</div>
             </div>
             <div class="box postal">
               <div class="key">邮政编码</div>
-              <div class="value">518100</div>
+              <div class="value">{{senderAddress.postCode}}</div>
             </div>
           </div>
           <div class="right">
             <div class="icon">收</div>
             <div class="box name-id">
               <div class="key">姓名</div>
-              <div class="value">陈悠悠</div>
+              <div class="value">{{receiverAddress.contactName }}</div>
               <div class="key">身份证</div>
-              <div class="value">186431351654646644654</div>
+              <div class="value">{{receiverAddress.identityCard}}</div>
             </div>
             <div class="box phone-cellphone">
               <div class="key">手机号</div>
-              <div class="value">17655556666</div>
+              <div class="value">{{receiverAddress.contactMobile}}</div>
               <div class="key">固定电话</div>
-              <div class="value">200-54646541</div>
+              <div class="value">{{receiverAddress.contactPhone}}</div>
             </div>
             <div class="box address-detial">
               <div class="key">详细地址</div>
-              <div class="value">北京市朝阳区爱国路20号</div>
+              <div class="value">{{receiverAddress.detailAddress}}</div>
             </div>
             <div class="box postal">
               <div class="key">邮政编码</div>
-              <div class="value">518100</div>
+              <div class="value">{{receiverAddress.postCode}}</div>
             </div>
           </div>
         </div>
@@ -505,24 +505,24 @@
         <div class="item1">
           <div>
             <div class="key">件数</div>
-            <div class="value">10</div>
+            <div class="value">{{orderGoodsDetail.goodsNumber}}</div>
             <div class="unit">件</div>
           </div>
           <div>
             <div class="key">SLAC件数</div>
-            <div class="value">10</div>
+            <div class="value"></div>
             <div class="unit">件</div>
           </div>
           <div>
             <div class="key">重量</div>
-            <div class="value">10</div>
+            <div class="value">{{orderGoodsDetail.goodsWeight}}</div>
             <div class="unit">件</div>
           </div>
         </div>
         <div class="item2">
           <div>
             <div class="key">计费重量</div>
-            <div class="value">1000</div>
+            <div class="value">{{orderGoodsDetail.valuationWeight}}</div>
             <div class="unit">KG</div>
           </div>
           <div style="visibility:hidden">
@@ -532,7 +532,7 @@
           </div>
           <div>
             <div class="key">体积</div>
-            <div class="value">2</div>
+            <div class="value">{{orderGoodsDetail.goodsVolume}}</div>
             <div class="unit">立方米</div>
           </div>
         </div>
@@ -541,12 +541,7 @@
           <EasyScrollbar>
             <div id="wrapper" class="box">
               <div>
-                <p>100*100*10/5</p>
-                <p>100*100*10/5</p>
-                <p>100*100*10/5</p>
-                <p>100*100*10/5</p>
-                <p>100*100*10/5</p>
-                <p>11</p>
+                <p v-for="list in goodsSizeList">{{list}}</p>
               </div>
             </div>
           </EasyScrollbar>
@@ -554,15 +549,15 @@
         <div class="item4">
           <div>
             <div class="key">处理代码</div>
-            <div class="value">普货</div>
+            <div class="value">{{orderGoodsDetail.goodsTypeName}}</div>
           </div>
           <div>
             <div class="key">包装</div>
-            <div class="value">纸箱</div>
+            <div class="value">{{orderGoodsDetail.goodsPackage}}</div>
           </div>
           <div>
             <div class="key">货物名称</div>
-            <div class="value">服装</div>
+            <div class="value">{{orderGoodsDetail.goodsName}}</div>
           </div>
         </div>
       </div>
@@ -602,15 +597,15 @@
           </div>
           <div>
             <div class="key">制单时间</div>
-            <div class="value">2017-10-10 10:10:10</div>
+            <div class="value"></div>
           </div>
           <div>
             <div class="key">制单人</div>
-            <div class="value">林丹英</div>
+            <div class="value"></div>
           </div>
           <div>
             <div class="key">制单营业点</div>
-            <div class="value">金鹏网</div>
+            <div class="value"></div>
           </div>
         </div>
       </div>
@@ -742,7 +737,12 @@ export default {
       startAddress:'',
       endAddress:'',
       pageTotal: 0,
-      orderList: []
+      orderList: [],
+      hnaOrder: {},
+      senderAddress: {}, //发货人信息
+      receiverAddress: {}, //收货人信息
+      orderGoodsDetail: {}, //货物信息
+      goodsSizeList: [], //货物尺寸
     };
   },
   created() {
@@ -793,16 +793,43 @@ export default {
     endPortValue (value){
       this.endAddress = value
     },
-    examine(){
-      this.dialogFormVisible = true
+    examine(no,id){
+      this.dialogFormVisible = true;
+      this.axios.post("/app/v1/order/getOrderDetail",{
+        "id": this.id,
+        "orderId": id,
+        "orderNo": no,
+        "token": this.token,
+      }).then(data => {
+        if(data.data.code === 1){
+          let res = data.data.data;
+          this.hnaOrder = res;
+          this.senderAddress = res.senderAddress||{};
+          this.receiverAddress = res.receiverAddress||{};
+          if(res.orderGoodsDetail){
+            let goodsTypeName = '';
+            switch (parseInt(res.orderGoodsDetail.goodsType)){
+              case 7: goodsTypeName = '普货'; break;
+              case 8: goodsTypeName = '冷链'; break;
+              case 9: goodsTypeName = '重货'; break;
+              case 10: goodsTypeName = '危险品'; break;
+            }
+            res.orderGoodsDetail.goodsTypeName = goodsTypeName;
+            this.orderGoodsDetail = res.orderGoodsDetail;
+            if(res.orderGoodsDetail.goodsSize){
+              this.goodsSizeList = res.orderGoodsDetail.goodsSize.split(',');
+            }
+          }
+        }
+      })
+
     },
     dealwith (no,id){
-      //this.$router.push('/supplier/order_deal')
       this.$router.push({ path: '/supplier/order_deal', query: { orderNo: no,orderId: id}})
 
     },
-    viewOrder (){
-      this.$router.push('/supplier/order_track')
+    viewOrder (no,status){
+      this.$router.push({path:'/supplier/order_track',query:{orderNo: no,orderStatus: status}})
     }
   },
   computed: {
