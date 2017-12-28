@@ -8,22 +8,22 @@
         </el-breadcrumb>
       </div>
     </div>
-    <div class="main">
+    <div class="main" v-if="'id' in orderDetailData">
       <div class="main-top">
         <div class="linear"></div>
         <div class="main-top-title">
-          <div class="time">2017-10-10 10:10:10</div>
+          <div class="time">{{orderDetailData.createTime}}</div>
           <div class="btn"><span class="reset">修改订单</span><span>|</span><span class="cancle">取消订单</span></div>
         </div>
         <div class="content">
           <div class="left">
             <div class="box orderNum">
               <div class="title">订单编号:</div>
-              <div class="detail">46464646464164</div>
+              <div class="detail">{{orderDetailData.orderNo}}</div>
             </div>
             <div class="box transLine">
               <div class="title">运输线路:</div>
-              <div class="detail">北京(PEK)——上海(PVG)</div>
+              <div class="detail">{{orderDetailData.airportStart}}——{{orderDetailData.airportEnd}}</div>
             </div>
             <div class="box baseserve">
               <div class="title">基础服务:</div>
@@ -34,17 +34,17 @@
             <div class="box moreserver">
               <div class="title">更多服务:</div>
               <div class="detail">
-                <div class="item"><span class="get el-icon-circle-check"></span><span>代交货</span></div>
-                <div class="item"><span class="get el-icon-circle-check"></span><span>代提交</span></div>
-                <div class="item"><span class="get el-icon-circle-check"></span><span>上门取货</span></div>
-                <div class="item not"><span class="get el-icon-circle-check"></span><span>落地配</span></div>
+                <div class="item" v-if="'airportStartAgent' in orderDetailData"><span class="get el-icon-circle-check"></span><span>代交货</span></div>
+                <div class="item" v-if="'airportEndAgent' in orderDetailData"><span class="get el-icon-circle-check"></span><span>代提交</span></div>
+                <div class="item" v-if="'pickUpAgent' in orderDetailData"><span class="get el-icon-circle-check"></span><span>上门取货</span></div>
+                <div class="item" v-if="'deliveryAgent' in orderDetailData"><span class="get el-icon-circle-check"></span><span>落地配</span></div>
               </div>
             </div>
-            <div class="box increaseserver">
+            <div class="box increaseserver" v-if="false">
               <div class="title">增值服务:</div>
               <div class="detail">
                 <div class="item"><span class="get el-icon-circle-check"></span><span>报关报检</span></div>
-                <div class="item not"><span class="get el-icon-circle-check"></span><span>运输保险</span></div>
+                <div class="item"><span class="get el-icon-circle-check"></span><span>运输保险</span></div>
               </div>
             </div>
           </div>
@@ -66,100 +66,100 @@
           <div class="title">航空运输服务</div>
           <div class="content">
             <div class="item flightNumber">
-              <span>预定航班：</span><span>HU7211</span>
+              <span>预定航班：</span><span>{{orderDetailData.flightNo}}</span>
             </div>
             <div class="item flightData">
-              <span>航班时间：</span><span>2017-10-10</span>
+              <span>航班时间：</span><span>{{orderDetailData.flightDate}}</span>
             </div>
             <div class="item flighttime">
-              <span>航班时刻：</span><span>10:10</span>
+              <span>航班时刻：</span><span>{{orderDetailData.starHour}}--{{orderDetailData.endHour}}</span>
             </div>
             <div class="item transNum">
-              <span>运单号码：</span><span>80-135464</span>
+              <span>运单号码：</span><span>{{orderDetailData.orderNo}}</span>
             </div>
           </div>
         </div>
-        <div class="box beginport">
+        <div class="box beginport" v-if="'airportStartAgent' in orderDetailData">
           <div class="img"><img src="../../../assets/detail_info_img2.png" alt=""></div>
           <div class="title">始发港地面操作服务</div>
           <div class="content">
             <div class="item flightNumber">
-              <span>最晚交货时间：</span><span>2017-10-10</span>
+              <span>最晚交货时间：</span><span>{{orderDetailData.airportStartAgent.arrivalTime}}</span>
             </div>
             <div class="item flightData">
-              <span>货运代理：</span><span>海航速运北京分公司</span>
+              <span>货运代理：</span><span>{{orderDetailData.airportStartAgent.agentCompany}}</span>
             </div>
             <div class="item flighttime">
-              <span>交货位置：</span><span>北京市朝阳区爱国路21号</span>
+              <span>交货位置：</span><span>{{orderDetailData.airportStartAgent.deliveryAddress}}</span>
             </div>
             <div class="item transNum">
-              <span>联系方式：</span><span>13468465435</span>
+              <span>联系方式：</span><span>{{orderDetailData.airportStartAgent.agentContactPhone}}</span>
             </div>
           </div>
         </div>
-        <div class="box endport">
+        <div class="box endport" v-if="'airportEndAgent' in orderDetailData">
           <div class="img"><img src="../../../assets/detail_info_img3.png" alt=""></div>
           <div class="title">目的港地面操作服务</div>
           <div class="content">
             <div class="item flightNumber">
-              <span>预计取货时间：</span><span>2017-11-11</span>
+              <span>预计取货时间：</span><span>{{orderDetailData.airportEndAgent.arrivalTime}}</span>
             </div>
             <div class="item flightData">
-              <span>货运代理：</span><span>海航速运北京分公司</span>
+              <span>货运代理：</span><span>{{orderDetailData.airportEndAgent.agentCompany}}</span>
             </div>
             <div class="item flighttime">
-              <span>交货位置：</span><span>北京市朝阳区爱国路21号</span>
+              <span>交货位置：</span><span>{{orderDetailData.airportEndAgent.deliveryAddress}}</span>
             </div>
             <div class="item transNum">
-              <span>联系方式：</span><span>15156556666</span>
+              <span>联系方式：</span><span>{{orderDetailData.airportEndAgent.agentContactPhone}}</span>
             </div>
           </div>
         </div>
-        <div class="box pickup ">
+        <div class="box pickup" v-if="'pickUpAgent' in orderDetailData">
           <div class="img"><img src="../../../assets/detail_info_img4.png" alt=""></div>
           <div class="title">上门取货服务</div>
           <div class="content">
             <div class="item flightNumber">
-              <span>预计取货时间：</span><span>2017-10-10</span>
+              <span>预计取货时间：</span><span>{{orderDetailData.pickUpAgent.arrivalTime}}</span>
             </div>
             <div class="item flightData">
-              <span>货运代理：</span><span>海航速运北京分公司</span>
+              <span>货运代理：</span><span>{{orderDetailData.pickUpAgent.agentCompany}}</span>
             </div>
-            <div class="item flighttime">
+            <div class="item flighttime" v-if="false">
               <span>运输方式：</span><span>专车配送</span>
             </div>
-            <div class="item transNum">
+            <div class="item transNum" v-if="false">
               <span>运输车辆：</span><span>1吨金杯车</span>
             </div>
             <div class="item transNum">
-              <span>取货位置：</span><span>北京市朝阳区爱国路21号</span>
+              <span>取货位置：</span><span>{{orderDetailData.pickUpAgent.deliveryAddress}}</span>
             </div>
             <div class="item transNum">
-              <span>联系方式:</span><span>13215645468</span>
+              <span>联系方式:</span><span>{{orderDetailData.pickUpAgent.agentContactPhone}}</span>
             </div>
           </div>
         </div>
-        <div class="box landing">
+        <div class="box landing" v-if="'deliveryAgent' in orderDetailData">
           <div class="img"><img src="../../../assets/detail_info_img5.png" alt=""></div>
           <div class="title">落地配服务</div>
           <div class="content">
             <div class="item flightNumber">
-              <span>预计取货时间：</span><span>2017-10-10</span>
+              <span>预计取货时间：</span><span>{{orderDetailData.pickUpAgent.arrivalTime}}</span>
             </div>
             <div class="item flightData">
-              <span>货运代理：</span><span>海航速运上海分公司</span>
+              <span>货运代理：</span><span>{{orderDetailData.pickUpAgent.agentCompany}}</span>
             </div>
-            <div class="item flighttime">
+            <div class="item flighttime" v-if="false">
               <span>运输方式：</span><span>一般配送</span>
             </div>
-            <div class="item transNum">
+            <div class="item transNum" v-if="false">
               <span>运输车辆：</span><span>5吨箱式火车</span>
             </div>
             <div class="item transNum">
-              <span>取货位置：</span><span>上海市爱国区爱国路21号</span>
+              <span>取货位置：</span><span>{{orderDetailData.pickUpAgent.deliveryAddress}}</span>
             </div>
             <div class="item transNum">
-              <span>联系方式:</span><span>156465465645</span>
+              <span>联系方式:</span><span>{{orderDetailData.pickUpAgent.agentContactPhone}}</span>
             </div>
           </div>
         </div>
@@ -180,108 +180,108 @@
           <div class="icon">发</div>
           <div class="box name-id">
             <div class="key">姓名</div>
-            <div class="value">陈悠悠</div>
+            <div class="value">{{orderDetailData.senderAddress.contactName}}</div>
             <div class="key">身份证</div>
-            <div class="value">186431351654646644654</div>
+            <div class="value" v-if="'identityCard' in orderDetailData.senderAddress">{{orderDetailData.senderAddress.identityCard}}</div>
           </div>
           <div class="box phone-cellphone">
             <div class="key">手机号</div>
-            <div class="value">17655556666</div>
+            <div class="value">{{orderDetailData.senderAddress.contactMobile}}</div>
             <div class="key">固定电话</div>
-            <div class="value">200-54646541</div>
+            <div class="value" v-if="'contactPhone' in orderDetailData.senderAddress">{{orderDetailData.senderAddress.contactPhone}}</div>
           </div>
           <div class="box address-detial">
             <div class="key">详细地址</div>
-            <div class="value">北京市朝阳区爱国路20号</div>
+            <div class="value" v-if="'region' in orderDetailData.senderAddress">{{orderDetailData.senderAddress.region}}</div>
           </div>
           <div class="box postal">
             <div class="key">邮政编码</div>
-            <div class="value">518100</div>
+            <div class="value" v-if="'postCode ' in orderDetailData.senderAddress">{{orderDetailData.senderAddress.postCode}}</div>
           </div>
         </div>
         <div class="right">
           <div class="icon">收</div>
           <div class="box name-id">
             <div class="key">姓名</div>
-            <div class="value">陈悠悠</div>
+            <div class="value">{{orderDetailData.receiverAddress.contactName}}</div>
             <div class="key">身份证</div>
-            <div class="value">186431351654646644654</div>
+            <div class="value" v-if="'identityCard' in orderDetailData.receiverAddress">{{orderDetailData.receiverAddress.identityCard}}</div>
           </div>
           <div class="box phone-cellphone">
             <div class="key">手机号</div>
-            <div class="value">17655556666</div>
+            <div class="value">{{orderDetailData.receiverAddress.contactMobile}}</div>
             <div class="key">固定电话</div>
-            <div class="value">200-54646541</div>
+            <div class="value" v-if="'contactPhone' in orderDetailData.receiverAddress">{{orderDetailData.receiverAddress.contactPhone}}</div>
           </div>
           <div class="box address-detial">
             <div class="key">详细地址</div>
-            <div class="value">北京市朝阳区爱国路20号</div>
+            <div class="value" v-if="'region' in orderDetailData.receiverAddress">{{orderDetailData.receiverAddress.region}}</div>
           </div>
           <div class="box postal">
             <div class="key">邮政编码</div>
-            <div class="value">518100</div>
+            <div class="value" v-if="'postCode ' in orderDetailData.receiverAddress">{{orderDetailData.receiverAddress.postCode}}</div>
           </div>
         </div>
       </div>
       <div class="goodsInfo">
         <div class="triangle">
-            <p>跟踪信息</p>
+            <p>货物信息</p>
         </div>
         <div class="content">
           <div class="content-left">
             <div class="box weight">
               <span class="title">货物重量</span>
-              <span class="detial">1000</span>
+              <span class="detial">{{orderDetailData.orderGoodsDetail.goodsWeight}}</span>
               <span class="unit">千克</span>
             </div>
             <div class="box num">
               <span class="title">货物件数</span>
-              <span class="detial">10</span>
+              <span class="detial">{{orderDetailData.orderGoodsDetail.goodsNumber}}</span>
               <span class="unit">件</span>
             </div>
             <div class="box size">
               <span class="title">货物体积</span>
-              <span class="detial">0.50</span>
+              <span class="detial">{{orderDetailData.orderGoodsDetail.goodsVolume}}</span>
               <span class="unit">立方米</span>
             </div>
             <div class="box payWeight">
               <span class="title">计费重量</span>
-              <span class="detial">1000.00</span>
+              <span class="detial">{{orderDetailData.orderGoodsDetail.valuationWeight}}</span>
               <span class="unit">千克</span>
             </div>
             <div class="box type">
               <span class="title">货物类型</span>
-              <span class="detial">普货</span>
+              <span class="detial">{{getGoodsType(orderDetailData.orderGoodsDetail.goodsType)}}</span>
             </div>
             <div class="box name">
               <span class="title">货物名称</span>
-              <span class="detial">服装</span>
+              <span class="detial">{{orderDetailData.orderGoodsDetail.goodsName}}</span>
             </div>
           </div>
           <div class="content-middle">
             <div class="box weight">
               <span class="title">实际重量</span>
-              <span class="detial">1000.00</span>
+              <span class="detial">{{orderDetailData.orderGoodsDetail.actualWeight}}</span>
               <span class="unit">千克</span>
             </div>
             <div class="box num">
               <span class="title">实际件数</span>
-              <span class="detial">10</span>
+              <span class="detial">{{orderDetailData.orderGoodsDetail.actualNumber}}</span>
               <span class="unit">件</span>
             </div>
             <div class="box size">
               <span class="title">实际体积</span>
-              <span class="detial">0.50</span>
+              <span class="detial">{{orderDetailData.orderGoodsDetail.actualVolume}}</span>
               <span class="unit">立方米</span>
             </div>
             <div class="box payWeight">
               <span class="title">实际计费重量</span>
-              <span class="detial">1000.00</span>
+              <span class="detial">{{orderDetailData.orderGoodsDetail.valuationWeight}}</span>
               <span class="unit">千克</span>
             </div>
             <div class="box pack">
               <span class="title">货物包装</span>
-              <span class="detial">纸箱</span>
+              <span class="detial">{{orderDetailData.orderGoodsDetail.goodsPackage}}</span>
             </div>
           </div>
           <div class="content-right">
@@ -294,18 +294,7 @@
               <EasyScrollbar>
                 <div class="box" id="wrapper">
                   <div>
-                    <p>100*100*10/5</p>
-                    <p>100*100*10/5</p>
-                    <p>100*100*10/5</p>
-                    <p>100*100*10/5</p>
-                    <p>100*100*10/5</p>
-                    <p>100*100*10/5</p>
-                    <p>100*100*10/5</p>
-                    <p>100*100*10/5</p>
-                    <p>100*100*10/5</p>
-                    <p>100*100*10/5</p>
-                    <p>100*100*10/5</p>
-                    <p>100*100*10/5</p>
+                    <p v-for="(item,index) in FormatGoodsSize" :key="index">{{item}}</p>
                   </div>
                 </div>
               </EasyScrollbar>
@@ -320,37 +309,14 @@
         <div class="fee-top">
           <div class="box left">
             <h3>固定费用</h3>
-            <div>
-              <div class="key">航空运费</div>
-              <div class="value">¥300.00</div>
-            </div>
-            <div>
-              <div class="key">燃油附加费</div>
-              <div class="value">¥120.00</div>
-            </div>
-            <div>
-              <div class="key">出港处置费</div>
-              <div class="value">¥10.00</div>
-            </div>
-            <div>
-              <div class="key">出港制单费</div>
-              <div class="value">¥100.00</div>
-            </div>
-            <div>
-              <div class="key">进港提货费</div>
-              <div class="value">¥100.00</div>
-            </div>
-            <div>
-              <div class="key">上门提货费</div>
-              <div class="value">¥10000.00</div>
-            </div>
-            <div>
-              <div class="key">派送费</div>
-              <div class="value">¥100.00</div>
+            <div v-for="(item,index) in orderDetailData.productPriceList" :key="index">
+              <div class="key" v-if="'name' in item">{{item.name}}</div>
+              <div class="key" v-else-if="'remark' in item">{{item.remark}}</div>
+              <div class="value">¥{{item.price}}</div>
             </div>
             <div class="total">
               <div class="key">合计</div>
-              <div class="value">¥8800.00</div>
+              <div class="value">¥{{totalPay}}</div>
             </div>
           </div>
           <div class="box center">
@@ -358,41 +324,41 @@
           </div>
           <div class="box right">
             <h3>发票信息</h3>
-            <div>
+            <div v-if="'companyName' in orderDetailData.invoiceDTO">
               <div class="key">企业名称：</div>
-              <div class="value">深圳运捷讯息系统有限公司</div>
+              <div class="value">{{orderDetailData.invoiceDTO.companyName}}</div>
             </div>
-            <div>
+            <div v-if="'taxpayerNo' in orderDetailData.invoiceDTO">
               <div class="key">纳税人识别号：</div>
-              <div class="value">46546546464655465</div>
+              <div class="value">{{orderDetailData.invoiceDTO.taxpayerNo}}</div>
             </div>
-            <div>
+            <div v-if="'registerAddress' in orderDetailData.invoiceDTO">
               <div class="key">注册地址：</div>
-              <div class="value">深圳市福田区深南中路什么大厦1122</div>
+              <div class="value">{{orderDetailData.invoiceDTO.registerAddress}}</div>
             </div>
-            <div>
+            <div v-if="'telephone' in orderDetailData.invoiceDTO">
               <div class="key">联系电话：</div>
-              <div class="value">0755-156546465</div>
+              <div class="value">{{orderDetailData.invoiceDTO.telephone}}</div>
             </div>
-            <div>
+            <div v-if="'bankName' in orderDetailData.invoiceDTO">
               <div class="key">开户行：</div>
-              <div class="value">中国建设银行</div>
+              <div class="value">{{orderDetailData.invoiceDTO.bankName}}</div>
             </div>
-            <div>
+            <div v-if="'bankCard' in orderDetailData.invoiceDTO">
               <div class="key">开户行账号：</div>
-              <div class="value">4135465416546464641654</div>
+              <div class="value">{{orderDetailData.invoiceDTO.bankCard}}</div>
             </div>
-            <div>
+            <div v-if="'issuerName' in orderDetailData.invoiceDTO">
               <div class="key">开票人：</div>
-              <div class="value">刘嬷嬷</div>
+              <div class="value">{{orderDetailData.invoiceDTO.issuerName}}</div>
             </div>
-            <div>
+            <div v-if="'issuerMobile' in orderDetailData.invoiceDTO">
               <div class="key">开票人电话：</div>
-              <div class="value">13546655454</div>
+              <div class="value">{{orderDetailData.invoiceDTO.issuerMobile}}</div>
             </div>
-            <div>
+            <div v-if="'issuerAddress' in orderDetailData.invoiceDTO">
               <div class="key">开票人地址：</div>
-              <div class="value">北京市朝阳区建国路</div>
+              <div class="value">{{orderDetailData.invoiceDTO.issuerAddress}}</div>
             </div>
 
           </div>
@@ -400,29 +366,29 @@
         <div class="fee-mid">
           <div class="had">
             <span class="title">已支付</span>
-            <span class="value">¥8300.00</span>
+            <span class="value">¥{{orderDetailData.paidAmount}}</span>
           </div>
           <div class="need">
             <span class="title">待支付</span>
-            <span class="value">¥0.00</span>
+            <span class="value">¥{{orderDetailData.needMakeUpAmount }}</span>
           </div>
         </div>
         <div class="fee-bot">
-          <div class="box">
+          <div class="box" v-for="(item,index) in orderDetailData.payDTOS" :key="index">
             <div>
               <div>
                 <span class="key">系统交易流水号：</span>
-                <span class="value">1354646464646854685468</span>
+                <span class="value">{{item.payNo}}</span>
               </div>
               <div>
                 <span class="key">交易时间：</span>
-                <span class="value">2017-10-10 10:10:10</span>
+                <span class="value">{{item.payTime}}</span>
               </div>
             </div>
             <div>
               <div>
                 <span class="key">交易金额：</span>
-                <span class="value">¥800</span>
+                <span class="value">¥{{item.payAmount}}</span>
               </div>
               <div>
                 <span class="key">支付渠道：</span>
@@ -430,7 +396,7 @@
               </div>
             </div>
           </div>
-          <div class="box">
+          <!-- <div class="box">
             <div>
               <div>
                 <span class="key">系统交易流水号：</span>
@@ -451,7 +417,7 @@
                 <span class="value">支付宝</span>
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
@@ -463,7 +429,8 @@ export default {
   data() {
     return {
       orderId: "",
-      orderNo: ""
+      orderNo: "",
+      orderDetailData:{},
     };
   },
   created() {
@@ -473,7 +440,27 @@ export default {
   },
   methods: {
     goto(path) {
-      this.$router.push(path);
+      this.$router.push({
+        path:path,
+        query:{
+          orderId:this.orderId,
+          orderNo:this.orderNo
+        }
+      });
+    },
+    getGoodsType(val) {
+      var type = "普货";
+      // (7-普货 8-冷链 9-重货 10-危险品
+      if (val == "7") {
+        type = "普货";
+      } else if (val == "8") {
+        type = "冷链";
+      } else if (val == "9") {
+        type = "重货";
+      } else if (val == "10") {
+        type = "危险品";
+      }
+      return type;
     },
     getOrderDetail() {
       this.axios.post("/app/v1/order/getOrderDetail", {
@@ -483,17 +470,35 @@ export default {
         token: this.token
       }).then(data=>{
         console.log(data);
-      });
+        if(data.data.code == 1){
+          this.orderDetailData = data.data.data
+        }else{
+          this.$message.error('获取订单详情失败，请重新获取');
+          this.$router.go(-1);
+        }
+      })
     }
   },
   computed: {
-    ...mapGetters(["id", "token"])
+    ...mapGetters(["id", "token"]),
+    FormatGoodsSize(){
+      // this.orderDetailData.orderGoodsDetail.goodsSize
+      return this.orderDetailData.orderGoodsDetail.goodsSize.split(',')
+    },
+    totalPay(){
+      var total = 0
+      this.orderDetailData.productPriceList.forEach(ele => {
+        total +=parseFloat(ele.price)
+      });
+      return total
+    }
   }
 };
 </script>
 <style lang="scss" scoped>
 .order_detail {
   // 左上角的三角
+  margin-bottom: 400px;
   .triangle {
     display: inline-block;
     position: absolute;

@@ -1,5 +1,5 @@
 <template>
-  <div class="product-container li-product-write-container">
+  <div class="m-product-container m-li-product-write-container">
     <div class="product-container-left">
       <div class="container-left-selection">
         <div class="selection-inner">
@@ -810,7 +810,7 @@ export default {
           }
         } else if (serverType == 2) {
           if (ele.productType == 2) {
-            let priceList = ele.list;
+            let priceList = ele.list[0];
             this.selectServer.landStartPrice.price = priceList.price;
             this.selectServer.landStartPrice.minPrice = priceList.minPrice;
           }
@@ -1091,7 +1091,7 @@ export default {
 </script>
 
 <style lang="scss">
-.product-container {
+.m-product-container {
   color: rgba(153, 153, 153, 1);
   flex: 1;
   width: 100%;
@@ -1126,7 +1126,7 @@ export default {
             width: 700px;
             .left-list-selection {
               width: 250px;
-              transform: scale(0.9);
+              // transform: scale(0.9);
               margin-left: -20px;
               .el-select {
                 width: 250px;
@@ -1303,7 +1303,7 @@ export default {
               justify-content: space-around;
               -webkit-text-size-adjust: none;
               .detail-list1 {
-                margin-bottom: -25px;
+                // margin-bottom: -25px;
               }
               .detail-list3 {
                 width: 300px;
@@ -1513,7 +1513,7 @@ export default {
 }
 </style>
 <style lang='scss'>
-.li-product-write-container {
+.m-li-product-write-container {
   .left-list-selection {
     * {
       border: none;
@@ -1538,7 +1538,7 @@ export default {
     width: 600px;
     .left-list-selection {
       width: 180px;
-      transform: scale(0.9);
+      // transform: scale(0.9);
       select {
         margin-left: -30px;
         width: 170px;

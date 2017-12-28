@@ -17,19 +17,19 @@
           </div>
           <div class="list list3">
             <div class="list-text">基础服务:</div>
-            <span class="list-land"><span class="icon el-icon-success" :class="getProductIndexData.selectServer.baseServer?'active':''"></span>航空运输</span>
+            <span class="list-land" v-if="getProductIndexData.selectServer.baseServer"><span class="icon active el-icon-success"></span>航空运输</span>
           </div>
           <div class="list list4">
             <div class="list-text">更多服务:</div>
-            <span class="list-land"><span class="icon el-icon-success" :class="getProductIndexData.selectServer.airportStart?'active':''"></span>代交货</span>
-            <span class="list-land"><span class="icon el-icon-success" :class="getProductIndexData.selectServer.airportEnd?'active':''"></span>代提交</span>
-            <span class=" list-land"><span class="icon el-icon-success" :class="getProductIndexData.selectServer.landStart?'active':''"></span>上门取货</span>
-            <span class="list-land"><span class="icon el-icon-success" :class="getProductIndexData.selectServer.landEnd?'active':''"></span>落地配</span>
+            <span class="list-land" v-if="getProductIndexData.selectServer.airportStart"><span class="icon active el-icon-success"></span>代交货</span>
+            <span class="list-land" v-if="getProductIndexData.selectServer.airportEnd"><span class="icon active el-icon-success"></span>代提交</span>
+            <span class=" list-land" v-if="getProductIndexData.selectServer.landStart"><span class="icon active el-icon-success"></span>上门取货</span>
+            <span class="list-land" v-if="getProductIndexData.selectServer.landEnd"><span class="icon active el-icon-success"></span>落地配</span>
           </div>
           <div class="list list5">
             <div class="list-text">增值服务:</div>
-            <span class="list-land"><span class="icon el-icon-success" :class="getProductIndexData.selectServer.customs?'active':''"></span>报关报检</span>
-            <span class="list-land"><span class="icon el-icon-success" :class="getProductIndexData.selectServer.insurance?'active':''"></span>运输保险</span>
+            <span class="list-land" v-if="getProductIndexData.selectServer.customs"><span class="icon active el-icon-success"></span>报关报检</span>
+            <span class="list-land" v-if="getProductIndexData.selectServer.insurance"><span class="icon active el-icon-success"></span>运输保险</span>
           </div>
         </div>
       </div>
@@ -557,7 +557,7 @@ export default {
                 this.sendAddressData.tellPhone2,
               detailAddress: this.sendAddressData.detailAddress,
               id: this.id,
-              identityCard: this.sendAddressData.postal,
+              identityCard: this.sendAddressData.id,
               postCode: this.sendAddressData.postal,
               region:
                 this.sendAddressData.address.province +
@@ -594,7 +594,7 @@ export default {
                 this.receiveAddressData.tellPhone2,
               detailAddress: this.receiveAddressData.detailAddress,
               id: this.id,
-              identityCard: this.receiveAddressData.postal,
+              identityCard: this.receiveAddressData.id,
               postCode: this.receiveAddressData.postal,
               region:
                 this.receiveAddressData.address.province +

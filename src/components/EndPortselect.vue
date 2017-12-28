@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-select size="mini" @change="change" v-model="value" filterable placeholder="目的港">
+    <el-select size="mini" @change="change" v-model="value" filterable :placeholder="placeholder">
       <el-option
         v-for="item in portList"
         :key="item.id"
@@ -12,19 +12,18 @@
 </template>
 <script>
 export default {
-  name: "Portselect",
   data() {
     return {
       portList: [],
       value: ""
     };
   },
-  // props: {
-  //   placeHolder: {
-  //     type: String,
-  //     default: "始发港"
-  //   }
-  // },
+  props: {
+    placeholder: {
+      type: String,
+      default: "目的港"
+    }
+  },
   created() {
     this.getPortList();
   },

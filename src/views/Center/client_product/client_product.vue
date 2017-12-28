@@ -1,6 +1,6 @@
 <template>
-<div class="client_product">
-  client_product
+<div class="client-product">
+  <img src="../../../assets/QRCode.png" alt="">
 </div>
 </template>
 <script>
@@ -12,4 +12,8 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.client-product{
+  width: 200px;
+  margin: 200px auto;
+}
 </style>

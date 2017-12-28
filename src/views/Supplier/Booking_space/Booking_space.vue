@@ -9,14 +9,6 @@
         <div class="start">
           <div class="key">始发港</div>
           <div class="value">
-            <!--<el-select size="mini" v-model="searchData.start" placeholder="请选择">
-              <el-option
-                v-for="item in starts"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
-              </el-option>
-            </el-select>-->
             <StartPortselect @startportvalue='startPortValue'></StartPortselect>
           </div>
         </div>
@@ -31,15 +23,7 @@
         <div class="end">
           <div class="key">目的港</div>
           <div class="value">
-            <!--<el-select size="mini" v-model="searchData.end" placeholder="请选择">
-              <el-option
-                v-for="item in ends"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
-              </el-option>
-            </el-select>-->
-            <EndPortselect></EndPortselect>
+            <EndPortselect @endportvalue='endportvalue'></EndPortselect>
           </div>
         </div>
         <div class="order-num">
@@ -92,350 +76,355 @@
         <div class="pay-weight">付费重量(千克)</div>
         <div class="operate">操作</div>
       </div>
-      <!-- 未订舱 -->
-      <div class="tbody">
-        <div class="tbody-head">
-          <!-- <div class="time">2017-09-09 12:00</div> -->
-          <div class="orderNum"><span>订单号：</span><span class="value">74459-4135465416</span></div>
-          <!-- <div class="mainOrderNum"><span>主运单号：</span><span class="value">74459-4135465416</span></div> -->
-          <div class="examine"><span class="value">拆分</span></div>
-        </div>
-        <div class="wrapper">
-          <div class="status">
-            <p>未订舱</p>
-          </div>
-          <div class="plane-num">
-            <p>HU7211</p>
-          </div>
-          <div class="line">
-            <p class="start">北京阿萨德阿萨德艾迪(PEK)</p>
-            <p class="end">上海阿萨德阿萨德艾迪(PVG)</p>
-          </div>
-          <div class="plane-data">
-            <p>2017-10-10</p>
-          </div>
-          <div class="plane-time">
-            <p>10:10-10:10</p>
-          </div>
-          <div class="name">
-            <p>服装</p>
-          </div>
-          <div class="num">
-            <p>20</p>
-          </div>
-          <div class="weight">
-            <p>2000</p>
-          </div>
-          <div class="pay-weight">
-            <p>2000</p>
-          </div>
-          <div class="operate">
-            <div class="icon el-icon-success"></div>
-          </div>
-        </div>
-      </div>
-      <!-- 已提交 -->
-      <div class="tbody">
-        <div class="tbody-head">
-          <!-- <div class="time">2017-09-09 12:00</div> -->
-          <div class="orderNum"><span>订单号：</span><span class="value">74459-4135465416</span></div>
-          <div class="mainOrderNum"><span>主运单号：</span><span class="value">74459-4135465416</span></div>
-          <div class="examine"><span class="value">拆分</span></div>
-        </div>
-        <div class="wrapper">
-          <div class="status">
-            <p class="yellow">已提交</p>
-          </div>
-          <div class="plane-num">
-            <p>HU7211</p>
-          </div>
-          <div class="line">
-            <p class="start">北京阿萨德阿萨德艾迪(PEK)</p>
-            <p class="end">上海阿萨德阿萨德艾迪(PVG)</p>
-          </div>
-          <div class="plane-data">
-            <p>2017-10-10</p>
-          </div>
-          <div class="plane-time">
-            <p>10:10-10:10</p>
-          </div>
-          <div class="name">
-            <p>服装</p>
-          </div>
-          <div class="num">
-            <p>20</p>
-          </div>
-          <div class="weight">
-            <p>2000</p>
-          </div>
-          <div class="pay-weight">
-            <p>2000</p>
-          </div>
-          <div class="operate">
-            <!-- <div class="icon el-icon-success"></div> -->
-          </div>
-        </div>
-      </div>
-      <!-- 订舱成功 -->
-      <div class="tbody success">
-        <div class="tbody-head">
-          <!-- <div class="time">2017-09-09 12:00</div> -->
-          <div class="orderNum"><span>订单号：</span><span class="value">74459-4135465416</span></div>
-          <div class="mainOrderNum"><span>主运单号：</span><span class="value">74459-4135465416</span></div>
-          <div class="examine"><span class="value">拆分</span></div>
-        </div>
-        <div class="wrapper">
-          <div class="status">
-            <p class="green">订舱成功</p>
-          </div>
-          <div class="plane-num">
-            <p>HU7211</p>
-          </div>
-          <div class="line">
-            <p class="start">北京阿萨德阿萨德艾迪(PEK)</p>
-            <p class="end">上海阿萨德阿萨德艾迪(PVG)</p>
-          </div>
-          <div class="plane-data">
-            <p>2017-10-10</p>
-          </div>
-          <div class="plane-time">
-            <p>10:10-10:10</p>
-          </div>
-          <div class="name">
-            <p>服装</p>
-          </div>
-          <div class="num">
-            <p>20</p>
-          </div>
-          <div class="weight">
-            <p>2000</p>
-          </div>
-          <div class="pay-weight">
-            <p>2000</p>
-          </div>
-          <div class="operate">
-            <!-- <div class="icon el-icon-success"></div> -->
-          </div>
-        </div>
-      </div>
-      <!-- 订舱失败 -->
-      <div class="tbody">
-        <div class="tbody-head">
-          <!-- <div class="time">2017-09-09 12:00</div> -->
-          <div class="orderNum"><span>订单号：</span><span class="value">74459-4135465416</span></div>
-          <div class="mainOrderNum"><span>主运单号：</span><span class="value">74459-4135465416</span></div>
-          <div class="examine"><span class="value">拆分</span></div>
-        </div>
-        <div class="wrapper">
-          <div class="status">
-            <p class="red">订舱失败</p>
-          </div>
-          <div class="plane-num">
-            <p>HU7211</p>
-          </div>
-          <div class="line">
-            <p class="start">北京阿萨德阿萨德艾迪(PEK)</p>
-            <p class="end">上海阿萨德阿萨德艾迪(PVG)</p>
-          </div>
-          <div class="plane-data">
-            <p>2017-10-10</p>
-          </div>
-          <div class="plane-time">
-            <p>10:10-10:10</p>
-          </div>
-          <div class="name">
-            <p>服装</p>
-          </div>
-          <div class="num">
-            <p>20</p>
-          </div>
-          <div class="weight">
-            <p>2000</p>
-          </div>
-          <div class="pay-weight">
-            <p>2000</p>
-          </div>
-          <div class="operate">
-            <div class="icon el-icon-success"></div>
-          </div>
-        </div>
-      </div>
-      <!-- 未订舱 -->
-      <div class="tbody">
-        <div class="tbody-head">
-          <!-- <div class="time">2017-09-09 12:00</div> -->
-          <div class="orderNum"><span>订单号：</span><span class="value">74459-4135465416</span></div>
-          <!-- <div class="mainOrderNum"><span>主运单号：</span><span class="value">74459-4135465416</span></div> -->
-          <div class="examine"><span class="value">拆分</span></div>
-        </div>
-        <div class="wrapper">
-          <div class="status">
-            <p>未订舱</p>
-          </div>
-          <div class="plane-num">
-            <p>HU7211</p>
-          </div>
-          <div class="line">
-            <p class="start">北京阿萨德阿萨德艾迪(PEK)</p>
-            <p class="end">上海阿萨德阿萨德艾迪(PVG)</p>
-          </div>
-          <div class="plane-data">
-            <p>2017-10-10</p>
-          </div>
-          <div class="plane-time">
-            <p>10:10-10:10</p>
-          </div>
-          <div class="name">
-            <p>服装</p>
-          </div>
-          <div class="num">
-            <p>20</p>
-          </div>
-          <div class="weight">
-            <p>2000</p>
-          </div>
-          <div class="pay-weight">
-            <p>2000</p>
-          </div>
-          <div class="operate">
-            <div class="icon active el-icon-success"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="body-form">
-      <div class="form-head"></div>
-      <div class="form-content">
-        <div class="left">
-          <h3>订舱航班</h3>
-          <div class="plane-num">
-            <div class="key">航班号</div>
-            <div class="value">
-              <el-input size="mini" v-model="bodyformData.planenum" placeholder="请输入航班号"></el-input>
-            </div>
-          </div>
-          <div class="plane-data">
-            <div class="key">航班日期</div>
-            <div class="value">
-              <el-date-picker
-                v-model="bodyformData.data"
-                type="date"
-                size="mini"
-                placeholder="选择日期">
-              </el-date-picker>
-            </div>
-            <div class="arrow el-icon-arrow-down"></div>
-          </div>
-          <div>
-            <div class="key">始发港</div>
-            <div class="value">北京(PEK)</div>
-          </div>
-          <div>
-            <div class="key">目的港</div>
-            <div class="value">上海(PVG)</div>
-          </div>
-          <div>
-            <div class="key">剩余仓位</div>
-            <div class="value">1000KG</div>
-          </div>
-        </div>
-        <div class="center">
-          <h3>订舱信息</h3>
-          <div class="main-order-num">
-            <div class="key">主运单号</div>
-            <div class="value">
-              <el-input size="mini" placeholder="880"></el-input>
-            </div>
-            <div class="line">|</div>
-            <div class="value2">
-              <el-input size="mini" placeholder="6688668866"></el-input>
-            </div>
-          </div>
-          <div>
-            <div class="key">重量</div>
-            <div class="value"><el-input size="mini" placeholder="6688668866"></el-input></div>
-            <div class="unit">KG</div>
-          </div>
-          <div>
-            <div class="key">件数</div>
-            <div class="value"><el-input size="mini" placeholder="6688668866"></el-input></div>
-            <div class="unit">件</div>
-          </div>
-          <div>
-            <div class="key">体积</div>
-            <div class="value"><el-input size="mini" placeholder="6688668866"></el-input></div>
-            <div class="unit">立方米</div>
-          </div>
-          <div>
-            <div class="key">货物名称</div>
-            <div class="value"><el-input size="mini" placeholder="6688668866"></el-input></div>
-          </div>
-          <div>
-            <div class="key">货物代码</div>
-            <div class="value"><el-input size="mini" placeholder="6688668866"></el-input></div>
-          </div>
-          <div>
-            <div class="key">代理人代码</div>
-            <div class="value"><el-input size="mini" placeholder="6688668866"></el-input></div>
-          </div>
-          <div>
-            <div class="key">计费重量</div>
-            <div class="yellow value"><el-input size="mini" placeholder="6688668866"></el-input></div>
-            <div class="unit">KG</div>
-          </div>
-        </div>
-        <div class="right">
-          <div class="top">
-            <div class="key">
-              <p>货物尺寸</p>
-              <p class="scale">(长*宽*高/件)</p>
-              <p>单位：cm</p>
-            </div>
-            <div class="box">
-              <EasyScrollbar>
-                <div  id="wrapper">
-                  <div class="box-inner">
-                    <p>100*100*10/5</p>
-                    <p>100*100*10/5</p>
-                    <p>100*100*10/5</p>
-                    <p>100*100*10/5</p>
-                    <p>100*100*10/5</p>
-                    <p>100*100*10/5</p>
-                    <p>100*100*10/5</p>
-                    <p>100*100*10/5</p>
-                    <p>100*100*10/5</p>
+      <EasyScrollbar>
+        <div  id="wrapper" style="height: 600px;">
+          <div v-if="orderListData.length==0?false:true">
+            <!-- 未订舱 -->
+            <div class="tbody" v-for="(item,index) in orderListData" :key="index" :class="item.bookingStatus == 2?'success':''">
+              <div class="tbody-head">
+                <!-- <div class="time">2017-09-09 12:00</div> -->
+                <div class="orderNum" v-if="'orderNo' in item"><span>订单号：</span><span class="value">{{item.orderNo}}</span></div>
+                <div class="mainOrderNum" v-if="'aviationNumber' in item"><span>主运单号：</span><span class="value">{{item.aviationNumber}}</span></div>
+                <div class="examine"><span class="value">拆分</span></div>
+              </div>
+              <div class="wrapper">
+                <!-- 未订舱 -->
+                <div class="status" v-if="item.bookingStatus == 0">
+                  <p>未订舱</p>
+                </div>
+                <!-- 已提交 -->
+                <div class="status" v-if="item.bookingStatus == 1">
+                  <p class="yellow">已提交</p>
+                </div>
+                <!-- 订舱成功 -->
+                <div class="status" v-if="item.bookingStatus == 2">
+                  <p class="green">订舱成功</p>
+                </div>
+                <!-- 订舱失败 -->
+                <div class="status" v-if="item.bookingStatus == 3">
+                  <p class="red">订舱失败</p>
+                </div>
+                <div class="plane-num">
+                  <p>{{item.flightNumber}}</p>
+                </div>
+                <div class="line">
+                  <p class="start">{{item.cityStart}}</p>
+                  <p class="end">{{item.cityEnd}}</p>
+                </div>
+                <div class="plane-data">
+                  <p>{{item.flightDate}}</p>
+                </div>
+                <div class="plane-time">
+                  <p>{{item.departureTime}}-{{item.arrivalTime}}</p>
+                </div>
+                <div class="name">
+                  <p>{{item.goodsName}}</p>
+                </div>
+                <div class="num">
+                  <p>{{item.actualNumber}}</p>
+                </div>
+                <div class="weight">
+                  <p>{{item.actualWeight}}</p>
+                </div>
+                <div class="pay-weight">
+                  <p>{{item.actualCalcWeight}}</p>
+                </div>
+                <div class="operate">
+                  <div class="icon el-icon-success"
+                    @click="selectItem(item,item.id)"
+                    :class="item.select?'active':''"
+                    v-if="item.bookingStatus == 0 || item.bookingStatus == 3">
                   </div>
                 </div>
-              </EasyScrollbar>
+              </div>
             </div>
-            <div class="add-btn"></div>
+            <!-- 已提交 -->
+            <!-- <div class="tbody">
+              <div class="tbody-head">
+                <div class="orderNum"><span>订单号：</span><span class="value">74459-4135465416</span></div>
+                <div class="mainOrderNum"><span>主运单号：</span><span class="value">74459-4135465416</span></div>
+                <div class="examine"><span class="value">拆分</span></div>
+              </div>
+              <div class="wrapper">
+                <div class="status">
+                  <p class="yellow">已提交</p>
+                </div>
+                <div class="plane-num">
+                  <p>HU7211</p>
+                </div>
+                <div class="line">
+                  <p class="start">北京阿萨德阿萨德艾迪(PEK)</p>
+                  <p class="end">上海阿萨德阿萨德艾迪(PVG)</p>
+                </div>
+                <div class="plane-data">
+                  <p>2017-10-10</p>
+                </div>
+                <div class="plane-time">
+                  <p>10:10-10:10</p>
+                </div>
+                <div class="name">
+                  <p>服装</p>
+                </div>
+                <div class="num">
+                  <p>20</p>
+                </div>
+                <div class="weight">
+                  <p>2000</p>
+                </div>
+                <div class="pay-weight">
+                  <p>2000</p>
+                </div>
+                <div class="operate">
+                </div>
+              </div>
+            </div> -->
+            <!-- 订舱成功 -->
+            <!-- <div class="tbody success">
+              <div class="tbody-head">
+                <div class="orderNum"><span>订单号：</span><span class="value">74459-4135465416</span></div>
+                <div class="mainOrderNum"><span>主运单号：</span><span class="value">74459-4135465416</span></div>
+                <div class="examine"><span class="value">拆分</span></div>
+              </div>
+              <div class="wrapper">
+                <div class="status">
+                  <p class="green">订舱成功</p>
+                </div>
+                <div class="plane-num">
+                  <p>HU7211</p>
+                </div>
+                <div class="line">
+                  <p class="start">北京阿萨德阿萨德艾迪(PEK)</p>
+                  <p class="end">上海阿萨德阿萨德艾迪(PVG)</p>
+                </div>
+                <div class="plane-data">
+                  <p>2017-10-10</p>
+                </div>
+                <div class="plane-time">
+                  <p>10:10-10:10</p>
+                </div>
+                <div class="name">
+                  <p>服装</p>
+                </div>
+                <div class="num">
+                  <p>20</p>
+                </div>
+                <div class="weight">
+                  <p>2000</p>
+                </div>
+                <div class="pay-weight">
+                  <p>2000</p>
+                </div>
+                <div class="operate">
+                </div>
+              </div>
+            </div> -->
+            <!-- 订舱失败 -->
+            <!-- <div class="tbody">
+              <div class="tbody-head">
+                <div class="orderNum"><span>订单号：</span><span class="value">74459-4135465416</span></div>
+                <div class="mainOrderNum"><span>主运单号：</span><span class="value">74459-4135465416</span></div>
+                <div class="examine"><span class="value">拆分</span></div>
+              </div>
+              <div class="wrapper">
+                <div class="status">
+                  <p class="red">订舱失败</p>
+                </div>
+                <div class="plane-num">
+                  <p>HU7211</p>
+                </div>
+                <div class="line">
+                  <p class="start">北京阿萨德阿萨德艾迪(PEK)</p>
+                  <p class="end">上海阿萨德阿萨德艾迪(PVG)</p>
+                </div>
+                <div class="plane-data">
+                  <p>2017-10-10</p>
+                </div>
+                <div class="plane-time">
+                  <p>10:10-10:10</p>
+                </div>
+                <div class="name">
+                  <p>服装</p>
+                </div>
+                <div class="num">
+                  <p>20</p>
+                </div>
+                <div class="weight">
+                  <p>2000</p>
+                </div>
+                <div class="pay-weight">
+                  <p>2000</p>
+                </div>
+                <div class="operate">
+                  <div class="icon el-icon-success"></div>
+                </div>
+              </div>
+            </div> -->
           </div>
-          <div class="bottom">
+          <div class="page">
+            <el-pagination
+              @current-change='currentChange'
+              background
+              layout="prev, pager, next"
+              :total="totalPage">
+            </el-pagination>
+          </div>
+        </div>
+      </EasyScrollbar>
+    </div>
+    <div class="body-form">
+      <el-form :model="bodyformData" :rules="bodyform" ref="bodyform" class="bodyform">
+        <div class="form-head"></div>
+        <div class="form-content">
+          <div class="left">
+            <h3>订舱航班</h3>
+            <div class="plane-num">
+              <div class="key">航班号</div>
+              <div class="value">
+                <el-input size="mini" v-model="bodyformData.planenum" placeholder="请输入航班号"></el-input>
+              </div>
+            </div>
+            <div class="plane-data">
+              <div class="key">航班日期</div>
+              <div class="value">
+                <el-date-picker
+                  v-model="bodyformData.data"
+                  value-format="yyyy-MM-dd"
+                  type="date"
+                  size="mini"
+                  placeholder="选择日期">
+                </el-date-picker>
+              </div>
+              <div class="arrow el-icon-arrow-down"></div>
+            </div>
+            <div class="startPort">
+              <div class="key">始发港</div>
+              <div class="value">
+                <StartPortselect @startportvalue='bodyFormStartportvalue' :placeholder='bodyformData.startPort'></StartPortselect>
+              </div>
+              <div class="arrow el-icon-arrow-down"></div>
+            </div>
+            <div class="endPort">
+              <div class="key">目的港</div>
+              <div class="value">
+                <EndPortselect @endportvalue='bodyFormEndportvalue' :placeholder='bodyformData.endPort'></EndPortselect>
+              </div>
+              <div class="arrow el-icon-arrow-down"></div>
+            </div>
+            <div class="last-depot">
+              <div class="key">剩余仓位</div>
+              <div class="value">
+                <el-input size="mini" v-model="bodyformData.lastDepot" placeholder="请输入剩余仓位(kg)"></el-input>
+              </div>
+            </div>
+          </div>
+          <div class="center">
+            <h3>订舱信息</h3>
+            <div class="main-order-num">
+              <div class="key">主运单号</div>
+              <div class="value">
+                <el-form-item prop="mainOrderNumF">
+                  <el-input size="mini" v-model="bodyformData.mainOrderNumF" placeholder="880"></el-input>
+                </el-form-item>
+              </div>
+              <div class="line">|</div>
+              <div class="value2">
+                <el-form-item prop="mainOrderNumB">
+                  <el-input size="mini" v-model="bodyformData.mainOrderNumB" placeholder="66886688"></el-input>
+                </el-form-item>
+              </div>
+            </div>
             <div>
-              <div class="key">备注</div>
-              <div class="input"><el-input size="mini" v-model="remark" placeholder="请输入内容"></el-input></div>
+              <div class="key">重量</div>
+              <div class="value"><el-input v-model="bodyformData.goodsWeight" size="mini" placeholder="请输入重量"></el-input></div>
+              <div class="unit">KG</div>
+            </div>
+            <div>
+              <div class="key">件数</div>
+              <div class="value"><el-input v-model="bodyformData.goodsNum" size="mini" placeholder="请输入件数"></el-input></div>
+              <div class="unit">件</div>
+            </div>
+            <div>
+              <div class="key">体积</div>
+              <div class="value"><el-input v-model="bodyformData.goodsVolumn" size="mini" placeholder="请输入体积"></el-input></div>
+              <div class="unit">立方米</div>
+            </div>
+            <div>
+              <div class="key">货物名称</div>
+              <div class="value"><el-input v-model="bodyformData.goodsName" size="mini" placeholder="请输入货物名称"></el-input></div>
+            </div>
+            <div>
+              <div class="key">货物代码</div>
+              <div class="value"><el-input v-model="bodyformData.goodsCode" size="mini" placeholder="请输入货物代码"></el-input></div>
+            </div>
+            <div>
+              <div class="key">代理人代码</div>
+              <div class="value"><el-input v-model="bodyformData.agentCode" size="mini" placeholder="请输入代理人代码"></el-input></div>
+            </div>
+            <div>
+              <div class="key">计费重量</div>
+              <div class="yellow value"><el-input v-model="bodyformData.calcWeight" size="mini" placeholder="请输入计费重量"></el-input></div>
+              <div class="unit">KG</div>
+            </div>
+          </div>
+          <div class="right">
+            <div class="top">
+              <div class="key">
+                <p>货物尺寸</p>
+                <p class="scale">(长*宽*高/件)</p>
+                <p>单位：cm</p>
+              </div>
+              <div class="box">
+                <!-- 增加尺寸模态框 -->
+                <div class="addSize">
+                  <el-dialog width="520px" title="增加货物尺寸" :visible.sync="addSizeDialogFormVisible">
+                      <input type="number" v-model="addSizeDialogFormData.length" placeholder="长">
+                      <input type="number" v-model="addSizeDialogFormData.width" placeholder="宽">
+                      <input type="number" v-model="addSizeDialogFormData.height" placeholder="高">
+                      <input type="number" v-model="addSizeDialogFormData.num" placeholder="件数">
+                    <div slot="footer" class="dialog-footer">
+                      <el-button @click="addSizeDialogFormVisible = false">取 消</el-button>
+                      <el-button @click="addGoodsSize">确 定</el-button>
+                    </div>
+                  </el-dialog>
+                </div>
+                <EasyScrollbar>
+                  <div  id="wrapper">
+                    <div class="box-inner">
+                      <p v-for="(item,index) in bodyformData.goodsSize" :key="index">{{item}}</p>
+                    </div>
+                  </div>
+                </EasyScrollbar>
+              </div>
+              <div class="add-btn" @click="addSizeDialogFormVisible = true"></div>
+            </div>
+            <div class="bottom">
+              <div>
+                <div class="key">备注</div>
+                <div class="input"><el-input size="mini" v-model="bodyformData.remark" placeholder="请输入内容"></el-input></div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="submit-btn">
-        <el-button size="mini" type="danger">提交订舱</el-button>
-      </div>
+        <div class="submit-btn">
+          <el-button size="mini" type="danger" @click="submitOrderCabin('bodyform')">提交订舱</el-button>
+        </div>
+      </el-form>
     </div>
   </div>
 </div>
 </template>
 <script>
-  import StartPortselect from "@/components/StartPortselect";
-  import EndPortselect from "@/components/EndPortselect";
-
-  export default {
-    components: {
-      StartPortselect,
-      EndPortselect,
-    },
-    data() {
+import StartPortselect from "@/components/StartPortselect";
+import EndPortselect from "@/components/EndPortselect";
+import { mapGetters } from "vuex";
+export default {
+  components: {
+    StartPortselect,
+    EndPortselect
+  },
+  data() {
     return {
+      addSizeDialogFormVisible: false,
       searchData: {
         start: "",
         planenum: "",
@@ -444,94 +433,253 @@
         time: "",
         orderstatus: ""
       },
+      totalPage: 0,
+      orderListData: [],
       bodyformData: {
         planenum: "",
-        data: ""
+        data: "",
+        lastDepot: "", // 剩余仓位
+        startPort: "",
+        endPort: "",
+        goodsSize: [],
+        mainOrderNumF: "",
+        mainOrderNumB: "",
+        goodsWeight: "",
+        goodsNum: "",
+        goodsVolumn: "",
+        goodsName: "",
+        goodsCode: "",
+        agentCode: "",
+        calcWeight: "",
+        remark: ""
       },
-      remark: "",
-      starts: [
-        {
-          value: "选项1",
-          label: "黄金糕"
-        },
-        {
-          value: "选项2",
-          label: "双皮奶"
-        },
-        {
-          value: "选项3",
-          label: "蚵仔煎"
-        },
-        {
-          value: "选项4",
-          label: "龙须面"
-        },
-        {
-          value: "选项5",
-          label: "北京烤鸭"
-        }
-      ],
-      ends: [
-        {
-          value: "选项1",
-          label: "黄金糕"
-        },
-        {
-          value: "选项2",
-          label: "双皮奶"
-        },
-        {
-          value: "选项3",
-          label: "蚵仔煎"
-        },
-        {
-          value: "选项4",
-          label: "龙须面"
-        },
-        {
-          value: "选项5",
-          label: "北京烤鸭"
-        }
-      ],
+      bodyform:{
+        mainOrderNumF:[
+          { required: true, message: '主运单号前缀', trigger: 'blur' },
+          { min: 3, max: 3, message: '长度是 3 个字符', trigger: 'blur' }
+        ],
+        mainOrderNumB:[
+          { required: true, message: '主运单号', trigger: 'blur' },
+          { min: 8, max: 8, message: '长度是 8 个字符', trigger: 'blur' }
+        ],
+      },
+      addSizeDialogFormData: {
+        length: "",
+        width: "",
+        height: "",
+        num: ""
+      },
       orderstatuses: [
         {
-          value: "选项1",
-          label: "黄金糕"
+          value: "-1",
+          label: "全部"
         },
         {
-          value: "选项2",
-          label: "双皮奶"
+          value: "0",
+          label: "未订舱"
         },
         {
-          value: "选项3",
-          label: "蚵仔煎"
+          value: "1",
+          label: "申请中"
         },
         {
-          value: "选项4",
-          label: "龙须面"
+          value: "2",
+          label: "订舱成功"
         },
         {
-          value: "选项5",
-          label: "北京烤鸭"
+          value: "3",
+          label: "拒绝订舱"
         }
-      ]
+      ],
+      storeSelectItem: [] //储存被选中的订单信息
     };
   },
-    created() {
-      this.getOrderList();
+  created() {
+    this.getOrderList(1, this.searchData.orderstatus);
+  },
+  methods: {
+    startPortValue(val) {
+      this.searchData.start = val;
     },
-    methods: {
-      getOrderList() {
-        this.axios.get("",{
-            params: {}
-        }).then(data => {
-          console.log(data.data);
+    endportvalue(val) {
+      this.searchData.end = val;
+    },
+    bodyFormStartportvalue(val) {
+      this.bodyformData.startPort = val;
+    },
+    bodyFormEndportvalue(val) {
+      this.bodyformData.endPort = val;
+    },
+    currentChange(val) {
+      this.getOrderList(val, this.searchData.orderstatus);
+
+      // 当改变页数的时候，重置
+      this.storeSelectItem = [];
+      this.initFormData(this.storeSelectItem);
+    },
+    addGoodsSize() {
+      console.log(typeof this.addSizeDialogFormData.length);
+      if (
+        !this.addSizeDialogFormData.length ||
+        !this.addSizeDialogFormData.width ||
+        !this.addSizeDialogFormData.height ||
+        !this.addSizeDialogFormData.num
+      ) {
+        return;
+      }
+      var str =
+        this.addSizeDialogFormData.length +
+        "*" +
+        this.addSizeDialogFormData.width +
+        "*" +
+        this.addSizeDialogFormData.height +
+        "/" +
+        this.addSizeDialogFormData.num;
+      this.bodyformData.goodsSize.push(str);
+      this.addSizeDialogFormVisible = false;
+    },
+    selectItem(item, id) {
+      // 如果已经选择了带有主运单号的订单， 不可以在选择其他的订单
+      // 如果订单中有主运单号 ， 当点击这个订单的时候 ，取消其它的选择
+      if ("aviationNumber" in item) {
+        this.storeSelectItem = [];
+        this.orderListData.forEach(ele => {
+          if (item == ele) {
+          } else {
+            ele.select = false;
+          }
         });
-      },
-      startPortValue (data){
-        console.log(data)
-      },
+        item.select = !item.select;
+        if (item.select) {
+          this.storeSelectItem.push({
+            id: id,
+            item: item
+          });
+        }
+        // console.log(this.storeSelectItem);
+        this.initFormData(this.storeSelectItem);
+      }
+      // 不带主运单号的订单
+      if (!("aviationNumber" in item)) {
+        var limit = true;
+        this.orderListData.forEach(ele => {
+          if ("aviationNumber" in ele && ele.select) {
+            limit = false;
+          }
+        });
+        if (limit) {
+          item.select = !item.select;
+          if (item.select) {
+            this.storeSelectItem.push({
+              id: id,
+              item: item
+            });
+          } else {
+            this.storeSelectItem.forEach((ele, index) => {
+              if (ele.id == id) {
+                this.storeSelectItem.splice(index, 1);
+              }
+            });
+          }
+        }
+        // console.log(this.storeSelectItem);
+        this.initFormData(this.storeSelectItem);
+      }
     },
+    initFormData(item) {
+      //把选中的订单信息中的第一个item赋值给订舱信息
+      if (item.length == 0) {
+        this.bodyformData.startPort = "";
+        this.bodyformData.endPort = "";
+      } else {
+        this.bodyformData.startPort = item[0].item.cityStart;
+        this.bodyformData.endPort = item[0].item.cityEnd;
+      }
+    },
+    getOrderList(pageIndex, orderstatus) {
+      this.orderListData = [];
+      if (orderstatus == undefined) {
+        var _orderstatus = -1;
+      } else if (orderstatus == "") {
+        var _orderstatus = -1;
+      } else {
+        var _orderstatus = orderstatus;
+      }
+      this.axios
+        .post("/web/v1/supplier/booking/list", {
+          bookingStatus: _orderstatus,
+          cityEnd: this.searchData.end,
+          cityStart: this.searchData.start,
+          flightDate: this.searchData.time,
+          flightNo: this.searchData.planenum,
+          id: this.id,
+          orderNo: this.searchData.ordernum,
+          pageIndex: pageIndex,
+          size: 10,
+          token: this.token
+        })
+        .then(data => {
+          if (data.data.code == 1) {
+            this.totalPage = data.data.total;
+            this.orderListData.push(...data.data.data);
+            // this.$set(item, "remove", false);
+            this.orderListData.forEach(ele => {
+              this.$set(ele, "select", false);
+            });
+            // console.log(this.orderListData);
+          } else {
+            this.$message.error("获取订舱列表失败,请重新获取。。");
+          }
+        });
+    },
+    submitOrderCabin(formName) {
+      console.log(this.bodyformData.data);
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          var orderids = ''
+          this.storeSelectItem.forEach(ele=>{
+            orderids = orderids + ele.item.id + ','
+          })
+          orderids = orderids.substring(0,orderids.length-1)
+          this.axios.post("/web/v1/supplier/booking/save", {
+            agentCode: this.bodyformData.agentCode,
+            dep: this.bodyformData.startPort,
+            dest: this.bodyformData.endPort,
+            flightDate1: this.bodyformData.data,
+            flightNo1: this.bodyformData.planenum,
+            goods: this.bodyformData.goodsName,
+            goodsCodo: this.bodyformData.goodsCode,
+            goodsSize: this.bodyformData.goodsSize.toString(),
+            goodsVolumn: this.bodyformData.goodsVolumn,
+            id: this.id,
+            no: this.bodyformData.mainOrderNumB,
+            orderIds: orderids,
+            pc: this.bodyformData.goodsNum,
+            prefix: this.bodyformData.mainOrderNumF,
+            remark: this.bodyformData.remark,
+            token: this.token,
+            weight: this.bodyformData.goodsWeight
+          }).then(data=>{
+            if(data.data.code == 1){
+              this.$message({
+                message: '恭喜你，订舱成功',
+                type: 'success'
+              });
+            }else{
+              this.$message.error('订舱失败');
+            }
+            console.log(data);
+          });
+        } else {
+          console.log('error submit!!');
+          return false;
+        }
+      });
+    }
+  },
+  computed: {
+    ...mapGetters(["id", "token"])
+  }
 };
 </script>
 <style lang="scss">
@@ -612,6 +760,9 @@
       .thead {
         margin-bottom: 20px;
       }
+      .easy-scrollbar {
+        box-shadow: 0 0 10px #a0a0a0;
+      }
       .tbody {
         margin-top: 2px;
         box-shadow: 4px 4px 4px #e0e0e0;
@@ -638,9 +789,9 @@
           .examine {
             flex: 1;
             text-align: right;
-            cursor: pointer;
             margin-right: 30px;
             span {
+              cursor: pointer;
               &:hover {
                 color: gray;
               }
@@ -648,7 +799,7 @@
           }
         }
         .wrapper {
-          height: 80px;
+          // height: 80px;
           justify-items: center;
           align-items: center;
           .line {
@@ -699,6 +850,10 @@
           }
         }
       }
+      .page {
+        text-align: center;
+        margin: 60px 0 30px 0;
+      }
     }
     .body-form {
       padding: 0 30px 30px 30px;
@@ -744,7 +899,10 @@
             }
           }
           .plane-num,
-          .plane-data {
+          .plane-data,
+          .last-depot,
+          .startPort,
+          .endPort {
             border-bottom: 1px solid #e0e0e0;
             position: relative;
             .value {
@@ -786,7 +944,7 @@
             }
             .value {
               color: #5e5e5e;
-              width: 80px;
+              width: 100px;
               text-align: center;
               .el-input {
                 input {
@@ -805,6 +963,7 @@
           }
           .main-order-num {
             position: relative;
+            height: 28px;
             .line {
               position: absolute;
               top: 5px;
@@ -815,7 +974,12 @@
               .el-input {
                 input {
                   border: none;
+                  transform: translateY(-10px);
                 }
+              }
+              .el-form-item__error{
+                z-index: 999;
+                top:45%;
               }
             }
             .value {
@@ -823,6 +987,7 @@
                 width: 50px;
                 input {
                   padding: 0;
+
                 }
               }
             }
@@ -838,6 +1003,31 @@
         }
         .right {
           position: relative;
+          .addSize {
+            .el-dialog__wrapper {
+              .el-dialog__header {
+                background-color: #fccf00;
+                .el-dialog__title {
+                  color: #fff;
+                }
+              }
+              .el-dialog__body {
+                display: flex;
+                input {
+                  width: 25%;
+                  border-right: 1px solid #e0e0e0;
+                  border-bottom: 1px solid #e0e0e0;
+                  margin-right: 10px;
+                  -moz-appearance: textfield;
+                  &::-webkit-inner-spin-button,
+                  &::-webkit-outer-spin-button {
+                    -webkit-appearance: none;
+                    margin: 0;
+                  }
+                }
+              }
+            }
+          }
           .top {
             display: flex;
             padding-top: 40px;
@@ -856,9 +1046,9 @@
               border: 1px solid #b8b8b8;
               padding-left: 20px;
               box-sizing: border-box;
-              #wrapper{
+              #wrapper {
                 height: 185px;
-                .box-inner{
+                .box-inner {
                   padding-bottom: 20px;
                 }
               }
@@ -918,7 +1108,7 @@
       .submit-btn {
         text-align: center;
         margin: 20px 0;
-        button{
+        button {
           padding: 7px 100px;
           box-shadow: 4px 4px 4px #e0e0e0;
         }

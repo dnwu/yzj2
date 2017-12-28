@@ -46,6 +46,7 @@ const Error = () => import ('@/views/Login/Error/Error')
 const Success = () => import ('@/views/Login/Success/Success')
 
 const Index = () => import ('@/views/Index/Index')
+const Order_track_home = () => import ('@/views/Index/Order_track_home/Order_track_home')
 const Service = () => import ('@/views/Service/Service')
 const About = () => import ('@/views/About/About')
 const NewsDetail = () => import ('@/views/About/NewsDetail/NewsDetail')
@@ -68,6 +69,7 @@ const Jinpeng_client = () => import ('@/views/Center/Jinpeng_Client/Jinpeng_clie
 const Order_search = () => import ('@/views/Center/Order_search/Order_search')
 const Order_detail = () => import ('@/views/Center/Order_detail/Order_detail')
 const Order_track = () => import ('@/views/Center/Order_track/Order_track')
+const Order_track_index = () => import ('@/views/Center/Order_track_index/Order_track_index')
 const Ticket_info_egis = () => import ('@/views/Center/Ticket_info_egis/Ticket_info_egis')
 const Bill_look = () => import ('@/views/Center/Bill_look/Bill_look')
 const My_finance = () => import ('@/views/Center/My_finance/My_finance')
@@ -102,7 +104,13 @@ let router = new Router({
           path: '/home',
           name: 'home',
           component: Home
-        }, {
+        },
+        {
+          path: '/home/order_track_home',
+          name: 'order_track_home',
+          component: Order_track_home
+        },
+        {
           path: '/product/airCargoServices',
           name: 'product/airCargoServices',
           component: AirCargoServices,
@@ -432,6 +440,13 @@ let router = new Router({
             usertype:'personal'
           }
         }, {
+          path: '/center/order_track_index',
+          component: Order_track_index,
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'personal'
+          }
+        },{
           path: '/center/ticket_info_egis',
           component: Ticket_info_egis,
           meta: {

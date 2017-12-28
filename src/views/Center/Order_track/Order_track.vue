@@ -1,5 +1,5 @@
 <template>
-  <div class="order-track">
+  <div class="order-track" v-if="'id' in orderDetailData">
     <div class="head">
       <div class="title">
         <el-breadcrumb separator=">>>">
@@ -8,7 +8,7 @@
         </el-breadcrumb>
       </div>
       <div class="steps">
-        <el-steps :space="200" :active="4" finish-status="success">
+        <el-steps :space="200" :active="orderStatus" finish-status="success">
           <el-step title="产品选择"></el-step>
           <el-step title="填写订单"></el-step>
           <el-step title="下单成功"></el-step>
@@ -23,14 +23,14 @@
         <div class="linear"></div>
         <div class="content">
           <div class="left">
-            <p>2017-10-10 10:10:10</p>
+            <p>{{orderDetailData.createTime}}</p>
             <div class="box orderNum">
               <div class="title">订单编号:</div>
-              <div class="detail">46464646464164</div>
+              <div class="detail">{{orderDetailData.orderNo}}</div>
             </div>
             <div class="box transLine">
               <div class="title">运输线路:</div>
-              <div class="detail">北京(PEK)——上海(PVG)</div>
+              <div class="detail">{{orderDetailData.airportStart}}——{{orderDetailData.airportEnd}}</div>
             </div>
             <div class="box baseserve">
               <div class="title">基础服务:</div>
@@ -41,17 +41,17 @@
             <div class="box moreserver">
               <div class="title">更多服务:</div>
               <div class="detail">
-                <div class="item"><span class="get el-icon-circle-check"></span><span>代交货</span></div>
-                <div class="item"><span class="get el-icon-circle-check"></span><span>代提交</span></div>
-                <div class="item"><span class="get el-icon-circle-check"></span><span>上门取货</span></div>
-                <div class="item not"><span class="get el-icon-circle-check"></span><span>落地配</span></div>
+                <div class="item" v-if="'airportStartAgent' in orderDetailData"><span class="get el-icon-circle-check"></span><span>代交货</span></div>
+                <div class="item" v-if="'airportEndAgent' in orderDetailData"><span class="get el-icon-circle-check"></span><span>代提交</span></div>
+                <div class="item" v-if="'pickUpAgent' in orderDetailData"><span class="get el-icon-circle-check"></span><span>上门取货</span></div>
+                <div class="item" v-if="'deliveryAgent' in orderDetailData"><span class="get el-icon-circle-check"></span><span>落地配</span></div>
               </div>
             </div>
-            <div class="box increaseserver">
+            <div class="box increaseserver" v-if="false">
               <div class="title">增值服务:</div>
               <div class="detail">
                 <div class="item"><span class="get el-icon-circle-check"></span><span>报关报检</span></div>
-                <div class="item not"><span class="get el-icon-circle-check"></span><span>运输保险</span></div>
+                <div class="item"><span class="get el-icon-circle-check"></span><span>运输保险</span></div>
               </div>
             </div>
           </div>
@@ -72,58 +72,40 @@
           <div class="content-left">
             <div class="box weight">
               <span class="title">货物重量</span>
-              <span class="detial">1000</span>
+              <span class="detial">{{orderDetailData.orderGoodsDetail.goodsWeight}}</span>
               <span class="unit">千克</span>
             </div>
             <div class="box num">
               <span class="title">货物件数</span>
-              <span class="detial">10</span>
+              <span class="detial">{{orderDetailData.orderGoodsDetail.goodsNumber}}</span>
               <span class="unit">件</span>
             </div>
             <div class="box size">
               <span class="title">货物体积</span>
-              <span class="detial">0.50</span>
+              <span class="detial">{{orderDetailData.orderGoodsDetail.goodsVolume}}</span>
               <span class="unit">立方米</span>
             </div>
             <div class="box payWeight">
               <span class="title">计费重量</span>
-              <span class="detial">1000.00</span>
+              <span class="detial">{{orderDetailData.orderGoodsDetail.valuationWeight}}</span>
               <span class="unit">千克</span>
             </div>
             <div class="box type">
               <span class="title">货物类型</span>
-              <span class="detial">普货</span>
+              <span class="detial">{{getGoodsType(orderDetailData.orderGoodsDetail.goodsType)}}</span>
             </div>
             <div class="box name">
               <span class="title">货物名称</span>
-              <span class="detial">服装</span>
+              <span class="detial">{{orderDetailData.orderGoodsDetail.goodsName}}</span>
             </div>
           </div>
           <div class="content-right">
               <EasyScrollbar>
                 <div class="box" id="wrapper">
-                    <div class="oneday">
-                      <div class="data">2017-10-10</div>
+                    <div class="oneday" v-for="(item,index) in orderDetailData.trackDTOS" :key="index">
+                      <div class="data"></div>
                       <div class="time">
-                        <div class="item"><span class="itme-time">15:48:22</span><span class="caption">【运输中】</span><span class="who">陈丽</span></div>
-                        <div class="item"><span class="itme-time">15:48:22</span><span class="caption">【出发上门】</span><span class="who">陈丽</span></div>
-                        <div class="item"><span class="itme-time">15:48:22</span><span class="caption">【到达目的站】</span><span class="who">陈丽</span></div>
-                      </div>
-                    </div>
-                    <div class="oneday">
-                      <div class="data">2017-10-10</div>
-                      <div class="time">
-                        <div class="item"><span class="itme-time">15:48:22</span><span class="caption">【出港收运】</span><span class="who">陈丽</span></div>
-                        <div class="item"><span class="itme-time">15:48:22</span><span class="caption">【补缴费用】</span><span class="who">王全</span></div>
-                        <div class="item"><span class="itme-time">15:48:22</span><span class="caption">【货物复核】</span><span class="who">陈小丽</span></div>
-                      </div>
-                    </div>
-                    <div class="oneday">
-                      <div class="data">2017-10-10</div>
-                      <div class="time">
-                        <div class="item"><span class="itme-time">15:48:22</span><span class="caption">【订单支付】</span><span class="who">黎明</span></div>
-                        <div class="item"><span class="itme-time">15:48:22</span><span class="caption">【订单受理】</span><span class="who">陈丽</span></div>
-                        <div class="item"><span class="itme-time">15:48:22</span><span class="caption">【订单提交】</span><span class="who">陈悠悠</span></div>
+                        <div class="item"><span class="itme-time">{{item.time}}</span><span class="caption">【{{item.orderType}}】</span><span class="who">{{item.accountName}}</span></div>
                       </div>
                     </div>
                 </div>
@@ -135,13 +117,73 @@
   </div>
 </template>
 <script>
+import { mapGetters } from "vuex";
 export default {
   data() {
-    return {};
+    return {
+      orderId: "",
+      orderNo: "",
+      orderDetailData:{},
+    };
+  },
+  created () {
+    this.orderId = this.$route.query.orderId;
+    this.orderNo = this.$route.query.orderNo;
+    this.getOrderDetail()
   },
   methods: {
     goto(path) {
-      this.$router.push(path);
+      this.$router.push({
+        path:path,
+        query:{
+          orderId:this.orderId,
+          orderNo:this.orderNo
+        }
+      });
+    },
+    getGoodsType(val) {
+      var type = "普货";
+      // (7-普货 8-冷链 9-重货 10-危险品
+      if (val == "7") {
+        type = "普货";
+      } else if (val == "8") {
+        type = "冷链";
+      } else if (val == "9") {
+        type = "重货";
+      } else if (val == "10") {
+        type = "危险品";
+      }
+      return type;
+    },
+     getOrderDetail() {
+      this.axios.post("/app/v1/order/getOrderDetail", {
+        id: this.id,
+        orderId: this.orderId,
+        orderNo: this.orderNo,
+        token: this.token
+      }).then(data=>{
+        console.log(data);
+        if(data.data.code == 1){
+          this.orderDetailData = data.data.data
+        }else{
+          this.$message.error('获取订单详情失败，请重新获取');
+          this.$router.go(-1);
+        }
+      })
+    }
+  },
+  computed:{
+    ...mapGetters(["id", "token"]),
+    orderStatus(){
+      if(this.orderDetailData.orderStatus == 4){
+        return 4
+      }else if(this.orderDetailData.orderStatus == 5){
+        return 5
+      }else if(this.orderDetailData.orderStatus == 7){
+        return 6
+      }else{
+        return 3
+      }
     }
   }
 };
@@ -308,7 +350,7 @@ export default {
                   content: "";
                   position: absolute;
                   top: 6px;
-                  left: -174px;
+                  left: -58px;
                   display: inline-block;
                   width: 8px;
                   height: 8px;
@@ -320,7 +362,7 @@ export default {
                 &::after {
                   content: "";
                   position: absolute;
-                  left: -171px;
+                  left: -55px;
                   top: 0;
                   height: 100%;
                   width: 2px;

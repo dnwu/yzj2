@@ -34,7 +34,7 @@
             <li @click.stop="goto(8,'/center/client_product')" :class="activeIndex == '8'?'active':''"><span class="icon"><img :src="activeIndex == '8'?iconARR[8].active:iconARR[8].default" alt=""></span><span class="title">客户端下单</span></li>
             <li class="title">订单管理</li>
             <li @click.stop="goto(9,'/center/order_search')" :class="activeIndex == '9'?'active':''"><span class="icon"><img :src="activeIndex == '9'?iconARR[9].active:iconARR[9].default" alt=""></span><span class="title">订单查询</span></li>
-            <li @click.stop="goto(10,'/center/order_track')" :class="activeIndex == '10'?'active':''"><span class="icon"><img :src="activeIndex == '10'?iconARR[10].active:iconARR[10].default" alt=""></span><span class="title">订单跟踪</span></li>
+            <li @click.stop="goto(10,'/center/order_track_index')" :class="activeIndex == '10'?'active':''"><span class="icon"><img :src="activeIndex == '10'?iconARR[10].active:iconARR[10].default" alt=""></span><span class="title">订单跟踪</span></li>
             <li class="title">我的财务</li>
             <li @click.stop="goto(11,'/center/ticket_info_egis')" :class="activeIndex == '11'?'active':''"><span class="icon"><img :src="activeIndex == '11'?iconARR[11].active:iconARR[11].default" alt=""></span><span class="title">开票信息维护</span></li>
             <li @click.stop="goto(12,'/center/bill_look')" :class="activeIndex == '12'?'active':''"><span class="icon"><img :src="activeIndex == '12'?iconARR[12].active:iconARR[12].default" alt=""></span><span class="title">账单查看</span></li>
@@ -73,31 +73,31 @@ export default {
   created() {
     this.fullPath = this.$route.fullPath;
     console.log(this.fullPath);
-    if(this.fullPath.includes('/center/account')){
+    if(this.fullPath.includes('account')){
       this.activeIndex = 0
-    }else if(this.fullPath.includes('/center/company_info')){
+    }else if(this.fullPath.includes('company_info')){
       this.activeIndex = 1
-    }else if(this.fullPath.includes('/center/doings')){
+    }else if(this.fullPath.includes('doings')){
       this.activeIndex = 2
-    }else if(this.fullPath.includes('/center/experience')){
+    }else if(this.fullPath.includes('experience')){
       this.activeIndex = 3
-    }else if(this.fullPath.includes('/center/integral')){
+    }else if(this.fullPath.includes('integral')){
       this.activeIndex = 4
-    }else if(this.fullPath.includes('/center/address')){
+    }else if(this.fullPath.includes('address')){
       this.activeIndex = 5
-    }else if(this.fullPath.includes('/center/son_account')){
+    }else if(this.fullPath.includes('son_account')){
       this.activeIndex = 6
-    }else if(this.fullPath.includes('/center/online_product')){
+    }else if(this.fullPath.includes('online_product')){
       this.activeIndex = 7
-    }else if(this.fullPath.includes('/center/client_product')){
+    }else if(this.fullPath.includes('client_product')){
       this.activeIndex = 8
-    }else if(this.fullPath.includes('/center/order_search')){
+    }else if(this.fullPath.includes('order_search')){
       this.activeIndex = 9
-    }else if(this.fullPath.includes('/center/order_track')){
+    }else if(this.fullPath.includes('order_track')){
       this.activeIndex = 10
-    }else if(this.fullPath.includes('/center/ticket_info_egis')){
+    }else if(this.fullPath.includes('ticket_info_egis')){
       this.activeIndex = 11
-    }else if(this.fullPath.includes('/center/bill_look')){
+    }else if(this.fullPath.includes('bill_look')){
       this.activeIndex = 12
     }
   },
