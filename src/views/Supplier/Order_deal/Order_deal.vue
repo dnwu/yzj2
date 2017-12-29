@@ -110,6 +110,7 @@
                       size="mini"
                       is-range
                       v-model="flighttime"
+                      format = "HH:mm"
                       value-format = "HH:mm"
                       range-separator="--"
                       start-placeholder="开始时间"
@@ -528,9 +529,9 @@
                     <el-select size="small" v-model="goodsType" placeholder="请选择">
                       <el-option
                         v-for="item in options2"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value"
+                        :key="item.dataSort"
+                        :label="item.dataName"
+                        :value="item.dataSort"
                         :disabled="item.disabled">
                       </el-option>
                     </el-select>
@@ -662,7 +663,7 @@
         </div>
       </div>
       <div class="submit-btn">
-        <div :class="{hide:!statusAdmin.submitOrder}" class="btn-refuse"><el-button @click="acceptOrder(9)" size="mini" type="info">拒绝订单</el-button></div>
+        <div :class="{hide:!statusAdmin.submitOrder}" class="btn-refuse"><el-button @click="refuseOrder(9)" size="mini" type="info">拒绝订单</el-button></div>
         <div :class="{hide:!statusAdmin.submitOrder}" class="btn-accept"><el-button @click="acceptOrder(3)" size="mini" type="danger">接受订单</el-button></div>
         <div :class="{hide:!statusAdmin.completeOrder}" class="btn-accept"><el-button @click="acceptOrder(7)" size="mini" type="danger">完成订单</el-button></div>
       </div>
@@ -671,23 +672,13 @@
 </template>
 <script>
 import { mapGetters } from "vuex";
+import { logout } from "@/tools/logout";
 export default {
+  mixins: [logout],
   data() {
     return {
-      options2: [{
-        value: 7,
-        label: '普货'
-      }, {
-        value: 8,
-        label: '冷链'
-      }, {
-        value: 9,
-        label: '重货'
-      }, {
-        value: 10,
-        label: '危险品'
-      }],
-      goodsType: 7,
+      options2: [],
+      goodsType: '',
       goodsTypeData: [
         {
           value: 7,
@@ -763,6 +754,24 @@ export default {
     this.orderId = this.$route.query.orderId;
     this.orderNo = this.$route.query.orderNo;
     this.getOrderDetail()
+    this.axios.post("/app/v1/common/queryDict",{
+      "dataType": 4
+    }).then(data => {
+      if(data.data.code === 1){
+        if(data.data.data.detailDTOS.length){
+          this.goodsType = data.data.data.detailDTOS[0].dataSort;
+          this.options2 = data.data.data.detailDTOS;
+        }
+      }else if(data.data.code === -1){
+
+        //this.logout();
+      }else{
+        this.$notify.error({
+          title: '错误',
+          message: '错误，请重试！'
+        });
+      }
+    });
   },
   watch: {
     orderStatus (){
@@ -937,68 +946,72 @@ export default {
                 }
             }
           }
+        }else if(data.data.code === -1){
+
+          //this.logout();
+        }else{
+          this.$notify.error({
+            title: '错误',
+            message: '错误，请重试！'
+          });
+        }
+      });
+    },
+    acceptOrder (status){
+      this.axios.post("/web/v1/supplier/order/accepting",{
+        "id": this.id,
+        "status": status,
+        "orderNo": this.orderNo,
+        "token": this.token,
+      }).then(data => {
+        if(data.data.code === 1){
+          this.$notify({
+            title: '成功',
+            message: '操作成功！',
+            type: 'success'
+          });
+          this.getOrderDetail();
+        }else if(data.data.code === -1){
+
+          //this.logout();
+        }else{
+          this.$notify.error({
+            title: '错误',
+            message: '错误，请重试！'
+          });
         }
       })
     },
-    acceptOrder (status){
-      if(status === 9){
-        this.$confirm('此操作将拒绝该订单, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '已经拒绝了该订单！'
-          });
-          this.axios.post("/web/v1/supplier/order/accepting",{
-            "id": this.id,
-            "status": status,
-            "orderNo": this.orderNo,
-            "token": this.token,
-          }).then(data => {
-            if(data.data.code === 1&&data.data.msg === "操作成功"){
-              this.$message({
-                showClose: true,
-                message: '已经拒绝了该订单！',
-                type: 'success'
-              });
-              this.getOrderDetail();
-            }else{
-              this.$message({
-                showClose: true,
-                message: '出错啦，操作失败，请重新提交！',
-                type: 'error',
-                duration: 0
-              });
-            }
-          })
-        }).catch(() => {
-        });
-      }else{
+    refuseOrder(status) {
+      this.$confirm('此操作将拒绝该订单, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
         this.axios.post("/web/v1/supplier/order/accepting",{
           "id": this.id,
           "status": status,
           "orderNo": this.orderNo,
           "token": this.token,
         }).then(data => {
-          if(data.data.code === 1&&data.data.msg === "操作成功"){
-            this.getOrderDetail();
-            this.$message({
-              showClose: true,
-              message: '操作订单成功！',
+          if(data.data.code === 1){
+            this.$notify({
+              title: '成功',
+              message: '操作成功！',
               type: 'success'
             });
+            this.getOrderDetail();
+          }else if(data.data.code === -1){
+
+            //this.logout();
           }else{
-            this.$message({
-              showClose: true,
-              message: '出错啦，操作失败，请重新提交！',
-              type: 'error',
-              duration: 0
+            this.$notify.error({
+              title: '错误',
+              message: '错误，请重试！'
             });
           }
         })
-      }
+      })
     },
     modifyServiceInfo (){ //修改服务信息的确定按钮
       if(this.flightNo && this.flightDate && this.flighttime[0] && this.flighttime[1]){
@@ -1012,20 +1025,21 @@ export default {
           "flightNumber": this.flightNo,
           "aviationNumber": this.transNum,
         }).then(data => {
-          if(data.data.code === 1&&data.data.msg === "操作成功"){
-            this.$message({
-              showClose: true,
-              message: '修改信息成功！',
+          if(data.data.code === 1){
+            this.$notify({
+              title: '成功',
+              message: '操作成功！',
               type: 'success'
             });
             this.getOrderDetail();
             this.serverInfoModel.airtrans = false;
+          }else if(data.data.code === -1){
+
+            //this.logout();
           }else{
-            this.$message({
-              showClose: true,
-              message: '出错啦，操作失败，请重新提交！',
-              type: 'error',
-              duration: 0
+            this.$notify.error({
+              title: '错误',
+              message: '错误，请重试！'
             });
           }
         });
@@ -1061,7 +1075,7 @@ export default {
           "actualWeight": this.actualGoodsSize.weight,
           "goodsSize": goodsSize
         }).then(data => {
-          if(data.data.code === 1&&data.data.msg === "操作成功"){
+          if(data.data.code === 1){
             this.$message({
               showClose: true,
               message: '货物复核成功！',
@@ -1112,7 +1126,7 @@ export default {
       })
     },
     getCostAdd (){
-      if(this.costAddData.money && this.costAddData.goodsType){
+      if(!this.costAddData.money || !this.goodsType){
         this.$message({
           showClose: true,
           message: '填写不正确，请重新填写!',
@@ -2043,7 +2057,7 @@ export default {
                       text-align-last: justify;
                     }
                     .num{
-                      width: 150px;
+                      width: 142px;
                       height: 30px;
                     }
                     input{

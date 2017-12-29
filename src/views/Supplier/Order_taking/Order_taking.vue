@@ -619,8 +619,10 @@
 <script>
   import StartPortselect from "@/components/StartPortselect";
   import EndPortselect from "@/components/EndPortselect";
+  import { logout } from "@/tools/logout";
   import { mapGetters } from "vuex";
 export default {
+  mixins: [logout],
   components: {
     StartPortselect,
     EndPortselect,
@@ -750,26 +752,42 @@ export default {
   },
   methods:{
     getOrderList(page) {
-      let _this = this;
-      let goodsType = _this.goodsType || -1;
-      let orderStatus = _this.orderStatus || -1;
-      _this.axios.post("/web/v1/supplier/order/orderList",{
-          "cityEnd": _this.endAddress,
-          "cityStart": _this.startAddress,
-          "endTime": _this.orderTime[0],
+      let goodsType = this.goodsType || -1;
+      let orderStatus = this.orderStatus || -1;
+      this.axios.post("/web/v1/supplier/order/orderList",{
+          "cityEnd": this.endAddress,
+          "cityStart": this.startAddress,
+          "endTime": this.orderTime[0],
           "goodType": goodsType,
-          "id": parseInt(_this.id),
-          "orderNo": _this.orderNum,
+          "id": parseInt(this.id),
+          "orderNo": this.orderNum,
           "orderStatus": orderStatus,
           "pageIndex": page,
           "size": 10,
-          "startTime": _this.orderTime[1],
-          "token": _this.token
+          "startTime": this.orderTime[1],
+          "token": this.token
       }).then(data => {
           if(data.data.code === 1){
-            _this.orderList = data.data.data;
-            _this.pageTotal = data.data.total;
+            this.orderList = data.data.data;
+            this.pageTotal = data.data.total;
+          }else if(data.data.code === -1){
+            this.$notify.error({
+              title: '错误',
+              message: '登录失效，请重新登录！'
+            });
+            this.logout();
+          }else{
+            console.log(data.data.msg);
+            this.$notify.error({
+              title: '错误',
+              message: '错误，请重试！'
+            });
           }
+      }).catch(function(err){
+        this.$notify.error({
+          title: '错误',
+          message: '错误，请重试！'
+        });
       });
     },
     dateTransform(time){
@@ -820,9 +838,24 @@ export default {
               this.goodsSizeList = res.orderGoodsDetail.goodsSize.split(',');
             }
           }
+        }else if(data.data.code === -1){
+          this.$notify.error({
+            title: '错误',
+            message: '登录失效，请重新登录！'
+          });
+          this.logout();
+        }else{
+          this.$notify.error({
+            title: '错误',
+            message: '错误，请重试！'
+          });
         }
-      })
-
+      }).catch(function(err){
+        this.$notify.error({
+          title: '错误',
+          message: '错误，请重试！'
+        });
+      });
     },
     dealwith (no,id){
       this.$router.push({ path: '/supplier/order_deal', query: { orderNo: no,orderId: id}})
