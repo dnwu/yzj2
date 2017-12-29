@@ -83,16 +83,16 @@
           <div class="img"><img src="../../../assets/detail_info_img2.png" alt=""></div>
           <div class="title">始发港地面操作服务</div>
           <div class="content">
-            <div class="item flightNumber">
+            <div class="item flightNumber" v-if="'arrivalTime' in orderDetailData.airportStartAgent">
               <span>最晚交货时间：</span><span>{{orderDetailData.airportStartAgent.arrivalTime}}</span>
             </div>
-            <div class="item flightData">
+            <div class="item flightData" v-if="'agentCompany' in orderDetailData.airportStartAgent">
               <span>货运代理：</span><span>{{orderDetailData.airportStartAgent.agentCompany}}</span>
             </div>
-            <div class="item flighttime">
+            <div class="item flighttime" v-if="'deliveryAddress' in orderDetailData.airportStartAgent">
               <span>交货位置：</span><span>{{orderDetailData.airportStartAgent.deliveryAddress}}</span>
             </div>
-            <div class="item transNum">
+            <div class="item transNum" v-if="'agentContactPhone' in orderDetailData.airportStartAgent">
               <span>联系方式：</span><span>{{orderDetailData.airportStartAgent.agentContactPhone}}</span>
             </div>
           </div>
@@ -101,16 +101,16 @@
           <div class="img"><img src="../../../assets/detail_info_img3.png" alt=""></div>
           <div class="title">目的港地面操作服务</div>
           <div class="content">
-            <div class="item flightNumber">
+            <div class="item flightNumber" v-if="'arrivalTime' in orderDetailData.airportEndAgent">
               <span>预计取货时间：</span><span>{{orderDetailData.airportEndAgent.arrivalTime}}</span>
             </div>
-            <div class="item flightData">
+            <div class="item flightData" v-if="'agentCompany' in orderDetailData.airportEndAgent">
               <span>货运代理：</span><span>{{orderDetailData.airportEndAgent.agentCompany}}</span>
             </div>
-            <div class="item flighttime">
+            <div class="item flighttime" v-if="'deliveryAddress' in orderDetailData.airportEndAgent">
               <span>交货位置：</span><span>{{orderDetailData.airportEndAgent.deliveryAddress}}</span>
             </div>
-            <div class="item transNum">
+            <div class="item transNum" v-if="'agentContactPhone' in orderDetailData.airportEndAgent">
               <span>联系方式：</span><span>{{orderDetailData.airportEndAgent.agentContactPhone}}</span>
             </div>
           </div>
@@ -119,10 +119,10 @@
           <div class="img"><img src="../../../assets/detail_info_img4.png" alt=""></div>
           <div class="title">上门取货服务</div>
           <div class="content">
-            <div class="item flightNumber">
+            <div class="item flightNumber" v-if="'arrivalTime' in orderDetailData.pickUpAgent">
               <span>预计取货时间：</span><span>{{orderDetailData.pickUpAgent.arrivalTime}}</span>
             </div>
-            <div class="item flightData">
+            <div class="item flightData" v-if="'agentCompany' in orderDetailData.pickUpAgent">
               <span>货运代理：</span><span>{{orderDetailData.pickUpAgent.agentCompany}}</span>
             </div>
             <div class="item flighttime" v-if="false">
@@ -131,10 +131,10 @@
             <div class="item transNum" v-if="false">
               <span>运输车辆：</span><span>1吨金杯车</span>
             </div>
-            <div class="item transNum">
+            <div class="item transNum" v-if="'deliveryAddress' in orderDetailData.pickUpAgent">
               <span>取货位置：</span><span>{{orderDetailData.pickUpAgent.deliveryAddress}}</span>
             </div>
-            <div class="item transNum">
+            <div class="item transNum" v-if="'agentContactPhone' in orderDetailData.pickUpAgent">
               <span>联系方式:</span><span>{{orderDetailData.pickUpAgent.agentContactPhone}}</span>
             </div>
           </div>
@@ -143,11 +143,11 @@
           <div class="img"><img src="../../../assets/detail_info_img5.png" alt=""></div>
           <div class="title">落地配服务</div>
           <div class="content">
-            <div class="item flightNumber">
-              <span>预计取货时间：</span><span>{{orderDetailData.pickUpAgent.arrivalTime}}</span>
+            <div class="item flightNumber" v-if="'arrivalTime' in orderDetailData.deliveryAgent">
+              <span>预计取货时间：</span><span>{{orderDetailData.deliveryAgent.arrivalTime}}</span>
             </div>
-            <div class="item flightData">
-              <span>货运代理：</span><span>{{orderDetailData.pickUpAgent.agentCompany}}</span>
+            <div class="item flightData" v-if="'agentCompany' in orderDetailData.deliveryAgent">
+              <span>货运代理：</span><span>{{orderDetailData.deliveryAgent.agentCompany}}</span>
             </div>
             <div class="item flighttime" v-if="false">
               <span>运输方式：</span><span>一般配送</span>
@@ -155,11 +155,11 @@
             <div class="item transNum" v-if="false">
               <span>运输车辆：</span><span>5吨箱式火车</span>
             </div>
-            <div class="item transNum">
-              <span>取货位置：</span><span>{{orderDetailData.pickUpAgent.deliveryAddress}}</span>
+            <div class="item transNum" v-if="'deliveryAddress' in orderDetailData.deliveryAgent">
+              <span>取货位置：</span><span>{{orderDetailData.deliveryAgent.deliveryAddress}}</span>
             </div>
-            <div class="item transNum">
-              <span>联系方式:</span><span>{{orderDetailData.pickUpAgent.agentContactPhone}}</span>
+            <div class="item transNum" v-if="'agentContactPhone' in orderDetailData.deliveryAgent">
+              <span>联系方式:</span><span>{{orderDetailData.deliveryAgent.agentContactPhone}}</span>
             </div>
           </div>
         </div>
@@ -324,43 +324,44 @@
           </div>
           <div class="box right">
             <h3>发票信息</h3>
-            <div v-if="'companyName' in orderDetailData.invoiceDTO">
-              <div class="key">企业名称：</div>
-              <div class="value">{{orderDetailData.invoiceDTO.companyName}}</div>
+            <div v-if="'invoiceDTO' in orderDetailData">
+              <div v-if="'companyName' in orderDetailData.invoiceDTO">
+                <div class="key">企业名称：</div>
+                <div class="value">{{orderDetailData.invoiceDTO.companyName}}</div>
+              </div>
+              <div v-if="'taxpayerNo' in orderDetailData.invoiceDTO">
+                <div class="key">纳税人识别号：</div>
+                <div class="value">{{orderDetailData.invoiceDTO.taxpayerNo}}</div>
+              </div>
+              <div v-if="'registerAddress' in orderDetailData.invoiceDTO">
+                <div class="key">注册地址：</div>
+                <div class="value">{{orderDetailData.invoiceDTO.registerAddress}}</div>
+              </div>
+              <div v-if="'telephone' in orderDetailData.invoiceDTO">
+                <div class="key">联系电话：</div>
+                <div class="value">{{orderDetailData.invoiceDTO.telephone}}</div>
+              </div>
+              <div v-if="'bankName' in orderDetailData.invoiceDTO">
+                <div class="key">开户行：</div>
+                <div class="value">{{orderDetailData.invoiceDTO.bankName}}</div>
+              </div>
+              <div v-if="'bankCard' in orderDetailData.invoiceDTO">
+                <div class="key">开户行账号：</div>
+                <div class="value">{{orderDetailData.invoiceDTO.bankCard}}</div>
+              </div>
+              <div v-if="'issuerName' in orderDetailData.invoiceDTO">
+                <div class="key">开票人：</div>
+                <div class="value">{{orderDetailData.invoiceDTO.issuerName}}</div>
+              </div>
+              <div v-if="'issuerMobile' in orderDetailData.invoiceDTO">
+                <div class="key">开票人电话：</div>
+                <div class="value">{{orderDetailData.invoiceDTO.issuerMobile}}</div>
+              </div>
+              <div v-if="'issuerAddress' in orderDetailData.invoiceDTO">
+                <div class="key">开票人地址：</div>
+                <div class="value">{{orderDetailData.invoiceDTO.issuerAddress}}</div>
+              </div>
             </div>
-            <div v-if="'taxpayerNo' in orderDetailData.invoiceDTO">
-              <div class="key">纳税人识别号：</div>
-              <div class="value">{{orderDetailData.invoiceDTO.taxpayerNo}}</div>
-            </div>
-            <div v-if="'registerAddress' in orderDetailData.invoiceDTO">
-              <div class="key">注册地址：</div>
-              <div class="value">{{orderDetailData.invoiceDTO.registerAddress}}</div>
-            </div>
-            <div v-if="'telephone' in orderDetailData.invoiceDTO">
-              <div class="key">联系电话：</div>
-              <div class="value">{{orderDetailData.invoiceDTO.telephone}}</div>
-            </div>
-            <div v-if="'bankName' in orderDetailData.invoiceDTO">
-              <div class="key">开户行：</div>
-              <div class="value">{{orderDetailData.invoiceDTO.bankName}}</div>
-            </div>
-            <div v-if="'bankCard' in orderDetailData.invoiceDTO">
-              <div class="key">开户行账号：</div>
-              <div class="value">{{orderDetailData.invoiceDTO.bankCard}}</div>
-            </div>
-            <div v-if="'issuerName' in orderDetailData.invoiceDTO">
-              <div class="key">开票人：</div>
-              <div class="value">{{orderDetailData.invoiceDTO.issuerName}}</div>
-            </div>
-            <div v-if="'issuerMobile' in orderDetailData.invoiceDTO">
-              <div class="key">开票人电话：</div>
-              <div class="value">{{orderDetailData.invoiceDTO.issuerMobile}}</div>
-            </div>
-            <div v-if="'issuerAddress' in orderDetailData.invoiceDTO">
-              <div class="key">开票人地址：</div>
-              <div class="value">{{orderDetailData.invoiceDTO.issuerAddress}}</div>
-            </div>
-
           </div>
         </div>
         <div class="fee-mid">
@@ -900,6 +901,12 @@ export default {
         .right {
           flex: 3;
           padding-left: 20px;
+          >div{
+            flex-direction: column;
+            >div{
+              display: flex;
+            }
+          }
         }
       }
       .fee-mid {

@@ -9,8 +9,8 @@
         <div class="base-info">
           <div class="head-img"><img src="../../../assets/head_img.png"></div>
           <div class="info">
-            <p class="company-name">会员名称 {{userInfo.fullName}}</p>
-            <p class="account-type">会员类型 {{userInfo.accountType}}</p>
+            <p class="company-name">会员名称：<span>{{userInfo.fullName}}</span></p>
+            <p class="account-type">会员类型：<span>{{userInfo.accountType}}</span></p>
             <div class="star" v-if="'level' in this.userInfo">
               <el-rate
                 v-model='starNo'
@@ -228,9 +228,16 @@ export default {
           .company-name,.account-type {
             font-size: 16px;
             color: #999999;
+            margin: 0;
+            span{
+              color: #888;
+            }
+          }
+          .company-name{
+            margin-top: 40px;
           }
           .star {
-            margin: 40px 0;
+            margin: 20px 0;
           }
           .member {
             display: flex;

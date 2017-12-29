@@ -131,7 +131,7 @@
                 <div class="nav-select-detail">
                   <template v-if="selectServer.landStartGeneral">
                     <div class="detail-list1 detail-list"><span class="detail-name">地面运输费</span><span class="detail-cost">{{selectServer.landStartPrice.price}}元/千克</span></div>
-                    <div class="detail-list2 detail-list"><span class="detail-name">最低收费</span><span class="detail-cost">{{selectServer.landStartPrice.minPrice}}元</span></div>
+                    <div class="detail-list2 detail-list"><span class="detail-name">最低收费</span><span class="detail-cost">{{selectServer.landStartPrice.minPrice}}元/单</span></div>
                   </template>
                   <template v-if="!selectServer.landStartGeneral">
                     <div class="detail-list4 detail-list"><span class="detail-name">配送费</span><span class="detail-cost">{{getLandStartCarPrice}}元/辆</span></div>
@@ -178,7 +178,7 @@
                 <div class="nav-select-detail">
                   <template v-if="selectServer.landEndGeneral">
                     <div class="detail-list1 detail-list"><span class="detail-name">地面运输费</span><span class="detail-cost">{{selectServer.landEndPrice.price}}元/千克</span></div>
-                    <div class="detail-list2 detail-list"><span class="detail-name">最低收费</span><span class="detail-cost">{{selectServer.landEndPrice.minPrice}}元/千克</span></div>
+                    <div class="detail-list2 detail-list"><span class="detail-name">最低收费</span><span class="detail-cost">{{selectServer.landEndPrice.minPrice}}元/单</span></div>
                   </template>
                   <template v-if="!selectServer.landEndGeneral">
                     <div class="detail-list4 detail-list"><span class="detail-name">配送费</span><span class="detail-cost">{{getLandEndCarPrice}}元/辆</span></div>
