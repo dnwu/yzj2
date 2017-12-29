@@ -254,7 +254,7 @@
     <div class="product-container-right">
       <div class="right-nav">费用合计</div>
       <div class="right-content">
-        <div class="right-content-nav">
+        <div class="right-content-nav box1">
           <div class="right-content-cost">
             <span class="cost-text">航空运费</span>
             <span class="cost-number">{{airTransFee}}元</span>
@@ -317,8 +317,8 @@
           </div>
         </div> -->
         <div class="right-content-free">
-          <span class="cost-free">优惠</span>
-          <span>
+          <span class="cost-free cost-text">优惠</span>
+          <span class="cost-number">
             <span class="cost-index">0</span>
             <span>元</span>
           </span>
@@ -331,6 +331,7 @@
           </span>
         </div>
       </div>
+      <div class="wave"></div>
       <div class="confirm" @click="productConfirm">下一步</div>
     </div>
   </div>
@@ -1458,8 +1459,9 @@ export default {
     box-shadow: 0 0 15px #ccc;
     position: relative;
     margin-top: 50px;
-    height: 600px;
-    width: 300px;
+    padding: 0 40px;
+    height: 500px;
+    width: 220px;
     .right-nav {
       height: 50px;
       font-size: 18px;
@@ -1470,12 +1472,16 @@ export default {
     .right-content {
       // min-height: 310px;
       .right-content-nav {
-        height: 60px;
+        // height: 60px;
         margin-top: 10px;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: space-around;
+        &.box1{
+          border-bottom: 1px solid #e0e0e0;
+          padding-bottom: 20px;
+        }
         .right-content-cost {
           width: 200px;
           display: flex;
@@ -1489,13 +1495,18 @@ export default {
       .right-content-free {
         height: 70px;
         display: flex;
-        justify-content: space-around;
+        // justify-content: space-around;
         align-items: center;
         .cost-free {
           width: 80px;
           margin-left: 10px;
           display: inline-block;
           text-align-last: justify;
+        }
+        .cost-number{
+          flex: 1;
+          text-align: right;
+          padding-right: 10px;
         }
       }
       .right-content-total {
@@ -1504,6 +1515,9 @@ export default {
         align-items: center;
         flex-direction: row;
         justify-content: space-around;
+        border-top: 1px dotted #e0e0e0;
+        font-size: 16px;
+        font-weight: 700;
         .total-nav {
           width: 80px;
           margin-left: 30px;
@@ -1512,15 +1526,25 @@ export default {
         }
         .total-content {
           width: 80px;
-          color: rgba(215, 215, 50, 1);
+          color: #FCD832;
         }
       }
+    }
+    .wave{
+      position: absolute;
+      bottom: -15px;
+      left:0;
+      width: 300px;
+      height: 15px;
+      background: linear-gradient(45deg,#F9F9F9 0%,#F9F9F9 50%,#fff 50%,#fff 100%);
+      background-size: 15px 15px;
     }
     .confirm {
       position: absolute;
       width: 100%;
       height: 40px;
       bottom: -70px;
+      left: 0;
       text-align: center;
       line-height: 40px;
       font-size: 20px;

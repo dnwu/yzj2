@@ -368,15 +368,24 @@ let router = new Router({
           children: [
             {
               path: '/center/online_product',
-              component: PIndex
+              component: PIndex,
+              meta:{
+                keepAlive:true
+              }
             },
             {
               path: '/center/online_product/write',
-              component: productWrite
+              component: productWrite,
+              meta:{
+                keepAlive:false
+              }
             },
             {
               path: '/center/online_product/complete',
-              component: productComplete
+              component: productComplete,
+              meta:{
+                keepAlive:false
+              }
             }
           ],
           meta: {

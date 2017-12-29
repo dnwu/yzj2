@@ -11,10 +11,12 @@
     <div class="main">
       <div class="main-head">
         <div class="addressinput">
-          <span>收发地</span>
-          <v-distpicker only-province></v-distpicker>
+          <span>运输路线</span>
+          <!-- <v-distpicker only-province></v-distpicker> -->
+          <StartPortselect @startportvalue = 'startportvalue'></StartPortselect>
           <span class="line"></span>
-          <v-distpicker only-province></v-distpicker>
+          <!-- <v-distpicker only-province></v-distpicker> -->
+          <EndPortselect @endportvalue = 'endportvalue'></EndPortselect>
         </div>
         <div class="goodsType">
           <span>货物类型</span>
@@ -22,9 +24,9 @@
             <el-select v-model="goodsType" placeholder="请选择">
               <el-option
                 v-for="item in goodsTypes"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
+                :key="item.id"
+                :label="item.dataName"
+                :value="item.id">
               </el-option>
             </el-select>
           </div>
@@ -48,7 +50,7 @@
         <div class="orderStatus">
           <span>订单状态</span>
           <div class="select">
-            <el-select v-model="orderStatu" placeholder="请选择">
+            <el-select v-model="orderStatu" placeholder="全部">
               <el-option
                 v-for="item in orderStatus"
                 :key="item.value"
@@ -65,7 +67,7 @@
       <div class="main-body">
         <div class="thead wrapper">
           <div class="goodsName">货物名称</div>
-          <div class="address">收发地</div>
+          <div class="address">运输路线</div>
           <div class="num">件数</div>
           <div class="weight">重量(千克)</div>
           <div class="needPayWeight">计费重量(千克)</div>
@@ -340,36 +342,17 @@
 <script>
 import VDistpicker from "v-distpicker";
 import { mapGetters } from "vuex";
-import pay from '@/api/pay'
+import pay from "@/api/pay";
+import StartPortselect from "@/components/StartPortselect";
+import EndPortselect from "@/components/EndPortselect";
 export default {
-  components: { VDistpicker },
+  components: { VDistpicker, StartPortselect, EndPortselect },
   data() {
     return {
       orderNum: "",
       orderListData: [],
       pageTotal: 60,
-      goodsTypes: [
-        {
-          value: "选项1",
-          label: "普货1"
-        },
-        {
-          value: "选项2",
-          label: "普货2"
-        },
-        {
-          value: "选项3",
-          label: "普货3"
-        },
-        {
-          value: "选项4",
-          label: "普货4"
-        },
-        {
-          value: "选项5",
-          label: "普货5"
-        }
-      ],
+      goodsTypes: [],
       goodsType: "",
       pickerOptions2: {
         shortcuts: [
@@ -438,19 +421,26 @@ export default {
   },
   created() {
     this.getOrderList(1, 10);
+    this.getGoodsTypeList();
   },
   methods: {
-    pay(orderNo,status){
-      pay(orderNo,status)
+    pay(orderNo, status) {
+      pay(orderNo, status);
     },
     errorAlert(title) {
       this.$notify.error({
-        title: '错误',
+        title: "错误",
         message: title
       });
     },
-    searchList(){
-      this.getOrderList(1,10,this.orderStatu)
+    startportvalue(val){
+      console.log(val);
+    },
+    endportvalue(val){
+      console.log(val);
+    },
+    searchList() {
+      this.getOrderList(1, 10, this.orderStatu);
     },
     goDetail(orderNo, id) {
       this.$router.push({
@@ -463,6 +453,15 @@ export default {
         path: "/center/order_track",
         query: { orderNo: orderNo, id: id }
       });
+    },
+    getGoodsTypeList() {
+      this.goodsTypes = [];
+      this.axios
+        .post("/app/v1/common/queryDict", { dataType: 2 })
+        .then(data => {
+          console.log(data.data.data.detailDTOS);
+          this.goodsTypes = data.data.data.detailDTOS;
+        });
     },
     getGoodsType(val) {
       var type = "普货";
@@ -478,8 +477,8 @@ export default {
       }
       return type;
     },
-    getOrderList(pageindex, size,orderStatus) {
-      this.orderListData = []
+    getOrderList(pageindex, size, orderStatus) {
+      this.orderListData = [];
       // size为页面显示数据量 ; pageindex为第几页
       if (size == undefined) {
         var _size = 10;
@@ -505,8 +504,8 @@ export default {
             this.orderListData.push(...orderList);
             // console.log(this.orderListData);
           }
-          if(data.data.code == 10001){
-            this.errorAlert('登录已失效，请重新登录')
+          if (data.data.code == 10001) {
+            this.errorAlert("登录已失效，请重新登录");
           }
         });
     },
@@ -582,10 +581,24 @@ export default {
         span:first-child {
           margin-right: 20px;
         }
+        .el-select{
+          .el-input{
+            input{
+              border: none;
+              border-radius: 0;
+              background-color: #e6e6e6;
+            }
+            .el-input__suffix{
+              .el-input__suffix-inner{
+                margin-right: 0;
+              }
+            }
+          }
+        }
         .line {
           position: absolute;
           top: 50%;
-          left: 218px;
+          left: 294px;
           z-index: 999;
           width: 10px;
           height: 1px;
@@ -625,7 +638,13 @@ export default {
         .block {
           margin-left: 10px;
           .el-date-editor {
+            width: 260px;
             background-color: #e6e6e6;
+            .el-range__close-icon {
+              position: absolute;
+              top: 0;
+              right: 0;
+            }
             input {
               background-color: #e6e6e6;
             }

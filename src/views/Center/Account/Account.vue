@@ -146,7 +146,7 @@ export default {
           token: this.token
         })
         .then(data => {
-          console.log(data.data.data);
+          console.log(data);
           if (data.data.code == "1") {
             this.userInfo = data.data.data;
           }else if(data.data.code == 10001){

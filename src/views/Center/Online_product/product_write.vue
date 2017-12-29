@@ -7,7 +7,7 @@
           <div class="list list1">
             <!-- <div class="list-text">订单编号:</div>
             <span class="list-num">464689648</span> -->
-            <div class="write-back" @click="back" style="cursor:pointer;">返回上一步</div>
+            <div class="write-back" @click="completeGo" style="cursor:pointer;">返回上一步</div>
           </div>
           <div class="list list2">
             <div class="list-text">运输服务:</div>
@@ -721,9 +721,8 @@ export default {
       });
     },
     completeGo() {
-      this.$router.push("/center/Online_product");
+      this.$router.go(-1);
     },
-    back() {},
     confirm() {},
     sendProvince(data) {
       this.sendAddressData.address.province = data.value;
