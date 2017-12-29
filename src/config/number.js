@@ -1,3 +1,9 @@
+/*
+封装函数解决js浮点数精度问题
+
+*/
+
+
 //加法
 Number.prototype.add = function(arg){
   var r1,r2,m;

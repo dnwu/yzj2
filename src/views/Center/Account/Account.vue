@@ -122,9 +122,9 @@
 </template>
 <script>
 import { mapGetters } from "vuex";
-// import { logout } from '@/tools/logout'
+import { logout } from '@/tools/logout'
 export default {
-  // mixins:[ logout ],
+  mixins:[ logout ],
   data() {
     return {
       activity:'',
@@ -150,7 +150,7 @@ export default {
           if (data.data.code == "1") {
             this.userInfo = data.data.data;
           }else if(data.data.code == 10001){
-            // this.logout()
+            this.logout()
           }
         });
     }
