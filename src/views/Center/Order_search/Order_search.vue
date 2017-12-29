@@ -79,7 +79,7 @@
           <div class="tbody-head">
             <div class="time">{{item.createTime}}</div>
             <div class="orderNum">订单号：{{item.orderNo}}</div>
-            <div class="mainOrderNum">主运单号：{{item.orderGoodsDetail.actualNumber}}</div>
+            <div class="mainOrderNum" v-if="'aviationNumber' in item.orderGoodsDetail">主运单号：{{item.orderGoodsDetail.aviationNumber}}</div>
           </div>
           <div class="wrapper">
             <div class="goodsName">
@@ -138,7 +138,7 @@
             <template v-else-if="item.orderStatus=='4'">
               <div class="status">
                 <div class="black"><img src="../../../assets/hadpay_icon.png" alt="">已支付</div>
-                <div>总额¥1602</div>
+                <div>总额¥{{item.amount}}</div>
               </div>
               <div class="operate">
                 <div><span class="detail" @click="goDetail(item.orderNo,item.id)">详情</span><span>|</span><span class="track" @click="goTrack(item.orderNo,item.id)">跟踪</span></div>
@@ -149,7 +149,7 @@
             <template v-else-if="item.orderStatus=='5'">
               <div class="status">
                 <div class="orange"><img src="../../../assets/send_icon.png" alt="">运送中</div>
-                <div>总额¥1602</div>
+                <div>总额¥{{item.amount}}</div>
               </div>
               <div class="operate">
                 <div><span class="detail" @click="goDetail(item.orderNo,item.id)">详情</span><span>|</span><span class="track" @click="goTrack(item.orderNo,item.id)">跟踪</span></div>
@@ -160,7 +160,7 @@
             <template v-else-if="item.orderStatus=='2'">
               <div class="status">
                 <div class="black"><img src="../../../assets/willcare.png" alt="">待受理</div>
-                <div>总额¥1602</div>
+                <div>总额¥{{item.amount}}</div>
               </div>
               <div class="operate">
                 <div><span class="detail" @click="goDetail(item.orderNo,item.id)">详情</span><span>|</span><span class="track" @click="goTrack(item.orderNo,item.id)">跟踪</span></div>
@@ -171,7 +171,7 @@
             <template v-else-if="item.orderStatus=='7'">
               <div class="status">
                 <div class="green"><img src="../../../assets/haddone.png" alt="">已完成</div>
-                <div>总额¥1602</div>
+                <div>总额¥{{item.amount}}</div>
               </div>
               <div class="operate">
                 <div><span class="detail" @click="goDetail(item.orderNo,item.id)">详情</span><span>|</span><span class="track" @click="goTrack(item.orderNo,item.id)">跟踪</span></div>
@@ -459,7 +459,7 @@ export default {
       this.axios
         .post("/app/v1/common/queryDict", { dataType: 2 })
         .then(data => {
-          console.log(data.data.data.detailDTOS);
+          // console.log(data.data.data.detailDTOS);
           this.goodsTypes = data.data.data.detailDTOS;
         });
     },
@@ -502,7 +502,7 @@ export default {
             this.pageTotal = data.data.data.total;
             var orderList = data.data.data.orderBaseDTOS;
             this.orderListData.push(...orderList);
-            // console.log(this.orderListData);
+            console.log(this.orderListData);
           }
           if (data.data.code == 10001) {
             this.errorAlert("登录已失效，请重新登录");
