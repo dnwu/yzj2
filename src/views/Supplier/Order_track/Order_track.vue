@@ -123,6 +123,8 @@
                       <el-date-picker
                         v-model="statusdata"
                         type="date"
+                        :editable = false
+                        :clearable=false
                         value-format = "yyyy-MM-dd"
                         placeholder="选择日期">
                       </el-date-picker>
@@ -135,6 +137,8 @@
                       <el-time-picker
                         v-model="statustime"
                         value-format = "HH:mm:ss"
+                        :editable = false
+                        :clearable=false
                         placeholder="选择时间">
                       </el-time-picker>
                     </div>
@@ -283,7 +287,7 @@ export default {
         "orderNo": this.orderNo,
         "token": this.token,
       }).then(data => {
-        if(data.data.code === 1&&data.data.msg === "操作成功"){
+        if(data.data.code === 1){
           let res =data.data;
           let statusName = "";
           let menuStatus = 3;
@@ -359,6 +363,17 @@ export default {
             this.trackListDate=arr1;
             this.trackListData=arr2;
           }
+        }else if(data.data.code === -1&&data.data.msg === "登录超时"){
+          this.$notify.error({
+            title: '错误',
+            message: '登录已失效，请重新登录！'
+          });
+          this.logout();
+        }else{
+          this.$notify.error({
+            title: '错误',
+            message: data.data.msg
+          });
         }
       })
     },
@@ -401,20 +416,24 @@ export default {
           "orderType": this.statusname,
           "trackId": this.infoId,
         }).then(data => {
-          if(data.data.code === 1&&data.data.msg === "操作成功"){
-            this.$message({
-              showClose: true,
+          if(data.data.code === 1){
+            this.$notify({
+              title: '成功',
               message: '操作成功！',
               type: 'success'
             });
             this.dialogFormVisible = false;
             this.loadOrderTrack();
+          }else if(data.data.code === -1&&data.data.msg === "登录超时"){
+            this.$notify.error({
+              title: '错误',
+              message: '登录已失效，请重新登录！'
+            });
+            this.logout();
           }else{
-            this.$message({
-              showClose: true,
-              message: '出错啦，操作失败，请重新提交！',
-              type: 'error',
-              duration: 0
+            this.$notify.error({
+              title: '错误',
+              message: data.data.msg
             });
           }
         })
@@ -427,19 +446,23 @@ export default {
           "orderType": this.statusname,
         }).then(data => {
           if(data.data.code === 1&&data.data.msg === "操作成功"){
-            this.$message({
-              showClose: true,
+            this.$notify({
+              title: '成功',
               message: '操作成功！',
               type: 'success'
             });
             this.dialogFormVisible = false;
             this.loadOrderTrack();
+          }else if(data.data.code === -1&&data.data.msg === "登录超时"){
+            this.$notify.error({
+              title: '错误',
+              message: '登录已失效，请重新登录！'
+            });
+            this.logout();
           }else{
-            this.$message({
-              showClose: true,
-              message: '出错啦，操作失败，请重新提交！',
-              type: 'error',
-              duration: 0
+            this.$notify.error({
+              title: '错误',
+              message: data.data.msg
             });
           }
         })
@@ -457,19 +480,23 @@ export default {
           "recordId": id,
         }).then(data => {
           if(data.data.code === 1&&data.data.msg === "操作成功"){
-            this.$message({
-              showClose: true,
+            this.$notify({
+              title: '成功',
               message: '删除成功！',
               type: 'success'
             });
             this.dialogFormVisible = false;
             this.loadOrderTrack();
+          }else if(data.data.code === -1&&data.data.msg === "登录超时"){
+            this.$notify.error({
+              title: '错误',
+              message: '登录已失效，请重新登录！'
+            });
+            this.logout();
           }else{
-            this.$message({
-              showClose: true,
-              message: '出错啦，操作失败，请重新提交！',
-              type: 'error',
-              duration: 0
+            this.$notify.error({
+              title: '错误',
+              message: data.data.msg
             });
           }
         })

@@ -97,6 +97,7 @@
                       size="mini"
                       v-model="flightDate"
                       type="date"
+                      :editable = false
                       value-format = "yyyy-MM-dd"
                       placeholder="选择日期">
                     </el-date-picker>
@@ -110,6 +111,7 @@
                       size="mini"
                       is-range
                       v-model="flighttime"
+                      :editable = false
                       format = "HH:mm"
                       value-format = "HH:mm"
                       range-separator="--"
@@ -538,7 +540,7 @@
                   </p>
                   <p>
                     <span class="title">金额：</span>
-                    <input v-model="costAddData.money" class="num" type="number">
+                    <input v-model="costAddData.money" class="num" type="number" step="0.01">
                     <span class="unit">元</span>
                   </p>
                   <p>
@@ -679,25 +681,6 @@ export default {
     return {
       options2: [],
       goodsType: '',
-      goodsTypeData: [
-        {
-          value: 7,
-          label: "普货"
-        },
-        {
-          value: 8,
-          label: "冷链"
-        },
-        {
-          value: 9,
-          label: "重货"
-        },
-        {
-          value: 10,
-          label: "危险品"
-        },
-      ],
-      value: 7,
       serverInfoModel: {
         airtrans: false,
         beginport: false,
@@ -759,17 +742,13 @@ export default {
     }).then(data => {
       if(data.data.code === 1){
         if(data.data.data.detailDTOS.length){
-          this.goodsType = data.data.data.detailDTOS[0].dataSort;
           this.options2 = data.data.data.detailDTOS;
+        }else{
+          this.$notify.error({
+            title: '错误',
+            message: data.data.msg
+          });
         }
-      }else if(data.data.code === -1){
-
-        //this.logout();
-      }else{
-        this.$notify.error({
-          title: '错误',
-          message: '错误，请重试！'
-        });
       }
     });
   },
@@ -946,13 +925,16 @@ export default {
                 }
             }
           }
-        }else if(data.data.code === -1){
-
-          //this.logout();
+        }else if(data.data.code === 10001){
+          this.$notify.error({
+            title: '错误',
+            message: '登录已失效，请重新登录！'
+          });
+          this.logout();
         }else{
           this.$notify.error({
             title: '错误',
-            message: '错误，请重试！'
+            message: data.data.msg
           });
         }
       });
@@ -971,13 +953,16 @@ export default {
             type: 'success'
           });
           this.getOrderDetail();
-        }else if(data.data.code === -1){
-
-          //this.logout();
+        }else if(data.data.code === -1&&data.data.msg === "登录超时"){
+          this.$notify.error({
+            title: '错误',
+            message: '登录已失效，请重新登录！'
+          });
+          this.logout()
         }else{
           this.$notify.error({
             title: '错误',
-            message: '错误，请重试！'
+            message: data.data.msg
           });
         }
       })
@@ -1001,55 +986,60 @@ export default {
               type: 'success'
             });
             this.getOrderDetail();
-          }else if(data.data.code === -1){
-
-            //this.logout();
+          }else if(data.data.code === -1&&data.data.msg === "登录超时"){
+            this.$notify.error({
+              title: '错误',
+              message: '登录已失效，请重新登录！'
+            });
+            this.logout()
           }else{
             this.$notify.error({
               title: '错误',
-              message: '错误，请重试！'
+              message: data.data.msg
             });
           }
         })
       })
     },
     modifyServiceInfo (){ //修改服务信息的确定按钮
-      if(this.flightNo && this.flightDate && this.flighttime[0] && this.flighttime[1]){
-        this.axios.post("/web/v1/supplier/order/infoSupplement",{
-          "id": this.id,
-          "orderNo": this.orderNo,
-          "token": this.token,
-          "flightDate": this.flightDate,
-          "departureTime": this.flighttime[0],
-          "arrivalTime": this.flighttime[1],
-          "flightNumber": this.flightNo,
-          "aviationNumber": this.transNum,
-        }).then(data => {
-          if(data.data.code === 1){
-            this.$notify({
-              title: '成功',
-              message: '操作成功！',
-              type: 'success'
-            });
-            this.getOrderDetail();
-            this.serverInfoModel.airtrans = false;
-          }else if(data.data.code === -1){
-
-            //this.logout();
-          }else{
-            this.$notify.error({
-              title: '错误',
-              message: '错误，请重试！'
-            });
-          }
+      if(!this.flightNo || !this.flightDate || !this.flighttime[0] || !this.flighttime[1]) {
+        this.$notify.error({
+          title: '错误',
+          message: '填写不正确，请重新填写!'
         });
-      }else{
-        this.$message({
-          showClose: true,
-          message: '填写不正确，请重新填写!',
-          type: 'error',
-        });
+        return
       }
+      this.axios.post("/web/v1/supplier/order/infoSupplement",{
+        "id": this.id,
+        "orderNo": this.orderNo,
+        "token": this.token,
+        "flightDate": this.flightDate,
+        "departureTime": this.flighttime[0],
+        "arrivalTime": this.flighttime[1],
+        "flightNumber": this.flightNo,
+        "aviationNumber": this.transNum,
+      }).then(data => {
+        if(data.data.code === 1){
+          this.$notify({
+            title: '成功',
+            message: '操作成功！',
+            type: 'success'
+          });
+          this.getOrderDetail();
+          this.serverInfoModel.airtrans = false;
+        }else if(data.data.code === -1&&data.data.msg === "登录超时"){
+          this.$notify.error({
+            title: '错误',
+            message: '登录已失效，请重新登录！'
+          });
+          this.logout()
+        }else{
+          this.$notify.error({
+            title: '错误',
+            message: data.data.msg
+          });
+        }
+      });
     },
     calculationWeight (){
       let chargWeight = this.actualGoodsSize.volume*167;
@@ -1060,45 +1050,48 @@ export default {
       }
     },
     reviewOfGoodsData (){
-      let goodsSize = '';
-      if(this.actualGoodsSizeList.length && this.actualGoodsSize.weight){
-        for(let i=0;i<this.actualGoodsSizeList.length;i++){
-          goodsSize += this.actualGoodsSizeList[i]+',';
-        }
-        this.axios.post("/web/v1/supplier/order/reviewSave",{
-          "id": this.id,
-          "orderNo": this.orderNo,
-          "token": this.token,
-          "actualCalcWeight": this.actualWeight,
-          "actualNumber": this.actualGoodsSize.num,
-          "actualVolume": this.actualGoodsSize.volume,
-          "actualWeight": this.actualGoodsSize.weight,
-          "goodsSize": goodsSize
-        }).then(data => {
-          if(data.data.code === 1){
-            this.$message({
-              showClose: true,
-              message: '货物复核成功！',
-              type: 'success'
-            });
-            this.getOrderDetail();
-            this.reviewOfGoods = false;
-          }else{
-            this.$message({
-              showClose: true,
-              message: '出错啦，操作失败，请重新提交！',
-              type: 'error',
-              duration: 0
-            });
-          }
-        })
-      }else{
-        this.$message({
-          showClose: true,
-          message: '填写不正确，请重新填写!',
-          type: 'error',
+      if(!this.actualGoodsSizeList.length || !this.actualGoodsSize.weight) {
+        this.$notify.error({
+          title: '错误',
+          message: '填写不正确，请重新填写!'
         });
+        return
       }
+      let goodsSize = '';
+      for(let i=0;i<this.actualGoodsSizeList.length;i++){
+        goodsSize += this.actualGoodsSizeList[i]+',';
+      }
+      this.axios.post("/web/v1/supplier/order/reviewSave",{
+        "id": this.id,
+        "orderNo": this.orderNo,
+        "token": this.token,
+        "actualCalcWeight": this.actualWeight,
+        "actualNumber": this.actualGoodsSize.num,
+        "actualVolume": this.actualGoodsSize.volume,
+        "actualWeight": this.actualGoodsSize.weight,
+        "goodsSize": goodsSize
+      }).then(data => {
+        if(data.data.code === 1){
+          this.$notify({
+            title: '成功',
+            message: '操作成功！',
+            type: 'success'
+          });
+          this.getOrderDetail();
+          this.reviewOfGoods = false;
+        }else if(data.data.code === -1&&data.data.msg === "登录超时"){
+          this.$notify.error({
+            title: '错误',
+            message: '登录已失效，请重新登录！'
+          });
+          this.logout()
+        }else{
+          this.$notify.error({
+            title: '错误',
+            message: data.data.msg
+          });
+        }
+      })
     },
     getCostPay (){
       this.axios.post("/web/v1/supplier/order/executivePay",{
@@ -1107,30 +1100,33 @@ export default {
         "token": this.token,
         status: 6
       }).then(data => {
-        if(data.data.code === 1&&data.data.msg === "操作成功"){
-          this.$message({
-            showClose: true,
+        if(data.data.code === 1){
+          this.$notify({
+            title: '成功',
             message: '操作成功！',
             type: 'success'
           });
           this.getOrderDetail();
           this.costPay = false;
+        }else if(data.data.code === -1&&data.data.msg === "登录超时"){
+          this.$notify.error({
+            title: '错误',
+            message: '登录已失效，请重新登录！'
+          });
+          this.logout()
         }else{
-          this.$message({
-            showClose: true,
-            message: '出错啦，操作失败，请重新提交！',
-            type: 'error',
-            duration: 0
+          this.$notify.error({
+            title: '错误',
+            message: data.data.msg
           });
         }
       })
     },
     getCostAdd (){
       if(!this.costAddData.money || !this.goodsType){
-        this.$message({
-          showClose: true,
-          message: '填写不正确，请重新填写!',
-          type: 'error',
+        this.$notify.error({
+          title: '错误',
+          message: '填写不正确，请重新填写!'
         });
         return
       }
@@ -1142,20 +1138,24 @@ export default {
         "remarks": this.costAddData.Remarks,
         "costType": this.goodsType,
       }).then(data => {
-        if(data.data.code === 1&&data.data.msg === "操作成功"){
-          this.$message({
-            showClose: true,
+        if(data.data.code === 1){
+          this.$notify({
+            title: '成功',
             message: '操作成功！',
             type: 'success'
           });
           this.getOrderDetail();
           this.costAdd = false;
+        }else if(data.data.code === -1&&data.data.msg === "登录超时"){
+          this.$notify.error({
+            title: '错误',
+            message: '登录已失效，请重新登录！'
+          });
+          this.logout()
         }else{
-          this.$message({
-            showClose: true,
-            message: '出错啦，操作失败，请重新提交！',
-            type: 'error',
-            duration: 0
+          this.$notify.error({
+            title: '错误',
+            message: data.data.msg
           });
         }
       })

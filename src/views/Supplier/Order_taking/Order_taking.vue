@@ -639,55 +639,9 @@ export default {
         planeIcon: require("../../../assets/plane_icon.png")
       },
       orderNum: "",
-      startPortData: [
-        {
-          value: "选项1",
-          label: "黄金糕"
-        },
-        {
-          value: "选项2",
-          label: "双皮奶"
-        },
-        {
-          value: "选项3",
-          label: "蚵仔煎"
-        },
-        {
-          value: "选项4",
-          label: "龙须面"
-        },
-        {
-          value: "选项5",
-          label: "北京烤鸭"
-        }
-      ],
-      startPort: "",
-      endPortData: [
-        {
-          value: "选项1",
-          label: "黄金糕"
-        },
-        {
-          value: "选项2",
-          label: "双皮奶"
-        },
-        {
-          value: "选项3",
-          label: "蚵仔煎"
-        },
-        {
-          value: "选项4",
-          label: "龙须面"
-        },
-        {
-          value: "选项5",
-          label: "北京烤鸭"
-        }
-      ],
-      endPort: "",
       goodsTypeData: [
         {
-          value: 7,
+          value: '7',
           label: "普货"
         },
         {
@@ -770,24 +724,18 @@ export default {
           if(data.data.code === 1){
             this.orderList = data.data.data;
             this.pageTotal = data.data.total;
-          }else if(data.data.code === -1){
+          }else if(data.data.code === -1&&data.data.msg === "登录超时"){
             this.$notify.error({
               title: '错误',
-              message: '登录失效，请重新登录！'
+              message: '登录已失效，请重新登录！'
             });
-            this.logout();
+            this.logout()
           }else{
-            console.log(data.data.msg);
             this.$notify.error({
               title: '错误',
-              message: '错误，请重试！'
+              message: data.data.msg
             });
           }
-      }).catch(function(err){
-        this.$notify.error({
-          title: '错误',
-          message: '错误，请重试！'
-        });
       });
     },
     dateTransform(time){
@@ -838,23 +786,18 @@ export default {
               this.goodsSizeList = res.orderGoodsDetail.goodsSize.split(',');
             }
           }
-        }else if(data.data.code === -1){
+        }else if(data.data.code === -1&&data.data.msg === "登录超时"){
           this.$notify.error({
             title: '错误',
-            message: '登录失效，请重新登录！'
+            message: '登录已失效，请重新登录！'
           });
-          this.logout();
+          this.logout()
         }else{
           this.$notify.error({
             title: '错误',
-            message: '错误，请重试！'
+            message: data.data.msg
           });
         }
-      }).catch(function(err){
-        this.$notify.error({
-          title: '错误',
-          message: '错误，请重试！'
-        });
       });
     },
     dealwith (no,id){
