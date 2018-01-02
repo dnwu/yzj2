@@ -12,6 +12,7 @@
             <p class="company-name">会员名称：<span>{{userInfo.fullName}}</span></p>
             <p class="account-type">会员类型：<span>{{userInfo.accountType}}</span></p>
             <div class="star" v-if="'level' in this.userInfo">
+              <div class="key">会员级别：</div>
               <el-rate
                 v-model='starNo'
                 disabled
@@ -238,6 +239,11 @@ export default {
           }
           .star {
             margin: 20px 0;
+            display: flex;
+            .key{
+              font-size: 16px;
+              color:#999999;
+            }
           }
           .member {
             display: flex;

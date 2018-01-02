@@ -6,7 +6,7 @@
           <img src="../../assets/login_logo.png" alt="">
         </div>
         <div class="title">
-          <h3>供应商中心</h3>
+          <h3>{{title}}</h3>
           <span @click="goto(0,'/home')">返回官网首页</span>
         </div>
       </div>
@@ -49,6 +49,7 @@ import {mapGetters,mapMutations} from 'vuex'
 export default {
   data() {
     return {
+      title:'供应商中心',
       fullPath: "/center/account",
       activeIndex:0,
       iconARR:[{default:require('../../assets/nav1.png'),active:require('../../assets/nav1_1.png')},
@@ -67,29 +68,39 @@ export default {
   },
   created() {
     this.fullPath = this.$route.fullPath;
-    console.log(this.fullPath);
     if(this.fullPath.includes('account')){
       this.activeIndex = 0
-    }else if(this.fullPath.includes('company_info')){
+      this.title = '账号信息'
+    }else if(this.fullPath.includes('ompany_info')){
       this.activeIndex = 1
-    }else if(this.fullPath.includes('server_info')){
+      this.title = '企业信息'
+    }else if(this.fullPath.includes('erver_info')){
       this.activeIndex = 2
-    }else if(this.fullPath.includes('son_account')){
+      this.title = '服务信息'
+    }else if(this.fullPath.includes('on_account')){
       this.activeIndex = 3
-    }else if(this.fullPath.includes('order_taking')){
+      this.title = '子账号管理'
+    }else if(this.fullPath.includes('rder_taking')){
       this.activeIndex = 4
-    }else if(this.fullPath.includes('booking_space')){
+      this.title = '接单管理'
+    }else if(this.fullPath.includes('ooking_space')){
       this.activeIndex = 5
-    }else if(this.fullPath.includes('making_bill')){
+      this.title = '订舱管理'
+    }else if(this.fullPath.includes('aking_bill')){
       this.activeIndex = 6
-    }else if(this.fullPath.includes('airlift')){
+      this.title = '制单管理'
+    }else if(this.fullPath.includes('irlift')){
       this.activeIndex = 7
-    }else if(this.fullPath.includes('land_transport')){
+      this.title = '空运产品管理'
+    }else if(this.fullPath.includes('and_transport')){
       this.activeIndex = 8
-    }else if(this.fullPath.includes('airport_operation')){
+      this.title = '陆运产品管理'
+    }else if(this.fullPath.includes('irport_operation')){
       this.activeIndex = 9
-    }else if(this.fullPath.includes('value_add')){
+      this.title = '机场操作产品管理'
+    }else if(this.fullPath.includes('alue_add')){
       this.activeIndex = 10
+      this.title = '增值服务产品管理'
     }
   },
   methods: {
@@ -110,6 +121,29 @@ export default {
     goto(index,path){
       this.$router.push(path)
       this.activeIndex = index
+      if(index == 0){
+        this.title = '账号信息'
+      }else if(index == 1){
+        this.title = '企业信息'
+      }else if(index == 2){
+        this.title = '服务信息'
+      }else if(index == 3){
+        this.title = '子账号管理'
+      }else if(index == 4){
+        this.title = '接单管理'
+      }else if(index == 5){
+        this.title = '订舱管理'
+      }else if(index == 6){
+        this.title = '制单管理'
+      }else if(index == 7){
+        this.title = '空运产品管理'
+      }else if(index == 8){
+        this.title = '陆运产品管理'
+      }else if(index == 9){
+        this.title = '机场操作产品管理'
+      }else if(index == 10){
+        this.title = '增值服务产品管理'
+      }
     }
   },
   computed: {

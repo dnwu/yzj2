@@ -13,7 +13,7 @@
             <div class="list-text">运输服务:</div>
             <span class="list-land">{{getProductIndexData.searchData.startPort}}-{{getProductIndexData.searchData.endPort}}</span>
             <span class="list-land"> 货物类型：{{ goodsType }}</span>
-            <span class="listTime">航班起飞时间：{{getProductIndexData.searchData.planeData}} {{getProductIndexData.searchData.planeTime[0]}}--{{getProductIndexData.searchData.planeTime[1]}}</span>
+            <span class="listTime">航班起飞时间：{{formatPlaneData}} {{getProductIndexData.searchData.planeTime[0]}}--{{getProductIndexData.searchData.planeTime[1]}}</span>
           </div>
           <div class="list list3">
             <div class="list-text">基础服务:</div>
@@ -27,7 +27,7 @@
             <span class="list-land" v-if="getProductIndexData.selectServer.landEnd"><span class="icon active el-icon-success"></span>落地配</span>
           </div>
           <div class="list list5">
-            <div class="list-text">增值服务:</div>
+            <div class="list-text" v-if="false">增值服务:</div>
             <span class="list-land" v-if="getProductIndexData.selectServer.customs"><span class="icon active el-icon-success"></span>报关报检</span>
             <span class="list-land" v-if="getProductIndexData.selectServer.insurance"><span class="icon active el-icon-success"></span>运输保险</span>
           </div>
@@ -304,32 +304,32 @@
     <div class="product-title">费用信息</div>
     <div class="product-cost">
       <div class="cost-content">
-        <div class="cost-list cost-list1" v-if="'airTransFee' in getProductIndexData.FeeInfo">
+        <div class="cost-list" v-if="'airTransFee' in getProductIndexData.FeeInfo && getProductIndexData.FeeInfo.airTransFee != 0">
           <span class="cost-num">航空运费</span>
           <span class="cost-line"></span>
           <span class="cost-item">¥{{getProductIndexData.FeeInfo.airTransFee}}</span>
         </div>
-        <div class="cost-list" v-if="'airOilAnnexFee' in getProductIndexData.FeeInfo">
+        <div class="cost-list" v-if="('airOilAnnexFee' in getProductIndexData.FeeInfo) && (getProductIndexData.FeeInfo.airOilAnnexFee != 0)">
           <span class="cost-num">燃油附加费</span>
           <span class="cost-line"></span>
           <span class="cost-item">¥{{getProductIndexData.FeeInfo.airOilAnnexFee}}</span>
         </div>
-        <div class="cost-list" v-if="'airportStartFee' in getProductIndexData.FeeInfo">
+        <div class="cost-list" v-if="'airportStartFee' in getProductIndexData.FeeInfo && getProductIndexData.FeeInfo.airportStartFee != 0">
           <span class="cost-num">始发港交货费</span>
           <span class="cost-line"></span>
           <span class="cost-item">¥{{getProductIndexData.FeeInfo.airportStartFee}}</span>
         </div>
-        <div class="cost-list" v-if="'airportEndFee' in getProductIndexData.FeeInfo">
+        <div class="cost-list" v-if="'airportEndFee' in getProductIndexData.FeeInfo && getProductIndexData.FeeInfo.airportEndFee != 0">
           <span class="cost-num">目的港提货费</span>
           <span class="cost-line"></span>
           <span class="cost-item">¥{{getProductIndexData.FeeInfo.airportEndFee}}</span>
         </div>
-        <div class="cost-list" v-if="'landStartGetGoodsFee' in getProductIndexData.FeeInfo">
+        <div class="cost-list" v-if="'landStartGetGoodsFee' in getProductIndexData.FeeInfo && getProductIndexData.FeeInfo.landStartGetGoodsFee != 0">
           <span class="cost-num">上门提货费</span>
           <span class="cost-line"></span>
           <span class="cost-item">¥{{getProductIndexData.FeeInfo.landStartGetGoodsFee}}</span>
         </div>
-        <div class="cost-list" v-if="'landEndTranFee' in getProductIndexData.FeeInfo">
+        <div class="cost-list" v-if="'landEndTranFee' in getProductIndexData.FeeInfo && getProductIndexData.FeeInfo.landEndTranFee != 0">
           <span class="cost-num">落地配送费</span>
           <span class="cost-line"></span>
           <span class="cost-item">¥{{getProductIndexData.FeeInfo.landEndTranFee}}</span>
@@ -345,7 +345,7 @@
         <div class="goback" @click="completeGo">返回上一步</div>
         <div class="gokeep"><el-button size="mini" type="info" @click="saveOrder('goodsInfo')">保存订单</el-button></div>
       </div>
-      <div class="cost-complete" @click="confirm"><el-button size="mini" type="danger" @click="submitOrder('goodsInfo')">提交</el-button></div>
+      <div class="cost-complete"><el-button size="mini" type="danger" @click="submitOrder('goodsInfo')">提交</el-button></div>
     </div>
   </div>
 </template>
@@ -459,7 +459,7 @@ export default {
       this.$router.push('/center/Online_product')
     }
     this.getGoodsTypeList();
-    // window.localStorage.removeItem('productIndex')
+    console.log(this.getProductIndexData);
   },
   destroyed(){
     window.localStorage.removeItem('productIndex')
@@ -723,7 +723,6 @@ export default {
     completeGo() {
       this.$router.go(-1);
     },
-    confirm() {},
     sendProvince(data) {
       this.sendAddressData.address.province = data.value;
     },
@@ -744,7 +743,16 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["id", "token"])
+    ...mapGetters(["id", "token"]),
+    formatPlaneData(){
+      if('searchData' in this.getProductIndexData){
+        var newDate =new Date(this.getProductIndexData.searchData.planeData)
+        var year = newDate.getFullYear()
+        var month = (newDate.getMonth()+1)<10?`0${newDate.getMonth()+1}`:newDate.getMonth()+1
+        var date = newDate.getDate()<10?`0${newDate.getDate()}`:newDate.getDate()
+        return `${year}-${month}-${date}`
+      }
+    },
   }
 };
 </script>
@@ -1694,20 +1702,16 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
     .cost-content {
       margin-top: 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: space-around;
       border-bottom: 1px solid rgba(244, 244, 244, 1);
       height: 240px;
       width: 100%;
-      .cost-list1 {
-        margin-top: 20px;
-      }
       .cost-list {
+        margin: 10px 0;
         width: 88%;
         display: flex;
         flex-direction: row;

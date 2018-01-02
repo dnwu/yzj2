@@ -6,7 +6,7 @@
           <img src="../../assets/login_logo.png" alt="">
         </div>
         <div class="title">
-          <h3>用户中心</h3>
+          <h3>{{title}}</h3>
           <span @click="goto(0,'/home')">返回官网首页</span>
         </div>
       </div>
@@ -52,7 +52,8 @@ import {mapGetters,mapMutations} from 'vuex'
 export default {
   data() {
     return {
-      fullPath: "/center/account",
+      // fullPath: "/center/account",
+      title:'用户中心',
       activeIndex:0,
       iconARR:[{default:require('../../assets/nav1.png'),active:require('../../assets/nav1_1.png')},
               {default:require('../../assets/nav2.png'),active:require('../../assets/nav2_2.png')},
@@ -72,33 +73,45 @@ export default {
   },
   created() {
     this.fullPath = this.$route.fullPath;
-    console.log(this.fullPath);
     if(this.fullPath.includes('account')){
       this.activeIndex = 0
+      this.title = '账号信息'
     }else if(this.fullPath.includes('company_info')){
       this.activeIndex = 1
+      this.title = '企业信息'
     }else if(this.fullPath.includes('doings')){
       this.activeIndex = 2
+      this.title = '我的活动'
     }else if(this.fullPath.includes('experience')){
       this.activeIndex = 3
+      this.title = '会员经验'
     }else if(this.fullPath.includes('integral')){
       this.activeIndex = 4
+      this.title = '会员积分'
     }else if(this.fullPath.includes('address')){
       this.activeIndex = 5
+      this.title = '地址簿'
     }else if(this.fullPath.includes('son_account')){
       this.activeIndex = 6
-    }else if(this.fullPath.includes('online_product')){
+      this.title = '子账号管理'
+    }else if(this.fullPath.includes('nline_product')){
       this.activeIndex = 7
+      this.title = '网上下单'
     }else if(this.fullPath.includes('client_product')){
       this.activeIndex = 8
+      this.title = '客户端下单'
     }else if(this.fullPath.includes('order_search')){
       this.activeIndex = 9
+      this.title = '订单查询'
     }else if(this.fullPath.includes('order_track')){
       this.activeIndex = 10
+      this.title = '订单跟踪'
     }else if(this.fullPath.includes('ticket_info_egis')){
       this.activeIndex = 11
+      this.title = '开票信息维护'
     }else if(this.fullPath.includes('bill_look')){
       this.activeIndex = 12
+      this.title = '账单查看'
     }
   },
   methods: {
@@ -111,6 +124,33 @@ export default {
     goto(index,path){
       this.$router.push(path)
       this.activeIndex = index
+      if(index == 0){
+        this.title = '账号信息'
+      }else if(index == 1){
+        this.title = '企业信息'
+      }else if(index == 2){
+        this.title = '我的活动'
+      }else if(index == 3){
+        this.title = '会员经验'
+      }else if(index == 4){
+        this.title = '会员积分'
+      }else if(index == 5){
+        this.title = '地址簿'
+      }else if(index == 6){
+        this.title = '子账号管理'
+      }else if(index == 7){
+        this.title = '网上下单'
+      }else if(index == 8){
+        this.title = '客户端下单'
+      }else if(index == 9){
+        this.title = '订单查询'
+      }else if(index == 10){
+        this.title = '订单跟踪'
+      }else if(index == 11){
+        this.title = '开票信息维护'
+      }else if(index == 12){
+        this.title = '账单查看'
+      }
     },
     logout(){
       this.$cookie.delete('username')

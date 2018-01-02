@@ -523,6 +523,7 @@
             </div>
           </div>
           <div class="box center">
+            <!-- 费用补充模态框 -->
             <div class="costAdd-model">
               <el-dialog width="800px" title="费用补充" :visible.sync="costAdd">
                 <div class="content">
@@ -540,7 +541,7 @@
                   </p>
                   <p>
                     <span class="title">金额：</span>
-                    <input v-model="costAddData.money" class="num" type="number" step="0.01">
+                    <input @keyup="formatCostAddDataMoney" v-model="costAddData.money" class="num" type="number" step="0.01">
                     <span class="unit">元</span>
                   </p>
                   <p>
@@ -554,6 +555,7 @@
                 </div>
               </el-dialog>
             </div>
+            <!-- 执行补缴模态框 -->
             <div class="costPay-model">
               <el-dialog width="800px" title="费用补缴" :visible.sync="costPay">
                 <div class="content">
@@ -691,7 +693,12 @@ export default {
       addSizeDialogFormVisible: false, //货物符合模态框状态
       addSizeDialogFormData: {}, //复核输入模态框
       costAdd: false, //费用补充模态框
-      costAddData: {}, //费用补充数据
+      costAddData: {
+        money:'',
+        Remarks:'',
+        goodsType:''
+
+      }, //费用补充数据
       costPay: false, //费用补缴
       hnaOrder: {},
       senderAddress: {}, //发货人信息
@@ -1122,6 +1129,12 @@ export default {
         }
       })
     },
+    formatCostAddDataMoney(){
+      if('money' in this.costAddData){
+        var newMoney=Math.floor(parseFloat(this.costAddData.money)*100)/100
+        this.costAddData.money = newMoney
+      }
+    },
     getCostAdd (){
       if(!this.costAddData.money || !this.goodsType){
         this.$notify.error({
@@ -1203,7 +1216,12 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["id", "token"])
+    ...mapGetters(["id", "token"]),
+    // formatCostAddDataMoney(){
+    //   if('money' in this.costAddData){
+    //     this.costAddData.money = this.costAddData.money.toFixed(2)
+    //   }
+    // }
   }
 };
 </script>
