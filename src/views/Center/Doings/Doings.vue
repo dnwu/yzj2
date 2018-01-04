@@ -5,7 +5,7 @@
       <div class="is-flex right">
         <span class="key">申请编号</span>
         <span class="is-flex opt opt-search">
-          <img :src="search" alt="">
+          <i class="el-icon-search"></i>
           <el-input v-model="input" placeholder=""></el-input>
         </span>
       </div>
@@ -89,7 +89,6 @@ export default {
   data() {
     return {
       pic: require("@/assets/reset_icon.png"),
-      search: require("@/assets/reset_icon.png"),
       input: "", // 搜索输入框
       startPort: "", // 始发港
       endPort: "", // 目的港
