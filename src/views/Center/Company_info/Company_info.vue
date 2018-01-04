@@ -16,7 +16,7 @@
                 <span class="dot">:</span>
               </div>
               <span class="value" v-text="obj.value" v-if="obj.value"></span>
-              <span v-else class="value"><img class="pic" :src="pic"></span>
+              <span v-else class="value"><i class="el-icon-picture"></i></span>
             </li>
           </ul>
           <ul class="card-right">
@@ -26,7 +26,7 @@
                 <span class="dot">:</span>
               </div>
               <span class="value" v-text="obj.value" v-if="obj.value"></span>
-              <span v-else class="value"><img class="pic" :src="pic"></span>
+              <span v-else class="value"><i class="el-icon-picture"></i></span>
             </li>
           </ul>
         </main>
@@ -41,7 +41,7 @@
                 <span class="dot">:</span>
               </div>
               <span class="value" v-text="obj.value" v-if="obj.value"></span>
-              <span v-else class="value"><img class="pic" :src="pic"></span>
+              <span v-else class="value"><i class="el-icon-picture"></i></span>
             </li>
           </ul>
           <ul class="card-right">
@@ -51,7 +51,7 @@
                 <span class="dot">:</span>
               </div>
               <span class="value" v-text="obj.value" v-if="obj.value"></span>
-              <span v-else class="value"><img class="pic" :src="pic"></span>
+              <span v-else class="value"><i class="el-icon-picture"></i></span>
             </li>
           </ul>
         </main>
@@ -66,7 +66,7 @@
                 <span class="dot">:</span>
               </div>
               <span class="value" v-text="obj.value" v-if="obj.value"></span>
-              <span v-else class="value"><img class="pic" :src="pic"></span>
+              <span v-else class="value"><i class="el-icon-picture"></i></span>
             </li>
           </ul>
           <ul class="card-right">
@@ -76,7 +76,7 @@
                 <span class="dot">:</span>
               </div>
               <span class="value" v-text="obj.value" v-if="obj.value"></span>
-              <span v-else class="value"><img class="pic" :src="pic"></span>
+              <span v-else class="value"><i class="el-icon-picture"></i></span>
             </li>
           </ul>
         </main>
@@ -91,7 +91,7 @@
                 <span class="dot">:</span>
               </div>
               <span class="value" v-text="obj.value" v-if="obj.value"></span>
-              <span v-else class="value"><img class="pic" :src="pic"></span>
+              <span v-else class="value"><i class="el-icon-picture"></i></span>
             </li>
           </ul>
           <ul class="card-right">
@@ -101,7 +101,7 @@
                 <span class="dot">:</span>
               </div>
               <span class="value" v-text="obj.value" v-if="obj.value"></span>
-              <span v-else class="value"><img class="pic" :src="pic"></span>
+              <span v-else class="value"><i class="el-icon-picture"></i></span>
             </li>
           </ul>
         </main>
@@ -261,13 +261,11 @@ ul {
   padding-left: 0;
 }
 
-.pic {
-  width: 21px;
-  height: 18px;
-}
-
 .company-info {
   width: 90%;
+  .el-icon-picture {
+    vertical-align: middle;
+  }
 }
 $orange: #fccf00;
 .header {
@@ -349,9 +347,8 @@ $font-height: 18px;
         }
       }
       .value {
-        padding-top: 2px;
         display: inline-block;
-        vertical-align: top;
+        vertical-align: text-bottom;
       }
 
       .card-left {
