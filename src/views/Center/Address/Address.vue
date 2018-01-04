@@ -3,8 +3,11 @@
     <div class="head">
       <div class="search">
         <div class="title">地址簿</div>
-        <div class="input"><i class="el-icon-search"></i><el-input v-model="searchkey" placeholder="请输入内容"></el-input></div>
+        <div class="receive" :class="addressType=='receive'?'active':''" @click="toggleTableData('receive')">收</div>
+        <div class="send" :class="addressType=='send'?'active':''" @click="toggleTableData('send')">发</div>
+        <div class="input"><i class="el-icon-search"></i><el-input @keyup.native="filterName" v-model="searchkey" placeholder="收发货人"></el-input></div>
       </div>
+      <!-- 添加地址信息模态框 -->
       <div class="add">
         <el-button type="warning" @click="newAddressModel = true">新增地址</el-button>
         <!-- 添加地址弹出窗 -->
@@ -67,6 +70,78 @@
           </div>
         </el-dialog>
       </div>
+      <!-- 修改地址信息模态框 -->
+      <div class="reset">
+        <!-- 添加地址弹出窗 -->
+        <el-dialog :visible.sync="resetAddressModel">
+          <div class="head"><img src="../../../assets/addAddress_icon.png" alt="">编辑地址</div>
+          <div class="main">
+            <!-- <div class="box addressCode">
+              <div class="title">地址编码</div>
+              <div class="code">F1234</div>
+            </div> -->
+            <el-form :model="resetAddressData" :rules="resetAddress" ref="resetAddress" class="resetAddress">
+              <div class="box addressType">
+                <div class="title">地址类型</div>
+                <div class="type">
+                  <div class="receive" :class="resetAddressData['type']=='receive'?'active':''" @click="resetAddressData['type']='receive'">收</div>
+                  <div class="send" :class="resetAddressData['type']=='send'?'active':''"  @click="resetAddressData['type']='send'">发</div>
+                </div>
+              </div>
+              <div class="message">
+                <div class="row">
+                  <div class="name">
+                    <div class="title">姓名</div>
+                      <el-form-item prop="name">
+                        <el-input v-model="resetAddressData.name" placeholder="请输入姓名"></el-input>
+                      </el-form-item>
+                  </div>
+                  <div class="id">
+                    <div class="title">身份证</div>
+                    <el-input v-model="resetAddressData.id" placeholder="请输入身份证"></el-input>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="phone">
+                    <div class="title">手机号</div>
+                    <el-form-item prop="phone">
+                      <el-input v-model="resetAddressData.phone" placeholder="请输入手机号"></el-input>
+                    </el-form-item>
+                  </div>
+                  <div class="cellPhone reset-cellPhone">
+                    <div class="title">固定电话</div>
+                    <el-input class="front" v-model="resetAddressData.cellPhone" placeholder="固定电话"></el-input>
+                    <!-- <el-input class="behind" v-model="resetAddressData.cellPhoneB" placeholder="号码"></el-input> -->
+                  </div>
+                </div>
+              </div>
+              <div class="box address reset-address">
+                <div class="title">所在区域</div>
+                <v-distpicker
+                  v-show="resetAddressData.edit"
+                  @province='resetProvince'
+                  @city="resetCity"
+                  @area="resetArea"
+                  :province='resetAddressData.province'
+                  :city='resetAddressData.city'
+                  :area='resetAddressData.area'>
+                </v-distpicker>
+                <el-input :disabled="true" v-show="!resetAddressData.edit" v-model="resetAddressData.region" placeholder="请输入内容"></el-input>
+                <div class="toggleEdit el-icon-edit" v-show="!resetAddressData.edit" @click="toggleEdit"></div>
+              </div>
+              <div class="addressDetial">
+                <div class="title">详细地址</div>
+                <el-input v-model="resetAddressData.addressDetial" placeholder="请输入详细地址"></el-input>
+              </div>
+              <div class="postalnum">
+                <div class="title">邮政编码</div>
+                <el-input v-model="resetAddressData.postalnum" placeholder="请输入邮政编码"></el-input>
+              </div>
+              <div class="saveSubmit"><el-button type="warning" @click="saveNewAddress('resetAddress')">确认修改地址</el-button></div>
+            </el-form>
+          </div>
+        </el-dialog>
+      </div>
       <div class="remove">
         <div class="select" v-show="editStatus">
           <el-button @click="toggle()" type="danger">选择</el-button>
@@ -97,7 +172,7 @@
         <div class="cellPhone">固定电话</div>
         <div class="id">身份证号码</div>
         <div class="address">所在地区</div>
-        <div class="addressDetial">纤细地址</div>
+        <div class="addressDetial">详细地址</div>
         <div class="postalcode">邮政编码</div>
       </div>
       <!-- 删除地址模态框 -->
@@ -110,7 +185,7 @@
           </div>
         </el-dialog>
       </div>
-      <div @click="selectItem(index)" class="body wrapper" v-for="(item,index) in toggleTableData" :key='index'>
+      <div @click="selectItem(index)" class="body wrapper" v-for="(item,index) in newAddressList" :key='index'>
         <div class="addresstype">
           <img :src="getAddressTypeImg(item.type)" alt="">
         </div>
@@ -121,7 +196,7 @@
         <div class="id">{{item.identityCard}}</div>
         <div class="address">{{item.region}}</div>
         <div class="addressDetial">{{item.detailAddress}}</div>
-        <div class="postalcode">{{item.postCode}}<i v-show="editStatus" class="el-icon-edit-outline"></i><i class="deleticon" v-show="!editStatus&&toggleTableData[index].remove"></i></div>
+        <div class="postalcode">{{item.postCode}}<i v-show="editStatus" @click="editAddress(item)" class="el-icon-edit-outline"></i><i class="deleticon" v-show="!editStatus&&newAddressList[index].remove"></i></div>
       </div>
     </div>
   </div>
@@ -129,7 +204,9 @@
 <script>
 import VDistpicker from "v-distpicker";
 import { mapGetters } from "vuex";
+import {logout} from '@/tools/logout'
 export default {
+  mixins:[logout],
   components: {
     VDistpicker
   },
@@ -149,7 +226,27 @@ export default {
         postalnum: ""
       },
       newAddressModel: false,
+      resetAddressData:{
+        edit:false,
+        region:'',
+        type: "receive",
+        name: "",
+        id: "",
+        addressId:'',
+        phone: "",
+        cellPhone: "", // 区号
+        province: "",
+        city: "",
+        area: "",
+        addressDetial: "",
+        postalnum: ""
+      },
+      resetAddressModel:false,
       newAddress: {
+        name: [{ required: true, message: "请输入姓名", trigger: "blur" }],
+        phone: [{ required: true, message: "请输入手机号", trigger: "blur" }]
+      },
+      resetAddress: {
         name: [{ required: true, message: "请输入姓名", trigger: "blur" }],
         phone: [{ required: true, message: "请输入手机号", trigger: "blur" }]
       },
@@ -163,6 +260,7 @@ export default {
       addressType: "all", //  all , send , receive
       sendAddressList: [],
       receiveAddressList: [],
+      newAddressList:[],
       storeRemoveAddress: [], // 储存要删除地址的id和type
       removeAddressModel: false, // 删除地址模态框控制显示
       removeAddressNo: 0 //删除地址的个数
@@ -171,6 +269,7 @@ export default {
   mounted() {
     this.getSendAddressList();
     this.getReceiveAddressList();
+
   },
   methods: {
     province(data) {
@@ -182,8 +281,16 @@ export default {
     area(data) {
       this.newAddressData.area = data.value == '区'?'':data.value;
     },
+    resetProvince(data){
+      this.resetAddressData.province = data.value == '省'?'':data.value;
+    },
+    resetCity(data){
+      this.resetAddressData.city = data.value == '市'?'':data.value;
+    },
+    resetArea(data){
+      this.resetAddressData.area = data.value == '区'?'':data.value;
+    },
     saveAddress(formName) {
-
       this.$refs[formName].validate(valid => {
         if (valid) {
           if (this.newAddressData.type == "send") {
@@ -213,6 +320,81 @@ export default {
               if (data.data.code == 1) {
 
                 this.newAddressModel = false;
+                this.getSendAddressList();
+                this.getReceiveAddressList();
+              }
+              if (data.data.code == 10110) {
+                this.this.$message({
+                  message: "身份证格式错误",
+                  type: "warning"
+                });
+              }
+              if (data.data.code == 10101) {
+                if (data.data.code == 10110) {
+                  this.this.$message({
+                    message: "手机号格式错误",
+                    type: "warning"
+                  });
+                }
+              }
+            });
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
+    toggleEdit(){
+      this.resetAddressData.edit=!this.resetAddressData.edit
+    },
+    editAddress(item){
+      console.log(item);
+      this.resetAddressData.edit = false
+      if(item.type == 0){
+        this.resetAddressData.type = 'send'
+      }else if(item.type == 1){
+        this.resetAddressData.type = 'receive'
+      }
+      this.resetAddressData.name =item.contactName
+      this.resetAddressData.id =item.identityCard
+      this.resetAddressData.addressId =item.id
+      this.resetAddressData.phone =item.contactMobile
+      this.resetAddressData.cellPhone =item.contactPhone
+      this.resetAddressData.region =item.region
+      this.resetAddressData.addressDetial =item.detailAddress
+      this.resetAddressData.postalnum =item.postCode
+      this.resetAddressModel=true
+    },
+    saveNewAddress(formName){
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          if (this.resetAddressData.type == "send") {
+            var addressType = 0;
+          } else if (this.resetAddressData.type == "receive") {
+            var addressType = 1;
+          }
+          if(this.resetAddressData.edit == false){
+            var address = this.resetAddressData.region
+          }else if(this.resetAddressData.edit == true){
+            var address = this.resetAddressData.province +this.resetAddressData.city +this.resetAddressData.area
+          }
+          this.axios
+            .post("/app/v1/address/updateAddress", {
+              addressId: this.resetAddressData.addressId,
+              addressType: addressType,
+              contactMobile: this.resetAddressData.phone,
+              contactName: this.resetAddressData.name,
+              contactPhone:this.resetAddressData.cellPhone,
+              detailAddress: this.resetAddressData.addressDetial,
+              id: this.id,
+              identityCard: this.resetAddressData.id,
+              postCode: this.resetAddressData.postalnum,
+              region:address,
+              token: this.token
+            })
+            .then(data => {
+              if (data.data.code == 1) {
+                this.resetAddressModel = false;
                 this.getSendAddressList();
                 this.getReceiveAddressList();
               }
@@ -294,9 +476,13 @@ export default {
             for (let i = 0; i < length; i++) {
               this.$set(this.sendAddressList.senderList[i], "remove", false);
             }
+            this.newAddressList.push(...this.sendAddressList.senderList)
           }
           if (data.data.code == 10001) {
             this.$message.error("登录已失效，请重新登录");
+            setTimeout(() => {
+              this.logout()
+            }, 2000);
           }
         });
     },
@@ -315,11 +501,24 @@ export default {
             for (let i = 0; i < length; i++) {
               this.$set(this.receiveAddressList.receiverList[i],"remove",false);
             }
+            this.newAddressList.push(...this.receiveAddressList.receiverList)
           }
           if (data.data.code == 10001) {
             this.$message.error("登录已失效，请重新登录");
+            setTimeout(() => {
+              this.logout()
+            }, 2000);
           }
         });
+    },
+    filterName(){
+      var addressList = [...this.sendAddressList.senderList,...this.receiveAddressList.receiverList]
+      this.newAddressList = []
+      addressList.forEach(ele=>{
+        if(ele.contactName.indexOf(this.searchkey) != -1){
+          this.newAddressList.push(ele)
+        }
+      })
     },
     toggle() {
       let length = this.toggleTableData.length;
@@ -334,6 +533,7 @@ export default {
     handleCommand(command) {
       // this.$message("click on item " + command);
       this.addressType = command;
+      this.toggleTableData(command)
     },
     getAddressTypeImg(type) {
       if (type == "1") {
@@ -348,21 +548,21 @@ export default {
         return;
       }
       this.toggleTableData[index].remove = !this.toggleTableData[index].remove;
-    }
-  },
-  computed: {
-    ...mapGetters(["id", "token"]),
-    toggleTableData() {
+    },
+    toggleTableData(type) {
+      this.searchkey = ''
+      this.newAddressList = []
+      this.addressType = type
+      console.log(type);
       if (this.addressType == "all") {
         if (
           "senderList" in this.sendAddressList &&
           "receiverList" in this.receiveAddressList
         ) {
-          return [
-            ...this.sendAddressList.senderList,
-            ...this.receiveAddressList.receiverList
-          ];
+          console.log('jinlai l ');
+          this.newAddressList.push(...[...this.sendAddressList.senderList,...this.receiveAddressList.receiverList])
         }
+        console.log( this.newAddressList);
       }
       if (this.addressType == "receive") {
         let newTableData = [];
@@ -371,7 +571,7 @@ export default {
             newTableData.push(element);
           }
         });
-        return newTableData;
+        this.newAddressList.push(...newTableData)
       }
       if (this.addressType == "send") {
         let newTableData = [];
@@ -380,9 +580,22 @@ export default {
             newTableData.push(element);
           }
         });
-        return newTableData;
+        this.newAddressList.push(...newTableData)
       }
     }
+  },
+  computed: {
+    ...mapGetters(["id", "token"]),
+    // toggleTableDatas() {
+    //   if (this.addressType == "all") {
+    //     if (
+    //       "senderList" in this.sendAddressList &&
+    //       "receiverList" in this.receiveAddressList
+    //     ) {
+    //       this.toggleTableData(this.addressType)
+    //     }
+    //   }
+    // }
   }
   // watch:{
   //   removeItems:{
@@ -403,10 +616,26 @@ export default {
       display: flex;
       flex: 1;
       line-height: 61px;
+      align-items: center;
       .title {
         width: 100px;
         text-align: center;
         color: #b3b3b3;
+      }
+      .receive,.send{
+        margin-right:20px;
+        width: 25px;
+        height: 25px;
+        line-height: 26px;
+        color: #fff;
+        border-radius: 50%;
+        background-color: #c0c0c0;
+        padding-left: 6px;
+        box-sizing: border-box;
+        cursor: pointer;
+        &.active{
+          background-color: red;
+        }
       }
       .input {
         flex: 1;
@@ -425,7 +654,7 @@ export default {
         }
       }
     }
-    .add {
+    .add,.reset {
       line-height: 61px;
       flex: 1;
       text-align: center;
@@ -561,6 +790,16 @@ export default {
                     }
                   }
                 }
+                // 地址编辑框中的reset-cellPhone
+                .reset-cellPhone{
+                  .front{
+                    flex: 1;
+                    &::after{
+                      content:'';
+                      display:none;
+                    }
+                  }
+                }
               }
             }
             .box.address {
@@ -573,6 +812,26 @@ export default {
               }
               .title {
                 transform: translateY(8px);
+              }
+            }
+            // 地址编辑框中的reset-address
+            .reset-address{
+              .title{
+                margin-right: 20px;
+              }
+              .el-input{
+                flex: 1;
+                input{
+                  border: none;
+                  background-color: #fff;
+                  color: #5a5e66;
+                }
+              }
+              .toggleEdit{
+                width: 100px;
+                font-size: 20px;
+                line-height: 40px;
+                cursor: pointer;
               }
             }
             .addressDetial,

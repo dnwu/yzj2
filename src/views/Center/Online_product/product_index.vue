@@ -160,7 +160,7 @@
                         </el-option>
                       </el-select>
                     </span>
-                    <span class="address-little" v-if="landStartLevel3ProductType2">实际落地时间在24:00之前的航班，次日到达</span>
+                    <!-- <span class="address-little" v-if="landStartLevel3ProductType2">实际落地时间在24:00之前的航班，次日到达</span> -->
                     <span class="address-little" v-if="landStartLevel3ProductType1">
                       <span class="address-btn" @click="toggleLandStartServer('landStart1Ton')" :class="selectServer.landStart1Ton?'btn-active':''">1吨金杯车</span>
                       <span class="address-btn" @click="toggleLandStartServer('landStart2Ton')" :class="selectServer.landStart2Ton?'btn-active':''">2吨厢式货车</span>
@@ -207,7 +207,7 @@
                         </el-option>
                       </el-select>
                     </span>
-                    <span class="address-little" v-if="landEndLevel3ProductType2">实际落地时间在24:00之前的航班，次日到达</span>
+                    <!-- <span class="address-little" v-if="landEndLevel3ProductType2">实际落地时间在24:00之前的航班，次日到达</span> -->
                     <span class="address-little" v-if="landEndLevel3ProductType1">
                       <span class="address-btn" @click="toggleLandEndServer('landEnd1Ton')" :class="selectServer.landEnd1Ton?'btn-active':''">1吨金杯车</span>
                       <span class="address-btn" @click="toggleLandEndServer('landEnd2Ton')" :class="selectServer.landEnd2Ton?'btn-active':''">2吨厢式货车</span>
