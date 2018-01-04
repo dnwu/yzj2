@@ -1,7 +1,6 @@
 /**
  * http配置
  */
-
 import axios from 'axios'
 import store from '@/store'
 import * as types from '@/store/mutation-type'
@@ -26,7 +25,12 @@ axios.interceptors.request.use(
 // http response 拦截器
 axios.interceptors.response.use(
     response => {
-        return response;
+      console.log(this);
+      // 登录失效
+      if(response.data.code == 10001){
+
+      }
+      return response;
     },
     error => {
         if (error.response) {

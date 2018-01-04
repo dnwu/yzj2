@@ -37,12 +37,27 @@
     <div class="product-title">收发地址</div>
       <div class="product-address">
         <!-- 发货地址列表模态框 -->
+        <div class="sendAddressList">
+          <el-dialog width="1200px" title="发货地址" :visible.sync="sendAddressListModel">
+            <EasyScrollbar>
+              <div id="wrapper" style="height: 500px;">
+                <div style="background-color: #F9F9F9;text-align: center;">
+                  <Addresslist  @getAddressItem='getAddressItem' address = 'send'></Addresslist>
+                </div>
+              </div>
+            </EasyScrollbar>
+            <div slot="footer" class="dialog-footer">
+              <!-- <el-button @click="sendAddressListModel = false">取 消</el-button>
+              <el-button type="primary" @click="sendAddressListModel = false">确 定</el-button> -->
+            </div>
+          </el-dialog>
+        </div>
         <el-form :model="sendAddressData" :rules="sendAddressRules" ref="sendAddress" label-width="100px" class="sendAddress">
           <div class="address-left">
             <div class="left-logo"></div>
             <div class="logo-text">发</div>
             <div class="left-nav">
-              <img src="../../../assets/product17.png">
+              <img @click="sendAddressListModel=true" src="../../../assets/product17.png">
             </div>
             <div class="left-info">
               <div class="left-name">
@@ -77,11 +92,11 @@
                 <span class="name-nav">固定电话</span>
                 <span class="name-text">
                   <el-form-item prop="tellPhone1">
-                    <el-input class="left" size="mini" v-model="sendAddressData.tellPhone1" placeholder="888"></el-input>
+                    <el-input class="left" size="mini" v-model="sendAddressData.tellPhone" placeholder="请输入固定电话"></el-input>
                   </el-form-item>
-                  <el-form-item prop="tellPhone2">
+                  <!-- <el-form-item prop="tellPhone2">
                     <el-input class="right" size="mini" v-model="sendAddressData.tellPhone2" placeholder="88886666"></el-input>
-                  </el-form-item>
+                  </el-form-item> -->
                 </span>
               </div>
             </div>
@@ -90,7 +105,8 @@
                 <span class="name-logo">&nbsp;</span>
                 <span class="name-nav">所在区域</span>
                 <span class="name-text">
-                  <v-distpicker @province='sendProvince' @city='sendCity' @area='sendArea' :paceholder='sendPlaceholders'></v-distpicker>
+                  <!-- <v-distpicker @province='sendProvince' @city='sendCity' @area='sendArea' :paceholder='sendPlaceholders'></v-distpicker> -->
+                  <el-input size="mini" v-model="sendAddressData.addressT" placeholder="请输入地区"></el-input>
                 </span>
               </div>
             </div>
@@ -109,9 +125,9 @@
               </div>
             </div>
             <div class="left-btn">
-              <span class="btn-box box1">添加地址簿</span>
-              <span class="btn-box box2" @click="setDefaultAddress(0)">设为默认</span>
-              <span class="btn-box box3" @click="submitSendAddressForm('sendAddress')">确定</span>
+              <span class="btn-box box1" @click="addSendAddress('sendAddress')">添加地址簿</span>
+              <span class="btn-box box2" @click="setDefaultSendAddress('sendAddress')">设为默认</span>
+              <span class="btn-box box3" @click="resetSendAddressForm('sendAddress')">确定</span>
             </div>
           </div>
         </el-form>
@@ -119,12 +135,27 @@
           <img src="../../../assets/product2.png">
         </div>
         <!-- 收货地址列表模态框 -->
+        <div class="receiveAddressList">
+          <el-dialog width="1200px" top='66px' title="收货地址" :visible.sync="receiveAddressListModel">
+            <EasyScrollbar>
+              <div id="wrapper" style="height: 500px;">
+                <div style="background-color: #F9F9F9;text-align: center;">
+                  <Addresslist @getAddressItem='getAddressItem' address = 'receive'></Addresslist>
+                </div>
+              </div>
+            </EasyScrollbar>
+            <div slot="footer" class="dialog-footer">
+              <!-- <el-button @click="receiveAddressListModel = false">取 消</el-button>
+              <el-button type="primary" @click="receiveAddressListModel = false">确 定</el-button> -->
+            </div>
+          </el-dialog>
+        </div>
         <el-form :model="receiveAddressData" :rules="receiveAddressRules" ref="receiveAddress" label-width="100px" class="receiveAddress">
           <div class="address-right">
             <div class="left-logo"></div>
             <div class="logo-text">收</div>
             <div class="left-nav">
-              <img src="../../../assets/product17.png">
+              <img @click="receiveAddressListModel=true" src="../../../assets/product17.png">
             </div>
             <div class="left-info">
               <div class="left-name">
@@ -159,10 +190,7 @@
                 <span class="name-nav">固定电话</span>
                 <span class="name-text">
                   <el-form-item prop="tellPhone1">
-                    <el-input class="left" size="mini" v-model="receiveAddressData.tellPhone1" placeholder="888"></el-input>
-                  </el-form-item>
-                  <el-form-item prop="tellPhone2">
-                    <el-input class="right" size="mini" v-model="receiveAddressData.tellPhone2" placeholder="88886666"></el-input>
+                    <el-input class="left" size="mini" v-model="receiveAddressData.tellPhone" placeholder="请输入固定电话"></el-input>
                   </el-form-item>
                 </span>
               </div>
@@ -171,7 +199,10 @@
               <div class="left-name">
                 <span class="name-logo">&nbsp;</span>
                 <span class="name-nav">所在区域</span>
-                <span class="name-text"><v-distpicker @province='receiveProvince' @city='receiveCity' @area='receiveArea' :paceholder='receivePlaceholders'></v-distpicker></span>
+                <span class="name-text">
+                  <!-- <v-distpicker @province='receiveProvince' @city='receiveCity' @area='receiveArea' :paceholder='receivePlaceholders'></v-distpicker> -->
+                  <el-input size="mini" v-model="receiveAddressData.addressT" placeholder="请输入地区"></el-input>
+                </span>
               </div>
             </div>
             <div class="left-detail">
@@ -189,9 +220,9 @@
               </div>
             </div>
             <div class="left-btn">
-              <span class="btn-box box1">添加地址簿</span>
-              <span class="btn-box box2" @click="setDefaultAddress(1)">设为默认</span>
-              <span class="btn-box box3" @click="submitReceiveAddressForm('receiveAddress')">确定</span>
+              <span class="btn-box box1" @click="addReceiveAddress('receiveAddress')">添加地址簿</span>
+              <span class="btn-box box2" @click="setDefaultReceiveAddress('receiveAddress')">设为默认</span>
+              <span class="btn-box box3" @click="resetReceiveAddressForm('receiveAddress')">确定</span>
             </div>
           </div>
         </el-form>
@@ -286,13 +317,13 @@
         </div>
       </div>
     </div>
-    <div class="product-title">活动信息</div>
-    <div class="product-pre">
+    <div class="product-title" v-if="false">活动信息</div>
+    <div class="product-pre" v-if="false">
       <input type="text" v-model="inviteCode" name="" placeholder="推荐人邀请码">
       <span class="product-preindex" @click="verificationCode">验证</span>
     </div>
-    <div class="product-title">发票信息</div>
-    <div class="product-con">
+    <div class="product-title" v-if="false">发票信息</div>
+    <div class="product-con" v-if="false">
       <div class="con-nav">
         <span class="icon el-icon-success" :class="invoiceServerInfo.notNeed?'active':''" ></span>不需要发票
         <!-- <span class="icon el-icon-success" :class="invoiceServerInfo.general?'active':''" @click="invoiceServerInfo.general = !invoiceServerInfo.general"></span>普票
@@ -354,12 +385,16 @@
 
 <script type="text/javascript">
 // import productSelect from "./product_select";
-import VDistpicker from "v-distpicker";
+// import VDistpicker from "v-distpicker";
 import { mapGetters } from "vuex";
+import Addresslist from '@/components/Addresslist'
+import {logout} from '@/tools/logout'
 export default {
+  mixins:[logout],
   components: {
     // productSelect,
-    VDistpicker
+    // VDistpicker,
+    Addresslist
   },
   data() {
     return {
@@ -367,7 +402,8 @@ export default {
       goodsTypesList: {},
       goodsType: "",
       addSizeDialogFormVisible: false,
-
+      sendAddressListModel:false,  // 地址列表模态框
+      receiveAddressListModel:false,  // 地址列表模态框
       invoiceServerInfo: {
         notNeed: true, // 不需要
         general: false, // 普通
@@ -380,16 +416,12 @@ export default {
         num: ""
       },
       sendAddressData: {
+        addressid:'',
         name: "",
         id: "",
         mobile: "",
-        tellPhone1: "",
-        tellPhone2: "",
-        address: {
-          province: "省",
-          city: "市",
-          area: "区"
-        },
+        tellPhone: "",
+        addressT:"",
         detailAddress: "",
         postal: ""
       },
@@ -413,28 +445,14 @@ export default {
         name: [{ required: true, message: "请输入货物名称", trigger: "blur" }]
       },
       receiveAddressData: {
+        addressid:'',
         name: "",
         id: "",
         mobile: "",
-        tellPhone1: "",
-        tellPhone2: "",
-        address: {
-          province: "省",
-          city: "市",
-          area: "区"
-        },
+        tellPhone: "",
+        addressT:"",
         detailAddress: "",
         postal: ""
-      },
-      sendPlaceholders: {
-        province: "省",
-        city: "市",
-        area: "区"
-      },
-      receivePlaceholders: {
-        province: "省",
-        city: "市",
-        area: "区"
       },
       goodsInfo: {
         weight: "",
@@ -447,10 +465,6 @@ export default {
         remark: ""
       },
       inviteCode: "",
-      addressId: {
-        sendId: "",
-        receiveId: ""
-      }
     };
   },
   created() {
@@ -462,6 +476,7 @@ export default {
     }
     this.getGoodsTypeList();
     this.defaultSendAddress()
+    this.defaultReceiveAddress()
   },
   destroyed() {
     window.localStorage.removeItem("productIndex");
@@ -482,12 +497,39 @@ export default {
         type: "success"
       });
     },
-
     promptwarning(title) {
       this.$message({
         message: title,
         type: "warning"
       });
+    },
+    getAddressItem(item,type){
+      console.log('zhelide ',item,type);
+      if(type == 'send'){
+        this.sendAddressData.addressid = item.id
+        this.sendAddressData.name = item.contactName
+        this.sendAddressData.id = item.identityCard
+        this.sendAddressData.mobile = item.contactMobile
+        this.sendAddressData.tellPhone = item.contactPhone
+        this.sendAddressData.addressT = item.region
+        this.sendAddressData.detailAddress = item.detailAddress
+        this.sendAddressData.postal = item.postCode
+
+        // 影藏模态框
+        this.sendAddressListModel = false
+      }else if(type == 'receive'){
+        this.receiveAddressData.addressid = item.id
+        this.receiveAddressData.name = item.contactName
+        this.receiveAddressData.id = item.identityCard
+        this.receiveAddressData.mobile = item.contactMobile
+        this.receiveAddressData.tellPhone = item.contactPhone
+        this.receiveAddressData.addressT = item.region
+        this.receiveAddressData.detailAddress = item.detailAddress
+        this.receiveAddressData.postal = item.postCode
+
+        // 影藏模态框
+        this.receiveAddressListModel = false
+      }
     },
     getGoodsTypeList() {
       this.goodsTypesList = {};
@@ -545,7 +587,71 @@ export default {
           });
       }
     },
-    submitSendAddressForm(formName) {
+    resetSendAddressForm(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.axios
+            .post("/app/v1/address/updateAddress", {
+              addressId: this.sendAddressData.addressid,
+              addressType: 0, // 发货地址
+              contactMobile: this.sendAddressData.mobile,
+              contactName: this.sendAddressData.name,
+              contactPhone:this.sendAddressData.tellPhone,
+              detailAddress: this.sendAddressData.detailAddress,
+              id: this.id,
+              identityCard: this.sendAddressData.id,
+              postCode: this.sendAddressData.postal,
+              region:this.sendAddressData.addressT,
+              token: this.token
+            })
+            .then(data => {
+              console.log(data);
+              if (data.data.code == 1) {
+                this.sendAddressData.addressid = data.data.data.id;
+                this.promptsuccess("地址更新成功");
+              } else {
+                this.promptwarning("地址更新失败");
+              }
+            });
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
+    resetReceiveAddressForm(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.axios
+            .post("/app/v1/address/updateAddress", {
+              addressId: this.receiveAddressData.addressid,
+              addressType: 1, // 收货地址
+              contactMobile: this.receiveAddressData.mobile,
+              contactName: this.receiveAddressData.name,
+              contactPhone:this.receiveAddressData.tellPhone,
+              detailAddress: this.receiveAddressData.detailAddress,
+              id: this.id,
+              identityCard: this.receiveAddressData.id,
+              postCode: this.receiveAddressData.postal,
+              region:this.receiveAddressData.addressT,
+              token: this.token
+            })
+            .then(data => {
+              console.log(data);
+              if (data.data.code == 1) {
+                this.receiveAddressData.addressid = data.data.data.id;
+                this.promptsuccess("地址更新成功");
+              } else {
+                this.promptwarning("地址更新失败");
+              }
+            });
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
+    addSendAddress(formName){
       this.$refs[formName].validate(valid => {
         if (valid) {
           this.axios
@@ -554,23 +660,18 @@ export default {
               addressType: 0, // 发货地址
               contactMobile: this.sendAddressData.mobile,
               contactName: this.sendAddressData.name,
-              contactPhone:
-                this.sendAddressData.tellPhone1 +
-                this.sendAddressData.tellPhone2,
+              contactPhone:this.sendAddressData.tellPhone,
               detailAddress: this.sendAddressData.detailAddress,
               id: this.id,
               identityCard: this.sendAddressData.id,
               postCode: this.sendAddressData.postal,
-              region:
-                this.sendAddressData.address.province +
-                this.sendAddressData.address.city +
-                this.sendAddressData.address.area,
+              region:this.sendAddressData.addressT,
               token: this.token
             })
             .then(data => {
               console.log(data);
               if (data.data.code == 1) {
-                this.addressId.sendId = data.data.data.id;
+                this.sendAddressData.addressid = data.data.data.id;
                 this.promptsuccess("地址添加成功");
               } else {
                 this.promptwarning("地址添加失败");
@@ -582,35 +683,81 @@ export default {
         }
       });
     },
-    submitReceiveAddressForm(formName) {
+    addReceiveAddress(formName){
       this.$refs[formName].validate(valid => {
         if (valid) {
           this.axios
             .post("/app/v1/address/addAddress", {
               addressId: 0,
               addressType: 1, // 收货地址
-              contactMobile: this.receiveAddressData.mobile,
-              contactName: this.receiveAddressData.name,
-              contactPhone:
-                this.receiveAddressData.tellPhone1 +
-                this.receiveAddressData.tellPhone2,
-              detailAddress: this.receiveAddressData.detailAddress,
+              contactMobile: this.sendAddressData.mobile,
+              contactName: this.sendAddressData.name,
+              contactPhone:this.sendAddressData.tellPhone,
+              detailAddress: this.sendAddressData.detailAddress,
               id: this.id,
-              identityCard: this.receiveAddressData.id,
-              postCode: this.receiveAddressData.postal,
-              region:
-                this.receiveAddressData.address.province +
-                this.receiveAddressData.address.city +
-                this.receiveAddressData.address.area,
+              identityCard: this.sendAddressData.id,
+              postCode: this.sendAddressData.postal,
+              region:this.sendAddressData.addressT,
               token: this.token
             })
             .then(data => {
               console.log(data);
               if (data.data.code == 1) {
-                this.addressId.receiveId = data.data.data.id;
+                this.sendAddressData.addressid = data.data.data.id;
                 this.promptsuccess("地址添加成功");
               } else {
                 this.promptwarning("地址添加失败");
+              }
+            });
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
+    setDefaultSendAddress(formName){
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.axios
+            .post("/app/v1/address/defaultAddress", {
+              addressId: this.sendAddressData.addressid,
+              addressType: 0, // 发货地址
+              detailAddress: this.sendAddressData.detailAddress,
+              id: this.id,
+              token: this.token
+            })
+            .then(data => {
+              console.log(data);
+              if (data.data.code == 1) {
+                this.addressId.sendId = data.data.data.id;
+                this.promptsuccess("设置默认地址成功");
+              } else {
+                this.promptwarning("设置默认地址成功");
+              }
+            });
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
+    setDefaultReceiveAddress(formName){
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.axios
+            .post("/app/v1/address/defaultAddress", {
+              addressId: this.receiveAddressData.addressid,
+              addressType: 1, // 收货地址
+              id: this.id,
+              token: this.token
+            })
+            .then(data => {
+              console.log(data);
+              if (data.data.code == 1) {
+                this.addressId.sendId = data.data.data.id;
+                this.promptsuccess("设置默认地址成功");
+              } else {
+                this.promptwarning("设置默认地址成功");
               }
             });
         } else {
@@ -628,10 +775,47 @@ export default {
           token: this.token
         })
         .then(data => {
-          console.log(data.data.data.senderList);
+          // console.log(data.data.data.senderList);
+          var sendList = data.data.data.senderList
+          sendList.forEach(ele=>{
+            if(ele.asDefault == 1){
+              this.sendAddressData.addressid = ele.id
+              this.sendAddressData.name = ele.contactName
+              this.sendAddressData.id = ele.identityCard
+              this.sendAddressData.mobile = ele.contactMobile
+              this.sendAddressData.tellPhone = ele.contactPhone
+              this.sendAddressData.addressT = ele.region
+              this.sendAddressData.detailAddress = ele.detailAddress
+              this.sendAddressData.postal = ele.postCode
+            }
+          })
         });
     },
-    defaultReceiveAddress() {},
+    defaultReceiveAddress() {
+      this.axios
+        .post("/app/v1/address/queryAddress", {
+          addressId: 0,
+          addressType: 1,
+          id: this.id,
+          token: this.token
+        })
+        .then(data => {
+          // console.log(data.data.data.receiverList);
+          var receiveList = data.data.data.receiverList
+          receiveList.forEach(ele=>{
+            if(ele.asDefault == 1){
+              this.receiveAddressData.addressid = ele.id
+              this.receiveAddressData.name = ele.contactName
+              this.receiveAddressData.id = ele.identityCard
+              this.receiveAddressData.mobile = ele.contactMobile
+              this.receiveAddressData.tellPhone = ele.contactPhone
+              this.receiveAddressData.addressT = ele.region
+              this.receiveAddressData.detailAddress = ele.detailAddress
+              this.receiveAddressData.postal = ele.postCode
+            }
+          })
+        });
+    },
     saveOrder(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
@@ -750,24 +934,6 @@ export default {
     completeGo() {
       this.$router.go(-1);
     },
-    sendProvince(data) {
-      this.sendAddressData.address.province = data.value;
-    },
-    sendCity(data) {
-      this.sendAddressData.address.city = data.value;
-    },
-    sendArea(data) {
-      this.sendAddressData.address.area = data.value;
-    },
-    receiveProvince(data) {
-      this.receiveAddressData.address.province = data.value;
-    },
-    receiveCity(data) {
-      this.receiveAddressData.address.city = data.value;
-    },
-    receiveArea(data) {
-      this.receiveAddressData.address.area = data.value;
-    }
   },
   computed: {
     ...mapGetters(["id", "token"]),
@@ -904,6 +1070,18 @@ export default {
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+    // 地址列表的模态框样式
+    .sendAddressList,
+    .receiveAddressList{
+      .el-dialog{
+        .el-dialog__header{
+          background-color: #fccf00;
+          .el-dialog__title{
+            color: #fff;
+          }
+        }
+      }
+    }
     .address-left {
       background: #fff;
       box-shadow: 0 0 15px #ccc;
@@ -955,6 +1133,7 @@ export default {
         justify-content: flex-end;
         align-items: center;
         img {
+          cursor: pointer;
           height: 25px;
           margin-right: 10px;
         }
@@ -1056,14 +1235,12 @@ export default {
           }
           .name-text {
             flex: 1;
-            text-indent: 10px;
             display: flex;
             .left {
-              width: 45px;
+              flex: 1;
               input {
                 padding: 0;
                 padding-right: 5px;
-                border-right: 1px solid #e0e0e0;
                 border-radius: 0;
               }
             }
@@ -1074,7 +1251,7 @@ export default {
         height: 38px;
         margin-top: 20px;
         .left-name {
-          border-bottom: 1px solid #e0e0e0;
+          border-bottom: 1px solid rgba(93, 93, 93, 0.1);
           display: flex;
           flex-direction: row;
           align-items: center;
@@ -1095,7 +1272,7 @@ export default {
           .name-text {
             flex: 1;
             // transform: scale(0.8);
-            transform: translateY(-2px);
+            transform: translateY(2px);
             overflow: hidden;
             .address {
               display: flex;
@@ -1131,7 +1308,6 @@ export default {
           }
           .name-text {
             flex: 1;
-            margin-left: 20px;
           }
         }
       }
@@ -1145,7 +1321,7 @@ export default {
           height: 100%;
           margin-left: 20px;
           margin-right: 20px;
-          border-bottom: 1px solid (244, 244, 244, 1);
+          border-bottom: 1px solid rgba(93, 93, 93, 0.1);
           .name-logo {
             color: rgba(252, 29, 26, 1);
             margin-top: 6px;
@@ -1158,7 +1334,6 @@ export default {
           }
           .name-text {
             flex: 1;
-            margin-left: 20px;
           }
         }
       }
@@ -1246,6 +1421,7 @@ export default {
         justify-content: flex-end;
         align-items: center;
         img {
+          cursor: pointer;
           height: 25px;
           margin-right: 10px;
         }
@@ -1343,14 +1519,12 @@ export default {
           }
           .name-text {
             flex: 1;
-            text-indent: 10px;
             display: flex;
             .left {
-              width: 50px;
+              flex: 1;
               input {
                 padding: 0;
                 border-radius: 0;
-                border-right: 1px solid #e0e0e0;
               }
             }
           }
@@ -1360,7 +1534,7 @@ export default {
         height: 38px;
         margin-top: 20px;
         .left-name {
-          border-bottom: 1px solid #e0e0e0;
+          border-bottom: 1px solid rgba(93, 93, 93, 0.1);
           display: flex;
           flex-direction: row;
           align-items: center;
@@ -1381,7 +1555,7 @@ export default {
           .name-text {
             flex: 1;
             // transform: scale(0.8);
-            transform: translateY(-2px);
+            transform: translateY(2px);
             overflow: hidden;
             .address {
               display: flex;
@@ -1417,7 +1591,6 @@ export default {
           }
           .name-text {
             flex: 1;
-            margin-left: 20px;
           }
         }
       }
@@ -1431,7 +1604,7 @@ export default {
           height: 100%;
           margin-left: 20px;
           margin-right: 20px;
-          border-bottom: 1px solid rgba(244, 244, 244, 1);
+          border-bottom: 1px solid rgba(93, 93, 93, 0.1);
           .name-logo {
             color: rgba(252, 29, 26, 1);
             margin-top: 6px;
@@ -1444,7 +1617,6 @@ export default {
           }
           .name-text {
             flex: 1;
-            margin-left: 20px;
           }
         }
       }
