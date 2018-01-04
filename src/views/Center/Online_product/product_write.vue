@@ -36,6 +36,7 @@
     </div>
     <div class="product-title">收发地址</div>
       <div class="product-address">
+        <!-- 发货地址列表模态框 -->
         <el-form :model="sendAddressData" :rules="sendAddressRules" ref="sendAddress" label-width="100px" class="sendAddress">
           <div class="address-left">
             <div class="left-logo"></div>
@@ -117,6 +118,7 @@
         <div class="address-img">
           <img src="../../../assets/product2.png">
         </div>
+        <!-- 收货地址列表模态框 -->
         <el-form :model="receiveAddressData" :rules="receiveAddressRules" ref="receiveAddress" label-width="100px" class="receiveAddress">
           <div class="address-right">
             <div class="left-logo"></div>
@@ -455,14 +457,14 @@ export default {
     this.getProductIndexData = JSON.parse(
       window.localStorage.getItem("productIndex")
     );
-    if(!this.getProductIndexData){
-      this.$router.push('/center/Online_product')
+    if (!this.getProductIndexData) {
+      this.$router.push("/center/Online_product");
     }
     this.getGoodsTypeList();
-    console.log(this.getProductIndexData);
+    this.defaultSendAddress()
   },
-  destroyed(){
-    window.localStorage.removeItem('productIndex')
+  destroyed() {
+    window.localStorage.removeItem("productIndex");
     // console.log('刷新出发了吗');
   },
   methods: {
@@ -617,6 +619,19 @@ export default {
         }
       });
     },
+    defaultSendAddress() {
+      this.axios
+        .post("/app/v1/address/queryAddress", {
+          addressId: 0,
+          addressType: 0,
+          id: this.id,
+          token: this.token
+        })
+        .then(data => {
+          console.log(data.data.data.senderList);
+        });
+    },
+    defaultReceiveAddress() {},
     saveOrder(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
@@ -625,39 +640,45 @@ export default {
             this.prompt("请输入地址，点击确定");
             return;
           }
-          this.axios.post("/app/v1/order/saveOrder", {
-            agentCode: "",
-            airfreightProductId: this.getProductIndexData.selectServer.airfreightProductId,
-            airportProductIds:  this.getProductIndexData.selectServer.airportProductIds,
-            aviationNo: "",
-            delegateOrderId: "",
-            flightRecordId: this.getProductIndexData.selectServer.flightRecordId,
-            goodsName: this.goodsInfo.name,
-            goodsNumber: this.goodsInfo.num,
-            goodsPackage: this.goodsInfo.pack,
-            goodsSize: this.goodsInfo.size.join(),
-            goodsVolume: this.goodsInfo.bulk,
-            goodsWeight: this.goodsInfo.weight,
-            id: this.id,
-            incrementProductIds: [],
-            inviteCode: this.inviteCode,
-            invoiceType: 0,
-            landCarriageProductIds: this.getProductIndexData.selectServer.landCarriageProductIds,
-            opt: 0,  // 保存
-            orderNo: "",
-            receiverAddressId: this.addressId.receiveId,
-            remark: this.goodsInfo.remark,
-            senderAddressId: this.addressId.sendId,
-            token: this.token
-          }).then(data=>{
-            console.log(data);
-            if(data.data.code == 1){
-              this.promptsuccess('订单保存成功！')
-            }
-            if(data.data.code == 10203){
-              this.promptwarning("货物尺寸格式错误")
-            }
-          });
+          this.axios
+            .post("/app/v1/order/saveOrder", {
+              agentCode: "",
+              airfreightProductId: this.getProductIndexData.selectServer
+                .airfreightProductId,
+              airportProductIds: this.getProductIndexData.selectServer
+                .airportProductIds,
+              aviationNo: "",
+              delegateOrderId: "",
+              flightRecordId: this.getProductIndexData.selectServer
+                .flightRecordId,
+              goodsName: this.goodsInfo.name,
+              goodsNumber: this.goodsInfo.num,
+              goodsPackage: this.goodsInfo.pack,
+              goodsSize: this.goodsInfo.size.join(),
+              goodsVolume: this.goodsInfo.bulk,
+              goodsWeight: this.goodsInfo.weight,
+              id: this.id,
+              incrementProductIds: [],
+              inviteCode: this.inviteCode,
+              invoiceType: 0,
+              landCarriageProductIds: this.getProductIndexData.selectServer
+                .landCarriageProductIds,
+              opt: 0, // 保存
+              orderNo: "",
+              receiverAddressId: this.addressId.receiveId,
+              remark: this.goodsInfo.remark,
+              senderAddressId: this.addressId.sendId,
+              token: this.token
+            })
+            .then(data => {
+              console.log(data);
+              if (data.data.code == 1) {
+                this.promptsuccess("订单保存成功！");
+              }
+              if (data.data.code == 10203) {
+                this.promptwarning("货物尺寸格式错误");
+              }
+            });
         } else {
           console.log("error submit!!");
           return false;
@@ -672,48 +693,54 @@ export default {
             this.prompt("请输入地址，点击确定");
             return;
           }
-          this.axios.post("/app/v1/order/saveOrder", {
-            agentCode: "",
-            airfreightProductId: this.getProductIndexData.selectServer.airfreightProductId,
-            airportProductIds:  this.getProductIndexData.selectServer.airportProductIds,
-            aviationNo: "",
-            delegateOrderId: "",
-            flightRecordId: this.getProductIndexData.selectServer.flightRecordId,
-            goodsName: this.goodsInfo.name,
-            goodsNumber: this.goodsInfo.num,
-            goodsPackage: this.goodsInfo.pack,
-            goodsSize: this.goodsInfo.size.join(),
-            goodsVolume: this.goodsInfo.bulk,
-            goodsWeight: this.goodsInfo.weight,
-            id: this.id,
-            incrementProductIds: [],
-            inviteCode: this.inviteCode,
-            invoiceType: 0,
-            landCarriageProductIds: this.getProductIndexData.selectServer.landCarriageProductIds,
-            opt: 1,    //提交
-            orderNo: "",
-            receiverAddressId: this.addressId.receiveId,
-            remark: this.goodsInfo.remark,
-            senderAddressId: this.addressId.sendId,
-            token: this.token
-          }).then(data=>{
-            console.log(data);
-            if(data.data.code == 10203){
-              this.promptwarning("货物尺寸格式错误")
-            }
-            if(data.data.code == 10212){
-              this.prompt('供应商信息维护错误,请重新下单')
-              setTimeout(()=>{
-                this.$router.push('/center/online_product')
-              },2000)
-            }
-            if(data.data.code ==1){
-              this.promptsuccess('下单成功')
-              setTimeout(()=>{
-                this.$router.push('/center/online_product/complete')
-              },1000)
-            }
-          });
+          this.axios
+            .post("/app/v1/order/saveOrder", {
+              agentCode: "",
+              airfreightProductId: this.getProductIndexData.selectServer
+                .airfreightProductId,
+              airportProductIds: this.getProductIndexData.selectServer
+                .airportProductIds,
+              aviationNo: "",
+              delegateOrderId: "",
+              flightRecordId: this.getProductIndexData.selectServer
+                .flightRecordId,
+              goodsName: this.goodsInfo.name,
+              goodsNumber: this.goodsInfo.num,
+              goodsPackage: this.goodsInfo.pack,
+              goodsSize: this.goodsInfo.size.join(),
+              goodsVolume: this.goodsInfo.bulk,
+              goodsWeight: this.goodsInfo.weight,
+              id: this.id,
+              incrementProductIds: [],
+              inviteCode: this.inviteCode,
+              invoiceType: 0,
+              landCarriageProductIds: this.getProductIndexData.selectServer
+                .landCarriageProductIds,
+              opt: 1, //提交
+              orderNo: "",
+              receiverAddressId: this.addressId.receiveId,
+              remark: this.goodsInfo.remark,
+              senderAddressId: this.addressId.sendId,
+              token: this.token
+            })
+            .then(data => {
+              console.log(data);
+              if (data.data.code == 10203) {
+                this.promptwarning("货物尺寸格式错误");
+              }
+              if (data.data.code == 10212) {
+                this.prompt("供应商信息维护错误,请重新下单");
+                setTimeout(() => {
+                  this.$router.push("/center/online_product");
+                }, 2000);
+              }
+              if (data.data.code == 1) {
+                this.promptsuccess("下单成功");
+                setTimeout(() => {
+                  this.$router.push("/center/online_product/complete");
+                }, 1000);
+              }
+            });
         } else {
           console.log("error submit!!");
           return false;
@@ -744,15 +771,19 @@ export default {
   },
   computed: {
     ...mapGetters(["id", "token"]),
-    formatPlaneData(){
-      if('searchData' in this.getProductIndexData){
-        var newDate =new Date(this.getProductIndexData.searchData.planeData)
-        var year = newDate.getFullYear()
-        var month = (newDate.getMonth()+1)<10?`0${newDate.getMonth()+1}`:newDate.getMonth()+1
-        var date = newDate.getDate()<10?`0${newDate.getDate()}`:newDate.getDate()
-        return `${year}-${month}-${date}`
+    formatPlaneData() {
+      if ("searchData" in this.getProductIndexData) {
+        var newDate = new Date(this.getProductIndexData.searchData.planeData);
+        var year = newDate.getFullYear();
+        var month =
+          newDate.getMonth() + 1 < 10
+            ? `0${newDate.getMonth() + 1}`
+            : newDate.getMonth() + 1;
+        var date =
+          newDate.getDate() < 10 ? `0${newDate.getDate()}` : newDate.getDate();
+        return `${year}-${month}-${date}`;
       }
-    },
+    }
   }
 };
 </script>
@@ -955,7 +986,6 @@ export default {
           .name-text {
             width: 80px;
             margin-left: 10px;
-
             input {
               padding: 0;
             }
