@@ -1,6 +1,6 @@
 <template>
   <div class="company-info">
-    <div class="header">
+    <div class="is-flex header">
       <span class="info">企业信息</span>
       <span class="btn">完善企业信息</span>
       <span class="btn">企业注册申请</span>
@@ -32,8 +32,8 @@
         </main>
       </section class="card">
       <section class="card card-two">
-        <header class="card-head">公司税务登记证</header>
-        <main class="card-body">
+        <header class="is-flex card-head">公司税务登记证</header>
+        <main class="is-flex card-body">
           <ul class="card-left info-justify-font">
             <li v-for="obj in tax1">
               <div class="wrap">
@@ -257,6 +257,19 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+@mixin header {
+  height: 61px;
+  align-items: center;
+  padding-left: 20px;
+  color: #b3b3b3;
+  h4 {
+    font-weight: normal;
+  }
+}
+.is-flex {
+  display: flex;
+}
+
 ul {
   padding-left: 0;
 }
@@ -270,15 +283,11 @@ ul {
 $orange: #fccf00;
 .header {
   $bth-height: 12px;
-  padding: 0 30px;
-  height: 61px;
-  display: flex;
+  @include header;
   align-items: center;
   justify-content: space-between;
-  font-size: $bth-height;
   .info {
     flex: 1;
-    color: #d5dadc;
   }
   .btn {
     margin: 0 10px;
@@ -312,7 +321,6 @@ $font-height: 18px;
     $radius: 3px;
     margin-bottom: $gap*2;
     .card-head {
-      display: flex;
       align-items: center;
       padding-left: 10px;
       color: white;
@@ -321,7 +329,6 @@ $font-height: 18px;
       border-radius: $radius;
     }
     .card-body {
-      display: flex;
       justify-content: space-between;
       border-radius: $radius;
       box-shadow: 0px 1px 10px 2px rgba(0, 0, 0, 0.1);

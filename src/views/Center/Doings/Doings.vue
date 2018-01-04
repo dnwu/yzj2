@@ -180,6 +180,15 @@ export default {
 </script>
 <style lang="scss" scoped>
 // 默认样式
+@mixin header {
+  height: 61px;
+  align-items: center;
+  padding-left: 20px;
+  color: #b3b3b3;
+  h4 {
+    font-weight: normal;
+  }
+}
 .doings {
   color: #999999;
   width: 90%;
@@ -224,8 +233,7 @@ ul {
 }
 //局部样式
 .header {
-  height: 61px;
-  padding: 0 20px;
+  @include header;
   justify-content: space-between;
   align-items: center;
   .right {
@@ -268,6 +276,7 @@ ul {
     line-height: $opt-height;
     background: #f52831;
     color: white;
+    box-shadow: 1px 2px 10px 2px rgba(0, 0, 0, 0.1);
   }
 }
 .wrap {
@@ -352,10 +361,25 @@ ul {
         }
       }
     }
-    .el-input__inner {
-      width: 59px;
-      height: 25px;
-      padding-right: 0;
+    .opt-place {
+      .el-input__inner {
+        width: 170px;
+        height: 25px;
+        padding-right: 0;
+      }
+    }
+    .opt-time {
+      .el-input__inner {
+        height: 25px;
+        padding-right: 0;
+      }
+    }
+    .opt-state {
+      .el-input__inner {
+        width: 70px;
+        height: 25px;
+        padding-right: 0;
+      }
     }
     .el-date-editor {
       width: 260px;
