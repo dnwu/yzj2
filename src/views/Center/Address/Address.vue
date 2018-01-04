@@ -318,10 +318,9 @@ export default {
             })
             .then(data => {
               if (data.data.code == 1) {
-
                 this.newAddressModel = false;
-                this.getSendAddressList();
                 this.getReceiveAddressList();
+                this.getSendAddressList();
               }
               if (data.data.code == 10110) {
                 this.this.$message({
@@ -337,6 +336,12 @@ export default {
                   });
                 }
               }
+              if (data.data.code == 10001) {
+                this.$message.error("登录已失效，请重新登录");
+                setTimeout(() => {
+                  this.logout()
+                }, 2000);
+              }
             });
         } else {
           console.log("error submit!!");
@@ -348,7 +353,6 @@ export default {
       this.resetAddressData.edit=!this.resetAddressData.edit
     },
     editAddress(item){
-      console.log(item);
       this.resetAddressData.edit = false
       if(item.type == 0){
         this.resetAddressData.type = 'send'
@@ -393,10 +397,12 @@ export default {
               token: this.token
             })
             .then(data => {
+              console.log(data);
               if (data.data.code == 1) {
                 this.resetAddressModel = false;
-                this.getSendAddressList();
                 this.getReceiveAddressList();
+                this.getSendAddressList();
+                // this.toggleTableData('all')
               }
               if (data.data.code == 10110) {
                 this.this.$message({
@@ -412,6 +418,12 @@ export default {
                   });
                 }
               }
+              if (data.data.code == 10001) {
+                this.$message.error("登录已失效，请重新登录");
+                setTimeout(() => {
+                  this.logout()
+                }, 2000);
+              }
             });
         } else {
           console.log("error submit!!");
@@ -422,7 +434,7 @@ export default {
     removeAddress() {
       this.storeRemoveAddress = [];
       this.removeAddressModel = true;
-      this.toggleTableData.forEach(ele => {
+      this.newAddressList.forEach(ele => {
         if (ele.remove == true) {
           this.storeRemoveAddress.push({
             addressId: ele.id,
@@ -443,6 +455,12 @@ export default {
           })
           .then(data => {
             this.removeAddressModel = false;
+            if (data.data.code == 10001) {
+              this.$message.error("登录已失效，请重新登录");
+              setTimeout(() => {
+                this.logout()
+              }, 2000);
+            }
             if (data.data.code == 1) {
               this.$message({
                 message: `成功删除${this.removeAddressNo}条地址`,
@@ -451,6 +469,7 @@ export default {
               this.editStatus = true;
               this.getSendAddressList();
               this.getReceiveAddressList();
+              this.addressType = 'all'
             } else {
               this.editStatus = true;
               this.$message({
@@ -462,6 +481,7 @@ export default {
       });
     },
     getSendAddressList() {
+      this.newAddressList = []
       this.axios
         .post("/app/v1/address/queryAddress", {
           addressId: 0,
@@ -487,6 +507,7 @@ export default {
         });
     },
     getReceiveAddressList() {
+      this.newAddressList = []
       this.axios
         .post("/app/v1/address/queryAddress", {
           addressId: 0,
@@ -512,7 +533,10 @@ export default {
         });
     },
     filterName(){
-      var addressList = [...this.sendAddressList.senderList,...this.receiveAddressList.receiverList]
+      // hh是标记，任意值都可以，作用是在toggleTableData函数中不是this.searchkey赋值为空
+      this.toggleTableData(this.addressType,'hh')
+      // var addressList = [...this.sendAddressList.senderList,...this.receiveAddressList.receiverList]
+      var addressList = [...this.newAddressList]
       this.newAddressList = []
       addressList.forEach(ele=>{
         if(ele.contactName.indexOf(this.searchkey) != -1){
@@ -521,17 +545,21 @@ export default {
       })
     },
     toggle() {
-      let length = this.toggleTableData.length;
       if (this.editStatus == false) {
-        for (let i = 0; i < length; i++) {
-          this.toggleTableData[i]["remove"] = false;
-        }
+        this.resetEditStatus()
       }
-      // this.selectType = !this.selectType;
       this.editStatus = !this.editStatus;
+    },
+    resetEditStatus(){
+      let length = this.newAddressList.length;
+      for (let i = 0; i < length; i++) {
+        this.newAddressList[i]["remove"] = false;
+      }
     },
     handleCommand(command) {
       // this.$message("click on item " + command);
+      this.editStatus = true
+      this.resetEditStatus()
       this.addressType = command;
       this.toggleTableData(command)
     },
@@ -547,22 +575,24 @@ export default {
       if (this.editStatus) {
         return;
       }
-      this.toggleTableData[index].remove = !this.toggleTableData[index].remove;
+      this.newAddressList[index].remove = !this.newAddressList[index].remove;
     },
-    toggleTableData(type) {
-      this.searchkey = ''
+    toggleTableData(type,mark) {
       this.newAddressList = []
+      this.editStatus = true
+      this.resetEditStatus()
+      if(mark == undefined){
+        this.searchkey = ''
+      }
       this.addressType = type
-      console.log(type);
       if (this.addressType == "all") {
         if (
           "senderList" in this.sendAddressList &&
           "receiverList" in this.receiveAddressList
         ) {
-          console.log('jinlai l ');
           this.newAddressList.push(...[...this.sendAddressList.senderList,...this.receiveAddressList.receiverList])
         }
-        console.log( this.newAddressList);
+        // console.log(this.newAddressList);
       }
       if (this.addressType == "receive") {
         let newTableData = [];
@@ -586,25 +616,7 @@ export default {
   },
   computed: {
     ...mapGetters(["id", "token"]),
-    // toggleTableDatas() {
-    //   if (this.addressType == "all") {
-    //     if (
-    //       "senderList" in this.sendAddressList &&
-    //       "receiverList" in this.receiveAddressList
-    //     ) {
-    //       this.toggleTableData(this.addressType)
-    //     }
-    //   }
-    // }
   }
-  // watch:{
-  //   removeItems:{
-  //     handler: function (newVal) {
-  //       console.log('123123',newVal)
-  //     },
-  //     deep: true
-  //   }
-  // }
 };
 </script>
 <style lang="scss">
