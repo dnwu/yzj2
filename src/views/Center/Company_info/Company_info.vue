@@ -7,7 +7,7 @@
     </div>
     <div class="main">
       <section class="card">
-        <header class="card-head">公司基本信息</header>
+        <header class="is-flex card-head">公司基本信息</header>
         <main class="is-flex card-body">
           <ul class="card-left">
             <li v-for="obj in info1">
@@ -283,6 +283,7 @@ ul {
 $orange: #fccf00;
 .header {
   $bth-height: 12px;
+  padding-right: 50px;
   @include header;
   align-items: center;
   justify-content: space-between;

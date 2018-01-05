@@ -4,16 +4,16 @@
       <h4>会员经验</h4>
       <div class="is-flex wrap">
         <div class="opt">
-          <input name="last" id="last7" type="radio" checked>
+          <input v-model="last" value="7" name="last" id="last7" type="radio">
           <label for="last7">最近7天</label>
         </div>
         <div class="opt">
-          <input name="last" id="last30" type="radio">
+          <input v-model="last" value="30" name="last" id="last30" type="radio">
           <label for="last30">最近30天</label>
         </div>
         <div class="opt">
-          <input name="last" id="last360" type="radio">
-          <label for="last360">最近1年</label>
+          <input v-model="last" value="365" name="last" id="last365" type="radio">
+          <label for="last365">最近1年</label>
         </div>
       </div>
       <span class="btn btn-export">导出</span>
@@ -21,7 +21,7 @@
     <section class="main">
       <div class="content">
         <el-table
-          :data="tableData"
+          :data="filterTableDate"
           style="width: 100%"
           :default-sort = "{prop: 'date', order: 'descending'}"
         >
@@ -71,9 +71,10 @@
 export default {
   data() {
     return {
+      last: "7",
       tableData: [
         {
-          date: "2017-11-11 12:00:00",
+          date: "2018-1-1 12:00:00",
           change: "+180",
           exp: "3360",
           grade: "3级",
@@ -81,7 +82,7 @@ export default {
           note: "【订单完成】201709299392"
         },
         {
-          date: "2017-11-12 12:00:00",
+          date: "2017-12-12 12:00:00",
           change: "+180",
           exp: "3360",
           grade: "3级",
@@ -99,11 +100,24 @@ export default {
       ]
     };
   },
-  methods: {
-    formatter(row, column) {
-      return row.address;
+  computed: {
+    filterTableDate() {
+      var date = new Date();
+      date.setDate(date.getDate() - this.last);
+      return this.tableData.filter(item => {
+        var itemTime = this.getTime(item.date);
+        if (itemTime > date.getTime()) return true;
+      });
     }
-  }
+  },
+  methods: {
+    getTime(str) {
+      var strDate = str.split(" ")[0].replace(/-/, "/");
+      var date = new Date(strDate);
+      return date.getTime();
+    }
+  },
+  mounted() {}
 };
 </script>
 <style lang="scss" scoped>
