@@ -8,7 +8,7 @@
     <div class="main">
       <section class="card">
         <header class="card-head">公司基本信息</header>
-        <main class="card-body">
+        <main class="is-flex card-body">
           <ul class="card-left">
             <li v-for="obj in info1">
               <div class="wrap">
@@ -83,7 +83,7 @@
       </section class="card">
       <section class="card card-two">
         <header class="card-head">联系人信息</header>
-        <main class="card-body">
+        <main class="is-flex card-body">
           <ul class="card-left info-justify-font">
             <li v-for="obj in msg1">
               <div class="wrap">
