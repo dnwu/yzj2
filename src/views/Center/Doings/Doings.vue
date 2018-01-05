@@ -6,7 +6,13 @@
         <span class="key">申请编号</span>
         <span class="is-flex opt opt-search">
           <i class="el-icon-search"></i>
-          <el-input v-model="input" placeholder=""></el-input>
+          <el-autocomplete
+            class="inline-input"
+            v-model="input"
+            :fetch-suggestions="querySearch"
+            placeholder="请输入内容"
+            @select="handleSelect"
+          ></el-autocomplete>
         </span>
       </div>
     </div>
@@ -19,47 +25,38 @@
       </span>
       <span class="key key-choose-name">申请日期</span>
       <span class="opt opt-time">
-        <el-date-picker
-          v-model="orderTime"
-          type="daterange"
-          align="center"
-          unlink-panels
-          range-separator="至"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-          size='mini'
-          :picker-options="pickerOptions2">
+        <el-date-picker v-model="orderTime" type="daterange" align="center" unlink-panels range-separator="至" start-placeholder="开始日期"
+          end-placeholder="结束日期" size='mini' :picker-options="pickerOptions2">
         </el-date-picker>
       </span>
       <span class="key key-choose-name">订单状态</span>
       <span class="opt opt-state">
         <el-select v-model="orderStatu" placeholder="全部">
-          <el-option
-            v-for="item in orderStatus"
-            :key="item.name"
-            :label="item.name"
-            :value="item.name">
+          <el-option v-for="item in orderStatus" :key="item.name" :label="item.name" :value="item.name">
           </el-option>
         </el-select>
       </span>
-      <span class="btn btn-check">查询</span>
+      <span class="btn btn-check" @click="check">查询</span>
     </div>
     <div class="wrap">
       <div class="is-flex title">
         <span class="wide wide1">申请状态</span>
         <span class="wide wide2">运输路线</span>
         <span class="wide wide3">航班日起飞时间</span>
-        <span class="wide wide4">申请运价<br>（元/千克）</span>
-        <span class="wide wide5">原始运价<br>（元/千克）</span>
-        <span class="wide wide6">重量<br>（千克）</span>
+        <span class="wide wide4">申请运价
+          <br>（元/千克）</span>
+        <span class="wide wide5">原始运价
+          <br>（元/千克）</span>
+        <span class="wide wide6">重量
+          <br>（千克）</span>
         <span class="wide wide7">货物类型</span>
         <span class="wide wide8">操作</span>
       </div>
       <ul>
-        <li class="card" v-for="order in orders">
+        <li class="card" v-for="order in filterOrders">
           <div class="is-flex tip">
             <span class="name">申请编号：</span>
-            <span class="value" v-text="order.code"></span>
+            <span class="value" v-text="order.value"></span>
             <span class="name">申请日期：</span>
             <span class="value" v-text="order.date"></span>
           </div>
@@ -85,7 +82,10 @@ import StartPortselect from "@/components/StartPortselect";
 import EndPortselect from "@/components/EndPortselect";
 
 export default {
-  components: { StartPortselect, EndPortselect },
+  components: {
+    StartPortselect,
+    EndPortselect
+  },
   data() {
     return {
       pic: require("@/assets/reset_icon.png"),
@@ -137,12 +137,13 @@ export default {
           name: "已通过"
         }
       ],
+      filterOrders: [],
       orders: [
         {
-          code: "SQ20173828372",
+          value: "SQ20173828372",
           date: "2017-11-12",
           state: "待审核",
-          line: "北京（PEK） 上海(PVG)",
+          line: "北京（PEK） 上海浦东（PVG）",
           time: "2017-11-12 10:00 - 12:00",
           apply: 3.5,
           original: 4.5,
@@ -151,10 +152,10 @@ export default {
           control: true
         },
         {
-          code: "SQ20173828372",
-          date: "2017-11-12",
+          value: "SQ20173828378",
+          date: "2018-11-12",
           state: "已通过",
-          line: "北京（PEK） 上海(PVG)",
+          line: "北京（PEK） 上海浦东（PVG）",
           time: "2017-11-12 10:00 - 12:00",
           apply: 3.5,
           original: 4.5,
@@ -166,15 +167,80 @@ export default {
     };
   },
   methods: {
+    querySearch(queryString, cb) {
+      var orders = this.orders;
+      var results = queryString
+        ? orders.filter(this.createFilter(queryString))
+        : orders;
+      // 调用 callback 返回建议列表的数据
+      cb(results);
+    },
+    createFilter(queryString) {
+      return order => {
+        return (
+          order.value.toLowerCase().indexOf(queryString.toLowerCase()) == 0
+        );
+      };
+    },
+    handleSelect(item) {
+      var arr = [];
+      arr.push(item);
+      this.filterOrders = arr;
+    },
     allow(state) {
       return state == "已通过" ? true : false;
     },
     startportvalue(val) {
-      console.log(val);
+      this.startPort = val;
     },
     endportvalue(val) {
-      console.log(val);
+      this.endPort = val;
+    },
+    getTime(str) {
+      var date = new Date(str);
+      return date.getTime();
+    },
+    getOrderTime(str) {
+      var date = new Date(str.replace(/-/, "/"));
+      return date.getTime();
+    },
+    check(bool) {
+      this.filterOrders = this.orders.filter(order => {
+        if (
+          this.orderStatu && // 选择了状态才会发生过滤
+          this.orderStatu !== "全部" &&
+          this.orderStatu !== order.state // 判断选择状态是否与订单状态相符
+        )
+          return false;
+
+        var line = order.line.split(" "),
+          start = line[0],
+          end = line[1];
+
+        if (
+          this.startPort !== "" && // 选择了路线才会发生过滤
+          this.endPort !== "" &&
+          (this.startPort !== start || this.endPort !== end) // 判断选择路线是否与订单路线相符
+        )
+          return false;
+
+        var timeStart = this.orderTime[0] && this.getTime(this.orderTime[0]);
+        var timeEnd = this.orderTime[1] && this.getTime(this.orderTime[1]);
+        var orderTime = order.time && this.getOrderTime(order.date);
+
+        if (
+          timeStart && // 选择了时间才会发生过滤
+          timeEnd &&
+          (orderTime < timeStart || orderTime > timeEnd) // 判断选择时间是否与订单时间相符
+        )
+          return false;
+
+        return true;
+      });
     }
+  },
+  mounted() {
+    this.check();
   }
 };
 </script>
@@ -189,49 +255,56 @@ export default {
     font-weight: normal;
   }
 }
+
 .doings {
   color: #999999;
   width: 90%;
 }
+
 ul {
   padding-left: 0;
-}
-// 全局样式
+} // 全局样式
 .is-flex {
   display: flex;
 }
+
 .yellow {
   color: #fccf00;
 }
+
 .green {
   color: #7ac943;
 }
+
 .key {
   // 加重字体格式
   color: #4c4c4c;
   font-size: 12px;
 }
+
 .opt {
   // 选择框样式
   background: #e5e5e5;
   vertical-align: middle;
   border-radius: 2px;
 }
+
 .btn {
   vertical-align: middle;
   border-radius: 2px;
 }
+
 .card {
   box-shadow: 0px 2px 8px -1px rgba(0, 0, 0, 0.1);
 }
+
 .show-line {
   position: relative;
   top: 46%;
   width: 15px;
   height: 1px;
   background-color: #c0c4cc;
-}
-//局部样式
+} //局部样式
 .header {
   @include header;
   justify-content: space-between;
@@ -279,6 +352,7 @@ ul {
     box-shadow: 1px 2px 10px 2px rgba(0, 0, 0, 0.1);
   }
 }
+
 .wrap {
   padding: 25px 30px 0;
   .title {
@@ -313,7 +387,8 @@ ul {
     width: 120px;
   }
   .wide2 {
-    width: 200px;
+    width: 300px;
+    flex: 1;
   }
   .wide3 {
     width: 200px;
@@ -396,4 +471,3 @@ ul {
   }
 }
 </style>
-
