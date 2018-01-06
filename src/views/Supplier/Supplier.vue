@@ -31,10 +31,11 @@
             <li @click.stop="goto(5,'/supplier/booking_space')" :class="activeIndex == '5'?'active':''"><span class="icon"><img :src="activeIndex == '5'?iconARR[5].active:iconARR[5].default" alt=""></span><span class="title">订舱管理</span></li>
             <li @click.stop="goto(6,'/supplier/making_bill')" :class="activeIndex == '6'?'active':''"><span class="icon"><img :src="activeIndex == '6'?iconARR[6].active:iconARR[6].default" alt=""></span><span class="title">制单管理</span></li>
             <li class="title">产品管理</li>
-            <li @click.stop="goto(7,'/supplier/airlift')" :class="activeIndex == '7'?'active':''"><span class="icon"><img :src="activeIndex == '7'?iconARR[7].active:iconARR[7].default" alt=""></span><span class="title">空运产品管理</span></li>
-            <li @click.stop="goto(8,'/supplier/land_transport')" :class="activeIndex == '8'?'active':''"><span class="icon"><img :src="activeIndex == '8'?iconARR[8].active:iconARR[8].default" alt=""></span><span class="title">陆运产品管理</span></li>
-            <li @click.stop="goto(9,'/supplier/airport_operation')" :class="activeIndex == '9'?'active':''"><span class="icon"><img :src="activeIndex == '9'?iconARR[9].active:iconARR[9].default" alt=""></span><span class="title">机场操作产品管理</span></li>
-            <li @click.stop="goto(10,'/supplier/value_add')" :class="activeIndex == '10'?'active':''"><span class="icon"><img :src="activeIndex == '10'?iconARR[10].active:iconARR[10].default" alt=""></span><span class="title">增值服务产品管理</span></li>
+            <li @click.stop="goto(7,'/supplier/air_plan')" :class="activeIndex == '7'?'active':''"><span class="icon"><img :src="activeIndex == '7'?iconARR[7].active:iconARR[7].default" alt=""></span><span class="title">航班计划维护</span></li>
+            <li @click.stop="goto(8,'/supplier/airlift')" :class="activeIndex == '8'?'active':''"><span class="icon"><img :src="activeIndex == '8'?iconARR[8].active:iconARR[8].default" alt=""></span><span class="title">空运产品管理</span></li>
+            <li @click.stop="goto(9,'/supplier/land_transport')" :class="activeIndex == '9'?'active':''"><span class="icon"><img :src="activeIndex == '9'?iconARR[9].active:iconARR[9].default" alt=""></span><span class="title">陆运产品管理</span></li>
+            <li @click.stop="goto(10,'/supplier/airport_operation')" :class="activeIndex == '10'?'active':''"><span class="icon"><img :src="activeIndex == '10'?iconARR[10].active:iconARR[10].default" alt=""></span><span class="title">机场操作产品管理</span></li>
+            <li @click.stop="goto(11,'/supplier/value_add')" :class="activeIndex == '11'?'active':''"><span class="icon"><img :src="activeIndex == '11'?iconARR[11].active:iconARR[11].default" alt=""></span><span class="title">增值服务产品管理</span></li>
           </ul>
         </div>
       </div>
@@ -63,6 +64,7 @@ export default {
               {default:require('../../assets/nav19.png'),active:require('../../assets/nav19_19.png')},
               {default:require('../../assets/nav20.png'),active:require('../../assets/nav20_20.png')},
               {default:require('../../assets/nav21.png'),active:require('../../assets/nav21_21.png')},
+              {default:require('../../assets/nav21.png'),active:require('../../assets/nav21_21.png')},
       ]
     };
   },
@@ -89,17 +91,20 @@ export default {
     }else if(this.fullPath.includes('aking_bill')){
       this.activeIndex = 6
       this.title = '制单管理'
-    }else if(this.fullPath.includes('irlift')){
+    }else if(this.fullPath.includes('ir_plan')){
       this.activeIndex = 7
+      this.title = '航班计划维护'
+    }else if(this.fullPath.includes('irlift')){
+      this.activeIndex = 8
       this.title = '空运产品管理'
     }else if(this.fullPath.includes('and_transport')){
-      this.activeIndex = 8
+      this.activeIndex = 9
       this.title = '陆运产品管理'
     }else if(this.fullPath.includes('irport_operation')){
-      this.activeIndex = 9
+      this.activeIndex = 10
       this.title = '机场操作产品管理'
     }else if(this.fullPath.includes('alue_add')){
-      this.activeIndex = 10
+      this.activeIndex = 11
       this.title = '增值服务产品管理'
     }
   },

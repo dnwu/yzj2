@@ -41,6 +41,7 @@ import * as types from '@/store/mutation-type'
 
 const LoginIndex = () => import ('@/views/Login/Login')
 const Login = () => import ('@/views/Login/Login/Login')
+const ForgetPass = () => import('@/views/Login/ForgetPass/ForgetPass')
 const Register = () => import ('@/views/Login/register/register')
 const Error = () => import ('@/views/Login/Error/Error')
 const Success = () => import ('@/views/Login/Success/Success')
@@ -86,6 +87,7 @@ const Supplier_Order_deal = () => import('@/views/Supplier/Order_deal/Order_deal
 const Supplier_Order_track = () => import('@/views/Supplier/Order_track/Order_track')
 const Supplier_Booking_space = () => import('@/views/Supplier/Booking_space/Booking_space')
 const Supplier_Making_bill = () => import('@/views/Supplier/Making_bill/Making_bill')
+const Supplier_Air_plan = () => import("@/views/Supplier/Air_plan/Air_plan")
 const Supplier_Airlift = () => import('@/views/Supplier/Airlift/Airlift')
 const Supplier_Land_transport = () => import('@/views/Supplier/Land_transport/Land_transport')
 const Supplier_Airport_operation = () => import('@/views/Supplier/Airport_operation/Airport_operation')
@@ -282,6 +284,10 @@ let router = new Router({
           component: Login,
           name: 'login/login'
         }, {
+          path: '/login/forgetpass',
+          component: ForgetPass,
+          name: 'login/forgetpass'
+        },{
           path: '/login/register',
           name:'login/register',
           component: Register
@@ -553,6 +559,15 @@ let router = new Router({
           path:'/supplier/making_bill',
           component:Supplier_Making_bill,
           name:'supplier/making_bill',
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'company' // 添加字段，判断用户权限
+          }
+        },
+        {
+          path:'/supplier/air_plan',
+          component:Supplier_Air_plan,
+          name:'supplier/air_plan',
           meta: {
             requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
             usertype:'company' // 添加字段，判断用户权限
