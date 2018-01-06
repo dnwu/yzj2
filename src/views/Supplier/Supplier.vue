@@ -69,6 +69,7 @@ export default {
     };
   },
   created() {
+    console.log(this.$route.fullPath);
     this.fullPath = this.$route.fullPath;
     if(this.fullPath.includes('account')){
       this.activeIndex = 0
@@ -91,7 +92,8 @@ export default {
     }else if(this.fullPath.includes('aking_bill')){
       this.activeIndex = 6
       this.title = '制单管理'
-    }else if(this.fullPath.includes('ir_plan')){
+    }else if(this.fullPath.includes('air_plan')){
+      console.log('lailemei');
       this.activeIndex = 7
       this.title = '航班计划维护'
     }else if(this.fullPath.includes('irlift')){
@@ -141,12 +143,14 @@ export default {
       }else if(index == 6){
         this.title = '制单管理'
       }else if(index == 7){
-        this.title = '空运产品管理'
+        this.title = '航班计划维护'
       }else if(index == 8){
-        this.title = '陆运产品管理'
+        this.title = '空运产品管理'
       }else if(index == 9){
-        this.title = '机场操作产品管理'
+        this.title = '陆运产品管理'
       }else if(index == 10){
+        this.title = '机场操作产品管理'
+      }else if(index == 11){
         this.title = '增值服务产品管理'
       }
     }
