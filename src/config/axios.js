@@ -25,10 +25,14 @@ axios.interceptors.request.use(
 // http response 拦截器
 axios.interceptors.response.use(
     response => {
-      console.log(this);
+      // console.log(response.data.code);
       // 登录失效
       if(response.data.code == 10001){
-
+        store.commit('SET_USERTYPE','')
+        store.commit('SET_TOKEN','')
+        store.commit('SET_USERNAME','')
+        store.commit('SET_ID','')
+        router.push('/login')
       }
       return response;
     },

@@ -467,6 +467,7 @@ export default {
                 type: "success"
               });
               this.editStatus = true;
+              this.newAddressList = []
               this.getSendAddressList();
               this.getReceiveAddressList();
               this.addressType = 'all'
@@ -481,7 +482,7 @@ export default {
       });
     },
     getSendAddressList() {
-      this.newAddressList = []
+      // this.newAddressList = []
       this.axios
         .post("/app/v1/address/queryAddress", {
           addressId: 0,
@@ -507,7 +508,7 @@ export default {
         });
     },
     getReceiveAddressList() {
-      this.newAddressList = []
+      // this.newAddressList = []
       this.axios
         .post("/app/v1/address/queryAddress", {
           addressId: 0,

@@ -729,7 +729,6 @@ export default {
             .then(data => {
               console.log(data);
               if (data.data.code == 1) {
-                this.addressId.sendId = data.data.data.id;
                 this.promptsuccess("设置默认地址成功");
               } else {
                 this.promptwarning("设置默认地址成功");
@@ -754,7 +753,6 @@ export default {
             .then(data => {
               console.log(data);
               if (data.data.code == 1) {
-                this.addressId.sendId = data.data.data.id;
                 this.promptsuccess("设置默认地址成功");
               } else {
                 this.promptwarning("设置默认地址成功");
@@ -820,7 +818,7 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           // alert("saveOrder!");
-          if (this.addressId.sendId == "" || this.addressId.receiveId == "") {
+          if (this.receiveAddressData.addressid == "" || this.sendAddressData.addressid == "") {
             this.prompt("请输入地址，点击确定");
             return;
           }
@@ -849,9 +847,9 @@ export default {
                 .landCarriageProductIds,
               opt: 0, // 保存
               orderNo: "",
-              receiverAddressId: this.addressId.receiveId,
+              receiverAddressId: this.receiveAddressData.addressid,
               remark: this.goodsInfo.remark,
-              senderAddressId: this.addressId.sendId,
+              senderAddressId: this.sendAddressData.addressid,
               token: this.token
             })
             .then(data => {
@@ -873,7 +871,7 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           // alert("submitOrder!");
-          if (this.addressId.sendId == "" || this.addressId.receiveId == "") {
+          if (this.receiveAddressData.addressid == "" || this.sendAddressData.addressid == "") {
             this.prompt("请输入地址，点击确定");
             return;
           }
@@ -902,9 +900,9 @@ export default {
                 .landCarriageProductIds,
               opt: 1, //提交
               orderNo: "",
-              receiverAddressId: this.addressId.receiveId,
+              receiverAddressId: this.receiveAddressData.addressid,
               remark: this.goodsInfo.remark,
-              senderAddressId: this.addressId.sendId,
+              senderAddressId: this.sendAddressData.addressid,
               token: this.token
             })
             .then(data => {
