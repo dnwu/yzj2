@@ -175,7 +175,31 @@
         <div class="personal-info">
           <!-- 修改个人信息模态框 -->
           <div class="changePersonalInfoModel">
-
+            <el-dialog width="800px" :visible.sync="changePersonalInfoModel">
+                <div slot="title">
+                  <span class="el-icon-edit"></span>
+                  <span>修改个人信息</span>
+                </div>
+                <el-form :model="resetPersonalInfoData" status-icon ref="resetPersonalInfo" label-width="100px" class="demo-ruleForm">
+                  <el-form-item label="姓名" prop="name">
+                    <el-input v-model="resetPersonalInfoData.name" auto-complete="off"></el-input>
+                  </el-form-item>
+                  <el-form-item label="身份证" prop="id">
+                    <el-input v-model="resetPersonalInfoData.id" auto-complete="off"></el-input>
+                  </el-form-item>
+                  <el-form-item label="固定电话" prop="telephone">
+                    <el-input v-model="resetPersonalInfoData.telephone" auto-complete="off"></el-input>
+                  </el-form-item>
+                  <el-form-item label="详细地址" prop="addressDetial">
+                    <el-input v-model="resetPersonalInfoData.addressDetial" auto-complete="off"></el-input>
+                  </el-form-item>
+                  <el-form-item class="btn">
+                    <el-button type="warning" size="mini" @click="submitPersonalInfo()">确认</el-button>
+                  </el-form-item>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                </div>
+              </el-dialog>
           </div>
           <div class="triangle">
             <p>个人信息</p>
@@ -194,6 +218,7 @@
           </div>
           <div class="revise">
             <el-button
+              @click="changePersonalInfoModelControl"
               type="info"
               size="mini">修改</el-button>
           </div>
@@ -232,6 +257,7 @@ export default {
       changePassModel: false,
       changePhoneModel: false,
       changeEmailModel: false,
+      changePersonalInfoModel: false,
       controlSendCodeBtn: false, // 控制发送验证码按钮
       time: 60, // 验证码剩余时间
       timeControl: false, //控制时间的显示
@@ -251,6 +277,12 @@ export default {
       resetEmailData: {
         oldEmail: "",
         newEmail: ""
+      },
+      resetPersonalInfoData: {
+        name: "",
+        id: "",
+        telephone: "",
+        addressDetial: ""
       },
       resetPasswordRules: {
         new_password1: [{ validator: validatePass, trigger: "blur" }],
@@ -360,9 +392,9 @@ export default {
           }
         });
     },
-    changeEmailModelControl(){
-      this.changeEmailModel = true
-      this.resetEmailData.newEmail=''
+    changeEmailModelControl() {
+      this.changeEmailModel = true;
+      this.resetEmailData.newEmail = "";
     },
     submitEmail() {
       if (this.resetEmailData.newEmail == "") {
@@ -392,15 +424,49 @@ export default {
               type: "warning"
             });
           }
-          if(data.data.code == 1){
-            this.getUserInfo()
-            this.changeEmailModel = false
+          if (data.data.code == 1) {
+            this.getUserInfo();
+            this.changeEmailModel = false;
             this.$message({
               message: "邮箱修改成功",
               type: "success"
             });
           }
         });
+    },
+    changePersonalInfoModelControl() {
+      this.changePersonalInfoModel = true;
+    },
+    submitPersonalInfo() {
+      if(this.resetPersonalInfoData.name == ''){
+        this.$message({
+          message: "姓名不能为空",
+          type: "warning"
+        });
+        return
+      }
+      this.axios.post("/app/v1/user/userModifyInfo", {
+        address: this.resetPersonalInfoData.addressDetial,
+        id: this.id,
+        identifyCard: this.resetPersonalInfoData.id,
+        info: "1",
+        name: this.resetPersonalInfoData.name,
+        smsCode: "",
+        telephone: this.resetPersonalInfoData.telephone,
+        token: this.token,
+        type: 3
+      }).then(data=>{
+        if(data.data.code == 10110){
+          this.$message({
+            message: "身份证格式错误",
+            type: "warning"
+          });
+        }
+        if(data.data.code == 1){
+          this.changePersonalInfoModel = false
+          this.getUserInfo()
+        }
+      });
     },
     verificationPhone() {
       this.axios
@@ -660,6 +726,42 @@ export default {
         flex: 2;
         margin-left: 20px;
         padding-top: 40px;
+        .changePersonalInfoModel {
+          .el-dialog {
+            .el-dialog__header {
+              background-color: #fccf00;
+              div {
+                color: #fff;
+                font-size: 20px;
+              }
+            }
+            .el-dialog__body {
+              position: relative;
+              .btn {
+                text-align: center;
+                transform: translateX(-60px);
+                button {
+                  padding: 6px 60px;
+                }
+              }
+              .code {
+                .el-form-item__content {
+                  display: flex;
+                  .sendCode {
+                    margin-left: 100px;
+                    margin-right: 100px;
+                  }
+                }
+              }
+              .time {
+                position: absolute;
+                right: 40px;
+                color: #67c23a;
+                text-align: left;
+              }
+            }
+          }
+        }
         .revise {
           display: flex;
           justify-content: flex-end;

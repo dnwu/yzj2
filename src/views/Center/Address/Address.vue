@@ -318,6 +318,7 @@ export default {
             })
             .then(data => {
               if (data.data.code == 1) {
+                this.newAddressList = []
                 this.newAddressModel = false;
                 this.getReceiveAddressList();
                 this.getSendAddressList();
@@ -399,6 +400,7 @@ export default {
             .then(data => {
               console.log(data);
               if (data.data.code == 1) {
+                this.newAddressList = []
                 this.resetAddressModel = false;
                 this.getReceiveAddressList();
                 this.getSendAddressList();
