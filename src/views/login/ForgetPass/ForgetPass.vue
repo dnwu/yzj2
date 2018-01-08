@@ -8,6 +8,10 @@
   </div>
   <template v-if="controlPass">
     <div class="step2">
+      <div class="key">输入验证码</div>
+      <div class="newpass"><el-input v-model="code" type="password" auto-complete="off"></el-input></div>
+    </div>
+    <div class="step2">
       <div class="key">输入新密码</div>
       <div class="newpass"><el-input v-model="newpass" type="password" auto-complete="off"></el-input></div>
     </div>
@@ -18,7 +22,10 @@
 </div>
 </template>
 <script>
+import getmd5 from "@/api/getmd5";
+import { logout } from "@/tools/logout";
 export default {
+  mixins: [logout],
   data() {
     return {
       controlBtn: false,
@@ -26,18 +33,17 @@ export default {
       controltime: false,
       controlPass: false,
       phone: "",
-      newpass: ""
+      newpass: "",
+      code:''
     };
   },
   methods: {
     validatePhone() {
-      console.log("11");
       this.axios
         .post("/app/v1/user/userValidateAccount", {
           phone: this.phone
         })
         .then(data => {
-          console.log(data);
           if (data.data.code == 10101) {
             this.$message({
               message: "手机格式错误",
@@ -45,6 +51,10 @@ export default {
             });
           }
           if (data.data.code == 10002) {
+            this.controlBtn = true;
+            this.controltime = true;
+            this.sendcode();
+            this.controlPass = true;
           }
           if (data.data.code == 1) {
             this.$message({
@@ -55,13 +65,59 @@ export default {
         });
     },
     sendcode() {
-      this.axios.post("/app/v1/common/sendSms", {
-        phone: this.phone,
-        smdType: 'findpwd'
-      });
+      this.timer = setInterval(() => {
+        this.time--;
+        if (this.time <= 0) {
+          clearInterval(this.timer);
+          this.controlBtn = false;
+          this.controltime = false;
+          this.time = 60;
+        }
+      }, 1000);
+      this.axios
+        .post("/app/v1/common/sendSms", {
+          phone: this.phone,
+          smdType: "findpwd"
+        })
+        .then(data => {});
     },
     submit() {
-      console.log("222");
+      if(this.code == ''){
+        this.$message({
+          message: "验证码不能为空",
+          type: "warning"
+        });
+        return
+      }
+      if(this.newpass == ''){
+        this.$message({
+          message: "请输入新密码",
+          type: "warning"
+        });
+        return
+      }
+      this.axios.post("/app/v1/user/userFindPassword", {
+        newPassword: getmd5(this.newpass),
+        phone: this.phone,
+        smsCode: this.code
+      }).then(data=>{
+        console.log(data);
+        if(data.data.code ==10103){
+          this.$message({
+            message: "验证码错误",
+            type: "warning"
+          });
+        }
+        if(data.data.code ==1 ){
+          this.$message({
+            message: "密码修改成功，请重新登录",
+            type: "success"
+          });
+          setTimeout(()=>{
+            this.logout()
+          },2000)
+        }
+      });
     }
   }
 };
@@ -73,7 +129,7 @@ export default {
   padding: 100px;
   .step1 {
     display: flex;
-    margin-bottom: 100px;
+    margin-bottom: 60px;
     .key {
       line-height: 40px;
       margin-right: 10px;
@@ -90,6 +146,7 @@ export default {
   }
   .step2 {
     display: flex;
+    margin: 10px 0;
     .key {
       line-height: 40px;
       margin-right: 10px;
