@@ -82,7 +82,7 @@
         </ul>
       </main>
       <footer>
-        <div class="btn-add"></div>
+        <div class="btn-add">立即添加</div>
       </footer>
     </div>
     
@@ -237,6 +237,7 @@ $yellow: #fccf00;
 $green: #7ac943;
 
 .son_account {
+  color: #999999;
   .header {
     @include header;
   }
@@ -339,6 +340,7 @@ $green: #7ac943;
   }
   .dialog {
     position: fixed;
+    padding-bottom: 40px;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
@@ -393,6 +395,15 @@ $green: #7ac943;
           color: $yellow;
         }
       }
+    }
+    .btn-add {
+      width: 150px;
+      height: 20px;
+      margin: 0 auto;
+      color: white;
+      background: $yellow;
+      text-align: center;
+      box-shadow: 1px 2px 10px 2px rgba(0, 0, 0, 0.1);
     }
   }
 }
