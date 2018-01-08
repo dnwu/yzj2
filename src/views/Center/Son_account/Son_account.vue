@@ -1,62 +1,92 @@
 <template>
-<div class="son_account">
-  <header class="is-flex ali-center header">
-    <h4>子账号管理</h4>
-  </header>
-  <section class="main">
-    <div class="linear-gradient"></div>
-    <div class="is-flex jst-between big-card">
-      <div class="head-img"></div>
-      <div class="account-msg is-flex dir-column">
-        <div class="card-wrap is-flex" v-for="item in msg">
-          <span class="msg name text-jst" v-text="item.name"></span>
-          <span class="dot">:</span>
-          <span class="value" v-text="item.value"></span>
+  <div class="son_account">
+    <header class="is-flex ali-center header">
+      <h4>子账号管理</h4>
+    </header>
+    <section class="main">
+      <div class="linear-gradient"></div>
+      <div class="is-flex jst-between big-card">
+        <div class="head-img"></div>
+        <div class="account-msg is-flex dir-column">
+          <div class="card-wrap is-flex" v-for="item in msg">
+            <span class="msg name text-jst" v-text="item.name"></span>
+            <span class="dot">:</span>
+            <span class="value" v-text="item.value"></span>
+          </div>
+        </div>
+        <div class="account-info is-flex dir-column">
+          <div class="card-wrap is-flex" v-for="item in info">
+            <span class="msg name text-jst" v-text="item.name"></span>
+            <span class="dot">:</span>
+            <span class="value" v-text="item.value"></span>
+          </div>
         </div>
       </div>
-      <div class="account-info is-flex dir-column">
-        <div class="card-wrap is-flex" v-for="item in info">
-          <span class="msg name text-jst" v-text="item.name"></span>
-          <span class="dot">:</span>
-          <span class="value" v-text="item.value"></span>
+      <div class="wrap">
+        <div class="is-flex jst-between ali-center title">
+          <span class="wide wide1"></span>
+          <span class="wide wide2">用户名</span>
+          <span class="wide wide3">姓名</span>
+          <span class="wide wide4">手机号</span>
+          <span class="wide wide5">邮箱</span>
+          <span class="wide wide6">身份证</span>
+          <span class="wide wide7">创建时间</span>
+          <span class="wide wide8">
+            <span class="add" @click="dialogVisible = true">+</span>
+          </span>
+        </div>
+        <div class="contain">
+          <ul>
+            <li class="is-flex jst-between ali-center card" v-for="(list,index) in lists">
+              <span class="wide wide1">
+                <div :class="['circle',color[list.state]]"></div>
+              </span>
+              <span class="wide wide2" v-text="list.account"></span>
+              <span class="wide wide3" v-text="list.name"></span>
+              <span class="wide wide4" v-text="list.tel"></span>
+              <span class="wide wide5" v-text="list.email"></span>
+              <span class="wide wide6" v-text="list.id"></span>
+              <span class="wide wide7" v-text="list.time"></span>
+              <span class="wide8 is-flex jst-between">
+                <img src="../../../assets/anew_icon.png" alt="">
+                <i class="el-icon-caret-right" v-show="!list.state" @click="cutState(index)"></i>
+                <i class="el-icon-close" v-show="list.state" @click="cutState(index)"></i>
+                <img src="../../../assets/delete_icon.png" alt="">
+              </span>
+            </li>
+          </ul>
         </div>
       </div>
-    </div>
-    <div class="wrap">
-      <div class="is-flex jst-between ali-center title">
-        <span class="wide wide1"></span>
-        <span class="wide wide2">用户名</span>
-        <span class="wide wide3">姓名</span>
-        <span class="wide wide4">手机号</span>
-        <span class="wide wide5">邮箱</span>
-        <span class="wide wide6">身份证</span>
-        <span class="wide wide7">创建时间</span>
-        <span class="wide wide8"></span>
-      </div>
-      <div class="contain">
+    </section>
+
+    <div v-show="dialogVisible" class="dialog">
+      <header class="dialog-header is-flex jst-between ali-center">
+        <div class="dialog-title">
+          <i class="el-icon-plus"></i> 添加子账号
+        </div>
+        <i class="el-icon-close" @click="dialogVisible = false"></i>
+      </header>
+      <main class="content">
         <ul>
-          <li class="is-flex jst-between ali-center card" v-for="(list,index) in lists">
-            <span class="wide wide1">
-              <div :class="['circle',color[list.state]]"></div>
-            </span>
-            <span class="wide wide2" v-text="list.account"></span>
-            <span class="wide wide3" v-text="list.name"></span>
-            <span class="wide wide4" v-text="list.tel"></span>
-            <span class="wide wide5" v-text="list.email"></span>
-            <span class="wide wide6" v-text="list.id"></span>
-            <span class="wide wide7" v-text="list.time"></span>
-            <span class="wide8 is-flex jst-around">
-              <img src="../../../assets/anew_icon.png" alt="">
-              <i class="el-icon-caret-right" v-show="!list.state" @click="cutState(index)"></i>
-              <i class="el-icon-close" v-show="list.state" @click="cutState(index)"></i>
-              <img src="../../../assets/delete_icon.png" alt="">
-            </span>
+          <li class="wrap is-flex jst-between" v-for="(item,index) in dialogs">
+            <div :class="['left' ,'is-flex',{'choose':choose[index*2-1]},{'no-border':!item.left.name}]" @click="fnChoose(index*2-1)">
+              <span class="name text-jst" v-text="item.left.name" v-show="item.left.name"></span>
+              <input class="value" type="text" :placeholder="item.left.placeholder" v-show="item.left.placeholder">
+            </div>
+            <div :class="['right' ,'is-flex',{'choose':choose[index*2]}]" @click="fnChoose(index*2)">
+              <span class="name text-jst" v-text="item.right.name"></span>
+              <input class="tip" type="text" :placeholder="item.right.tip">
+              <input :class="['value',{'tel-wide':item.right.tip}]" type="text" :placeholder="item.right.placeholder">
+            </div>
           </li>
         </ul>
-      </div>
+      </main>
+      <footer>
+        <div class="btn-add"></div>
+      </footer>
     </div>
-  </section>
-</div>
+    
+  </div>
 </template>
 <script>
 export default {
@@ -104,14 +134,84 @@ export default {
       color: {
         true: "green",
         false: "yellow"
-      }
+      },
+      dialogVisible: false,
+      choose: [],
+      dialogs: [
+        {
+          left: {},
+          right: {
+            name: "姓名",
+            value: "",
+            placeholder: "请输入姓名"
+          }
+        },
+        {
+          left: {
+            name: "用户名",
+            value: "",
+            placeholder: "请输入用户名"
+          },
+          right: {
+            name: "身份证",
+            value: "",
+            placeholder: "请输入身份证"
+          }
+        },
+        {
+          left: {
+            name: "登陆密码",
+            value: "",
+            placeholder: "请输入登陆密码"
+          },
+          right: {
+            name: "手机好",
+            value: "",
+            placeholder: "请输入手机好",
+            tip: "+86"
+          }
+        },
+        {
+          left: {
+            name: "确认密码",
+            value: "",
+            placeholder: "确认密码"
+          },
+          right: {
+            name: "固定电话",
+            value: "",
+            placeholder: "请输入手机好",
+            tip: "0755"
+          }
+        },
+        {
+          left: {},
+          right: {
+            name: "电子邮箱",
+            value: "",
+            placeholder: "请输入电子邮箱"
+          }
+        }
+      ]
     };
   },
   methods: {
     cutState(index) {
       this.lists[index].state = !this.lists[index].state;
+    },
+    handleClose(done) {
+      done();
+    },
+    fnChoose(index) {
+      this.choose[index] = false;
+      console.log(index);
+      for (var i = -1; i < this.choose.length; i++) {
+        this.choose[i] = false;
+      }
+      this.$set(this.choose, index, "choose");
     }
-  }
+  },
+  conputed: {}
 };
 </script>
 <style lang="scss" scoped>
@@ -133,6 +233,9 @@ ul {
   }
 }
 
+$yellow: #fccf00;
+$green: #7ac943;
+
 .son_account {
   .header {
     @include header;
@@ -143,8 +246,8 @@ ul {
       height: 3px;
       background: linear-gradient(
         45deg,
-        yellow 0%,
-        yellow 50%,
+        $yellow 0%,
+        $yellow 50%,
         red 50%,
         red 100%
       );
@@ -175,8 +278,17 @@ ul {
     }
   }
   .wrap {
+    padding-right: 20px;
     .title {
       padding: 20px 0;
+      .add {
+        display: inline-block;
+        text-align: center;
+        width: 20px;
+        line-height: 20px;
+        background: $yellow;
+        color: white;
+      }
     }
     .card {
       padding-bottom: 10px;
@@ -188,7 +300,7 @@ ul {
         border-radius: 50%;
       }
       .yellow {
-        background: #fccf00;
+        background: $yellow;
       }
       .green {
         background: #7ac943;
@@ -221,8 +333,66 @@ ul {
       width: 180px;
     }
     .wide8 {
-      padding-right: 20px;
-      width: 100px;
+      text-align: right;
+      width: 80px;
+    }
+  }
+  .dialog {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 1000px;
+    background: white;
+    box-shadow: 0px 2px 8px -1px rgba(0, 0, 0, 0.1);
+    .dialog-header {
+      background: $yellow;
+      padding: 10px 20px;
+      color: white;
+    }
+    .content {
+      padding: 40px;
+    }
+    .wrap {
+      input {
+        height: 17px;
+        border: 0;
+      }
+      .name {
+        display: inline-block;
+        width: 80px;
+        padding-right: 30px;
+      }
+      .left,
+      .right {
+        border-bottom: 1px solid #999999;
+        margin-bottom: 35px;
+      }
+      .no-border {
+        border-bottom: 0;
+      }
+      .left {
+        width: 400px;
+      }
+      .right {
+        width: 400px;
+      }
+      .tip {
+        width: 40px;
+        margin-right: 5px;
+      }
+      .tel-wide {
+        width: 125px;
+      }
+      .choose {
+        border-color: $yellow;
+        .name {
+          color: $yellow;
+        }
+        input::-webkit-input-placeholder {
+          color: $yellow;
+        }
+      }
     }
   }
 }
