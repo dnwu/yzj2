@@ -74,7 +74,7 @@ export default {
       last: "7",
       tableData: [
         {
-          date: "2018-1-1 12:00:00",
+          date: "2018-1-8 12:00:00",
           change: "+180",
           exp: "3360",
           grade: "3级",
