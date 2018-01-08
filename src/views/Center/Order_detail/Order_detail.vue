@@ -50,7 +50,7 @@
           </div>
           <div class="middle">
             <img src="../../../assets/send.png" alt="">
-            <p>运送中</p>
+            <p>{{orderstatus}}</p>
           </div>
           <div class="right">
             <el-button type="danger" @click="goto('/center/order_track')">订单跟踪</el-button>
@@ -431,12 +431,14 @@ export default {
     return {
       orderId: "",
       orderNo: "",
+      status:'',
       orderDetailData:{},
     };
   },
   created() {
     this.orderId = this.$route.query.id;
     this.orderNo = this.$route.query.orderNo;
+    this.status = this.$route.query.orderStatus;
     this.getOrderDetail()
   },
   methods: {
@@ -445,7 +447,8 @@ export default {
         path:path,
         query:{
           orderId:this.orderId,
-          orderNo:this.orderNo
+          orderNo:this.orderNo,
+          orderStatus:this.status
         }
       });
     },
@@ -492,6 +495,21 @@ export default {
         total +=parseFloat(ele.price)
       });
       return total
+    },
+    orderstatus(){
+      if(this.status == 3){
+        return '待支付'
+      }else if(this.status == 4){
+        return '已支付'
+      }else if(this.status == 5){
+        return '运送中'
+      }else if(this.status == 6){
+        return '待补缴'
+      }else if(this.status == 7){
+        return '已完成'
+      }else if(this.status == 2){
+        return '待受理'
+      }
     }
   }
 };

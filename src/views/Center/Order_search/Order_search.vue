@@ -108,7 +108,7 @@
                 <div><el-button size="mini" type="danger" plain @click="pay(item.orderNo,1)">立即支付</el-button></div>
               </div>
               <div class="operate">
-                <div><span class="detail" @click="goDetail(item.orderNo,item.id)">详情</span><span>|</span><span class="track" @click="goTrack(item.orderNo,item.id)">跟踪</span></div>
+                <div><span class="detail" @click="goDetail(item.orderNo,item.id,item.orderStatus)">详情</span><span>|</span><span class="track" @click="goTrack(item.orderNo,item.id,item.orderStatus)">跟踪</span></div>
                 <div><el-button size="mini" type="info">取消订单</el-button></div>
               </div>
             </template>
@@ -119,7 +119,7 @@
                 <div><el-button size="mini" type="danger" plain @click="pay(item.orderNo,2)">立即支付</el-button></div>
               </div>
               <div class="operate">
-                <div><span class="detail" @click="goDetail(item.orderNo,item.id)">详情</span><span>|</span><span class="track" @click="goTrack(item.orderNo,item.id)">跟踪</span></div>
+                <div><span class="detail" @click="goDetail(item.orderNo,item.id,item.orderStatus)">详情</span><span>|</span><span class="track" @click="goTrack(item.orderNo,item.id,item.orderStatus)">跟踪</span></div>
                 <div><el-button size="mini" type="info">取消订单</el-button></div>
               </div>
             </template>
@@ -130,7 +130,7 @@
                 <div><el-button size="mini" type="danger" plain>立即提交</el-button></div>
               </div>
               <div class="operate">
-                <div><span class="detail" @click="goDetail(item.orderNo,item.id)">详情</span><span>|</span><span class="track" @click="goTrack(item.orderNo,item.id)">跟踪</span></div>
+                <div><span class="detail" @click="goDetail(item.orderNo,item.id,item.orderStatus)">详情</span><span>|</span><span class="track" @click="goTrack(item.orderNo,item.id,item.orderStatus)">跟踪</span></div>
                 <div><el-button size="mini" type="info">取消订单</el-button></div>
               </div>
             </template>
@@ -141,7 +141,7 @@
                 <div>总额¥{{item.amount}}</div>
               </div>
               <div class="operate">
-                <div><span class="detail" @click="goDetail(item.orderNo,item.id)">详情</span><span>|</span><span class="track" @click="goTrack(item.orderNo,item.id)">跟踪</span></div>
+                <div><span class="detail" @click="goDetail(item.orderNo,item.id,item.orderStatus)">详情</span><span>|</span><span class="track" @click="goTrack(item.orderNo,item.id,item.orderStatus)">跟踪</span></div>
                 <div><el-button size="mini" type="info">取消订单</el-button></div>
               </div>
             </template>
@@ -152,7 +152,7 @@
                 <div>总额¥{{item.amount}}</div>
               </div>
               <div class="operate">
-                <div><span class="detail" @click="goDetail(item.orderNo,item.id)">详情</span><span>|</span><span class="track" @click="goTrack(item.orderNo,item.id)">跟踪</span></div>
+                <div><span class="detail" @click="goDetail(item.orderNo,item.id,item.orderStatus)">详情</span><span>|</span><span class="track" @click="goTrack(item.orderNo,item.id,item.orderStatus)">跟踪</span></div>
                 <div><el-button size="mini" type="warning">确认收货</el-button></div>
               </div>
             </template>
@@ -163,7 +163,7 @@
                 <div>总额¥{{item.amount}}</div>
               </div>
               <div class="operate">
-                <div><span class="detail" @click="goDetail(item.orderNo,item.id)">详情</span><span>|</span><span class="track" @click="goTrack(item.orderNo,item.id)">跟踪</span></div>
+                <div><span class="detail" @click="goDetail(item.orderNo,item.id,item.orderStatus)">详情</span><span>|</span><span class="track" @click="goTrack(item.orderNo,item.id,item.orderStatus)">跟踪</span></div>
                 <div><el-button size="mini" type="info">取消订单</el-button></div>
               </div>
             </template>
@@ -174,7 +174,7 @@
                 <div>总额¥{{item.amount}}</div>
               </div>
               <div class="operate">
-                <div><span class="detail" @click="goDetail(item.orderNo,item.id)">详情</span><span>|</span><span class="track" @click="goTrack(item.orderNo,item.id)">跟踪</span></div>
+                <div><span class="detail" @click="goDetail(item.orderNo,item.id,item.orderStatus)">详情</span><span>|</span><span class="track" @click="goTrack(item.orderNo,item.id,item.orderStatus)">跟踪</span></div>
               </div>
             </template>
           </div>
@@ -442,16 +442,16 @@ export default {
     searchList() {
       this.getOrderList(1, 10, this.orderStatu);
     },
-    goDetail(orderNo, id) {
+    goDetail(orderNo, id,status) {
       this.$router.push({
         path: "/center/order_detail",
-        query: { orderNo: orderNo, id: id }
+        query: { orderNo: orderNo, id: id,orderStatus:status }
       });
     },
-    goTrack(orderNo, id) {
+    goTrack(orderNo, id,status) {
       this.$router.push({
         path: "/center/order_track",
-        query: { orderNo: orderNo, id: id }
+        query: { orderNo: orderNo, id: id ,orderStatus:status}
       });
     },
     getGoodsTypeList() {

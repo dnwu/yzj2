@@ -29,7 +29,7 @@
           <el-form-item label="" prop="password">
             <el-input @focus="setclass('password')" @blur="removeclass('password')" type="password" placeholder="请输入密码" v-model="Form.password" auto-complete="off"></el-input>
           </el-form-item>
-          <span class="forgetpass">忘记密码？</span>
+          <span class="forgetpass" @click="forgetPass">忘记密码？</span>
         </div>
         <div class="autoLogin">
           <el-form-item label="">
@@ -99,6 +99,9 @@ export default {
         message: title,
         duration: 2000
       });
+    },
+    forgetPass(){
+      this.$router.push('/login/forgetpass')
     },
     goto(path) {
       this.$router.push(path);

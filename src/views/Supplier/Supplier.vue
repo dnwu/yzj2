@@ -6,7 +6,7 @@
           <img src="../../assets/login_logo.png" alt="">
         </div>
         <div class="title">
-          <h3>供应商中心</h3>
+          <h3>{{title}}</h3>
           <span @click="goto(0,'/home')">返回官网首页</span>
         </div>
       </div>
@@ -31,10 +31,11 @@
             <li @click.stop="goto(5,'/supplier/booking_space')" :class="activeIndex == '5'?'active':''"><span class="icon"><img :src="activeIndex == '5'?iconARR[5].active:iconARR[5].default" alt=""></span><span class="title">订舱管理</span></li>
             <li @click.stop="goto(6,'/supplier/making_bill')" :class="activeIndex == '6'?'active':''"><span class="icon"><img :src="activeIndex == '6'?iconARR[6].active:iconARR[6].default" alt=""></span><span class="title">制单管理</span></li>
             <li class="title">产品管理</li>
-            <li @click.stop="goto(7,'/supplier/airlift')" :class="activeIndex == '7'?'active':''"><span class="icon"><img :src="activeIndex == '7'?iconARR[7].active:iconARR[7].default" alt=""></span><span class="title">空运产品管理</span></li>
-            <li @click.stop="goto(8,'/supplier/land_transport')" :class="activeIndex == '8'?'active':''"><span class="icon"><img :src="activeIndex == '8'?iconARR[8].active:iconARR[8].default" alt=""></span><span class="title">陆运产品管理</span></li>
-            <li @click.stop="goto(9,'/supplier/airport_operation')" :class="activeIndex == '9'?'active':''"><span class="icon"><img :src="activeIndex == '9'?iconARR[9].active:iconARR[9].default" alt=""></span><span class="title">机场操作产品管理</span></li>
-            <li @click.stop="goto(10,'/supplier/value_add')" :class="activeIndex == '10'?'active':''"><span class="icon"><img :src="activeIndex == '10'?iconARR[10].active:iconARR[10].default" alt=""></span><span class="title">增值服务产品管理</span></li>
+            <li @click.stop="goto(7,'/supplier/air_plan')" :class="activeIndex == '7'?'active':''"><span class="icon"><img :src="activeIndex == '7'?iconARR[7].active:iconARR[7].default" alt=""></span><span class="title">航班计划维护</span></li>
+            <li @click.stop="goto(8,'/supplier/airlift')" :class="activeIndex == '8'?'active':''"><span class="icon"><img :src="activeIndex == '8'?iconARR[8].active:iconARR[8].default" alt=""></span><span class="title">空运产品管理</span></li>
+            <li @click.stop="goto(9,'/supplier/land_transport')" :class="activeIndex == '9'?'active':''"><span class="icon"><img :src="activeIndex == '9'?iconARR[9].active:iconARR[9].default" alt=""></span><span class="title">陆运产品管理</span></li>
+            <li @click.stop="goto(10,'/supplier/airport_operation')" :class="activeIndex == '10'?'active':''"><span class="icon"><img :src="activeIndex == '10'?iconARR[10].active:iconARR[10].default" alt=""></span><span class="title">机场操作产品管理</span></li>
+            <li @click.stop="goto(11,'/supplier/value_add')" :class="activeIndex == '11'?'active':''"><span class="icon"><img :src="activeIndex == '11'?iconARR[11].active:iconARR[11].default" alt=""></span><span class="title">增值服务产品管理</span></li>
           </ul>
         </div>
       </div>
@@ -49,6 +50,7 @@ import {mapGetters,mapMutations} from 'vuex'
 export default {
   data() {
     return {
+      title:'供应商中心',
       fullPath: "/center/account",
       activeIndex:0,
       iconARR:[{default:require('../../assets/nav1.png'),active:require('../../assets/nav1_1.png')},
@@ -62,34 +64,50 @@ export default {
               {default:require('../../assets/nav19.png'),active:require('../../assets/nav19_19.png')},
               {default:require('../../assets/nav20.png'),active:require('../../assets/nav20_20.png')},
               {default:require('../../assets/nav21.png'),active:require('../../assets/nav21_21.png')},
+              {default:require('../../assets/nav21.png'),active:require('../../assets/nav21_21.png')},
       ]
     };
   },
   created() {
+    console.log(this.$route.fullPath);
     this.fullPath = this.$route.fullPath;
-    console.log(this.fullPath);
     if(this.fullPath.includes('account')){
       this.activeIndex = 0
-    }else if(this.fullPath.includes('company_info')){
+      this.title = '账号信息'
+    }else if(this.fullPath.includes('ompany_info')){
       this.activeIndex = 1
-    }else if(this.fullPath.includes('server_info')){
+      this.title = '企业信息'
+    }else if(this.fullPath.includes('erver_info')){
       this.activeIndex = 2
-    }else if(this.fullPath.includes('son_account')){
+      this.title = '服务信息'
+    }else if(this.fullPath.includes('on_account')){
       this.activeIndex = 3
-    }else if(this.fullPath.includes('order_taking')){
+      this.title = '子账号管理'
+    }else if(this.fullPath.includes('rder_taking')){
       this.activeIndex = 4
-    }else if(this.fullPath.includes('booking_space')){
+      this.title = '接单管理'
+    }else if(this.fullPath.includes('ooking_space')){
       this.activeIndex = 5
-    }else if(this.fullPath.includes('making_bill')){
+      this.title = '订舱管理'
+    }else if(this.fullPath.includes('aking_bill')){
       this.activeIndex = 6
-    }else if(this.fullPath.includes('airlift')){
+      this.title = '制单管理'
+    }else if(this.fullPath.includes('air_plan')){
+      console.log('lailemei');
       this.activeIndex = 7
-    }else if(this.fullPath.includes('land_transport')){
+      this.title = '航班计划维护'
+    }else if(this.fullPath.includes('irlift')){
       this.activeIndex = 8
-    }else if(this.fullPath.includes('airport_operation')){
+      this.title = '空运产品管理'
+    }else if(this.fullPath.includes('and_transport')){
       this.activeIndex = 9
-    }else if(this.fullPath.includes('value_add')){
+      this.title = '陆运产品管理'
+    }else if(this.fullPath.includes('irport_operation')){
       this.activeIndex = 10
+      this.title = '机场操作产品管理'
+    }else if(this.fullPath.includes('alue_add')){
+      this.activeIndex = 11
+      this.title = '增值服务产品管理'
     }
   },
   methods: {
@@ -110,6 +128,31 @@ export default {
     goto(index,path){
       this.$router.push(path)
       this.activeIndex = index
+      if(index == 0){
+        this.title = '账号信息'
+      }else if(index == 1){
+        this.title = '企业信息'
+      }else if(index == 2){
+        this.title = '服务信息'
+      }else if(index == 3){
+        this.title = '子账号管理'
+      }else if(index == 4){
+        this.title = '接单管理'
+      }else if(index == 5){
+        this.title = '订舱管理'
+      }else if(index == 6){
+        this.title = '制单管理'
+      }else if(index == 7){
+        this.title = '航班计划维护'
+      }else if(index == 8){
+        this.title = '空运产品管理'
+      }else if(index == 9){
+        this.title = '陆运产品管理'
+      }else if(index == 10){
+        this.title = '机场操作产品管理'
+      }else if(index == 11){
+        this.title = '增值服务产品管理'
+      }
     }
   },
   computed: {

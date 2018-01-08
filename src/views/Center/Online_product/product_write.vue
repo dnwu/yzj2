@@ -13,7 +13,7 @@
             <div class="list-text">运输服务:</div>
             <span class="list-land">{{getProductIndexData.searchData.startPort}}-{{getProductIndexData.searchData.endPort}}</span>
             <span class="list-land"> 货物类型：{{ goodsType }}</span>
-            <span class="listTime">航班起飞时间：{{getProductIndexData.searchData.planeData}} {{getProductIndexData.searchData.planeTime[0]}}--{{getProductIndexData.searchData.planeTime[1]}}</span>
+            <span class="listTime">航班起飞时间：{{formatPlaneData}} {{getProductIndexData.searchData.planeTime[0]}}--{{getProductIndexData.searchData.planeTime[1]}}</span>
           </div>
           <div class="list list3">
             <div class="list-text">基础服务:</div>
@@ -27,7 +27,7 @@
             <span class="list-land" v-if="getProductIndexData.selectServer.landEnd"><span class="icon active el-icon-success"></span>落地配</span>
           </div>
           <div class="list list5">
-            <div class="list-text">增值服务:</div>
+            <div class="list-text" v-if="false">增值服务:</div>
             <span class="list-land" v-if="getProductIndexData.selectServer.customs"><span class="icon active el-icon-success"></span>报关报检</span>
             <span class="list-land" v-if="getProductIndexData.selectServer.insurance"><span class="icon active el-icon-success"></span>运输保险</span>
           </div>
@@ -36,12 +36,28 @@
     </div>
     <div class="product-title">收发地址</div>
       <div class="product-address">
+        <!-- 发货地址列表模态框 -->
+        <div class="sendAddressList">
+          <el-dialog width="1200px" title="发货地址" :visible.sync="sendAddressListModel">
+            <EasyScrollbar>
+              <div id="wrapper" style="height: 500px;">
+                <div style="background-color: #F9F9F9;text-align: center;">
+                  <Addresslist  @getAddressItem='getAddressItem' address = 'send'></Addresslist>
+                </div>
+              </div>
+            </EasyScrollbar>
+            <div slot="footer" class="dialog-footer">
+              <!-- <el-button @click="sendAddressListModel = false">取 消</el-button>
+              <el-button type="primary" @click="sendAddressListModel = false">确 定</el-button> -->
+            </div>
+          </el-dialog>
+        </div>
         <el-form :model="sendAddressData" :rules="sendAddressRules" ref="sendAddress" label-width="100px" class="sendAddress">
           <div class="address-left">
             <div class="left-logo"></div>
             <div class="logo-text">发</div>
             <div class="left-nav">
-              <img src="../../../assets/product17.png">
+              <img @click="sendAddressListModel=true" src="../../../assets/product17.png">
             </div>
             <div class="left-info">
               <div class="left-name">
@@ -76,11 +92,11 @@
                 <span class="name-nav">固定电话</span>
                 <span class="name-text">
                   <el-form-item prop="tellPhone1">
-                    <el-input class="left" size="mini" v-model="sendAddressData.tellPhone1" placeholder="888"></el-input>
+                    <el-input class="left" size="mini" v-model="sendAddressData.tellPhone" placeholder="请输入固定电话"></el-input>
                   </el-form-item>
-                  <el-form-item prop="tellPhone2">
+                  <!-- <el-form-item prop="tellPhone2">
                     <el-input class="right" size="mini" v-model="sendAddressData.tellPhone2" placeholder="88886666"></el-input>
-                  </el-form-item>
+                  </el-form-item> -->
                 </span>
               </div>
             </div>
@@ -89,7 +105,8 @@
                 <span class="name-logo">&nbsp;</span>
                 <span class="name-nav">所在区域</span>
                 <span class="name-text">
-                  <v-distpicker @province='sendProvince' @city='sendCity' @area='sendArea' :paceholder='sendPlaceholders'></v-distpicker>
+                  <!-- <v-distpicker @province='sendProvince' @city='sendCity' @area='sendArea' :paceholder='sendPlaceholders'></v-distpicker> -->
+                  <el-input size="mini" v-model="sendAddressData.addressT" placeholder="请输入地区"></el-input>
                 </span>
               </div>
             </div>
@@ -108,21 +125,37 @@
               </div>
             </div>
             <div class="left-btn">
-              <span class="btn-box box1">添加地址簿</span>
-              <span class="btn-box box2" @click="setDefaultAddress(0)">设为默认</span>
-              <span class="btn-box box3" @click="submitSendAddressForm('sendAddress')">确定</span>
+              <span class="btn-box box1" @click="addSendAddress('sendAddress')">添加地址簿</span>
+              <span class="btn-box box2" @click="setDefaultSendAddress('sendAddress')">设为默认</span>
+              <span class="btn-box box3" @click="resetSendAddressForm('sendAddress')">确定</span>
             </div>
           </div>
         </el-form>
         <div class="address-img">
           <img src="../../../assets/product2.png">
         </div>
+        <!-- 收货地址列表模态框 -->
+        <div class="receiveAddressList">
+          <el-dialog width="1200px" top='66px' title="收货地址" :visible.sync="receiveAddressListModel">
+            <EasyScrollbar>
+              <div id="wrapper" style="height: 500px;">
+                <div style="background-color: #F9F9F9;text-align: center;">
+                  <Addresslist @getAddressItem='getAddressItem' address = 'receive'></Addresslist>
+                </div>
+              </div>
+            </EasyScrollbar>
+            <div slot="footer" class="dialog-footer">
+              <!-- <el-button @click="receiveAddressListModel = false">取 消</el-button>
+              <el-button type="primary" @click="receiveAddressListModel = false">确 定</el-button> -->
+            </div>
+          </el-dialog>
+        </div>
         <el-form :model="receiveAddressData" :rules="receiveAddressRules" ref="receiveAddress" label-width="100px" class="receiveAddress">
           <div class="address-right">
             <div class="left-logo"></div>
             <div class="logo-text">收</div>
             <div class="left-nav">
-              <img src="../../../assets/product17.png">
+              <img @click="receiveAddressListModel=true" src="../../../assets/product17.png">
             </div>
             <div class="left-info">
               <div class="left-name">
@@ -157,10 +190,7 @@
                 <span class="name-nav">固定电话</span>
                 <span class="name-text">
                   <el-form-item prop="tellPhone1">
-                    <el-input class="left" size="mini" v-model="receiveAddressData.tellPhone1" placeholder="888"></el-input>
-                  </el-form-item>
-                  <el-form-item prop="tellPhone2">
-                    <el-input class="right" size="mini" v-model="receiveAddressData.tellPhone2" placeholder="88886666"></el-input>
+                    <el-input class="left" size="mini" v-model="receiveAddressData.tellPhone" placeholder="请输入固定电话"></el-input>
                   </el-form-item>
                 </span>
               </div>
@@ -169,7 +199,10 @@
               <div class="left-name">
                 <span class="name-logo">&nbsp;</span>
                 <span class="name-nav">所在区域</span>
-                <span class="name-text"><v-distpicker @province='receiveProvince' @city='receiveCity' @area='receiveArea' :paceholder='receivePlaceholders'></v-distpicker></span>
+                <span class="name-text">
+                  <!-- <v-distpicker @province='receiveProvince' @city='receiveCity' @area='receiveArea' :paceholder='receivePlaceholders'></v-distpicker> -->
+                  <el-input size="mini" v-model="receiveAddressData.addressT" placeholder="请输入地区"></el-input>
+                </span>
               </div>
             </div>
             <div class="left-detail">
@@ -187,9 +220,9 @@
               </div>
             </div>
             <div class="left-btn">
-              <span class="btn-box box1">添加地址簿</span>
-              <span class="btn-box box2" @click="setDefaultAddress(1)">设为默认</span>
-              <span class="btn-box box3" @click="submitReceiveAddressForm('receiveAddress')">确定</span>
+              <span class="btn-box box1" @click="addReceiveAddress('receiveAddress')">添加地址簿</span>
+              <span class="btn-box box2" @click="setDefaultReceiveAddress('receiveAddress')">设为默认</span>
+              <span class="btn-box box3" @click="resetReceiveAddressForm('receiveAddress')">确定</span>
             </div>
           </div>
         </el-form>
@@ -284,13 +317,13 @@
         </div>
       </div>
     </div>
-    <div class="product-title">活动信息</div>
-    <div class="product-pre">
+    <div class="product-title" v-if="false">活动信息</div>
+    <div class="product-pre" v-if="false">
       <input type="text" v-model="inviteCode" name="" placeholder="推荐人邀请码">
       <span class="product-preindex" @click="verificationCode">验证</span>
     </div>
-    <div class="product-title">发票信息</div>
-    <div class="product-con">
+    <div class="product-title" v-if="false">发票信息</div>
+    <div class="product-con" v-if="false">
       <div class="con-nav">
         <span class="icon el-icon-success" :class="invoiceServerInfo.notNeed?'active':''" ></span>不需要发票
         <!-- <span class="icon el-icon-success" :class="invoiceServerInfo.general?'active':''" @click="invoiceServerInfo.general = !invoiceServerInfo.general"></span>普票
@@ -304,32 +337,32 @@
     <div class="product-title">费用信息</div>
     <div class="product-cost">
       <div class="cost-content">
-        <div class="cost-list cost-list1" v-if="'airTransFee' in getProductIndexData.FeeInfo">
+        <div class="cost-list" v-if="'airTransFee' in getProductIndexData.FeeInfo && getProductIndexData.FeeInfo.airTransFee != 0">
           <span class="cost-num">航空运费</span>
           <span class="cost-line"></span>
           <span class="cost-item">¥{{getProductIndexData.FeeInfo.airTransFee}}</span>
         </div>
-        <div class="cost-list" v-if="'airOilAnnexFee' in getProductIndexData.FeeInfo">
+        <div class="cost-list" v-if="('airOilAnnexFee' in getProductIndexData.FeeInfo) && (getProductIndexData.FeeInfo.airOilAnnexFee != 0)">
           <span class="cost-num">燃油附加费</span>
           <span class="cost-line"></span>
           <span class="cost-item">¥{{getProductIndexData.FeeInfo.airOilAnnexFee}}</span>
         </div>
-        <div class="cost-list" v-if="'airportStartFee' in getProductIndexData.FeeInfo">
+        <div class="cost-list" v-if="'airportStartFee' in getProductIndexData.FeeInfo && getProductIndexData.FeeInfo.airportStartFee != 0">
           <span class="cost-num">始发港交货费</span>
           <span class="cost-line"></span>
           <span class="cost-item">¥{{getProductIndexData.FeeInfo.airportStartFee}}</span>
         </div>
-        <div class="cost-list" v-if="'airportEndFee' in getProductIndexData.FeeInfo">
+        <div class="cost-list" v-if="'airportEndFee' in getProductIndexData.FeeInfo && getProductIndexData.FeeInfo.airportEndFee != 0">
           <span class="cost-num">目的港提货费</span>
           <span class="cost-line"></span>
           <span class="cost-item">¥{{getProductIndexData.FeeInfo.airportEndFee}}</span>
         </div>
-        <div class="cost-list" v-if="'landStartGetGoodsFee' in getProductIndexData.FeeInfo">
+        <div class="cost-list" v-if="'landStartGetGoodsFee' in getProductIndexData.FeeInfo && getProductIndexData.FeeInfo.landStartGetGoodsFee != 0">
           <span class="cost-num">上门提货费</span>
           <span class="cost-line"></span>
           <span class="cost-item">¥{{getProductIndexData.FeeInfo.landStartGetGoodsFee}}</span>
         </div>
-        <div class="cost-list" v-if="'landEndTranFee' in getProductIndexData.FeeInfo">
+        <div class="cost-list" v-if="'landEndTranFee' in getProductIndexData.FeeInfo && getProductIndexData.FeeInfo.landEndTranFee != 0">
           <span class="cost-num">落地配送费</span>
           <span class="cost-line"></span>
           <span class="cost-item">¥{{getProductIndexData.FeeInfo.landEndTranFee}}</span>
@@ -345,19 +378,23 @@
         <div class="goback" @click="completeGo">返回上一步</div>
         <div class="gokeep"><el-button size="mini" type="info" @click="saveOrder('goodsInfo')">保存订单</el-button></div>
       </div>
-      <div class="cost-complete" @click="confirm"><el-button size="mini" type="danger" @click="submitOrder('goodsInfo')">提交</el-button></div>
+      <div class="cost-complete"><el-button size="mini" type="danger" @click="submitOrder('goodsInfo')">提交</el-button></div>
     </div>
   </div>
 </template>
 
 <script type="text/javascript">
 // import productSelect from "./product_select";
-import VDistpicker from "v-distpicker";
+// import VDistpicker from "v-distpicker";
 import { mapGetters } from "vuex";
+import Addresslist from '@/components/Addresslist'
+import {logout} from '@/tools/logout'
 export default {
+  mixins:[logout],
   components: {
     // productSelect,
-    VDistpicker
+    // VDistpicker,
+    Addresslist
   },
   data() {
     return {
@@ -365,7 +402,8 @@ export default {
       goodsTypesList: {},
       goodsType: "",
       addSizeDialogFormVisible: false,
-
+      sendAddressListModel:false,  // 地址列表模态框
+      receiveAddressListModel:false,  // 地址列表模态框
       invoiceServerInfo: {
         notNeed: true, // 不需要
         general: false, // 普通
@@ -378,16 +416,12 @@ export default {
         num: ""
       },
       sendAddressData: {
+        addressid:'',
         name: "",
         id: "",
         mobile: "",
-        tellPhone1: "",
-        tellPhone2: "",
-        address: {
-          province: "省",
-          city: "市",
-          area: "区"
-        },
+        tellPhone: "",
+        addressT:"",
         detailAddress: "",
         postal: ""
       },
@@ -411,28 +445,14 @@ export default {
         name: [{ required: true, message: "请输入货物名称", trigger: "blur" }]
       },
       receiveAddressData: {
+        addressid:'',
         name: "",
         id: "",
         mobile: "",
-        tellPhone1: "",
-        tellPhone2: "",
-        address: {
-          province: "省",
-          city: "市",
-          area: "区"
-        },
+        tellPhone: "",
+        addressT:"",
         detailAddress: "",
         postal: ""
-      },
-      sendPlaceholders: {
-        province: "省",
-        city: "市",
-        area: "区"
-      },
-      receivePlaceholders: {
-        province: "省",
-        city: "市",
-        area: "区"
       },
       goodsInfo: {
         weight: "",
@@ -445,24 +465,21 @@ export default {
         remark: ""
       },
       inviteCode: "",
-      addressId: {
-        sendId: "",
-        receiveId: ""
-      }
     };
   },
   created() {
     this.getProductIndexData = JSON.parse(
       window.localStorage.getItem("productIndex")
     );
-    if(!this.getProductIndexData){
-      this.$router.push('/center/Online_product')
+    if (!this.getProductIndexData) {
+      this.$router.push("/center/Online_product");
     }
     this.getGoodsTypeList();
-    // window.localStorage.removeItem('productIndex')
+    this.defaultSendAddress()
+    this.defaultReceiveAddress()
   },
-  destroyed(){
-    window.localStorage.removeItem('productIndex')
+  destroyed() {
+    window.localStorage.removeItem("productIndex");
     // console.log('刷新出发了吗');
   },
   methods: {
@@ -480,12 +497,39 @@ export default {
         type: "success"
       });
     },
-
     promptwarning(title) {
       this.$message({
         message: title,
         type: "warning"
       });
+    },
+    getAddressItem(item,type){
+      console.log('zhelide ',item,type);
+      if(type == 'send'){
+        this.sendAddressData.addressid = item.id
+        this.sendAddressData.name = item.contactName
+        this.sendAddressData.id = item.identityCard
+        this.sendAddressData.mobile = item.contactMobile
+        this.sendAddressData.tellPhone = item.contactPhone
+        this.sendAddressData.addressT = item.region
+        this.sendAddressData.detailAddress = item.detailAddress
+        this.sendAddressData.postal = item.postCode
+
+        // 影藏模态框
+        this.sendAddressListModel = false
+      }else if(type == 'receive'){
+        this.receiveAddressData.addressid = item.id
+        this.receiveAddressData.name = item.contactName
+        this.receiveAddressData.id = item.identityCard
+        this.receiveAddressData.mobile = item.contactMobile
+        this.receiveAddressData.tellPhone = item.contactPhone
+        this.receiveAddressData.addressT = item.region
+        this.receiveAddressData.detailAddress = item.detailAddress
+        this.receiveAddressData.postal = item.postCode
+
+        // 影藏模态框
+        this.receiveAddressListModel = false
+      }
     },
     getGoodsTypeList() {
       this.goodsTypesList = {};
@@ -543,7 +587,71 @@ export default {
           });
       }
     },
-    submitSendAddressForm(formName) {
+    resetSendAddressForm(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.axios
+            .post("/app/v1/address/updateAddress", {
+              addressId: this.sendAddressData.addressid,
+              addressType: 0, // 发货地址
+              contactMobile: this.sendAddressData.mobile,
+              contactName: this.sendAddressData.name,
+              contactPhone:this.sendAddressData.tellPhone,
+              detailAddress: this.sendAddressData.detailAddress,
+              id: this.id,
+              identityCard: this.sendAddressData.id,
+              postCode: this.sendAddressData.postal,
+              region:this.sendAddressData.addressT,
+              token: this.token
+            })
+            .then(data => {
+              console.log(data);
+              if (data.data.code == 1) {
+                this.sendAddressData.addressid = data.data.data.id;
+                this.promptsuccess("地址更新成功");
+              } else {
+                this.promptwarning("地址更新失败");
+              }
+            });
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
+    resetReceiveAddressForm(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.axios
+            .post("/app/v1/address/updateAddress", {
+              addressId: this.receiveAddressData.addressid,
+              addressType: 1, // 收货地址
+              contactMobile: this.receiveAddressData.mobile,
+              contactName: this.receiveAddressData.name,
+              contactPhone:this.receiveAddressData.tellPhone,
+              detailAddress: this.receiveAddressData.detailAddress,
+              id: this.id,
+              identityCard: this.receiveAddressData.id,
+              postCode: this.receiveAddressData.postal,
+              region:this.receiveAddressData.addressT,
+              token: this.token
+            })
+            .then(data => {
+              console.log(data);
+              if (data.data.code == 1) {
+                this.receiveAddressData.addressid = data.data.data.id;
+                this.promptsuccess("地址更新成功");
+              } else {
+                this.promptwarning("地址更新失败");
+              }
+            });
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
+    addSendAddress(formName){
       this.$refs[formName].validate(valid => {
         if (valid) {
           this.axios
@@ -552,23 +660,18 @@ export default {
               addressType: 0, // 发货地址
               contactMobile: this.sendAddressData.mobile,
               contactName: this.sendAddressData.name,
-              contactPhone:
-                this.sendAddressData.tellPhone1 +
-                this.sendAddressData.tellPhone2,
+              contactPhone:this.sendAddressData.tellPhone,
               detailAddress: this.sendAddressData.detailAddress,
               id: this.id,
               identityCard: this.sendAddressData.id,
               postCode: this.sendAddressData.postal,
-              region:
-                this.sendAddressData.address.province +
-                this.sendAddressData.address.city +
-                this.sendAddressData.address.area,
+              region:this.sendAddressData.addressT,
               token: this.token
             })
             .then(data => {
               console.log(data);
               if (data.data.code == 1) {
-                this.addressId.sendId = data.data.data.id;
+                this.sendAddressData.addressid = data.data.data.id;
                 this.promptsuccess("地址添加成功");
               } else {
                 this.promptwarning("地址添加失败");
@@ -580,32 +683,27 @@ export default {
         }
       });
     },
-    submitReceiveAddressForm(formName) {
+    addReceiveAddress(formName){
       this.$refs[formName].validate(valid => {
         if (valid) {
           this.axios
             .post("/app/v1/address/addAddress", {
               addressId: 0,
               addressType: 1, // 收货地址
-              contactMobile: this.receiveAddressData.mobile,
-              contactName: this.receiveAddressData.name,
-              contactPhone:
-                this.receiveAddressData.tellPhone1 +
-                this.receiveAddressData.tellPhone2,
-              detailAddress: this.receiveAddressData.detailAddress,
+              contactMobile: this.sendAddressData.mobile,
+              contactName: this.sendAddressData.name,
+              contactPhone:this.sendAddressData.tellPhone,
+              detailAddress: this.sendAddressData.detailAddress,
               id: this.id,
-              identityCard: this.receiveAddressData.id,
-              postCode: this.receiveAddressData.postal,
-              region:
-                this.receiveAddressData.address.province +
-                this.receiveAddressData.address.city +
-                this.receiveAddressData.address.area,
+              identityCard: this.sendAddressData.id,
+              postCode: this.sendAddressData.postal,
+              region:this.sendAddressData.addressT,
               token: this.token
             })
             .then(data => {
               console.log(data);
               if (data.data.code == 1) {
-                this.addressId.receiveId = data.data.data.id;
+                this.sendAddressData.addressid = data.data.data.id;
                 this.promptsuccess("地址添加成功");
               } else {
                 this.promptwarning("地址添加失败");
@@ -617,47 +715,152 @@ export default {
         }
       });
     },
+    setDefaultSendAddress(formName){
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.axios
+            .post("/app/v1/address/defaultAddress", {
+              addressId: this.sendAddressData.addressid,
+              addressType: 0, // 发货地址
+              detailAddress: this.sendAddressData.detailAddress,
+              id: this.id,
+              token: this.token
+            })
+            .then(data => {
+              console.log(data);
+              if (data.data.code == 1) {
+                this.promptsuccess("设置默认地址成功");
+              } else {
+                this.promptwarning("设置默认地址成功");
+              }
+            });
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
+    setDefaultReceiveAddress(formName){
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.axios
+            .post("/app/v1/address/defaultAddress", {
+              addressId: this.receiveAddressData.addressid,
+              addressType: 1, // 收货地址
+              id: this.id,
+              token: this.token
+            })
+            .then(data => {
+              console.log(data);
+              if (data.data.code == 1) {
+                this.promptsuccess("设置默认地址成功");
+              } else {
+                this.promptwarning("设置默认地址成功");
+              }
+            });
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
+    defaultSendAddress() {
+      this.axios
+        .post("/app/v1/address/queryAddress", {
+          addressId: 0,
+          addressType: 0,
+          id: this.id,
+          token: this.token
+        })
+        .then(data => {
+          // console.log(data.data.data.senderList);
+          var sendList = data.data.data.senderList
+          sendList.forEach(ele=>{
+            if(ele.asDefault == 1){
+              this.sendAddressData.addressid = ele.id
+              this.sendAddressData.name = ele.contactName
+              this.sendAddressData.id = ele.identityCard
+              this.sendAddressData.mobile = ele.contactMobile
+              this.sendAddressData.tellPhone = ele.contactPhone
+              this.sendAddressData.addressT = ele.region
+              this.sendAddressData.detailAddress = ele.detailAddress
+              this.sendAddressData.postal = ele.postCode
+            }
+          })
+        });
+    },
+    defaultReceiveAddress() {
+      this.axios
+        .post("/app/v1/address/queryAddress", {
+          addressId: 0,
+          addressType: 1,
+          id: this.id,
+          token: this.token
+        })
+        .then(data => {
+          // console.log(data.data.data.receiverList);
+          var receiveList = data.data.data.receiverList
+          receiveList.forEach(ele=>{
+            if(ele.asDefault == 1){
+              this.receiveAddressData.addressid = ele.id
+              this.receiveAddressData.name = ele.contactName
+              this.receiveAddressData.id = ele.identityCard
+              this.receiveAddressData.mobile = ele.contactMobile
+              this.receiveAddressData.tellPhone = ele.contactPhone
+              this.receiveAddressData.addressT = ele.region
+              this.receiveAddressData.detailAddress = ele.detailAddress
+              this.receiveAddressData.postal = ele.postCode
+            }
+          })
+        });
+    },
     saveOrder(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
           // alert("saveOrder!");
-          if (this.addressId.sendId == "" || this.addressId.receiveId == "") {
+          if (this.receiveAddressData.addressid == "" || this.sendAddressData.addressid == "") {
             this.prompt("请输入地址，点击确定");
             return;
           }
-          this.axios.post("/app/v1/order/saveOrder", {
-            agentCode: "",
-            airfreightProductId: this.getProductIndexData.selectServer.airfreightProductId,
-            airportProductIds:  this.getProductIndexData.selectServer.airportProductIds,
-            aviationNo: "",
-            delegateOrderId: "",
-            flightRecordId: this.getProductIndexData.selectServer.flightRecordId,
-            goodsName: this.goodsInfo.name,
-            goodsNumber: this.goodsInfo.num,
-            goodsPackage: this.goodsInfo.pack,
-            goodsSize: this.goodsInfo.size.join(),
-            goodsVolume: this.goodsInfo.bulk,
-            goodsWeight: this.goodsInfo.weight,
-            id: this.id,
-            incrementProductIds: [],
-            inviteCode: this.inviteCode,
-            invoiceType: 0,
-            landCarriageProductIds: this.getProductIndexData.selectServer.landCarriageProductIds,
-            opt: 0,  // 保存
-            orderNo: "",
-            receiverAddressId: this.addressId.receiveId,
-            remark: this.goodsInfo.remark,
-            senderAddressId: this.addressId.sendId,
-            token: this.token
-          }).then(data=>{
-            console.log(data);
-            if(data.data.code == 1){
-              this.promptsuccess('订单保存成功！')
-            }
-            if(data.data.code == 10203){
-              this.promptwarning("货物尺寸格式错误")
-            }
-          });
+          this.axios
+            .post("/app/v1/order/saveOrder", {
+              agentCode: "",
+              airfreightProductId: this.getProductIndexData.selectServer
+                .airfreightProductId,
+              airportProductIds: this.getProductIndexData.selectServer
+                .airportProductIds,
+              aviationNo: "",
+              delegateOrderId: "",
+              flightRecordId: this.getProductIndexData.selectServer
+                .flightRecordId,
+              goodsName: this.goodsInfo.name,
+              goodsNumber: this.goodsInfo.num,
+              goodsPackage: this.goodsInfo.pack,
+              goodsSize: this.goodsInfo.size.join(),
+              goodsVolume: this.goodsInfo.bulk,
+              goodsWeight: this.goodsInfo.weight,
+              id: this.id,
+              incrementProductIds: [],
+              inviteCode: this.inviteCode,
+              invoiceType: 0,
+              landCarriageProductIds: this.getProductIndexData.selectServer
+                .landCarriageProductIds,
+              opt: 0, // 保存
+              orderNo: "",
+              receiverAddressId: this.receiveAddressData.addressid,
+              remark: this.goodsInfo.remark,
+              senderAddressId: this.sendAddressData.addressid,
+              token: this.token
+            })
+            .then(data => {
+              console.log(data);
+              if (data.data.code == 1) {
+                this.promptsuccess("订单保存成功！");
+              }
+              if (data.data.code == 10203) {
+                this.promptwarning("货物尺寸格式错误");
+              }
+            });
         } else {
           console.log("error submit!!");
           return false;
@@ -668,52 +871,58 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           // alert("submitOrder!");
-          if (this.addressId.sendId == "" || this.addressId.receiveId == "") {
+          if (this.receiveAddressData.addressid == "" || this.sendAddressData.addressid == "") {
             this.prompt("请输入地址，点击确定");
             return;
           }
-          this.axios.post("/app/v1/order/saveOrder", {
-            agentCode: "",
-            airfreightProductId: this.getProductIndexData.selectServer.airfreightProductId,
-            airportProductIds:  this.getProductIndexData.selectServer.airportProductIds,
-            aviationNo: "",
-            delegateOrderId: "",
-            flightRecordId: this.getProductIndexData.selectServer.flightRecordId,
-            goodsName: this.goodsInfo.name,
-            goodsNumber: this.goodsInfo.num,
-            goodsPackage: this.goodsInfo.pack,
-            goodsSize: this.goodsInfo.size.join(),
-            goodsVolume: this.goodsInfo.bulk,
-            goodsWeight: this.goodsInfo.weight,
-            id: this.id,
-            incrementProductIds: [],
-            inviteCode: this.inviteCode,
-            invoiceType: 0,
-            landCarriageProductIds: this.getProductIndexData.selectServer.landCarriageProductIds,
-            opt: 1,    //提交
-            orderNo: "",
-            receiverAddressId: this.addressId.receiveId,
-            remark: this.goodsInfo.remark,
-            senderAddressId: this.addressId.sendId,
-            token: this.token
-          }).then(data=>{
-            console.log(data);
-            if(data.data.code == 10203){
-              this.promptwarning("货物尺寸格式错误")
-            }
-            if(data.data.code == 10212){
-              this.prompt('供应商信息维护错误,请重新下单')
-              setTimeout(()=>{
-                this.$router.push('/center/online_product')
-              },2000)
-            }
-            if(data.data.code ==1){
-              this.promptsuccess('下单成功')
-              setTimeout(()=>{
-                this.$router.push('/center/online_product/complete')
-              },1000)
-            }
-          });
+          this.axios
+            .post("/app/v1/order/saveOrder", {
+              agentCode: "",
+              airfreightProductId: this.getProductIndexData.selectServer
+                .airfreightProductId,
+              airportProductIds: this.getProductIndexData.selectServer
+                .airportProductIds,
+              aviationNo: "",
+              delegateOrderId: "",
+              flightRecordId: this.getProductIndexData.selectServer
+                .flightRecordId,
+              goodsName: this.goodsInfo.name,
+              goodsNumber: this.goodsInfo.num,
+              goodsPackage: this.goodsInfo.pack,
+              goodsSize: this.goodsInfo.size.join(),
+              goodsVolume: this.goodsInfo.bulk,
+              goodsWeight: this.goodsInfo.weight,
+              id: this.id,
+              incrementProductIds: [],
+              inviteCode: this.inviteCode,
+              invoiceType: 0,
+              landCarriageProductIds: this.getProductIndexData.selectServer
+                .landCarriageProductIds,
+              opt: 1, //提交
+              orderNo: "",
+              receiverAddressId: this.receiveAddressData.addressid,
+              remark: this.goodsInfo.remark,
+              senderAddressId: this.sendAddressData.addressid,
+              token: this.token
+            })
+            .then(data => {
+              console.log(data);
+              if (data.data.code == 10203) {
+                this.promptwarning("货物尺寸格式错误");
+              }
+              if (data.data.code == 10212) {
+                this.prompt("供应商信息维护错误,请重新下单");
+                setTimeout(() => {
+                  this.$router.push("/center/online_product");
+                }, 2000);
+              }
+              if (data.data.code == 1) {
+                this.promptsuccess("下单成功");
+                setTimeout(() => {
+                  this.$router.push("/center/online_product/complete");
+                }, 1000);
+              }
+            });
         } else {
           console.log("error submit!!");
           return false;
@@ -723,28 +932,22 @@ export default {
     completeGo() {
       this.$router.go(-1);
     },
-    confirm() {},
-    sendProvince(data) {
-      this.sendAddressData.address.province = data.value;
-    },
-    sendCity(data) {
-      this.sendAddressData.address.city = data.value;
-    },
-    sendArea(data) {
-      this.sendAddressData.address.area = data.value;
-    },
-    receiveProvince(data) {
-      this.receiveAddressData.address.province = data.value;
-    },
-    receiveCity(data) {
-      this.receiveAddressData.address.city = data.value;
-    },
-    receiveArea(data) {
-      this.receiveAddressData.address.area = data.value;
-    }
   },
   computed: {
-    ...mapGetters(["id", "token"])
+    ...mapGetters(["id", "token"]),
+    formatPlaneData() {
+      if ("searchData" in this.getProductIndexData) {
+        var newDate = new Date(this.getProductIndexData.searchData.planeData);
+        var year = newDate.getFullYear();
+        var month =
+          newDate.getMonth() + 1 < 10
+            ? `0${newDate.getMonth() + 1}`
+            : newDate.getMonth() + 1;
+        var date =
+          newDate.getDate() < 10 ? `0${newDate.getDate()}` : newDate.getDate();
+        return `${year}-${month}-${date}`;
+      }
+    }
   }
 };
 </script>
@@ -865,6 +1068,18 @@ export default {
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+    // 地址列表的模态框样式
+    .sendAddressList,
+    .receiveAddressList{
+      .el-dialog{
+        .el-dialog__header{
+          background-color: #fccf00;
+          .el-dialog__title{
+            color: #fff;
+          }
+        }
+      }
+    }
     .address-left {
       background: #fff;
       box-shadow: 0 0 15px #ccc;
@@ -916,6 +1131,7 @@ export default {
         justify-content: flex-end;
         align-items: center;
         img {
+          cursor: pointer;
           height: 25px;
           margin-right: 10px;
         }
@@ -947,7 +1163,6 @@ export default {
           .name-text {
             width: 80px;
             margin-left: 10px;
-
             input {
               padding: 0;
             }
@@ -1018,14 +1233,12 @@ export default {
           }
           .name-text {
             flex: 1;
-            text-indent: 10px;
             display: flex;
             .left {
-              width: 45px;
+              flex: 1;
               input {
                 padding: 0;
                 padding-right: 5px;
-                border-right: 1px solid #e0e0e0;
                 border-radius: 0;
               }
             }
@@ -1036,7 +1249,7 @@ export default {
         height: 38px;
         margin-top: 20px;
         .left-name {
-          border-bottom: 1px solid #e0e0e0;
+          border-bottom: 1px solid rgba(93, 93, 93, 0.1);
           display: flex;
           flex-direction: row;
           align-items: center;
@@ -1057,7 +1270,7 @@ export default {
           .name-text {
             flex: 1;
             // transform: scale(0.8);
-            transform: translateY(-2px);
+            transform: translateY(2px);
             overflow: hidden;
             .address {
               display: flex;
@@ -1093,7 +1306,6 @@ export default {
           }
           .name-text {
             flex: 1;
-            margin-left: 20px;
           }
         }
       }
@@ -1107,7 +1319,7 @@ export default {
           height: 100%;
           margin-left: 20px;
           margin-right: 20px;
-          border-bottom: 1px solid (244, 244, 244, 1);
+          border-bottom: 1px solid rgba(93, 93, 93, 0.1);
           .name-logo {
             color: rgba(252, 29, 26, 1);
             margin-top: 6px;
@@ -1120,7 +1332,6 @@ export default {
           }
           .name-text {
             flex: 1;
-            margin-left: 20px;
           }
         }
       }
@@ -1208,6 +1419,7 @@ export default {
         justify-content: flex-end;
         align-items: center;
         img {
+          cursor: pointer;
           height: 25px;
           margin-right: 10px;
         }
@@ -1305,14 +1517,12 @@ export default {
           }
           .name-text {
             flex: 1;
-            text-indent: 10px;
             display: flex;
             .left {
-              width: 50px;
+              flex: 1;
               input {
                 padding: 0;
                 border-radius: 0;
-                border-right: 1px solid #e0e0e0;
               }
             }
           }
@@ -1322,7 +1532,7 @@ export default {
         height: 38px;
         margin-top: 20px;
         .left-name {
-          border-bottom: 1px solid #e0e0e0;
+          border-bottom: 1px solid rgba(93, 93, 93, 0.1);
           display: flex;
           flex-direction: row;
           align-items: center;
@@ -1343,7 +1553,7 @@ export default {
           .name-text {
             flex: 1;
             // transform: scale(0.8);
-            transform: translateY(-2px);
+            transform: translateY(2px);
             overflow: hidden;
             .address {
               display: flex;
@@ -1379,7 +1589,6 @@ export default {
           }
           .name-text {
             flex: 1;
-            margin-left: 20px;
           }
         }
       }
@@ -1393,7 +1602,7 @@ export default {
           height: 100%;
           margin-left: 20px;
           margin-right: 20px;
-          border-bottom: 1px solid rgba(244, 244, 244, 1);
+          border-bottom: 1px solid rgba(93, 93, 93, 0.1);
           .name-logo {
             color: rgba(252, 29, 26, 1);
             margin-top: 6px;
@@ -1406,7 +1615,6 @@ export default {
           }
           .name-text {
             flex: 1;
-            margin-left: 20px;
           }
         }
       }
@@ -1694,20 +1902,16 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
     .cost-content {
       margin-top: 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: space-around;
       border-bottom: 1px solid rgba(244, 244, 244, 1);
       height: 240px;
       width: 100%;
-      .cost-list1 {
-        margin-top: 20px;
-      }
       .cost-list {
+        margin: 10px 0;
         width: 88%;
         display: flex;
         flex-direction: row;

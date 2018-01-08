@@ -12,6 +12,7 @@
             <p class="company-name">会员名称：<span>{{userInfo.fullName}}</span></p>
             <p class="account-type">会员类型：<span>{{userInfo.accountType}}</span></p>
             <div class="star" v-if="'level' in this.userInfo">
+              <div class="key">会员级别：</div>
               <el-rate
                 v-model='starNo'
                 disabled
@@ -76,16 +77,93 @@
             <span class="title">账号</span><span class="colon">:</span><span class="content">{{userInfo.account}}</span>
           </div>
           <div class="pass">
+            <!-- 修改密码弹出窗 -->
+            <div class="changePassModel">
+              <el-dialog width="800px" :visible.sync="changePassModel">
+                <div slot="title">
+                  <span class="el-icon-edit"></span>
+                  <span>修改密码</span>
+                </div>
+                <el-form :model="resetPasswordData" status-icon :rules="resetPasswordRules" ref="resetPassword" label-width="100px" class="demo-ruleForm">
+                  <el-form-item label="当前密码" prop="old_password">
+                    <el-input type="password" v-model="resetPasswordData.old_password" auto-complete="off"></el-input>
+                  </el-form-item>
+                  <el-form-item label="新密码" prop="new_password1">
+                    <el-input type="password" v-model="resetPasswordData.new_password1" auto-complete="off"></el-input>
+                  </el-form-item>
+                  <el-form-item label="确认密码" prop="new_password2">
+                    <el-input type="password" v-model="resetPasswordData.new_password2" auto-complete="off"></el-input>
+                  </el-form-item>
+                  <el-form-item class="btn">
+                    <el-button type="warning" size="mini" @click="submit('resetPassword')">确认</el-button>
+                  </el-form-item>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                </div>
+              </el-dialog>
+            </div>
             <span class="title">密码</span>
             <span class="colon">:</span>
             <div class="content">***********</div>
-            <span class="btn"><el-button type="info" size='mini' @click="resetPassword(userInfo.id)">修改</el-button></span>
+            <span class="btn"><el-button type="info" size='mini' @click="resetPasswordBtn(userInfo.id)">修改</el-button></span>
           </div>
           <div class="phonenum">
-            <span class="title">手机号</span><span class="colon">:</span><span class="content">{{userInfo.phone}}</span><span class="btn"><el-button type="info" size='mini'>修改</el-button></span>
+            <!-- 修改手机号模态框 -->
+            <div class="changePhoneModel">
+              <el-dialog width="800px" :close-on-click-modal='phoneCloseOnClickModal' :visible.sync="changePhoneModel">
+                <div slot="title">
+                  <span class="el-icon-edit"></span>
+                  <span>修改手机号</span>
+                </div>
+                <el-form :model="resetPhoneData" status-icon ref="resetPhone" label-width="100px" class="demo-ruleForm">
+                  <el-form-item label="当前手机号" prop="oldPhone">
+                    <el-input v-model="resetPhoneData.oldPhone" auto-complete="off"></el-input>
+                  </el-form-item>
+                  <el-form-item label="新手机号" prop="newPhone">
+                    <el-input v-model="resetPhoneData.newPhone" auto-complete="off"></el-input>
+                  </el-form-item>
+                  <el-form-item class="code" label="验证码" prop="code">
+                    <el-input v-model="resetPhoneData.code" auto-complete="off"></el-input>
+                    <div class="sendCode">
+                      <el-button @click="verificationPhone" :disabled='controlSendCodeBtn' type="success">发送验证码</el-button>
+                    </div>
+                    <div class="time" v-show="timeControl">({{time}}s)</div>
+                  </el-form-item>
+                  <el-form-item class="btn">
+                    <el-button type="warning" size="mini" @click="submitPhone()">确认</el-button>
+                  </el-form-item>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                  <!-- <el-button type="warning" size="mini" @click="changePassModel = false">确 定</el-button> -->
+                </div>
+              </el-dialog>
+            </div>
+            <span class="title">手机号</span><span class="colon">:</span><span class="content">{{userInfo.phone}}</span><span class="btn"><el-button @click="changePhoneModel=true" type="info" size='mini'>修改</el-button></span>
           </div>
           <div class="email">
-            <span class="title">邮箱</span><span class="colon">:</span><span class="content">{{userInfo.email}}</span><span class="btn"><el-button type="info" size='mini'>修改</el-button></span>
+            <!-- 修改邮箱模态框 -->
+            <div class="changeEmailModel">
+              <el-dialog width="800px" :visible.sync="changeEmailModel">
+                <div slot="title">
+                  <span class="el-icon-edit"></span>
+                  <span>修改邮箱</span>
+                </div>
+                <el-form :model="resetEmailData" status-icon ref="resetEmail" label-width="100px" class="demo-ruleForm">
+                  <el-form-item label="原邮箱地址" prop="oldEmail">
+                    <el-input v-model="resetEmailData.oldEmail" auto-complete="off"></el-input>
+                  </el-form-item>
+                  <el-form-item label="新邮箱地址" prop="newEmail">
+                    <el-input type="email" v-model="resetEmailData.newEmail" auto-complete="off"></el-input>
+                  </el-form-item>
+                  <el-form-item class="btn">
+                    <el-button type="warning" size="mini" @click="submitEmail()">确认</el-button>
+                  </el-form-item>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                </div>
+              </el-dialog>
+            </div>
+            <span class="title">邮箱</span><span class="colon">:</span><span class="content">{{userInfo.email}}</span><span class="btn"><el-button @click="changeEmailModelControl" type="info" size='mini'>修改</el-button></span>
           </div>
           <!-- <div class="account-type">
             <span class="title">账号类型</span><span class="colon">:</span><span class="content">{{userInfo.accountType}}</span>
@@ -95,6 +173,34 @@
           </div>
         </div>
         <div class="personal-info">
+          <!-- 修改个人信息模态框 -->
+          <div class="changePersonalInfoModel">
+            <el-dialog width="800px" :visible.sync="changePersonalInfoModel">
+                <div slot="title">
+                  <span class="el-icon-edit"></span>
+                  <span>修改个人信息</span>
+                </div>
+                <el-form :model="resetPersonalInfoData" status-icon ref="resetPersonalInfo" label-width="100px" class="demo-ruleForm">
+                  <el-form-item label="姓名" prop="name">
+                    <el-input v-model="resetPersonalInfoData.name" auto-complete="off"></el-input>
+                  </el-form-item>
+                  <el-form-item label="身份证" prop="id">
+                    <el-input v-model="resetPersonalInfoData.id" auto-complete="off"></el-input>
+                  </el-form-item>
+                  <el-form-item label="固定电话" prop="telephone">
+                    <el-input v-model="resetPersonalInfoData.telephone" auto-complete="off"></el-input>
+                  </el-form-item>
+                  <el-form-item label="详细地址" prop="addressDetial">
+                    <el-input v-model="resetPersonalInfoData.addressDetial" auto-complete="off"></el-input>
+                  </el-form-item>
+                  <el-form-item class="btn">
+                    <el-button type="warning" size="mini" @click="submitPersonalInfo()">确认</el-button>
+                  </el-form-item>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                </div>
+              </el-dialog>
+          </div>
           <div class="triangle">
             <p>个人信息</p>
           </div>
@@ -112,6 +218,7 @@
           </div>
           <div class="revise">
             <el-button
+              @click="changePersonalInfoModelControl"
               type="info"
               size="mini">修改</el-button>
           </div>
@@ -121,14 +228,66 @@
   </div>
 </template>
 <script>
-import { mapGetters } from "vuex";
-import { logout } from '@/tools/logout'
+import { mapGetters, mapMutations } from "vuex";
+import { logout } from "@/tools/logout";
+import getmd5 from "@/api/getmd5";
 export default {
-  mixins:[ logout ],
+  mixins: [logout],
   data() {
+    var validatePass = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("请输入密码"));
+      } else {
+        if (this.resetPasswordData.new_password1 !== "") {
+          this.$refs.resetPassword.validateField("new_password2");
+        }
+        callback();
+      }
+    };
+    var validatePass2 = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("请再次输入密码"));
+      } else if (value !== this.resetPasswordData.new_password1) {
+        callback(new Error("两次输入密码不一致!"));
+      } else {
+        callback();
+      }
+    };
     return {
-      activity:'',
-      userInfo: {}
+      changePassModel: false,
+      changePhoneModel: false,
+      changeEmailModel: false,
+      changePersonalInfoModel: false,
+      controlSendCodeBtn: false, // 控制发送验证码按钮
+      time: 60, // 验证码剩余时间
+      timeControl: false, //控制时间的显示
+      phoneCloseOnClickModal: true,
+      activity: "",
+      userInfo: {},
+      resetPasswordData: {
+        old_password: "",
+        new_password1: "",
+        new_password2: ""
+      },
+      resetPhoneData: {
+        oldPhone: "",
+        newPhone: "",
+        code: ""
+      },
+      resetEmailData: {
+        oldEmail: "",
+        newEmail: ""
+      },
+      resetPersonalInfoData: {
+        name: "",
+        id: "",
+        telephone: "",
+        addressDetial: ""
+      },
+      resetPasswordRules: {
+        new_password1: [{ validator: validatePass, trigger: "blur" }],
+        new_password2: [{ validator: validatePass2, trigger: "blur" }]
+      }
     };
   },
   created() {
@@ -136,8 +295,15 @@ export default {
     // console.log(0.000001.div(0.0001));  // number.js浮点数精度问题
   },
   methods: {
-    resetPassword(id) {
-      this.$router.push("/center/change_password");
+    ...mapMutations({
+      setUsertype: "SET_USERTYPE",
+      setToken: "SET_TOKEN",
+      setUsername: "SET_USERNAME",
+      setId: "SET_ID"
+    }),
+    resetPasswordBtn(id) {
+      // this.$router.push("/center/change_password");
+      this.changePassModel = true;
     },
     getUserInfo() {
       this.axios
@@ -149,17 +315,216 @@ export default {
           console.log(data);
           if (data.data.code == "1") {
             this.userInfo = data.data.data;
-          }else if(data.data.code == 10001){
-            this.logout()
+            this.resetEmailData.oldEmail = data.data.data.email;
+            console.log(this.userInfo);
+          } else if (data.data.code == 10001) {
+            this.logout();
           }
+        });
+    },
+    submit(formName) {
+      this.$refs[formName].validate(valid => {
+        console.log(valid);
+        if (valid) {
+          this.axios
+            .post("/app/v1/user/userModifyPassword", {
+              id: this.id,
+              newPassword: getmd5(this.resetPasswordData.new_password1),
+              oldPassword: getmd5(this.resetPasswordData.old_password),
+              token: this.token
+            })
+            .then(data => {
+              console.log(data);
+              if (data.data.code == 10104) {
+                this.$message.error("密码格式错误,修改失败");
+              }
+              if (data.data.code == 10108) {
+                this.$message.error("密码错误");
+              }
+              if (data.data.code == 1) {
+                this.$message({
+                  message: "恭喜你，密码修改成功,请重新登录",
+                  type: "success"
+                });
+                setTimeout(() => {
+                  this.$cookie.delete("username");
+                  this.setUsername("");
+                  this.setUsertype("");
+                  this.setToken("");
+                  this.setId("");
+                  this.$router.push("/login");
+                }, 3000);
+              }
+            });
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
+    submitPhone() {
+      this.axios
+        .post("/app/v1/user/userModifyInfo", {
+          address: "",
+          id: this.id,
+          identifyCard: "",
+          info: this.resetPhoneData.newPhone,
+          name: "",
+          smsCode: this.resetPhoneData.code,
+          telephone: "",
+          token: this.token,
+          type: 1
+        })
+        .then(data => {
+          console.log(data);
+          if (data.data.code == 10103) {
+            this.$message({
+              message: "验证码错误",
+              type: "warning"
+            });
+          }
+          if (data.data.code == 1) {
+            this.getUserInfo();
+            this.$message({
+              message: "修改成功",
+              type: "success"
+            });
+          }
+        });
+    },
+    changeEmailModelControl() {
+      this.changeEmailModel = true;
+      this.resetEmailData.newEmail = "";
+    },
+    submitEmail() {
+      if (this.resetEmailData.newEmail == "") {
+        this.$message({
+          message: "邮箱不能为空",
+          type: "warning"
+        });
+        return;
+      }
+      this.axios
+        .post("/app/v1/user/userModifyInfo", {
+          address: "",
+          id: this.id,
+          identifyCard: "",
+          info: this.resetEmailData.newEmail,
+          name: "",
+          smsCode: "",
+          telephone: "",
+          token: this.token,
+          type: 2
+        })
+        .then(data => {
+          console.log(data);
+          if (data.data.code == 10109) {
+            this.$message({
+              message: "邮箱格式错误",
+              type: "warning"
+            });
+          }
+          if (data.data.code == 1) {
+            this.getUserInfo();
+            this.changeEmailModel = false;
+            this.$message({
+              message: "邮箱修改成功",
+              type: "success"
+            });
+          }
+        });
+    },
+    changePersonalInfoModelControl() {
+      this.changePersonalInfoModel = true;
+    },
+    submitPersonalInfo() {
+      if(this.resetPersonalInfoData.name == ''){
+        this.$message({
+          message: "姓名不能为空",
+          type: "warning"
+        });
+        return
+      }
+      this.axios.post("/app/v1/user/userModifyInfo", {
+        address: this.resetPersonalInfoData.addressDetial,
+        id: this.id,
+        identifyCard: this.resetPersonalInfoData.id,
+        info: "1",
+        name: this.resetPersonalInfoData.name,
+        smsCode: "",
+        telephone: this.resetPersonalInfoData.telephone,
+        token: this.token,
+        type: 3
+      }).then(data=>{
+        if(data.data.code == 10110){
+          this.$message({
+            message: "身份证格式错误",
+            type: "warning"
+          });
+        }
+        if(data.data.code == 1){
+          this.changePersonalInfoModel = false
+          this.getUserInfo()
+        }
+      });
+    },
+    verificationPhone() {
+      this.axios
+        .post("/app/v1/user/userValidateAccount", {
+          phone: this.resetPhoneData.newPhone
+        })
+        .then(data => {
+          console.log(data);
+          if (data.data.code == 10002) {
+            this.$message({
+              message: "手机号已存在",
+              type: "warning"
+            });
+          }
+          if (data.data.code == 10101) {
+            this.controlSendCodeBtn = false;
+            this.timeControl = false;
+            this.phoneCloseOnClickModal = true;
+            clearInterval(this.timer);
+            this.$message({
+              message: "手机格式错误",
+              type: "warning"
+            });
+          }
+          if (data.data.code == 1) {
+            this.sendCode();
+          }
+        });
+    },
+    sendCode() {
+      this.controlSendCodeBtn = true;
+      this.timeControl = true;
+      this.phoneCloseOnClickModal = false;
+      this.timer = setInterval(() => {
+        this.time--;
+        if (this.time == 0) {
+          this.controlSendCodeBtn = false;
+          this.timeControl = false;
+          this.phoneCloseOnClickModal = true;
+          this.time = 60;
+          clearInterval(this.timer);
+        }
+      }, 1000);
+      this.axios
+        .post("/app/v1/common/sendSms", {
+          phone: this.resetPhoneData.oldPhone,
+          smdType: "editphone"
+        })
+        .then(data => {
+          console.log("21212", data);
         });
     }
   },
   computed: {
     ...mapGetters(["token", "id"]),
-    starNo(){
-      if('level' in this.userInfo){
-        return parseInt(this.userInfo.level.level)
+    starNo() {
+      if ("level" in this.userInfo) {
+        return parseInt(this.userInfo.level.level);
       }
     }
   }
@@ -225,19 +590,25 @@ export default {
         }
         .info {
           flex: 1;
-          .company-name,.account-type {
+          .company-name,
+          .account-type {
             font-size: 16px;
             color: #999999;
             margin: 0;
-            span{
+            span {
               color: #888;
             }
           }
-          .company-name{
+          .company-name {
             margin-top: 40px;
           }
           .star {
             margin: 20px 0;
+            display: flex;
+            .key {
+              font-size: 16px;
+              color: #999999;
+            }
           }
           .member {
             display: flex;
@@ -308,11 +679,89 @@ export default {
             width: 200px;
           }
         }
+        .pass,
+        .phonenum,
+        .email {
+          .changePassModel,
+          .changePhoneModel,
+          .changeEmailModel {
+            .el-dialog {
+              .el-dialog__header {
+                background-color: #fccf00;
+                div {
+                  color: #fff;
+                  font-size: 20px;
+                }
+              }
+              .el-dialog__body {
+                position: relative;
+                .btn {
+                  text-align: center;
+                  transform: translateX(-60px);
+                  button {
+                    padding: 6px 60px;
+                  }
+                }
+                .code {
+                  .el-form-item__content {
+                    display: flex;
+                    .sendCode {
+                      margin-left: 100px;
+                      margin-right: 100px;
+                    }
+                  }
+                }
+                .time {
+                  position: absolute;
+                  right: 40px;
+                  color: #67c23a;
+                  text-align: left;
+                }
+              }
+            }
+          }
+        }
       }
       .personal-info {
         flex: 2;
         margin-left: 20px;
         padding-top: 40px;
+        .changePersonalInfoModel {
+          .el-dialog {
+            .el-dialog__header {
+              background-color: #fccf00;
+              div {
+                color: #fff;
+                font-size: 20px;
+              }
+            }
+            .el-dialog__body {
+              position: relative;
+              .btn {
+                text-align: center;
+                transform: translateX(-60px);
+                button {
+                  padding: 6px 60px;
+                }
+              }
+              .code {
+                .el-form-item__content {
+                  display: flex;
+                  .sendCode {
+                    margin-left: 100px;
+                    margin-right: 100px;
+                  }
+                }
+              }
+              .time {
+                position: absolute;
+                right: 40px;
+                color: #67c23a;
+                text-align: left;
+              }
+            }
+          }
+        }
         .revise {
           display: flex;
           justify-content: flex-end;

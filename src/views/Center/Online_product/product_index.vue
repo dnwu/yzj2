@@ -19,7 +19,6 @@
               <div class="left-list-selection selection-date">
                 <div class="block">
                   <el-date-picker
-                    value-format="yyyy-MM-dd"
                     size="mini"
                     v-model="searchData.planeData"
                     type="date"
@@ -27,6 +26,7 @@
                   </el-date-picker>
                   <el-time-picker
                     value-format="HH:mm"
+                    format="HH:mm"
                     size="mini"
                     is-range
                     v-model="searchData.planeTime"
@@ -160,7 +160,7 @@
                         </el-option>
                       </el-select>
                     </span>
-                    <span class="address-little" v-if="landStartLevel3ProductType2">实际落地时间在24:00之前的航班，次日到达</span>
+                    <!-- <span class="address-little" v-if="landStartLevel3ProductType2">实际落地时间在24:00之前的航班，次日到达</span> -->
                     <span class="address-little" v-if="landStartLevel3ProductType1">
                       <span class="address-btn" @click="toggleLandStartServer('landStart1Ton')" :class="selectServer.landStart1Ton?'btn-active':''">1吨金杯车</span>
                       <span class="address-btn" @click="toggleLandStartServer('landStart2Ton')" :class="selectServer.landStart2Ton?'btn-active':''">2吨厢式货车</span>
@@ -207,7 +207,7 @@
                         </el-option>
                       </el-select>
                     </span>
-                    <span class="address-little" v-if="landEndLevel3ProductType2">实际落地时间在24:00之前的航班，次日到达</span>
+                    <!-- <span class="address-little" v-if="landEndLevel3ProductType2">实际落地时间在24:00之前的航班，次日到达</span> -->
                     <span class="address-little" v-if="landEndLevel3ProductType1">
                       <span class="address-btn" @click="toggleLandEndServer('landEnd1Ton')" :class="selectServer.landEnd1Ton?'btn-active':''">1吨金杯车</span>
                       <span class="address-btn" @click="toggleLandEndServer('landEnd2Ton')" :class="selectServer.landEnd2Ton?'btn-active':''">2吨厢式货车</span>
@@ -255,35 +255,35 @@
       <div class="right-nav">费用合计</div>
       <div class="right-content">
         <div class="right-content-nav box1">
-          <div class="right-content-cost">
+          <div class="right-content-cost" v-if="airTransFee != 0">
             <span class="cost-text">航空运费</span>
             <span class="cost-number">{{airTransFee}}元</span>
           </div>
-          <div class="right-content-cost">
+          <div class="right-content-cost" v-if="airOilAnnexFee != 0">
             <span class="cost-text">燃油附加费</span>
             <span class="cost-number">{{airOilAnnexFee}}元</span>
           </div>
 
         </div>
-        <div class="right-content-nav" v-if="selectServer.airportStart">
+        <div class="right-content-nav" v-if="selectServer.airportStart && airportStartFee != 0">
           <div class="right-content-cost">
             <span class="cost-text">始发港交货</span>
             <span class="cost-number">{{airportStartFee}}元</span>
           </div>
         </div>
-        <div class="right-content-nav" v-if="selectServer.airportEnd">
+        <div class="right-content-nav" v-if="selectServer.airportEnd && airportEndFee != 0">
           <div class="right-content-cost">
             <span class="cost-text">目的港提货</span>
             <span class="cost-number">{{airportEndFee}}元</span>
           </div>
         </div>
-        <div class="right-content-nav" v-if="selectServer.landStart">
+        <div class="right-content-nav" v-if="selectServer.landStart && landStartGetGoodsFee != 0">
           <div class="right-content-cost">
             <span class="cost-text">上门取货</span>
             <span class="cost-number">{{landStartGetGoodsFee}}元</span>
           </div>
         </div>
-        <div class="right-content-nav" v-if="selectServer.landEnd">
+        <div class="right-content-nav" v-if="selectServer.landEnd && landEndTranFee != 0">
           <div class="right-content-cost">
             <span class="cost-text">落地配送</span>
             <span class="cost-number">{{landEndTranFee}}元</span>
@@ -316,7 +316,7 @@
             <span class="cost-number">{{landEndTranFee}}元</span>
           </div>
         </div> -->
-        <div class="right-content-free">
+        <div class="right-content-free" v-if="false">
           <span class="cost-free cost-text">优惠</span>
           <span class="cost-number">
             <span class="cost-index">0</span>
@@ -354,10 +354,10 @@ export default {
         // 搜索条件
         startPort: "",
         endPort: "",
-        planeData: "",
-        planeTime: "",
+        planeData: new Date(),
+        planeTime: ['00:00','23:59'],
         goodsWeight: "",
-        goodsType: ""
+        goodsType: 7
       },
       //  选择的服务
       selectServer: {
@@ -423,6 +423,7 @@ export default {
   },
   created() {
     this.getGoodsTypeList();
+
   },
   methods: {
     // 弹出窗
@@ -582,7 +583,7 @@ export default {
         .post("/app/v1/product/queryProduct", {
           airportEnd: this.searchData.endPort,
           airportStart: this.searchData.startPort,
-          flightDate: this.searchData.planeData,
+          flightDate: this.formatPlaneData,
           goodsType: this.searchData.goodsType,
           hourEnd: this.searchData.planeTime[1],
           hourStart: this.searchData.planeTime[0],
@@ -859,6 +860,13 @@ export default {
     }
   },
   computed: {
+    formatPlaneData(){
+      var newDate = this.searchData.planeData
+      var year = newDate.getFullYear()
+      var month = (newDate.getMonth()+1)<10?`0${newDate.getMonth()+1}`:newDate.getMonth()+1
+      var date = newDate.getDate()<10?`0${newDate.getDate()}`:newDate.getDate()
+      return `${year}-${month}-${date}`
+    },
     landStartLevel1Data() {
       var arr = [];
       var resultArr = this.productSearchResult.landStart.landCarriageSales;
@@ -1483,6 +1491,7 @@ export default {
           padding-bottom: 20px;
         }
         .right-content-cost {
+          margin: 6px 0;
           width: 200px;
           display: flex;
           justify-content: space-between;

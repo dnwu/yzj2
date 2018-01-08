@@ -1,353 +1,384 @@
 <template>
   <div class="company-info">
-    <!-- <div class="header">公司基本信息</div>
-    <div class="company-name">
-      <div>公司名称</div>
-      <div><el-input v-model="companyName" placeholder="公司名称"></el-input></div>
+    <div class="is-flex header">
+      <span class="info">企业信息</span>
+      <span class="btn">完善企业信息</span>
+      <span class="btn">企业注册申请</span>
     </div>
-    <div class="company-position">
-      <div>营业执照所在地</div>
-      <div><el-input v-model="companyPosition" placeholder="营业执照所在地"></el-input></div>
+    <div class="main">
+      <section class="card">
+        <header class="is-flex card-head">公司基本信息</header>
+        <main class="is-flex card-body">
+          <ul class="card-left">
+            <li v-for="obj in info1">
+              <div class="wrap">
+                <span class="name" v-text="obj.name"></span>
+                <span class="dot">:</span>
+              </div>
+              <span class="value" v-text="obj.value" v-if="obj.value"></span>
+              <span v-else class="value"><i class="el-icon-picture"></i></span>
+            </li>
+          </ul>
+          <ul class="card-right">
+            <li v-for="obj in info2">
+              <div class="wrap">
+                <span class="name info-beteen-font" v-text="obj.name"></span>
+                <span class="dot">:</span>
+              </div>
+              <span class="value" v-text="obj.value" v-if="obj.value"></span>
+              <span v-else class="value"><i class="el-icon-picture"></i></span>
+            </li>
+          </ul>
+        </main>
+      </section class="card">
+      <section class="card card-two">
+        <header class="is-flex card-head">公司税务登记证</header>
+        <main class="is-flex card-body">
+          <ul class="card-left info-justify-font">
+            <li v-for="obj in tax1">
+              <div class="wrap">
+                <span class="name" v-text="obj.name"></span>
+                <span class="dot">:</span>
+              </div>
+              <span class="value" v-text="obj.value" v-if="obj.value"></span>
+              <span v-else class="value"><i class="el-icon-picture"></i></span>
+            </li>
+          </ul>
+          <ul class="card-right">
+            <li v-for="obj in tax2">
+              <div class="wrap">
+                <span class="name" v-text="obj.name"></span>
+                <span class="dot">:</span>
+              </div>
+              <span class="value" v-text="obj.value" v-if="obj.value"></span>
+              <span v-else class="value"><i class="el-icon-picture"></i></span>
+            </li>
+          </ul>
+        </main>
+      </section class="card">
+      <section class="card">
+        <header class="card-head">开户银行许可证</header>
+        <main class="card-body">
+          <ul class="card-left">
+            <li v-for="obj in paper1">
+              <div class="wrap">
+                <span class="name" v-text="obj.name"></span>
+                <span class="dot">:</span>
+              </div>
+              <span class="value" v-text="obj.value" v-if="obj.value"></span>
+              <span v-else class="value"><i class="el-icon-picture"></i></span>
+            </li>
+          </ul>
+          <ul class="card-right">
+            <li v-for="obj in paper2">
+              <div class="wrap">
+                <span class="name" v-text="obj.name"></span>
+                <span class="dot">:</span>
+              </div>
+              <span class="value" v-text="obj.value" v-if="obj.value"></span>
+              <span v-else class="value"><i class="el-icon-picture"></i></span>
+            </li>
+          </ul>
+        </main>
+      </section class="card">
+      <section class="card card-two">
+        <header class="card-head">联系人信息</header>
+        <main class="is-flex card-body">
+          <ul class="card-left info-justify-font">
+            <li v-for="obj in msg1">
+              <div class="wrap">
+                <span class="name" v-text="obj.name"></span>
+                <span class="dot">:</span>
+              </div>
+              <span class="value" v-text="obj.value" v-if="obj.value"></span>
+              <span v-else class="value"><i class="el-icon-picture"></i></span>
+            </li>
+          </ul>
+          <ul class="card-right">
+            <li v-for="obj in msg2">
+              <div class="wrap">
+                <span class="name" v-text="obj.name"></span>
+                <span class="dot">:</span>
+              </div>
+              <span class="value" v-text="obj.value" v-if="obj.value"></span>
+              <span v-else class="value"><i class="el-icon-picture"></i></span>
+            </li>
+          </ul>
+        </main>
+      </section class="card">
     </div>
-    <div class="company-number">
-      <div>营业执照号</div>
-      <div><el-input v-model="companyNumber" placeholder="营业执照号"></el-input></div>
-    </div>
-    <div class="detail-position">
-      <div>详细地址</div>
-      <div><el-input v-model="detailPosition" placeholder="详细街道"></el-input></div>
-    </div>
-    <div class="legal-person">
-      <div>法定代表人</div>
-      <div><el-input v-model="legalPerson" placeholder="法定代表人"></el-input></div>
-    </div>
-    <div class="person-id">
-      <div>身份证号码</div>
-      <div><el-input v-model="personId" placeholder="身份证号码"></el-input></div>
-    </div>
-    <div class="electronic-id">
-      <div>法人身份证电子版</div>
-      <div>
-        <el-input v-model="electronicId" placeholder="选择文件..."></el-input>
-        <el-upload
-          class="avatar-uploader"
-          action="https://jsonplaceholder.typicode.com/posts/"
-          :show-file-list="false"
-          :on-success="handleAvatarSuccess"
-          :before-upload="beforeAvatarUpload">
-          <el-button size="medium" type="info">浏览</el-button>
-        </el-upload>
-      </div>
-    </div>
-    <div class="time-limit">
-      <div>营业期限</div>
-      <div><el-input v-model="timeLimit" placeholder="营业期限"></el-input></div>
-    </div>
-    <div class="registered-capital">
-      <div>注册资金</div>
-      <div><el-input v-model="registeredCapital" placeholder="注册资金"></el-input></div>
-    </div>
-    <div class="business-line">
-      <div>营业范围</div>
-      <div><el-input v-model="businessLine" placeholder="营业范围"></el-input></div>
-    </div>
-    <div class="business-licence">
-      <div>营业执照电子版</div>
-      <div>
-        <el-input v-model="businessLicence" placeholder="选择文件..."></el-input>
-        <el-upload
-          class="avatar-uploader"
-          action="https://jsonplaceholder.typicode.com/post/"
-          :show-file-list="false"
-          :on-success="handleAvatarSuccess1"
-          :before-upload="beforeAvatarUpload1">
-          <el-button size="medium" type="info">浏览</el-button>
-        </el-upload>
-      </div>
-    </div>
-    <div class="framework-id">
-      <div>组织机构代码</div>
-      <div><el-input v-model="frameworkId" placeholder="组织机构代码"></el-input></div>
-    </div>
-    <div class="framework-deadline">
-      <div>组织机构代码证有效期</div>
-      <div><el-input v-model="frameworkDeadline" placeholder="组织机构代码证有效期"></el-input></div>
-    </div>
-    <div class="framework-licence">
-      <div>组织机构代码证电子版</div>
-      <div>
-        <el-input v-model="frameworkLicence" placeholder="选择文件..."></el-input>
-        <el-upload
-          class="avatar-uploader"
-          action="https://jsonplaceholder.typicode.com/post/"
-          :show-file-list="false"
-          :on-success="handleAvatarSuccess2"
-          :before-upload="beforeAvatarUpload2">
-          <el-button size="medium" type="info">浏览</el-button>
-        </el-upload>
-      </div>
-    </div>
-    <div class="header">公司税务登记证</div>
-    <div class="taxpayer-id">
-      <div>纳税人识别号</div>
-      <div><el-input v-model="taxpayerID" placeholder="纳税人识别号"></el-input></div>
-    </div>
-    <div class="tax-licence">
-      <div>税务登记证电子版</div>
-      <div>
-        <el-input v-model="taxLicence" placeholder="选择文件..."></el-input>
-        <el-upload
-          class="avatar-uploader"
-          action="https://jsonplaceholder.typicode.com/post/"
-          :show-file-list="false"
-          :on-success="handleAvatarSuccess3"
-          :before-upload="beforeAvatarUpload3">
-          <el-button size="medium" type="info">浏览</el-button>
-        </el-upload>
-      </div>
-    </div>
-    <div class="taxpayer-id-licence">
-      <div>一般纳税人资格证电子版</div>
-      <div>
-        <el-input v-model="taxpayerIdLicence" placeholder="选择文件..."></el-input>
-        <el-upload
-          class="avatar-uploader"
-          action="https://jsonplaceholder.typicode.com/post/"
-          :show-file-list="false"
-          :on-success="handleAvatarSuccess4"
-          :before-upload="beforeAvatarUpload4">
-          <el-button size="medium" type="info">浏览</el-button>
-        </el-upload>
-      </div>
-    </div>
-    <div class="header">开户银行许可证</div>
-    <div class="bank-username">
-      <div>银行用户名</div>
-      <div><el-input v-model="bankUsername" placeholder="银行用户名"></el-input></div>
-    </div>
-    <div class="bank-account-number">
-      <div>公司银行账号</div>
-      <div><el-input v-model="bankAccountNumber" placeholder="公司银行账号"></el-input></div>
-    </div>
-    <div class="bank-name">
-      <div>开户银行支行名称</div>
-      <div><el-input v-model="bankName" placeholder="开户银行支行名称"></el-input></div>
-    </div>
-    <div class="bank-address">
-      <div>开户银行支行所在地</div>
-      <div><el-input v-model="bankAddress" placeholder="开户银行支行所在地"></el-input></div>
-    </div>
-    <div class="bank-licence">
-      <div>银行开户许可证电子版</div>
-      <div>
-        <el-input v-model="bankLicence" placeholder="选择文件..."></el-input>
-        <el-upload
-          class="avatar-uploader"
-          action="https://jsonplaceholder.typicode.com/post/"
-          :show-file-list="false"
-          :on-success="handleAvatarSuccess5"
-          :before-upload="beforeAvatarUpload5">
-          <el-button size="medium" type="info">浏览</el-button>
-        </el-upload>
-      </div>
-    </div>
-    <div class="header">联系人信息</div>
-    <div class="contact-name">
-      <div>联系人姓名</div>
-      <div><el-input v-model="contactName" placeholder="联系人姓名"></el-input></div>
-    </div>
-    <div class="contact-phonenumber">
-      <div>联系人手机</div>
-      <div><el-input v-model="contactPhonenumber" placeholder="联系人手机"></el-input></div>
-    </div>
-    <div class="contact-email">
-      <div>联系人邮箱</div>
-      <div><el-input v-model="contactEmail" placeholder="联系人邮箱"></el-input></div>
-    </div>
-    <div class="save">
-      <el-button type="success">保存</el-button>
-      <el-button type="warning">企业注册</el-button>
-    </div> -->
   </div>
 </template>
 <script>
 export default {
   data() {
     return {
-      companyName: "深圳运捷讯信息系统有限公司",
-      companyPosition: "广州省深圳市南山区",
-      companyNumber: "1354163465416FSDAF",
-      detailPosition: "粤海街道科苑路8号讯美科技广场",
-      legalPerson: "刘戴白",
-      personId: "11014648199134643135",
-      electronicId: "选择文件。。。",
-      timeLimit: "2017-03-03至长期",
-      registeredCapital: "50万",
-      businessLine: "运输",
-      businessLicence:'',
-      frameworkId:'4+65+5WDFSD',
-      frameworkDeadline:'2017-03-03至长期',
-      frameworkLicence:'',
-      taxpayerID:'43154JJKJL',
-      taxLicence:'',
-      taxpayerIdLicence:'',
-      bankUsername:'深圳运捷讯信息系统有限公司',
-      bankAccountNumber:'164163132135',
-      bankName:'民生银行',
-      bankAddress:'广东省深圳市南山区',
-      bankLicence:'',
-      contactName:'张杰',
-      contactPhonenumber:'135464165',
-      contactEmail:'33565@qq.com'
+      pic: require("@/assets/reset_icon.png"),
+      info1: {
+        firmName: {
+          name: "公司名称",
+          value: "深圳云捷讯信息系统有限公司（已注册）"
+        },
+        number: {
+          name: "营业执照号",
+          value: "1283929389389EDCA"
+        },
+        people: {
+          name: "法人代表",
+          value: "讯沙紫"
+        },
+        id: {
+          name: "身份证号码",
+          value: "003920399203920392"
+        },
+        id_pic: {
+          name: "身份证电子版",
+          value: false
+        },
+        code: {
+          name: "组织机构代码",
+          value: "14384939399EJFJFJ"
+        },
+        time: {
+          name: "组织机构代码证有效期 ",
+          value: "2017-02-03 至 长期"
+        },
+        org_pic: {
+          name: "组织机构代码证电子版",
+          value: false
+        }
+      },
+      info2: {
+        place: {
+          name: "营业执照所在地",
+          value: "广东省深圳市宝安区"
+        },
+        address: {
+          name: "详细地址",
+          value: "粤海啥看的咳咳咳额三生三世"
+        },
+        time: {
+          name: "营业期限",
+          value: "2017-02-03 至 长期"
+        },
+        bankroll: {
+          name: "注册资金",
+          value: "2万"
+        },
+        range: {
+          name: "经营范围",
+          value: "系统集成，软件开发，系统集成，软件开发系统集成，软件开发系统集成，软件开发系统集成，软件开发系统集成，软件开发"
+        },
+        org_pic: {
+          name: "营业执照电子版 ",
+          value: false
+        }
+      },
+      tax1: {
+        num: {
+          name: "纳税人识别号",
+          value: "188382829ED3839"
+        }
+      },
+      tax2: {
+        book: {
+          name: "税务登记证电子版",
+          value: false
+        },
+        common: {
+          name: "一般纳税人资格证电子版",
+          value: false
+        }
+      },
+      paper1: {
+        bankNamw: {
+          name: "银行开户名",
+          value: "国有支付清算信息科技有限公司"
+        },
+        bankCode: {
+          name: "开户银行支行名称",
+          value: "1283929389389EDCA"
+        },
+        pic: {
+          name: "银行开户许可证电子版 ",
+          value: false
+        }
+      },
+      paper2: {
+        account: {
+          name: "公司银行账户",
+          value: "12393939392929340403029"
+        },
+        address: {
+          name: "开户银行支行所在地",
+          value: "广东省深圳市宝安区"
+        }
+      },
+      msg1: {
+        myName: {
+          name: "联系人姓名",
+          value: "筛子"
+        }
+      },
+      msg2: {
+        tel: {
+          name: "联系人手机",
+          value: "102930293029"
+        },
+        email: {
+          name: "联系人邮箱",
+          value: "2929393@11.com"
+        }
+      }
     };
   },
-  methods: {
-    handleAvatarSuccess(res, file) {
-      this.identitypic = URL.createObjectURL(file.raw);
-    },
-    handleAvatarSuccess1(res, file) {
-      this.identitypic = URL.createObjectURL(file.raw);
-    },
-    handleAvatarSuccess2(res, file) {
-      this.identitypic = URL.createObjectURL(file.raw);
-    },
-    handleAvatarSuccess3(res, file) {
-      this.identitypic = URL.createObjectURL(file.raw);
-    },
-    handleAvatarSuccess4(res, file) {
-      this.identitypic = URL.createObjectURL(file.raw);
-    },
-    handleAvatarSuccess5(res, file) {
-      this.identitypic = URL.createObjectURL(file.raw);
-    },
-    beforeAvatarUpload(file) {
-      const isJPG = file.type === "image/jpeg";
-      const isLt2M = file.size / 1024 / 1024 < 2;
-
-      if (!isJPG) {
-        this.$message.error("上传头像图片只能是 JPG 格式!");
+  methods: {},
+  mounted() {
+    // obj: 需要设置数据的对象或者数组
+    // dataJson: 可读取json数据，直接属性对应coding映射关系
+    // objKey：对象中需要设置的值（其中，对象的name表示一对一映射关系）// 数组中的多对多映射关系的对象;
+    function setMapped(obj, dataJson, objKey) {
+      if (obj instanceof Array) {
+        let arr = obj;
+        for (let i = 0; i < arr.length; i++) {
+          var coding = arr[i][objKey] || arr[i]["coding"];
+          for (let name in coding) {
+            arr[i][name] = dataJson[coding[name]];
+          }
+        }
+      } else {
+        for (let name in obj) {
+          var coding = name;
+          coding && dataJson[coding] && (obj[name][objKey] = dataJson[coding]);
+        }
       }
-      if (!isLt2M) {
-        this.$message.error("上传头像图片大小不能超过 2MB!");
-      }
-      return isJPG && isLt2M;
-    },
-    beforeAvatarUpload1(file) {
-      const isJPG = file.type === "image/jpeg";
-      const isLt2M = file.size / 1024 / 1024 < 2;
-
-      if (!isJPG) {
-        this.$message.error("上传头像图片只能是 JPG 格式!");
-      }
-      if (!isLt2M) {
-        this.$message.error("上传头像图片大小不能超过 2MB!");
-      }
-      return isJPG && isLt2M;
-    },
-    beforeAvatarUpload2(file) {
-      const isJPG = file.type === "image/jpeg";
-      const isLt2M = file.size / 1024 / 1024 < 2;
-
-      if (!isJPG) {
-        this.$message.error("上传头像图片只能是 JPG 格式!");
-      }
-      if (!isLt2M) {
-        this.$message.error("上传头像图片大小不能超过 2MB!");
-      }
-      return isJPG && isLt2M;
-    },
-    beforeAvatarUpload3(file) {
-      const isJPG = file.type === "image/jpeg";
-      const isLt2M = file.size / 1024 / 1024 < 2;
-
-      if (!isJPG) {
-        this.$message.error("上传头像图片只能是 JPG 格式!");
-      }
-      if (!isLt2M) {
-        this.$message.error("上传头像图片大小不能超过 2MB!");
-      }
-      return isJPG && isLt2M;
-    },
-    beforeAvatarUpload4(file) {
-      const isJPG = file.type === "image/jpeg";
-      const isLt2M = file.size / 1024 / 1024 < 2;
-
-      if (!isJPG) {
-        this.$message.error("上传头像图片只能是 JPG 格式!");
-      }
-      if (!isLt2M) {
-        this.$message.error("上传头像图片大小不能超过 2MB!");
-      }
-      return isJPG && isLt2M;
-    },
-    beforeAvatarUpload5(file) {
-      const isJPG = file.type === "image/jpeg";
-      const isLt2M = file.size / 1024 / 1024 < 2;
-
-      if (!isJPG) {
-        this.$message.error("上传头像图片只能是 JPG 格式!");
-      }
-      if (!isLt2M) {
-        this.$message.error("上传头像图片大小不能超过 2MB!");
-      }
-      return isJPG && isLt2M;
     }
   }
 };
 </script>
 <style lang="scss" scoped>
+@mixin header {
+  height: 61px;
+  align-items: center;
+  padding-left: 20px;
+  color: #b3b3b3;
+  h4 {
+    font-weight: normal;
+  }
+}
+.is-flex {
+  display: flex;
+}
+
+ul {
+  padding-left: 0;
+}
+
 .company-info {
-  padding: 30px 100px;
-  .header {
+  width: 90%;
+  .el-icon-picture {
+    vertical-align: middle;
+  }
+}
+$orange: #fccf00;
+.header {
+  $bth-height: 12px;
+  padding-right: 50px;
+  @include header;
+  align-items: center;
+  justify-content: space-between;
+  .info {
+    flex: 1;
+  }
+  .btn {
+    margin: 0 10px;
+    padding: 2px 10px;
+    line-height: $bth-height;
+    background: $orange;
+    border-radius: 3px;
+    color: #feffe1;
+    box-shadow: 2px 3px 10px 1px rgba(0, 0, 0, 0.1);
+  }
+}
+$font-height: 18px;
+@mixin font {
+  text-align: justify;
+  height: $font-height;
+  overflow: hidden;
+  &::after {
     width: 100%;
-    height: 45px;
-    background-color: #f9f9f9;
-    position: relative;
-    color: #f4c900;
-    line-height: 45px;
-    padding-left: 20px;
-    &:after {
-      content: "";
-      display: block;
-      position: absolute;
-      width: 4px;
-      height: 100%;
-      background-color: #f4c900;
-      top: 0;
-      left: 0;
-    }
+    height: 0;
+    margin: 0;
+    display: inline-block;
+    overflow: hidden;
+    content: "";
   }
-  > div {
-    display: flex;
-    margin: 20px 0;
-    > div {
-      &:first-child {
-        width: 170px;
-        height: 40px;
+}
+
+.main {
+  $gap: 10px;
+  padding: $gap;
+  .card {
+    $radius: 3px;
+    margin-bottom: $gap*2;
+    .card-head {
+      align-items: center;
+      padding-left: 10px;
+      color: white;
+      height: 30px;
+      background: $orange;
+      border-radius: $radius;
+    }
+    .card-body {
+      justify-content: space-between;
+      border-radius: $radius;
+      box-shadow: 0px 1px 10px 2px rgba(0, 0, 0, 0.1);
+      color: #888;
+      font-size: $font-height - 3;
+      li {
+        margin-bottom: 10px;
+      }
+      .wrap {
+        display: inline-block;
         text-align: right;
-        line-height: 40px;
-        padding-right: 20px;
+        min-width: 220px;
+        .name {
+          display: inline-block;
+          min-width: 100px;
+          @include font;
+        }
+        .info-beteen-font {
+          min-width: 105px; // 公司基本信息第二栏名字两边对齐布局，宽度控制
+        }
+        .dot {
+          margin: 0 20px 0 10px;
+        }
       }
-      &:last-child {
-        flex: 1;
+      .value {
+        display: inline-block;
+        vertical-align: text-bottom;
       }
-    }
-  }
-  .electronic-id,.business-licence,.framework-licence,.tax-licence,.taxpayer-id-licence,.bank-licence {
-    > div {
-      &:last-child {
-        display: flex;
-        .el-button {
-          margin-left: 10px;
+
+      .card-left {
+        margin-left: 20px;
+        .value {
+          max-width: 300px;
+        }
+      }
+
+      .card-right {
+        margin-right: 50px;
+        .value {
+          max-width: 280px;
+          min-width: 280px;
         }
       }
     }
   }
-  .save{
-    text-align: center;
-    .el-button{
-      margin:30px auto 0;
-    }
-  }
+}
+
+.info-justify-font {
+  display: flex;
+  align-items: center;
 }
 </style>
