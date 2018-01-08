@@ -514,7 +514,7 @@
           <div class="box left">
             <h3>固定费用</h3>
             <div v-for="list in productPriceList">
-              <div class="key">{{list.name}}</div>
+              <div class="key">{{list.remark}}</div>
               <div class="value">¥{{list.price}}</div>
             </div>
             <div class="total">
@@ -658,7 +658,7 @@
               </div>
               <div>
                 <span class="key">支付渠道：</span>
-                <span class="value"></span>
+                <span class="value">新生支付</span>
               </div>
             </div>
           </div>
@@ -953,7 +953,7 @@ export default {
             type: 'success'
           });
           this.getOrderDetail();
-        }else if(data.data.code === -1&&data.data.msg === "登录超时"){
+        }else if(data.data.code === -1&&data.data.msg === "登陆超时"){
           this.$notify.error({
             title: '错误',
             message: '登录已失效，请重新登录！'
@@ -986,7 +986,7 @@ export default {
               type: 'success'
             });
             this.getOrderDetail();
-          }else if(data.data.code === -1&&data.data.msg === "登录超时"){
+          }else if(data.data.code === -1&&data.data.msg === "登陆超时"){
             this.$notify.error({
               title: '错误',
               message: '登录已失效，请重新登录！'
@@ -1027,7 +1027,7 @@ export default {
           });
           this.getOrderDetail();
           this.serverInfoModel.airtrans = false;
-        }else if(data.data.code === -1&&data.data.msg === "登录超时"){
+        }else if(data.data.code === -1&&data.data.msg === "登陆超时"){
           this.$notify.error({
             title: '错误',
             message: '登录已失效，请重新登录！'
@@ -1079,7 +1079,7 @@ export default {
           });
           this.getOrderDetail();
           this.reviewOfGoods = false;
-        }else if(data.data.code === -1&&data.data.msg === "登录超时"){
+        }else if(data.data.code === -1&&data.data.msg === "登陆超时"){
           this.$notify.error({
             title: '错误',
             message: '登录已失效，请重新登录！'
@@ -1108,7 +1108,7 @@ export default {
           });
           this.getOrderDetail();
           this.costPay = false;
-        }else if(data.data.code === -1&&data.data.msg === "登录超时"){
+        }else if(data.data.code === -1&&data.data.msg === "登陆超时"){
           this.$notify.error({
             title: '错误',
             message: '登录已失效，请重新登录！'
@@ -1146,7 +1146,7 @@ export default {
           });
           this.getOrderDetail();
           this.costAdd = false;
-        }else if(data.data.code === -1&&data.data.msg === "登录超时"){
+        }else if(data.data.code === -1&&data.data.msg === "登陆超时"){
           this.$notify.error({
             title: '错误',
             message: '登录已失效，请重新登录！'

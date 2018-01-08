@@ -363,7 +363,7 @@ export default {
             this.trackListDate=arr1;
             this.trackListData=arr2;
           }
-        }else if(data.data.code === -1&&data.data.msg === "登录超时"){
+        }else if(data.data.code === -1&&data.data.msg === "登陆超时"){
           this.$notify.error({
             title: '错误',
             message: '登录已失效，请重新登录！'
@@ -424,7 +424,7 @@ export default {
             });
             this.dialogFormVisible = false;
             this.loadOrderTrack();
-          }else if(data.data.code === -1&&data.data.msg === "登录超时"){
+          }else if(data.data.code === -1&&data.data.msg === "登陆超时"){
             this.$notify.error({
               title: '错误',
               message: '登录已失效，请重新登录！'
@@ -453,7 +453,7 @@ export default {
             });
             this.dialogFormVisible = false;
             this.loadOrderTrack();
-          }else if(data.data.code === -1&&data.data.msg === "登录超时"){
+          }else if(data.data.code === -1&&data.data.msg === "登陆超时"){
             this.$notify.error({
               title: '错误',
               message: '登录已失效，请重新登录！'
@@ -487,7 +487,7 @@ export default {
             });
             this.dialogFormVisible = false;
             this.loadOrderTrack();
-          }else if(data.data.code === -1&&data.data.msg === "登录超时"){
+          }else if(data.data.code === -1&&data.data.msg === "登陆超时"){
             this.$notify.error({
               title: '错误',
               message: '登录已失效，请重新登录！'
