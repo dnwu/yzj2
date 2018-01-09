@@ -3,17 +3,17 @@
     <div class="is-flex header">
       <span class="info">企业信息</span>
       <span class="btn" @click="edit = true">完善企业信息</span>
-      <span class="btn" @click="edit = false">企业注册申请</span>
+      <span class="btn" @click="submit">企业注册申请</span>
     </div>
     <div class="main">
       <section class="card">
         <header class="is-flex card-head">公司基本信息</header>
         <main class="is-flex card-body">
           <ul class="card-left">
-            <my-li :info="info1" :edit="edit" :width="widthLeft"></my-li>
+            <my-li ref="info1" :info="info1" :edit="edit" :width="widthLeft"></my-li>
           </ul>
           <ul class="card-right">
-            <my-li :info="info2" :edit="edit" :width="widthRight"></my-li>
+            <my-li ref="info2" :info="info2" :edit="edit" :width="widthRight"></my-li>
           </ul>
         </main>
       </section class="card">
@@ -21,10 +21,10 @@
         <header class="is-flex card-head">公司税务登记证</header>
         <main class="is-flex card-body">
           <ul class="card-left info-justify-font">
-            <my-li :info="tax1" :edit="edit" :width="widthLeft"></my-li>
+            <my-li ref="tax1" :info="tax1" :edit="edit" :width="widthLeft"></my-li>
           </ul>
           <ul class="card-right">
-            <my-li :info="tax2" :edit="edit" :width="widthRight"></my-li>
+            <my-li ref="tax2" :info="tax2" :edit="edit" :width="widthRight"></my-li>
           </ul>
         </main>
       </section class="card">
@@ -32,10 +32,10 @@
         <header class="is-flex card-head">开户银行许可证</header>
         <main class="is-flex card-body">
           <ul class="card-left">
-            <my-li :info="paper1" :edit="edit" :width="widthLeft"></my-li>
+            <my-li ref="paper1" :info="paper1" :edit="edit" :width="widthLeft"></my-li>
           </ul>
           <ul class="card-right">
-            <my-li :info="paper2" :edit="edit" :width="widthRight"></my-li>
+            <my-li ref="paper2"  :info="paper2" :edit="edit" :width="widthRight"></my-li>
           </ul>
         </main>
       </section class="card">
@@ -43,10 +43,10 @@
         <header class="is-flex card-head">联系人信息</header>
         <main class="is-flex card-body">
           <ul class="card-left info-justify-font">
-            <my-li class="test" :info="msg1" :edit="edit" :width="widthLeft"></my-li>
+            <my-li ref="msg1" :info="msg1" :edit="edit" :width="widthLeft"></my-li>
           </ul>
           <ul class="card-right">
-            <my-li :info="msg2" :edit="edit" :width="widthRight"></my-li>
+            <my-li ref="msg2" :info="msg2" :edit="edit" :width="widthRight"></my-li>
           </ul>
         </main>
       </section class="card">
@@ -181,7 +181,24 @@ export default {
       }
     };
   },
-  methods: {},
+  methods: {
+    submit() {
+      this.edit = false;
+      var arr = [
+        "info1",
+        "info2",
+        "tax1",
+        "tax2",
+        "paper1",
+        "paper2",
+        "msg1",
+        "msg2"
+      ];
+      for (var i = 0; i < arr.length; i++) {
+        this.$refs[arr[i]].submitUpload();
+      }
+    }
+  },
   mounted() {
     // obj: 需要设置数据的对象或者数组
     // dataJson: 可读取json数据，直接属性对应coding映射关系

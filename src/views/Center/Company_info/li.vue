@@ -1,6 +1,6 @@
 <template>
 <div class="my-li">
-    <li v-for="obj in info">
+    <li v-for="(obj,name) in info">
         <div class="wrap">
         <span class="name" v-text="obj.name"></span>
         <span class="dot">:</span>
@@ -39,7 +39,10 @@ export default {
       this.widthStyle = `width:${this.width}px`;
     },
     submitUpload() {
-      this.$refs.upload.submit();
+      var arrName = Object.keys(this.info);
+      for (var i = 0; i < arrName.length; i++) {
+        this.$refs[arrName[i]] && this.$refs[arrName[i]][0].submit();
+      }
     },
     handleRemove(file, fileList) {
       console.log(file, fileList);
