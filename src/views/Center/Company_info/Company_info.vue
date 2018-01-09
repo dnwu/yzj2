@@ -2,32 +2,18 @@
   <div class="company-info">
     <div class="is-flex header">
       <span class="info">企业信息</span>
-      <span class="btn">完善企业信息</span>
-      <span class="btn">企业注册申请</span>
+      <span class="btn" @click="edit = true">完善企业信息</span>
+      <span class="btn" @click="edit = false">企业注册申请</span>
     </div>
     <div class="main">
       <section class="card">
         <header class="is-flex card-head">公司基本信息</header>
         <main class="is-flex card-body">
           <ul class="card-left">
-            <li v-for="obj in info1">
-              <div class="wrap">
-                <span class="name" v-text="obj.name"></span>
-                <span class="dot">:</span>
-              </div>
-              <span class="value" v-text="obj.value" v-if="obj.value"></span>
-              <span v-else class="value"><i class="el-icon-picture"></i></span>
-            </li>
+            <my-li :info="info1" :edit="edit" :width="widthLeft"></my-li>
           </ul>
           <ul class="card-right">
-            <li v-for="obj in info2">
-              <div class="wrap">
-                <span class="name info-beteen-font" v-text="obj.name"></span>
-                <span class="dot">:</span>
-              </div>
-              <span class="value" v-text="obj.value" v-if="obj.value"></span>
-              <span v-else class="value"><i class="el-icon-picture"></i></span>
-            </li>
+            <my-li :info="info2" :edit="edit" :width="widthRight"></my-li>
           </ul>
         </main>
       </section class="card">
@@ -35,24 +21,10 @@
         <header class="is-flex card-head">公司税务登记证</header>
         <main class="is-flex card-body">
           <ul class="card-left info-justify-font">
-            <li v-for="obj in tax1">
-              <div class="wrap">
-                <span class="name" v-text="obj.name"></span>
-                <span class="dot">:</span>
-              </div>
-              <span class="value" v-text="obj.value" v-if="obj.value"></span>
-              <span v-else class="value"><i class="el-icon-picture"></i></span>
-            </li>
+            <my-li :info="tax1" :edit="edit" :width="widthLeft"></my-li>
           </ul>
           <ul class="card-right">
-            <li v-for="obj in tax2">
-              <div class="wrap">
-                <span class="name" v-text="obj.name"></span>
-                <span class="dot">:</span>
-              </div>
-              <span class="value" v-text="obj.value" v-if="obj.value"></span>
-              <span v-else class="value"><i class="el-icon-picture"></i></span>
-            </li>
+            <my-li :info="tax2" :edit="edit" :width="widthRight"></my-li>
           </ul>
         </main>
       </section class="card">
@@ -60,49 +32,21 @@
         <header class="is-flex card-head">开户银行许可证</header>
         <main class="is-flex card-body">
           <ul class="card-left">
-            <li v-for="obj in paper1">
-              <div class="wrap">
-                <span class="name" v-text="obj.name"></span>
-                <span class="dot">:</span>
-              </div>
-              <span class="value" v-text="obj.value" v-if="obj.value"></span>
-              <span v-else class="value"><i class="el-icon-picture"></i></span>
-            </li>
+            <my-li :info="paper1" :edit="edit" :width="widthLeft"></my-li>
           </ul>
           <ul class="card-right">
-            <li v-for="obj in paper2">
-              <div class="wrap">
-                <span class="name" v-text="obj.name"></span>
-                <span class="dot">:</span>
-              </div>
-              <span class="value" v-text="obj.value" v-if="obj.value"></span>
-              <span v-else class="value"><i class="el-icon-picture"></i></span>
-            </li>
+            <my-li :info="paper2" :edit="edit" :width="widthRight"></my-li>
           </ul>
         </main>
       </section class="card">
       <section class="card card-two">
-        <header class="card-head">联系人信息</header>
+        <header class="is-flex card-head">联系人信息</header>
         <main class="is-flex card-body">
           <ul class="card-left info-justify-font">
-            <li v-for="obj in msg1">
-              <div class="wrap">
-                <span class="name" v-text="obj.name"></span>
-                <span class="dot">:</span>
-              </div>
-              <span class="value" v-text="obj.value" v-if="obj.value"></span>
-              <span v-else class="value"><i class="el-icon-picture"></i></span>
-            </li>
+            <my-li class="test" :info="msg1" :edit="edit" :width="widthLeft"></my-li>
           </ul>
           <ul class="card-right">
-            <li v-for="obj in msg2">
-              <div class="wrap">
-                <span class="name" v-text="obj.name"></span>
-                <span class="dot">:</span>
-              </div>
-              <span class="value" v-text="obj.value" v-if="obj.value"></span>
-              <span v-else class="value"><i class="el-icon-picture"></i></span>
-            </li>
+            <my-li :info="msg2" :edit="edit" :width="widthRight"></my-li>
           </ul>
         </main>
       </section class="card">
@@ -110,9 +54,14 @@
   </div>
 </template>
 <script>
+import Li from "./li";
 export default {
+  components: { "my-li": Li },
   data() {
     return {
+      edit: false,
+      widthLeft: 300,
+      widthRight: 280,
       pic: require("@/assets/reset_icon.png"),
       info1: {
         firmName: {
@@ -292,7 +241,7 @@ $orange: #fccf00;
   }
   .btn {
     margin: 0 10px;
-    padding: 2px 10px;
+    padding: 4px 10px;
     line-height: $bth-height;
     background: $orange;
     border-radius: 3px;
@@ -335,44 +284,13 @@ $font-height: 18px;
       box-shadow: 0px 1px 10px 2px rgba(0, 0, 0, 0.1);
       color: #888;
       font-size: $font-height - 3;
-      li {
-        margin-bottom: 10px;
-      }
-      .wrap {
-        display: inline-block;
-        text-align: right;
-        min-width: 220px;
-        .name {
-          display: inline-block;
-          min-width: 100px;
-          @include font;
-        }
-        .info-beteen-font {
-          min-width: 105px; // 公司基本信息第二栏名字两边对齐布局，宽度控制
-        }
-        .dot {
-          margin: 0 20px 0 10px;
-        }
-      }
-      .value {
-        display: inline-block;
-        vertical-align: text-bottom;
-      }
+    }
+    .card-left {
+      margin-left: 20px;
+    }
 
-      .card-left {
-        margin-left: 20px;
-        .value {
-          max-width: 300px;
-        }
-      }
-
-      .card-right {
-        margin-right: 50px;
-        .value {
-          max-width: 280px;
-          min-width: 280px;
-        }
-      }
+    .card-right {
+      margin-right: 50px;
     }
   }
 }
