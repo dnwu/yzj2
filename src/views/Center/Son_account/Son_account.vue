@@ -50,7 +50,7 @@
               <span class="wide8 is-flex jst-between">
                 <img src="../../../assets/son_modify.png" alt="">
                 <img src="../../../assets/son_state_1.png" alt="" v-show="!list.state" @click="cutState(index)">
-                <i class="el-icon-close" v-show="list.state" @click="cutState(index)"></i>
+                <img src="../../../assets/son_stop.png" alt="" v-show="list.state" @click="cutState(index)">
                 <img src="../../../assets/son_delete.png" alt="">
               </span>
             </li>
