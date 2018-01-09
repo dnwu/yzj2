@@ -57,8 +57,8 @@
         </main>
       </section class="card">
       <section class="card">
-        <header class="card-head">开户银行许可证</header>
-        <main class="card-body">
+        <header class="is-flex card-head">开户银行许可证</header>
+        <main class="is-flex card-body">
           <ul class="card-left">
             <li v-for="obj in paper1">
               <div class="wrap">
