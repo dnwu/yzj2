@@ -38,15 +38,30 @@
       </div>
       <div class="border border-left"></div>
       <div class="border border-right"></div>
-      <img class="edit" src="../../../assets/son_modify.png" alt="">
+      <img class="edit" src="../../../assets/son_modify.png"  @click="dialogVisible = true" alt="">
     </div>
   </section>
+
+  <div v-show="dialogVisible" class="dialog">
+      <header class="dialog-header is-flex jst-between ali-center">
+        <div class="dialog-title">
+          <img src="../../../assets/ticket_info_modify.png" alt=""> 开票信息修改
+        </div>
+        <i class="el-icon-close" @click="dialogVisible = false"></i>
+      </header>
+      <main>
+      </main>
+      <footer>
+        <div class="btn-save">保存</div>
+      </footer>
+  </div>
 </div>
 </template>
 <script>
 export default {
   data() {
     return {
+      dialogVisible: true,
       info: {
         name: "深圳运捷讯信息系统有限公司",
         bank: "中国建设银行",
@@ -123,6 +138,43 @@ export default {
     .value {
       width: 400px;
     }
+  }
+}
+$yellow: #fccf00;
+.dialog {
+  position: fixed;
+  padding-bottom: 40px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 1000px;
+  background: white;
+  box-shadow: 0px 2px 8px -1px rgba(0, 0, 0, 0.1);
+  .dialog-header {
+    background: $yellow;
+    padding: 10px 20px;
+    color: white;
+  }
+  .row {
+    height: 25px;
+    .name {
+      display: inline-block;
+      width: 90px;
+      margin-right: 50px;
+    }
+    .value {
+      min-width: 200px;
+    }
+  }
+  .btn-save {
+    padding: 2px 0;
+    width: 180px;
+    height: 20px;
+    margin: 0 auto;
+    color: white;
+    background: $yellow;
+    text-align: center;
+    box-shadow: 1px 2px 10px 2px rgba(0, 0, 0, 0.1);
   }
 }
 </style>
