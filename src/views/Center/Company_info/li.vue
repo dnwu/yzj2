@@ -5,11 +5,11 @@
         <span class="name" v-text="obj.name"></span>
         <span class="dot">:</span>
         </div>
-        <input :style="getWitdthStyle()" class="value" v-text="obj.value" v-if="obj.value !== false" v-show="edit" v-model="obj.value"></input>
-        <span :style="getWitdthStyle()" class="value" v-text="obj.value" v-if="obj.value !== false" v-show="!edit"></span>
-        <span :style="getWitdthStyle()" v-if="obj.value === false" v-show="!edit" class="value"><i class="el-icon-picture"></i></span>
+        <input :style="widthStyle" class="value" v-text="obj.value" v-if="obj.value !== false" v-show="edit" v-model="obj.value"></input>
+        <span :style="widthStyle" class="value" v-text="obj.value" v-if="obj.value !== false" v-show="!edit"></span>
+        <span :style="widthStyle" v-if="obj.value === false" v-show="!edit" class="value"><i class="el-icon-picture"></i></span>
         <el-upload
-            :style="getWitdthStyle()"
+            :style="widthStyle"
             v-if="obj.value === false"
             v-show="edit"
             :limit="1"
@@ -30,11 +30,13 @@
 export default {
   props: ["info", "edit", "width"],
   data() {
-    return {};
+    return {
+      widthStyle: ""
+    };
   },
   methods: {
     getWitdthStyle() {
-      return `width:${this.width}px`;
+      this.widthStyle = `width:${this.width}px`;
     },
     submitUpload() {
       this.$refs.upload.submit();
@@ -45,6 +47,9 @@ export default {
     handlePreview(file) {
       console.log(file);
     }
+  },
+  mounted() {
+    this.getWitdthStyle();
   }
 };
 </script>
