@@ -32,7 +32,7 @@
           <span class="wide wide6">身份证</span>
           <span class="wide wide7">创建时间</span>
           <span class="wide wide8">
-            <span class="add" @click="dialogVisible = true">+</span>
+            <img src="../../../assets/son_add.png" alt="" @click="dialogVisible = true">
           </span>
         </div>
         <div class="contain">
@@ -48,10 +48,10 @@
               <span class="wide wide6" v-text="list.id"></span>
               <span class="wide wide7" v-text="list.time"></span>
               <span class="wide8 is-flex jst-between">
-                <img src="../../../assets/anew_icon.png" alt="">
-                <i class="el-icon-caret-right" v-show="!list.state" @click="cutState(index)"></i>
+                <img src="../../../assets/son_modify.png" alt="">
+                <img src="../../../assets/son_state_1.png" alt="" v-show="!list.state" @click="cutState(index)">
                 <i class="el-icon-close" v-show="list.state" @click="cutState(index)"></i>
-                <img src="../../../assets/delete_icon.png" alt="">
+                <img src="../../../assets/son_delete.png" alt="">
               </span>
             </li>
           </ul>
