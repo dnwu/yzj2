@@ -588,12 +588,17 @@ export default {
     },
     initFormData(item) {
       //把选中的订单信息中的第一个item赋值给订舱信息
+      console.log(item);
       if (item.length == 0) {
         this.bodyformData.startPort = "";
         this.bodyformData.endPort = "";
+        this.bodyformData.planenum = "";
+        this.bodyformData.data = "";
       } else {
         this.bodyformData.startPort = item[0].item.cityStart;
         this.bodyformData.endPort = item[0].item.cityEnd;
+        this.bodyformData.planenum = item[0].item.flightNumber;
+        this.bodyformData.data = item[0].item.flightDate;
       }
     },
     getOrderList(pageIndex, orderstatus) {

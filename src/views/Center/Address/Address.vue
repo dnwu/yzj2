@@ -263,7 +263,8 @@ export default {
       newAddressList:[],
       storeRemoveAddress: [], // 储存要删除地址的id和type
       removeAddressModel: false, // 删除地址模态框控制显示
-      removeAddressNo: 0 //删除地址的个数
+      removeAddressNo: 0, //删除地址的个数
+      counter: 0,         //计数器，计算删除地址成功的个数
     };
   },
   mounted() {
@@ -464,15 +465,8 @@ export default {
               }, 2000);
             }
             if (data.data.code == 1) {
-              this.$message({
-                message: `成功删除${this.removeAddressNo}条地址`,
-                type: "success"
-              });
-              this.editStatus = true;
-              this.newAddressList = []
-              this.getSendAddressList();
-              this.getReceiveAddressList();
-              this.addressType = 'all'
+              this.counter++
+
             } else {
               this.editStatus = true;
               this.$message({
@@ -619,6 +613,26 @@ export default {
   },
   computed: {
     ...mapGetters(["id", "token"]),
+  },
+  watch: {
+    counter:{
+      handler(newValue, oldValue) {
+　　　　console.log(newValue)
+        if(newValue == this.removeAddressNo){
+          this.counter = 0
+          this.$message({
+            message: `成功删除${this.removeAddressNo}条地址`,
+            type: "success"
+          });
+          this.editStatus = true;
+          this.newAddressList = []
+          this.getSendAddressList();
+          this.getReceiveAddressList();
+          this.addressType = 'all'
+        }
+　　　},
+　　　deep: true
+    }
   }
 };
 </script>

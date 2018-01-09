@@ -69,7 +69,7 @@
                 <span class="nav-select-text">航空运输</span>
                 <div class="nav-select-detail">
                   <div class="detail-list1 detail-list"><span class="detail-name">航空运费</span><span class="detail-cost">{{productSearchResult.airfreightDTO.airfreightCharge}}元/千克</span></div>
-                  <div class="detail-list2 detail-list"><span class="detail-name">燃油附加费</span><span class="detail-cost">{{productSearchResult.airfreightDTO.fuelCharge}}元/千克</span></div>
+                  <div class="detail-list2 detail-list" v-if="productSearchResult.airfreightDTO.fuelCharge != 0"><span class="detail-name">燃油附加费</span><span class="detail-cost">{{productSearchResult.airfreightDTO.fuelCharge}}元/千克</span></div>
                 </div>
                 <!-- 运价申请模态框 -->
 
@@ -266,15 +266,15 @@
 
         </div>
         <div class="right-content-nav" v-if="selectServer.airportStart && airportStartFee != 0">
-          <div class="right-content-cost">
-            <span class="cost-text">始发港交货</span>
-            <span class="cost-number">{{airportStartFee}}元</span>
+          <div class="right-content-cost" v-for="(item,index) in this.selectServer.saveAirportFee.airportStart.priceDTOS" :key="index">
+            <span class="cost-text">{{item.name}}</span>
+            <span class="cost-number">{{item.priceType=='11'?(item.price*searchData.goodsWeight>item.minPrice?item.price*searchData.goodsWeight:item.minPrice):(item.price)}}元</span>
           </div>
         </div>
         <div class="right-content-nav" v-if="selectServer.airportEnd && airportEndFee != 0">
-          <div class="right-content-cost">
-            <span class="cost-text">目的港提货</span>
-            <span class="cost-number">{{airportEndFee}}元</span>
+          <div class="right-content-cost" v-for="(item,index) in this.selectServer.saveAirportFee.airportEnd.priceDTOS" :key="index">
+            <span class="cost-text">{{item.name}}</span>
+            <span class="cost-number">{{item.priceType=='11'?(item.price*searchData.goodsWeight>item.minPrice?item.price*searchData.goodsWeight:item.minPrice):(item.price)}}元</span>
           </div>
         </div>
         <div class="right-content-nav" v-if="selectServer.landStart && landStartGetGoodsFee != 0">
@@ -373,6 +373,9 @@ export default {
         landCarriageProductIds:[], //上门取货，落地配送 路面运输产品ID列表,
         flightRecordId:'',
         landStartGeneral: false, // 上门取货服务类一般服务
+        landStart1Ton: false, // 上门取货服务类一吨金杯车
+        landStart2Ton: false, // 上门取货服务类2吨厢式车
+        landStart3Ton: false, // 上门取货服务类3吨厢式车
         landStartPrice: {
           // 上门取货服务费
           price: "", // 价格
@@ -381,10 +384,10 @@ export default {
           car2DonPrice: "", // 上门取货专车费
           car3DonPrice: "" // 上门取货专车费
         },
-        landStart1Ton: false, // 上门取货服务类一吨金杯车
-        landStart2Ton: false, // 上门取货服务类2吨厢式车
-        landStart3Ton: false, // 上门取货服务类3吨厢式车
         landEndGeneral: false, // 落地配送服务类一般服务
+        landEnd1Ton: false, // 落地配送服务类一吨金杯车
+        landEnd2Ton: false, // 落地配送服务类2吨厢式车
+        landEnd3Ton: false, // 落地配送服务类3吨厢式车
         landEndPrice: {
           // 落地配送上门取货服务费
           price: "", // 落地配送价格
@@ -393,16 +396,17 @@ export default {
           car2DonPrice: "", // 落地配送上门取货专车费
           car3DonPrice: "" // 落地配送上门取货专车费
         },
-        landEnd1Ton: false, // 落地配送服务类一吨金杯车
-        landEnd2Ton: false, // 落地配送服务类2吨厢式车
-        landEnd3Ton: false // 落地配送服务类3吨厢式车
+        saveAirportFee:{},  //储存始发港目的港服务内容以及收费
+        saveBaseServerData:{},  //储存基础服务内容以及收费情况
+        saveLandStartServerData:{},   //储存选择上门取货的服务内容
+        saveLandEndServerData:{},   //储存选择落地配送的服务内容
       },
-      landStartLevel1: "", // 上门取货一级选择value
-      landEndLevel1: "", // 落地配送一级选择value
+      landStartLevel1: "", // 上门取货一级选择value，为index
+      landEndLevel1: "", // 落地配送一级选择value,为index
       landStartLevel2Data: [], // 上门取货二级选择data
-      landStartLevel2: "", // 上门取货二级选择value
+      landStartLevel2: "", // 上门取货二级选择value，为productType
+      landEndLevel2: "", // 落地配送二级选择value，为productType
       landEndLevel2Data: [], // 落地配送二级选择data
-      landEndLevel2: "", // 落地配送二级选择value
       // 控制配送type(一般配送，专车配送)Type1位专车配送 Type2为一般配送
       landStartLevel3ProductType1: false,
       landStartLevel3ProductType2: false,
@@ -417,6 +421,9 @@ export default {
       searchNone: false,
       saveStartLandCarriageSales: {}, // 储存一级选择时候变化后的选择的地区对象,计算价格
       saveEndLandCarriageSales: {}, // 储存一级选择时候变化后的选择的地区对象，计算价格
+
+      controlLandStartServer:false,  //控制上门取货服务是否可以勾选，当选择服务后才可以勾选
+      controlLandEndServer:false,  //控制落地配送服务是否可以勾选，当选择服务后才可以勾选
       controlSubimt: false, // 控制提交按钮的提交
       ControlIncreaseInValueServer: false // 控制增值服务隐藏
     };
@@ -435,6 +442,9 @@ export default {
       });
     },
     landStartLevel1Change() {
+      // 每次点击一级选择的时候重置服务的是否勾选，然后重置controlLandStartServer
+      this.controlLandStartServer = false
+      this.selectServer.landStart = false
       this.setlandStartLevel2Data(this.landStartLevel1);
       // this.setlandStartLevel2Placeholder(this.landStartLevel1);
       this.landStartLevel2 = "";
@@ -444,11 +454,13 @@ export default {
         this.landStartLevel1
       ];
       // 每次变化的时候。重置服务项为false
-      this.landStartGeneral = false
-      this.landStart1Ton = false
-      this.landStart2Ton = false
-      this.landStart3Ton = false
+      this.selectServer.landStartGeneral = false
+      this.selectServer.landStart1Ton = false
+      this.selectServer.landStart2Ton = false
+      this.selectServer.landStart3Ton = false
       // console.log(this.saveStartLandCarriageSales);
+      // 把储存的选择数据也清空
+      this.selectServer.saveLandStartServerData = {}
     },
     landStartLevel2Change() {
       // console.log("landStartLevel2Change", this.landStartLevel2);
@@ -457,12 +469,19 @@ export default {
         this.landStartLevel3ProductType1 = true;
         this.landStartLevel3ProductType2 = false;
         this.selectServer.landStartGeneral = false;
+        this.selectServer.landStart1Ton = true
       } else if (this.landStartLevel2 == 2) {
         // 一般配送
         this.landStartLevel3ProductType1 = false;
         this.landStartLevel3ProductType2 = true;
         this.selectServer.landStartGeneral = true;
+        this.selectServer.landStart1Ton = false
+        this.selectServer.landStart2Ton = false
+        this.selectServer.landStart3Ton = false
       }
+      // 选择二级后，默认勾选服务,然后重置controlLandStartServer
+      this.controlLandStartServer = true
+      this.selectServer.landStart = true
       // 调用计算价格的函数
       this.getLandStartPrice(
         this.saveStartLandCarriageSales,
@@ -471,6 +490,9 @@ export default {
       // console.log(this.selectServer.landStartPrice,this.landStartLevel2);
     },
     landEndLevel1Change() {
+      // 每次点击一级选择的时候重置服务的是否勾选，然后重置controlLandStartServer
+      this.controlLandEndServer = false
+      this.selectServer.landEnd = false
       this.setlandEndLevel2Data(this.landEndLevel1);
       // this.setlandEndLevel2Placeholder(this.landEndLevel1);
       this.landEndLevel2 = "";
@@ -481,10 +503,12 @@ export default {
       ];
       // console.log(this.saveEndLandCarriageSales);
       // 每次变化的时候。重置服务项为false
-      this.landEndGeneral = false
-      this.landEnd1Ton = false
-      this.landEnd2Ton = false
-      this.landEnd3Ton = false
+      this.selectServer.landEndGeneral = false
+      this.selectServer.landEnd1Ton = false
+      this.selectServer.landEnd2Ton = false
+      this.selectServer.landEnd3Ton = false
+      // 把储存的选择数据也清空
+      this.selectServer.saveLandEndServerData = {}
     },
     landEndLevel2Change() {
       // console.log("landEndLevel2Change", this.landEndLevel2);
@@ -493,15 +517,24 @@ export default {
         this.landEndLevel3ProductType1 = true;
         this.landEndLevel3ProductType2 = false;
         this.selectServer.landEndGeneral = false;
+        this.selectServer.landEnd1Ton = true
       } else if (this.landEndLevel2 == 2) {
         // 一般配送
         this.landEndLevel3ProductType1 = false;
         this.landEndLevel3ProductType2 = true;
         this.selectServer.landEndGeneral = true;
+        this.selectServer.landEnd1Ton = false
+        this.selectServer.landEnd2Ton = false
+        this.selectServer.landEnd3Ton = false
+
+
       }
+      // 选择二级后，默认勾选服务,然后重置controlLandEndServer
+      this.controlLandEndServer = true
+      this.selectServer.landEnd = true
       // 调用计算价格的函数
       this.getLandEndPrice(this.saveEndLandCarriageSales, this.landEndLevel2);
-      // console.log(this.selectServer.landEndPrice,this.landEndLevel2);
+      console.log(this.landEndLevel2,this.saveEndLandCarriageSales,this.landEndLevel2);
     },
     setlandStartLevel2Data(index) {
       this.landStartLevel2Data = [];
@@ -560,7 +593,35 @@ export default {
       this.selectServer[type] = true;
     },
     toggleSelect(type) {
-      this.selectServer[type] = !this.selectServer[type];
+      if(type=='airportStart'){
+        this.selectServer[type] = !this.selectServer[type];
+        if(this.selectServer.airportStart){
+          this.selectServer.saveAirportFee.airportStart = this.productSearchResult.airportStart
+        }else{
+          delete this.selectServer.saveAirportFee.airportStart
+        }
+      }
+      if(type=='airportEnd'){
+        this.selectServer[type] = !this.selectServer[type];
+        if(this.selectServer.airportEnd){
+          this.selectServer.saveAirportFee.airportEnd = this.productSearchResult.airportEnd
+        }else{
+          delete this.selectServer.saveAirportFee.airportEnd
+        }
+      }
+      if(type=='landStart'){
+        if(!this.controlLandStartServer){
+          return
+        }
+        this.selectServer[type] = !this.selectServer[type];
+      }
+      if(type=='landEnd'){
+        if(!this.controlLandEndServer){
+          return
+        }
+        this.selectServer[type] = !this.selectServer[type];
+      }
+      console.log(this.selectServer.saveAirportFee);
     },
     startportvalue(data) {
       this.searchData.startPort = data;
@@ -590,10 +651,13 @@ export default {
           weight: this.searchData.goodsWeight
         })
         .then(data => {
-          console.log(data);
+          console.log(data.data.data);
           this.productSearchResult = {};
           if (data.data.code == 1) {
+            // 储存航空货运ID
             this.selectServer.flightRecordId = data.data.data.flightRecordId
+            // 储存基础服务的收费内容
+            this.selectServer.saveBaseServerData = data.data.data.airfreightDTO
             Object.assign(this.productSearchResult, data.data.data);
             // this.productSearchResult =  data.data.data
             this.getResultSuccess = true;
@@ -827,6 +891,9 @@ export default {
             let priceList = ele.list[0];
             this.selectServer.landStartPrice.price = priceList.price;
             this.selectServer.landStartPrice.minPrice = priceList.minPrice;
+
+            // 如果是一般配送的话，把一般配送的收费细节存在this.selectServer.saveLandStartServerData
+            this.selectServer.saveLandStartServerData = priceList
           }
         }
       });
@@ -854,10 +921,44 @@ export default {
             let priceList = ele.list[0];
             this.selectServer.landEndPrice.price = priceList.price;
             this.selectServer.landEndPrice.minPrice = priceList.minPrice;
+
+            // 如果是一般配送的话，把一般配送的收费细节存在this.selectServer.saveLandEndServerData中
+            this.selectServer.saveLandEndServerData = priceList
           }
         }
       });
+    },
+
+    // 这两个函数的主要作用是在选择不同专车服务的时候，设置saveLandStartServerData，saveLandEndServerData
+    setSaveLandStartServerData(type){
+      var landProductTypeDTOS = this.saveStartLandCarriageSales.landProductTypeDTOS
+      landProductTypeDTOS.forEach(ele=>{
+        if(ele.productType==1){
+          let priceList = ele.list;
+          priceList.forEach(e=>{
+            if(e.name == type){
+              // 如果是专车配送的时候，把一般配送的收费细节存在this.selectServer.saveLandStartServerData
+              this.selectServer.saveLandStartServerData = e
+            }
+          })
+        }
+      })
+    },
+    setSaveLandEndServerData(type){
+      var landProductTypeDTOS = this.saveEndLandCarriageSales.landProductTypeDTOS
+      landProductTypeDTOS.forEach(ele=>{
+        if(ele.productType==1){
+          let priceList = ele.list;
+          priceList.forEach(e=>{
+            if(e.name == type){
+              // 如果是专车配送的时候，把一般配送的收费细节存在this.selectServer.saveLandStartServerData
+              this.selectServer.saveLandEndServerData = e
+            }
+          })
+        }
+      })
     }
+
   },
   computed: {
     formatPlaneData(){
@@ -892,19 +993,25 @@ export default {
     // 计算配送费的显示价格
     getLandStartCarPrice() {
       if (this.selectServer.landStart1Ton) {
+        this.setSaveLandStartServerData("1吨金杯车")
         return this.selectServer.landStartPrice.car1DonPrice;
       } else if (this.selectServer.landStart2Ton) {
+        this.setSaveLandStartServerData("2吨厢式货车")
         return this.selectServer.landStartPrice.car2DonPrice;
       } else if (this.selectServer.landStart3Ton) {
+        this.setSaveLandStartServerData("3吨厢式货车")
         return this.selectServer.landStartPrice.car3DonPrice;
       }
     },
     getLandEndCarPrice() {
       if (this.selectServer.landEnd1Ton) {
+        this.setSaveLandEndServerData("1吨金杯车")
         return this.selectServer.landEndPrice.car1DonPrice;
       } else if (this.selectServer.landEnd2Ton) {
+        this.setSaveLandEndServerData("2吨厢式货车")
         return this.selectServer.landEndPrice.car2DonPrice;
       } else if (this.selectServer.landEnd3Ton) {
+        this.setSaveLandEndServerData("3吨厢式货车")
         return this.selectServer.landEndPrice.car3DonPrice;
       }
     },
@@ -914,8 +1021,13 @@ export default {
     airTransFee() {
       if (this.getResultSuccess) {
         let totalUnivalent = this.productSearchResult.airfreightDTO.airfreightCharge;
+        let minAirfreightCharge = this.productSearchResult.airfreightDTO.minAirfreightCharge;
         let totalWeight = parseFloat(this.searchData.goodsWeight);
-        return parseFloat(totalUnivalent).mul(totalWeight);
+        if(parseFloat(totalUnivalent).mul(totalWeight)>minAirfreightCharge){
+          return parseFloat(totalUnivalent).mul(totalWeight);
+        }else{
+          return minAirfreightCharge;
+        }
       } else {
         return 0;
       }
@@ -1541,12 +1653,16 @@ export default {
     }
     .wave{
       position: absolute;
-      bottom: -15px;
+      z-index: 99999;
+      bottom: 0px;
       left:0;
       width: 300px;
       height: 15px;
-      background: linear-gradient(45deg,#F9F9F9 0%,#F9F9F9 50%,#fff 50%,#fff 100%);
-      background-size: 15px 15px;
+      background-image: -webkit-gradient(linear,50% 0,0 100%,from(transparent), color-stop(.5,transparent),color-stop(.5,#e0e0e0),to(#e0e0e0)),
+                        -webkit-gradient(linear,50% 0,100% 100%,from(transparent), color-stop(.5,transparent),color-stop(.5,#e0e0e0),to(#e0e0e0));
+      background-size: 20px 10px;
+      background-repeat:repeat-x;
+      background-position:0 100%;
     }
     .confirm {
       position: absolute;

@@ -236,7 +236,7 @@
             <span class="name-nav">货物重量</span>
             <span class="name-text">
               <el-form-item prop="weight">
-                <el-input size="mini" v-model="goodsInfo.weight" placeholder="请输入货物重量"></el-input>
+                <el-input size="mini" @keyup.native = 'initWeight' v-model="goodsInfo.weight" placeholder="请输入货物重量"></el-input>
               </el-form-item>
             </span>
             <span class="name-num">千克</span>
@@ -292,7 +292,7 @@
           <EasyScrollbar>
             <div class="wrapper" id="wrapper">
               <div>
-                <p v-for="(item,index) in goodsInfo.size" :key="index">{{item}}</p>
+                <p v-for="(item) in goodsInfo.size">{{item}}</p>
               </div>
             </div>
           </EasyScrollbar>
@@ -301,20 +301,26 @@
         <img  @click="addSizeDialogFormVisible = true" src="../../../assets/product18.png">
       </div>
       <div class="info-right">
-        <div class="info-list">
-          <span class="name-nav">货物体积</span>
-          <span class="name-text"><el-input size="mini" v-model="goodsInfo.bulk" placeholder="请输入货物体积"></el-input></span>
-          <span class="name-num">立方米</span>
-        </div>
-        <div class="info-list">
-          <span class="name-nav">计费重量</span>
-          <span class="name-text"><el-input size="mini" v-model="goodsInfo.payWeight" placeholder="请输入计费重量"></el-input></span>
-          <span class="name-num">千克</span>
-        </div>
-        <div class="info-list mark">
-          <span class="name-nav">备注</span>
-          <span class="value"><el-input size="mini" v-model="goodsInfo.mark" placeholder="请输入备注"></el-input></span>
-        </div>
+        <el-form :model="goodsInfo" :rules="goodsInfoRules" ref="goodsInfo" class="goodsInfo">
+          <div class="info-list">
+            <span class="name-nav">货物体积</span>
+            <span class="name-text"><el-input size="mini" v-model="goodsInfo.bulk" placeholder="请输入货物体积"></el-input></span>
+            <span class="name-num">立方米</span>
+          </div>
+          <div class="info-list payWeight">
+            <span class="name-nav">计费重量</span>
+            <span class="name-text">
+              <el-form-item prop="payWeight">
+                <el-input size="mini" @keyup.native = 'initPayWeight' v-model="goodsInfo.payWeight" placeholder="请输入计费重量"></el-input>
+              </el-form-item>
+            </span>
+            <span class="name-num">千克</span>
+          </div>
+          <div class="info-list mark">
+            <span class="name-nav">备注</span>
+            <span class="value"><el-input size="mini" v-model="goodsInfo.mark" placeholder="请输入备注"></el-input></span>
+          </div>
+        </el-form>
       </div>
     </div>
     <div class="product-title" v-if="false">活动信息</div>
@@ -340,14 +346,32 @@
         <div class="cost-list" v-if="'airTransFee' in getProductIndexData.FeeInfo && getProductIndexData.FeeInfo.airTransFee != 0">
           <span class="cost-num">航空运费</span>
           <span class="cost-line"></span>
-          <span class="cost-item">¥{{getProductIndexData.FeeInfo.airTransFee}}</span>
+          <span class="cost-item">¥{{parseFloat(getProductIndexData.selectServer.saveBaseServerData.airfreightCharge).mul(goodsInfo.payWeight)>
+                                      getProductIndexData.selectServer.saveBaseServerData.minAirfreightCharge?
+                                      parseFloat(getProductIndexData.selectServer.saveBaseServerData.airfreightCharge).mul(goodsInfo.payWeight):
+                                      getProductIndexData.selectServer.saveBaseServerData.minAirfreightCharge
+                                    }}</span>
         </div>
         <div class="cost-list" v-if="('airOilAnnexFee' in getProductIndexData.FeeInfo) && (getProductIndexData.FeeInfo.airOilAnnexFee != 0)">
           <span class="cost-num">燃油附加费</span>
           <span class="cost-line"></span>
-          <span class="cost-item">¥{{getProductIndexData.FeeInfo.airOilAnnexFee}}</span>
+          <span class="cost-item">¥{{parseFloat(getProductIndexData.selectServer.saveBaseServerData.fuelCharge).mul(goodsInfo.payWeight)}}</span>
         </div>
-        <div class="cost-list" v-if="'airportStartFee' in getProductIndexData.FeeInfo && getProductIndexData.FeeInfo.airportStartFee != 0">
+        <template v-if="'airportStart' in getProductIndexData.selectServer.saveAirportFee">
+          <div class="cost-list" v-for="item in getProductIndexData.selectServer.saveAirportFee.airportStart.priceDTOS" :key="item.id">
+            <span class="cost-num">{{item.name}}</span>
+            <span class="cost-line"></span>
+            <span class="cost-item">¥{{item.priceType=='11'?(parseFloat(item.price).mul(goodsInfo.payWeight)>item.minPrice?parseFloat(item.price).mul(goodsInfo.payWeight):item.minPrice):parseFloat(item.price)}}</span>
+          </div>
+        </template>
+        <template v-if="'airportEnd' in getProductIndexData.selectServer.saveAirportFee">
+          <div class="cost-list" v-for="item in getProductIndexData.selectServer.saveAirportFee.airportEnd.priceDTOS" :key="item.id">
+            <span class="cost-num">{{item.name}}</span>
+            <span class="cost-line"></span>
+            <span class="cost-item">¥{{item.priceType=='11'?(parseFloat(item.price).mul(goodsInfo.payWeight)>item.minPrice?parseFloat(item.price).mul(goodsInfo.payWeight):item.minPrice):parseFloat(item.price)}}</span>
+          </div>
+        </template>
+        <!-- <div class="cost-list" v-if="'airportStartFee' in getProductIndexData.FeeInfo && getProductIndexData.FeeInfo.airportStartFee != 0">
           <span class="cost-num">始发港交货费</span>
           <span class="cost-line"></span>
           <span class="cost-item">¥{{getProductIndexData.FeeInfo.airportStartFee}}</span>
@@ -356,21 +380,30 @@
           <span class="cost-num">目的港提货费</span>
           <span class="cost-line"></span>
           <span class="cost-item">¥{{getProductIndexData.FeeInfo.airportEndFee}}</span>
-        </div>
+        </div> -->
         <div class="cost-list" v-if="'landStartGetGoodsFee' in getProductIndexData.FeeInfo && getProductIndexData.FeeInfo.landStartGetGoodsFee != 0">
           <span class="cost-num">上门提货费</span>
           <span class="cost-line"></span>
-          <span class="cost-item">¥{{getProductIndexData.FeeInfo.landStartGetGoodsFee}}</span>
+          <span class="cost-item">¥{{getProductIndexData.selectServer.saveLandStartServerData.priceType == '11'?
+                                      (parseFloat(getProductIndexData.selectServer.saveLandStartServerData.price).mul(goodsInfo.payWeight)>getProductIndexData.selectServer.saveLandStartServerData.minPrice?
+                                        parseFloat(getProductIndexData.selectServer.saveLandStartServerData.price).mul(goodsInfo.payWeight):getProductIndexData.selectServer.saveLandStartServerData.minPrice
+                                      ):(getProductIndexData.selectServer.saveLandStartServerData.price)
+
+            }}</span>
         </div>
         <div class="cost-list" v-if="'landEndTranFee' in getProductIndexData.FeeInfo && getProductIndexData.FeeInfo.landEndTranFee != 0">
           <span class="cost-num">落地配送费</span>
           <span class="cost-line"></span>
-          <span class="cost-item">¥{{getProductIndexData.FeeInfo.landEndTranFee}}</span>
+          <span class="cost-item">¥{{getProductIndexData.selectServer.saveLandEndServerData.priceType == '11'?
+                                      (parseFloat(getProductIndexData.selectServer.saveLandEndServerData.price).mul(goodsInfo.payWeight)>getProductIndexData.selectServer.saveLandEndServerData.minPrice?
+                                        parseFloat(getProductIndexData.selectServer.saveLandEndServerData.price).mul(goodsInfo.payWeight):getProductIndexData.selectServer.saveLandEndServerData.minPrice
+                                      ):(getProductIndexData.selectServer.saveLandEndServerData.price)
+            }}</span>
         </div>
       </div>
       <div class="cost-sum">
         <span class="sum-text">合计</span>
-        <span class="sum-num">¥{{getProductIndexData.FeeInfo.totalFee}}</span>
+        <span class="sum-num">¥{{totalPay}}</span>
       </div>
     </div>
     <div class="product-complete">
@@ -415,6 +448,7 @@ export default {
         height: "",
         num: ""
       },
+      saveGoodsSize:[],
       sendAddressData: {
         addressid:'',
         name: "",
@@ -442,7 +476,8 @@ export default {
       goodsInfoRules: {
         weight: [{ required: true, message: "请输入货物重量", trigger: "blur" }],
         num: [{ required: true, message: "请输入货物件数", trigger: "blur" }],
-        name: [{ required: true, message: "请输入货物名称", trigger: "blur" }]
+        name: [{ required: true, message: "请输入货物名称", trigger: "blur" }],
+        payWeight:[{ required: true, message: "请输入计费重量", trigger: "blur" }]
       },
       receiveAddressData: {
         addressid:'',
@@ -458,12 +493,14 @@ export default {
         weight: "",
         num: "",
         name: "",
-        pack: "",
+        pack: 0,
         size: [],
         bulk: "",
         payWeight: "",
         remark: ""
       },
+      saveGoodsInfoWeight:'',   //储存货物重量
+      saveGoodsInfoPayWeight:'',  //储存货物计费重量
       inviteCode: "",
     };
   },
@@ -474,6 +511,11 @@ export default {
     if (!this.getProductIndexData) {
       this.$router.push("/center/Online_product");
     }
+    console.log(this.getProductIndexData);
+    // 自动传入货物重量
+    this.goodsInfo.weight = this.getProductIndexData.searchData.goodsWeight
+    // 自动传入计费重量
+    this.goodsInfo.payWeight = this.getProductIndexData.searchData.goodsWeight
     this.getGoodsTypeList();
     this.defaultSendAddress()
     this.defaultReceiveAddress()
@@ -570,6 +612,47 @@ export default {
         this.addSizeDialogFormData.num;
       this.goodsInfo.size.push(str);
       this.addSizeDialogFormVisible = false;
+      var goodsSiez = this.addSizeDialogFormData.length*this.addSizeDialogFormData.width*this.addSizeDialogFormData.height*this.addSizeDialogFormData.num/1000000
+      this.saveGoodsSize.push(goodsSiez)
+      this.computedGoosSize()
+    },
+    computedGoosSize(){
+      this.goodsInfo.bulk = 0
+      this.saveGoodsSize.forEach(ele=>{
+        this.goodsInfo.bulk = parseFloat(this.goodsInfo.bulk) + parseFloat(ele)
+      })
+      this.computedGoodsPayWeight()
+    },
+    // 计算计费重量
+    computedGoodsPayWeight(){
+
+      var payWeight = this.goodsInfo.bulk*1000000/6000;
+      if(payWeight>this.goodsInfo.payWeight){
+        this.goodsInfo.payWeight = payWeight.toFixed(2)
+      }
+      // 储存计费重量
+      this.saveGoodsInfoPayWeight = this.goodsInfo.payWeight
+    },
+    initWeight(){
+      if(this.goodsInfo.weight > this.goodsInfo.payWeight){
+        this.goodsInfo.payWeight = this.goodsInfo.weight
+      }
+    },
+    initPayWeight(){
+      if(this.goodsInfo.payWeight < this.saveGoodsInfoPayWeight){
+        this.$message({
+          message: '手动输入的计费重量不能小于原计费重量',
+          type: 'warning'
+        });
+        this.goodsInfo.payWeight = this.saveGoodsInfoPayWeight
+      }
+      if(this.goodsInfo.payWeight < this.goodsInfo.weight){
+        this.$message({
+          message: '手动输入的计费重量不能小于原货物重量',
+          type: 'warning'
+        });
+        this.goodsInfo.payWeight = this.goodsInfo.weight
+      }
     },
     verificationCode() {
       // inviteCode
@@ -690,20 +773,20 @@ export default {
             .post("/app/v1/address/addAddress", {
               addressId: 0,
               addressType: 1, // 收货地址
-              contactMobile: this.sendAddressData.mobile,
-              contactName: this.sendAddressData.name,
-              contactPhone:this.sendAddressData.tellPhone,
-              detailAddress: this.sendAddressData.detailAddress,
+              contactMobile: this.receiveAddressData.mobile,
+              contactName: this.receiveAddressData.name,
+              contactPhone:this.receiveAddressData.tellPhone,
+              detailAddress: this.receiveAddressData.detailAddress,
               id: this.id,
-              identityCard: this.sendAddressData.id,
-              postCode: this.sendAddressData.postal,
-              region:this.sendAddressData.addressT,
+              identityCard: this.receiveAddressData.id,
+              postCode: this.receiveAddressData.postal,
+              region:this.receiveAddressData.addressT,
               token: this.token
             })
             .then(data => {
               console.log(data);
               if (data.data.code == 1) {
-                this.sendAddressData.addressid = data.data.data.id;
+                this.receiveAddressData.addressid = data.data.data.id;
                 this.promptsuccess("地址添加成功");
               } else {
                 this.promptwarning("地址添加失败");
@@ -947,6 +1030,84 @@ export default {
           newDate.getDate() < 10 ? `0${newDate.getDate()}` : newDate.getDate();
         return `${year}-${month}-${date}`;
       }
+    },
+    totalPay(){
+      var AirportFee = 0
+      var BaseServerFee = 0
+      var LandEndServerFee = 0
+      var LandStartServerFee = 0
+      // 计算基础服务收费
+      var airfreightCharge = parseFloat(this.getProductIndexData.selectServer.saveBaseServerData.airfreightCharge).mul(this.goodsInfo.payWeight)>
+                      parseFloat(this.getProductIndexData.selectServer.saveBaseServerData.minAirfreightCharge)?
+                      parseFloat(this.getProductIndexData.selectServer.saveBaseServerData.airfreightCharge).mul(this.goodsInfo.payWeight):
+                      parseFloat(this.getProductIndexData.selectServer.saveBaseServerData.minAirfreightCharge)
+      var fuelCharge = parseFloat(this.getProductIndexData.selectServer.saveBaseServerData.fuelCharge).mul(this.goodsInfo.payWeight)
+      BaseServerFee = airfreightCharge + fuelCharge
+      // 计算目的港交货收费
+      // airportEnd11为单位收费，airportEnd12为固定收费
+      var airportEnd11 = 0
+      var airportEnd12 = 0
+      var airportEndFee = 0
+      if('airportEnd' in this.getProductIndexData.selectServer.saveAirportFee){
+        var airportEndData = this.getProductIndexData.selectServer.saveAirportFee.airportEnd.priceDTOS
+        airportEndData.forEach(ele=>{
+          if(ele.priceType == 11){
+            airportEnd11 += parseFloat(ele.price).mul(this.goodsInfo.payWeight)>parseFloat(ele.minPrice)?parseFloat(ele.price).mul(this.goodsInfo.payWeight):parseFloat(ele.minPrice)
+          }else if(ele.priceType == 12){
+            airportEnd12 += parseFloat(ele.price)
+          }
+        })
+        airportEndFee = airportEnd11+airportEnd12
+      }
+      // 计算始发港交货收费
+      // airportEnd11为单位收费，airportEnd12为固定收费
+      var airportStart11 = 0
+      var airportStart12 = 0
+      var airportStartFee = 0
+      if('airportStart' in this.getProductIndexData.selectServer.saveAirportFee){
+        var airportStartData = this.getProductIndexData.selectServer.saveAirportFee.airportStart.priceDTOS
+        airportStartData.forEach(ele=>{
+          if(ele.priceType == 11){
+            airportStart11 += parseFloat(ele.price).mul(this.goodsInfo.payWeight)>parseFloat(ele.minPrice)?parseFloat(ele.price).mul(this.goodsInfo.payWeight):parseFloat(ele.minPrice)
+          }else if(ele.priceType == 12){
+            airportStart12 += parseFloat(ele.price)
+          }
+        })
+        airportStartFee = airportStart11+airportStart12
+      }
+      AirportFee = airportStartFee+airportEndFee
+
+      // 计算上门取货费用
+      if('id' in this.getProductIndexData.selectServer.saveLandStartServerData){
+        var saveLandStartServerData = this.getProductIndexData.selectServer.saveLandStartServerData
+        if(saveLandStartServerData.priceType == 11){
+          LandStartServerFee += parseFloat(saveLandStartServerData.price).mul(this.goodsInfo.payWeight)>parseFloat(saveLandStartServerData.minPrice)?
+                                parseFloat(saveLandStartServerData.price).mul(this.goodsInfo.payWeight):parseFloat(saveLandStartServerData.minPrice)
+        }else if(saveLandStartServerData.priceType == 12){
+          LandStartServerFee += parseFloat(saveLandStartServerData.price)
+        }
+      }
+
+      // 计算落地配送费用
+      if('id' in this.getProductIndexData.selectServer.saveLandEndServerData){
+        var saveLandEndServerData = this.getProductIndexData.selectServer.saveLandEndServerData
+        if(saveLandEndServerData.priceType == 11){
+          LandEndServerFee += parseFloat(saveLandEndServerData.price).mul(this.goodsInfo.payWeight)>parseFloat(saveLandEndServerData.minPrice)?
+                                parseFloat(saveLandEndServerData.price).mul(this.goodsInfo.payWeight):parseFloat(saveLandEndServerData.minPrice)
+        }else if(saveLandEndServerData.priceType == 12){
+          LandEndServerFee += parseFloat(saveLandEndServerData.price)
+        }
+      }
+
+      return AirportFee.add(BaseServerFee).add(LandEndServerFee).add(LandStartServerFee)
+    }
+  },
+  watch: {
+    goodsInfo:{
+      handler(newValue, oldValue) {
+　　　　console.log(newValue)
+　　　},
+　　　deep: true
     }
   }
 };
@@ -1798,6 +1959,18 @@ export default {
           justify-content: center;
           align-items: center;
           color: rgba(93, 93, 93, 1);
+        }
+      }
+      .payWeight{
+        .name-text{
+          .el-form-item{
+            margin-bottom: 0;
+            .el-form-item__error{
+              z-index: 999;
+              left: 14px;
+              top:69%;
+            }
+          }
         }
       }
       .mark {
