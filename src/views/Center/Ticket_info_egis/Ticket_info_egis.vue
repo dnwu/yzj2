@@ -45,11 +45,50 @@
   <div v-show="dialogVisible" class="dialog">
       <header class="dialog-header is-flex jst-between ali-center">
         <div class="dialog-title">
-          <img src="../../../assets/ticket_info_modify.png" alt=""> 开票信息修改
+          <img class="text-middle" src="../../../assets/ticket_info_modify.png" alt="">
+          <span>开票信息修改</span>
         </div>
         <i class="el-icon-close" @click="dialogVisible = false"></i>
       </header>
-      <main>
+      <main class="contain">
+        <div class="is-flex dir-column">
+          <div class="is-flex row">
+            <span class="text-jst name">企业名称:</span>
+            <input class="value text-middle" v-model="info.name"></input>
+          </div>
+          <div class="is-flex row">
+            <span class="text-jst name">纳税人识别号:</span>
+            <input class="value" v-model="info.taxNum"></input>
+          </div>
+          <div class="is-flex row">
+            <span class="text-jst name">注册地址:</span>
+            <input class="value" v-model="info.address"></input>
+          </div>
+          <div class="is-flex row">
+            <span class="text-jst name">联系电话:</span>
+            <input class="value" v-model="info.tel"></input>
+          </div>
+          <div class="is-flex row">
+            <span class="text-jst name">开户行:</span>
+            <input class="value" v-model="info.bank"></input>
+          </div>
+          <div class="is-flex row">
+            <span class="text-jst name">开户行账号:</span>
+            <input class="value" v-model="info.account"></input>
+          </div>
+          <div class="is-flex row">
+            <span class="text-jst name">开票人:</span>
+            <input class="value" v-model="info.taxPayer"></input>
+          </div>
+          <div class="is-flex row">
+            <span class="text-jst name">开票人电话:</span>
+            <input class="value" v-model="info.payerTel"></input>
+          </div>
+          <div class="is-flex row">
+            <span class="text-jst name">开票人地址:</span>
+            <input class="value" v-model="info.payerAdress"></input>
+          </div>
+        </div>
       </main>
       <footer>
         <div class="btn-save">保存</div>
@@ -143,7 +182,6 @@ export default {
 $yellow: #fccf00;
 .dialog {
   position: fixed;
-  padding-bottom: 40px;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
@@ -154,23 +192,32 @@ $yellow: #fccf00;
     background: $yellow;
     padding: 10px 20px;
     color: white;
+    font-size: 18px;
   }
-  .row {
-    height: 25px;
+  .contain {
+    color: #999999;
+    margin-left: 370px;
+    .row {
+      margin-top: 20px;
+      height: 20px;
+    }
     .name {
-      display: inline-block;
       width: 90px;
       margin-right: 50px;
     }
     .value {
-      min-width: 200px;
+      width: 280px;
+      border: 0;
+    }
+    input {
+      color: #999999;
     }
   }
   .btn-save {
     padding: 2px 0;
     width: 180px;
     height: 20px;
-    margin: 0 auto;
+    margin: 40px auto;
     color: white;
     background: $yellow;
     text-align: center;
