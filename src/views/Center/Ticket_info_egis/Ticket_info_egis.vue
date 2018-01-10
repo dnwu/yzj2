@@ -54,39 +54,39 @@
         <div class="is-flex dir-column">
           <div class="is-flex row">
             <span class="text-jst name">企业名称:</span>
-            <input class="value text-middle" v-model="info.name"></input>
+            <input class="value text-middle" v-model="edit.name"></input>
           </div>
           <div class="is-flex row">
             <span class="text-jst name">纳税人识别号:</span>
-            <input class="value" v-model="info.taxNum"></input>
+            <input class="value" v-model="edit.taxNum"></input>
           </div>
           <div class="is-flex row">
             <span class="text-jst name">注册地址:</span>
-            <input class="value" v-model="info.address"></input>
+            <input class="value" v-model="edit.address"></input>
           </div>
           <div class="is-flex row">
             <span class="text-jst name">联系电话:</span>
-            <input class="value" v-model="info.tel"></input>
+            <input class="value" v-model="edit.tel"></input>
           </div>
           <div class="is-flex row">
             <span class="text-jst name">开户行:</span>
-            <input class="value" v-model="info.bank"></input>
+            <input class="value" v-model="edit.bank"></input>
           </div>
           <div class="is-flex row">
             <span class="text-jst name">开户行账号:</span>
-            <input class="value" v-model="info.account"></input>
+            <input class="value" v-model="edit.account"></input>
           </div>
           <div class="is-flex row">
             <span class="text-jst name">开票人:</span>
-            <input class="value" v-model="info.taxPayer"></input>
+            <input class="value" v-model="edit.taxPayer"></input>
           </div>
           <div class="is-flex row">
             <span class="text-jst name">开票人电话:</span>
-            <input class="value" v-model="info.payerTel"></input>
+            <input class="value" v-model="edit.payerTel"></input>
           </div>
           <div class="is-flex row">
             <span class="text-jst name">开票人地址:</span>
-            <input class="value" v-model="info.payerAdress"></input>
+            <input class="value" v-model="edit.payerAdress"></input>
           </div>
         </div>
       </main>
@@ -100,7 +100,7 @@
 export default {
   data() {
     return {
-      dialogVisible: true,
+      dialogVisible: false,
       info: {
         name: "深圳运捷讯信息系统有限公司",
         bank: "中国建设银行",
@@ -111,8 +111,15 @@ export default {
         taxPayer: "刘某人",
         payerTel: "13628809128",
         payerAdress: "北京市朝阳区建国路"
-      }
+      },
+      edit: {}
     };
+  },
+  methods: {},
+  mounted() {
+    for (var name in this.info) {
+      this.edit[name] = this.info[name];
+    }
   }
 };
 </script>
