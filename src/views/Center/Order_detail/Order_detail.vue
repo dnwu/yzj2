@@ -539,10 +539,12 @@ export default {
     .title {
       margin-left: 30px;
       line-height: 61px;
-      display: grid;
-      grid-template-columns: 1fr;
+      // display: grid;
+      // grid-template-columns: 1fr;
+      display: flex;
       // justify-items: center;
       align-items: center;
+
     }
   }
   .main {
@@ -580,9 +582,12 @@ export default {
       .content {
         padding: 0 20px;
         color: #a0a0a0;
-        display: grid;
-        grid-template-columns: 1fr 250px 250px;
+        // display: grid;
+        // grid-template-columns: 1fr 250px 250px;
+        display: flex;
+
         .left {
+          width: 720px;
           .box {
             display: flex;
             margin: 10px 0;
@@ -621,13 +626,15 @@ export default {
           }
         }
         .middle {
+          width: 250px;
           color: #fed001;
-          width: 100%;
+          // width: 100%;
           text-align: center;
           padding-top: 30px;
         }
         .right {
-          width: 100%;
+          // width: 100%;
+          flex: 1;
           text-align: center;
           padding-top: 50px;
           button {
@@ -639,13 +646,16 @@ export default {
     }
     .server-info {
       position: relative;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      // display: grid;
+      // grid-template-columns: repeat(3, 1fr);
+      display: flex;
+      flex-wrap: wrap;
       margin-top: 20px;
       background-color: #fff;
       box-shadow: 4px 4px 4px #e0e0e0;
 
       .box {
+        width: 418px;
         height: 340px;
         border-right: 1px dashed #e0e0e0;
         border-bottom: 1px dashed #e0e0e0;
