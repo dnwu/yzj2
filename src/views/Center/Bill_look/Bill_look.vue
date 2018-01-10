@@ -88,6 +88,7 @@
 export default {
   data() {
     return {
+      item: {},
       number: "",
       orderTime: "",
       pickerOptions2: {
@@ -211,12 +212,14 @@ export default {
       };
     },
     handleSelect(item) {
-      /* console.log(item); */
+      this.itme = item;
     },
     search() {
-      this.tableData = [];
-      this.tableData.push(item);
-      this.curPage = 1;
+      if (this.number !== "") {
+        this.tableData = [];
+        this.tableData.push(item);
+        this.curPage = 1;
+      }
     }
   },
   computed: {

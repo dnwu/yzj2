@@ -6,13 +6,14 @@
         <span class="key">申请编号</span>
         <span class="is-flex opt opt-search">
           <i class="el-icon-search"></i>
-          <el-autocomplete
+          <el-input class="inline-input" v-model="input" placeholder="请输入内容"></el-input>
+          <!-- <el-autocomplete
             class="inline-input"
             v-model="input"
             :fetch-suggestions="querySearch"
             placeholder="请输入内容"
             @select="handleSelect"
-          ></el-autocomplete>
+          ></el-autocomplete> -->
         </span>
       </div>
     </div>
@@ -29,10 +30,10 @@
           end-placeholder="结束日期" size='mini' :picker-options="pickerOptions2">
         </el-date-picker>
       </span>
-      <span class="key key-choose-name">订单状态</span>
+      <span class="key key-choose-name">申请状态</span>
       <span class="opt opt-state">
-        <el-select v-model="orderStatu" placeholder="全部">
-          <el-option v-for="item in orderStatus" :key="item.name" :label="item.name" :value="item.name">
+        <el-select v-model="orderStatu" placeholder="待审核">
+          <el-option v-for="item in orderStatus" :key="item.value" :label="item.name" :value="item.value">
           </el-option>
         </el-select>
       </span>
@@ -53,23 +54,23 @@
         <span class="wide wide8">操作</span>
       </div>
       <ul>
-        <li class="card" v-for="order in filterOrders">
+        <li class="card" v-for="order in orders">
           <div class="is-flex tip">
             <span class="name">申请编号：</span>
-            <span class="value" v-text="order.value"></span>
+            <span class="value" v-text="order.applyNo"></span>
             <span class="name">申请日期：</span>
-            <span class="value" v-text="order.date"></span>
+            <span class="value" v-text="formatDate(order.applyDate)"></span>
           </div>
           <div class="is-flex contain">
-            <span :class="['wide','wide1','state','yellow',{green:allow(order.state)}]" v-text="order.state"></span>
-            <span class="wide wide2 line" v-text="order.line"></span>
-            <span class="wide wide3 time" v-text="order.time"></span>
-            <span class="wide wide4 apply yellow" v-text="order.apply"></span>
-            <span class="wide wide5 original" v-text="order.original"></span>
-            <span class="wide wide6 weight" v-text="order.weight"></span>
-            <span class="wide wide7 type" v-text="order.type"></span>
+            <span :class="['wide','wide1','state',orderStatus[order.applyStatus].color]" v-text="orderStatus[order.applyStatus].name"></span>
+            <span class="wide wide2 line" v-text="order.cityStart + '—— ' + order.cityEnd"></span>
+            <span class="wide wide3 time" v-text="order.flightTime"></span>
+            <span class="wide wide4 apply yellow" v-text="order.applyAmount"></span>
+            <span class="wide wide5 original" v-text="order.originalAmount"></span>
+            <span class="wide wide6 weight" v-text="order.goodsWeight"></span>
+            <span class="wide wide7 type" v-text="order.goodsTypeName"></span>
             <span class="wide wide8 control">
-              <img :src="pic" alt="" v-if="allow(order.state)">
+              <img src="../../../assets/doings_control.png" alt="" v-if="order.applyStatus == 1">
             </span>
           </div>
         </li>
@@ -81,6 +82,8 @@
 import StartPortselect from "@/components/StartPortselect";
 import EndPortselect from "@/components/EndPortselect";
 
+import { mapGetters } from "vuex";
+
 export default {
   components: {
     StartPortselect,
@@ -88,12 +91,11 @@ export default {
   },
   data() {
     return {
-      pic: require("@/assets/reset_icon.png"),
       input: "", // 搜索输入框
       startPort: "", // 始发港
       endPort: "", // 目的港
       orderTime: [], // [ "2018-01-10T16:00:00.000Z", "2018-02-05T16:00:00.000Z" ],
-      orderStatu: "全部", // 订单状态
+      orderStatu: "", // 订单状态 // 0 1 2
       // 以下为选项数据
       pickerOptions2: {
         shortcuts: [
@@ -126,122 +128,96 @@ export default {
           }
         ]
       },
-      orderStatus: [
-        {
-          name: "全部"
-        },
-        {
-          name: "待审核"
-        },
-        {
-          name: "已通过"
-        }
-      ],
-      filterOrders: [],
       orders: [
         {
-          value: "SQ20173828372",
-          date: "2017-11-12",
-          state: "待审核",
-          line: "北京（PEK） 上海浦东（PVG）",
-          time: "2017-11-12 10:00 - 12:00",
-          apply: 3.5,
-          original: 4.5,
-          weight: 2000,
-          type: "普货",
-          control: true
-        },
-        {
-          value: "SQ20173828378",
-          date: "2018-11-12",
-          state: "已通过",
-          line: "北京（PEK） 上海浦东（PVG）",
-          time: "2017-11-12 10:00 - 12:00",
-          apply: 3.5,
-          original: 4.5,
-          weight: 2000,
-          type: "普货",
-          control: true
+          accountId: 83,
+          accountName: "罗国鸿",
+          accountNo: "HH10011",
+          applyAmount: 3.5,
+          applyDate: "Jan 10, 2018 3:56:47 PM",
+          applyNo: "SQ2017111004",
+          applyStatus: 0,
+          cityEnd: "上海（PVG）",
+          cityStart: "北京（PEK）",
+          couponCode: "czrmKg",
+          docNo: "DDD111",
+          examineId: 1,
+          examineTime: "Jan 10, 2018 4:50:21 PM",
+          flightTime: "在 2018-01-10 20点 至 24点 间",
+          goodsType: 8,
+          goodsTypeName: "冷链",
+          goodsWeight: "1000",
+          id: 4,
+          originalAmount: 4.5
         }
-      ]
+      ],
+      orderStatus: {
+        undefined: {
+          color: "red",
+          name: "查询异常",
+          value: -1
+        },
+        0: {
+          color: "yellow",
+          name: "待审核",
+          value: 0
+        },
+        1: {
+          color: "green",
+          name: "已通过",
+          value: 1
+        },
+        2: {
+          color: "red",
+          name: "已拒绝",
+          value: 2
+        }
+      }
     };
   },
   methods: {
-    querySearch(queryString, cb) {
-      var orders = this.orders;
-      var results = queryString
-        ? orders.filter(this.createFilter(queryString))
-        : orders;
-      // 调用 callback 返回建议列表的数据
-      cb(results);
-    },
-    createFilter(queryString) {
-      return order => {
-        return (
-          order.value.toLowerCase().indexOf(queryString.toLowerCase()) == 0
-        );
-      };
-    },
-    handleSelect(item) {
-      var arr = [];
-      arr.push(item);
-      this.filterOrders = arr;
-    },
-    allow(state) {
-      return state == "已通过" ? true : false;
-    },
     startportvalue(val) {
       this.startPort = val;
     },
     endportvalue(val) {
       this.endPort = val;
     },
-    getTime(str) {
-      var date = new Date(str);
-      return date.getTime();
-    },
-    getOrderTime(str) {
-      var date = new Date(str.replace(/-/, "/"));
-      return date.getTime();
-    },
     check(bool) {
-      this.filterOrders = this.orders.filter(order => {
-        if (
-          this.orderStatu && // 选择了状态才会发生过滤
-          this.orderStatu !== "全部" &&
-          this.orderStatu !== order.state // 判断选择状态是否与订单状态相符
-        )
-          return false;
-
-        var line = order.line.split(" "),
-          start = line[0],
-          end = line[1];
-
-        if (
-          this.startPort !== "" && // 选择了路线才会发生过滤
-          this.endPort !== "" &&
-          (this.startPort !== start || this.endPort !== end) // 判断选择路线是否与订单路线相符
-        )
-          return false;
-
-        var timeStart = this.orderTime[0] && this.getTime(this.orderTime[0]);
-        var timeEnd = this.orderTime[1] && this.getTime(this.orderTime[1]);
-        var orderTime = order.time && this.getOrderTime(order.date);
-
-        if (
-          timeStart && // 选择了时间才会发生过滤
-          timeEnd &&
-          (orderTime < timeStart || orderTime > timeEnd) // 判断选择时间是否与订单时间相符
-        )
-          return false;
-
-        return true;
-      });
+      this.axios
+        .post("/app/v1/bargaining/getBargainingList", {
+          id: this.id,
+          token: this.token,
+          applyStatus: 0,
+          /* cityStart: this.startPort,
+          cityEnd: this.endPort, */
+          /* startTime: this.formatDate(this.orderTime[0]),
+          endTime: this.formatDate(this.orderTime[1]), */
+          orderNo: this.input,
+          pageIndex: 1,
+          size: 10
+        })
+        .then(res => {
+          this.orders = res.data.data;
+          console.log(this.orders);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    formatDate(strTime) {
+      var date = new Date(strTime);
+      var year = date.getFullYear();
+      var month = date.getMonth() + 1;
+      month = month < 10 ? "0" + month : month;
+      var day = date.getDate();
+      day = day < 10 ? "0" + day : day;
+      return year + "-" + month + "-" + day;
     }
   },
-  mounted() {
-    this.check();
-  }
+  computed: {
+    ...mapGetters(["token", "id"])
+  },
+  mounted() {}
 };
 </script>
 <style lang="scss" scoped>
@@ -274,6 +250,9 @@ ul {
 
 .green {
   color: #7ac943;
+}
+.red {
+  color: red;
 }
 
 .key {
