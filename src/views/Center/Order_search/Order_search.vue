@@ -677,11 +677,33 @@ export default {
     .main-body {
       padding: 30px;
       .wrapper {
-        display: grid;
-        grid-template-columns: 100px 250px repeat(5, 1fr);
+        // display: grid;
+        // grid-template-columns: 100px 250px repeat(5, 1fr);
+        display: flex;
         padding-left: 10px;
         color: #9f9f9f;
         text-align: center;
+        .goodsName{
+          width: 100px;
+        }
+        .address{
+          width: 250px;
+        }
+        .num{
+          width: 176px;
+        }
+        .weight{
+          width: 176px;
+        }
+        .needPayWeight{
+          width: 176px;
+        }
+        .status{
+          width: 176px;
+        }
+        .operate{
+          width: 176px;
+        }
       }
       .thead {
         margin-top: 20px;

@@ -268,13 +268,19 @@
         <div class="right-content-nav" v-if="selectServer.airportStart && airportStartFee != 0">
           <div class="right-content-cost" v-for="(item,index) in this.selectServer.saveAirportFee.airportStart.priceDTOS" :key="index">
             <span class="cost-text">{{item.name}}</span>
-            <span class="cost-number">{{item.priceType=='11'?(item.price*searchData.goodsWeight>item.minPrice?item.price*searchData.goodsWeight:item.minPrice):(item.price)}}元</span>
+            <span class="cost-number">{{item.priceType=='11'?
+                                      (parseFloat(item.price).mul(searchData.goodsWeight)>item.minPrice?parseFloat(item.price).mul(searchData.goodsWeight):item.minPrice):
+                                      (item.price)}}元
+            </span>
           </div>
         </div>
         <div class="right-content-nav" v-if="selectServer.airportEnd && airportEndFee != 0">
           <div class="right-content-cost" v-for="(item,index) in this.selectServer.saveAirportFee.airportEnd.priceDTOS" :key="index">
             <span class="cost-text">{{item.name}}</span>
-            <span class="cost-number">{{item.priceType=='11'?(item.price*searchData.goodsWeight>item.minPrice?item.price*searchData.goodsWeight:item.minPrice):(item.price)}}元</span>
+            <span class="cost-number">{{item.priceType=='11'?
+                                      (parseFloat(item.price).mul(searchData.goodsWeight)>item.minPrice?parseFloat(item.price).mul(searchData.goodsWeight):item.minPrice):
+                                      (item.price)}}元
+            </span>
           </div>
         </div>
         <div class="right-content-nav" v-if="selectServer.landStart && landStartGetGoodsFee != 0">

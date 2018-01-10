@@ -921,8 +921,42 @@ export default {
   .table {
     padding: 20px 30px 0 30px;
     .wrapper {
-      display: grid;
-      grid-template-columns: 80px 80px 80px repeat(5, 1fr);
+      // display: grid;
+      // grid-template-columns: 80px 80px 80px repeat(5, 1fr);
+      display: flex;
+      .addresstype{
+        width: 80px;
+      }
+      .name{
+        width: 80px;
+        overflow: hidden;
+        text-overflow:ellipsis;
+        white-space: nowrap;
+      }
+      .phone{
+        width: 80px;
+      }
+      .cellPhone{
+        width: 150px;
+      }
+      .id{
+        width: 200px;
+      }
+      .address{
+        width: 250px;
+        overflow: hidden;
+        text-overflow:ellipsis;
+        white-space: nowrap;
+      }
+      .addressDetial{
+        width: 250px;
+        overflow: hidden;
+        text-overflow:ellipsis;
+        white-space: nowrap;
+      }
+      .postalcode{
+        width: 150px;
+      }
     }
     .head {
       height: 40px;
