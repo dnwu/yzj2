@@ -3,7 +3,7 @@
   <div class="head">接单管理</div>
   <div class="body">
     <div class="Basic-information">
-      <p class="title">公司基本信息</p>
+      <p class="title"><img src="../../../assets/company_info_1.png"><span>公司基本信息</span></p>
       <div class="content">
         <div class="left">
           <p>
@@ -68,7 +68,7 @@
       </div>
     </div>
     <div class="tax-certificate">
-      <p class="title">公司税务登记证</p>
+      <p class="title"><img src="../../../assets/company_info_2.png"><span>公司税务登记证</span></p>
       <div class="content">
         <div class="left">
           <p>
@@ -89,7 +89,7 @@
       </div>
     </div>
     <div class="bank-licence">
-      <p class="title">开户银行许可证</p>
+      <p class="title"><img src="../../../assets/company_info_3.png"><span>开户银行许可证</span></p>
       <div class="content">
         <div class="left">
           <p>
@@ -118,7 +118,7 @@
       </div>
     </div>
     <div class="contact-information">
-      <p class="title">联系人信息</p>
+      <p class="title"><img src="../../../assets/company_info_4.png"><span>联系人信息</span></p>
       <div class="content">
         <div class="left">
           <p>
@@ -165,12 +165,22 @@ export default {
         margin: 10px 0px;
         .title{
           height: 32px;
-          line-height: 32px;
           color: #fff;
           background-color: #FCCF00;
           margin: 0;
           border-top-left-radius: 3px;
           border-top-right-radius: 3px;
+          padding-left: 10px;
+          img{
+            float: left;
+            margin-top: 4px;
+            margin-right: 12px;
+          }
+          span{
+            float: left;
+            height: 32px;
+            line-height: 32px;
+          }
         }
         .content{
           border-left: 1px solid #DFDFDF;
@@ -244,6 +254,17 @@ export default {
           margin: 0;
           border-top-left-radius: 3px;
           border-top-right-radius: 3px;
+          padding-left: 10px;
+          img{
+            float: left;
+            margin-top: 4px;
+            margin-right: 12px;
+          }
+          span{
+            float: left;
+            height: 32px;
+            line-height: 32px;
+          }
         }
         .content{
           border-left: 1px solid #DFDFDF;
@@ -302,6 +323,17 @@ export default {
           margin: 0;
           border-top-left-radius: 3px;
           border-top-right-radius: 3px;
+          padding-left: 10px;
+          img{
+            float: left;
+            margin-top: 4px;
+            margin-right: 12px;
+          }
+          span{
+            float: left;
+            height: 32px;
+            line-height: 32px;
+          }
         }
         .content{
           border-left: 1px solid #DFDFDF;
@@ -359,6 +391,17 @@ export default {
           margin: 0;
           border-top-left-radius: 3px;
           border-top-right-radius: 3px;
+          padding-left: 10px;
+          img{
+            float: left;
+            margin-top: 4px;
+            margin-right: 12px;
+          }
+          span{
+            float: left;
+            height: 32px;
+            line-height: 32px;
+          }
         }
         .content{
           border-left: 1px solid #DFDFDF;

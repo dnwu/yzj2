@@ -54,7 +54,7 @@
         <span>612501188006053613</span>
         <span>2018-01-06 12:53</span>
         <span><img src="../../../assets/son_modify.png"></span>
-        <span><img src="../../../assets/son_state_1.png"></span>
+        <span><img src="../../../assets/son_state_2.png"></span>
         <span><img src="../../../assets/son_delete.png"></span>
       </li>
     </ul>
