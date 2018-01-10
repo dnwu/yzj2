@@ -204,7 +204,6 @@ export default {
     },
     fnChoose(index) {
       this.choose[index] = false;
-      console.log(index);
       for (var i = -1; i < this.choose.length; i++) {
         this.choose[i] = false;
       }
