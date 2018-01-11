@@ -88,6 +88,7 @@ const Supplier_Order_track = () => import('@/views/Supplier/Order_track/Order_tr
 const Supplier_Booking_space = () => import('@/views/Supplier/Booking_space/Booking_space')
 const Supplier_Making_bill = () => import('@/views/Supplier/Making_bill/Making_bill')
 const Supplier_Air_plan = () => import("@/views/Supplier/Air_plan/Air_plan")
+const Supplier_Plane_manage = () => import('@/views/Supplier/Plane_manage/Plane_manage')
 const Supplier_Airlift = () => import('@/views/Supplier/Airlift/Airlift')
 const Supplier_Land_transport = () => import('@/views/Supplier/Land_transport/Land_transport')
 const Supplier_Airport_operation = () => import('@/views/Supplier/Airport_operation/Airport_operation')
@@ -568,6 +569,15 @@ let router = new Router({
           path:'/supplier/air_plan',
           component:Supplier_Air_plan,
           name:'supplier/air_plan',
+          meta: {
+            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            usertype:'company' // 添加字段，判断用户权限
+          }
+        },
+        {
+          path:'/supplier/plane_manage',
+          component:Supplier_Plane_manage,
+          name:'supplier/plane_manage',
           meta: {
             requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
             usertype:'company' // 添加字段，判断用户权限

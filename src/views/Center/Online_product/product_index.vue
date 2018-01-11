@@ -140,7 +140,7 @@
                 </div>
                 <div class="detail-btn-box">
                   <div class="detail-address">
-                    <span class="address-info">
+                    <div class="address-info">
                       <el-select @change="landStartLevel1Change" v-model="landStartLevel1" placeholder="请选择地区">
                         <el-option
                           v-for="item in landStartLevel1Data"
@@ -149,8 +149,8 @@
                           :value="item.value">
                         </el-option>
                       </el-select>
-                    </span>
-                    <span class="address-info">
+                    </div>
+                    <div class="address-info">
                       <el-select @change="landStartLevel2Change" v-model="landStartLevel2" placeholder="请选择服务">
                         <el-option
                           v-for="item in landStartLevel2Data"
@@ -159,13 +159,13 @@
                           :value="item.value">
                         </el-option>
                       </el-select>
-                    </span>
+                    </div>
                     <!-- <span class="address-little" v-if="landStartLevel3ProductType2">实际落地时间在24:00之前的航班，次日到达</span> -->
-                    <span class="address-little" v-if="landStartLevel3ProductType1">
-                      <span class="address-btn" @click="toggleLandStartServer('landStart1Ton')" :class="selectServer.landStart1Ton?'btn-active':''">1吨金杯车</span>
-                      <span class="address-btn" @click="toggleLandStartServer('landStart2Ton')" :class="selectServer.landStart2Ton?'btn-active':''">2吨厢式货车</span>
-                      <span class="address-btn" @click="toggleLandStartServer('landStart3Ton')" :class="selectServer.landStart3Ton?'btn-active':''">3吨厢式货车</span>
-                    </span>
+                    <div class="address-little" v-if="landStartLevel3ProductType1">
+                      <div class="address-btn" @click="toggleLandStartServer('landStart1Ton')" :class="selectServer.landStart1Ton?'btn-active':''">1吨金杯车</div>
+                      <div class="address-btn" @click="toggleLandStartServer('landStart2Ton')" :class="selectServer.landStart2Ton?'btn-active':''">2吨厢式货车</div>
+                      <div class="address-btn" @click="toggleLandStartServer('landStart3Ton')" :class="selectServer.landStart3Ton?'btn-active':''">3吨厢式货车</div>
+                    </div>
                   </div>
                 </div>
                 <div class="detail-img el-icon-success" @click="toggleSelect('landStart')" :class="selectServer.landStart?'active':''">
@@ -406,6 +406,8 @@ export default {
         saveBaseServerData:{},  //储存基础服务内容以及收费情况
         saveLandStartServerData:{},   //储存选择上门取货的服务内容
         saveLandEndServerData:{},   //储存选择落地配送的服务内容
+        saveLandStartCarType:[],   // 储存选择二级标签专车服务后，专车类型的list
+        saveLandEndCarType:[],   // 储存选择二级标签专车服务后，专车类型的list
       },
       landStartLevel1: "", // 上门取货一级选择value，为index
       landEndLevel1: "", // 落地配送一级选择value,为index
@@ -469,7 +471,6 @@ export default {
       this.selectServer.saveLandStartServerData = {}
     },
     landStartLevel2Change() {
-      // console.log("landStartLevel2Change", this.landStartLevel2);
       if (this.landStartLevel2 == 1) {
         // 专车配送
         this.landStartLevel3ProductType1 = true;
@@ -493,7 +494,7 @@ export default {
         this.saveStartLandCarriageSales,
         this.landStartLevel2
       );
-      // console.log(this.selectServer.landStartPrice,this.landStartLevel2);
+      console.log(this.saveStartLandCarriageSales,this.landStartLevel2);
     },
     landEndLevel1Change() {
       // 每次点击一级选择的时候重置服务的是否勾选，然后重置controlLandStartServer
@@ -541,6 +542,22 @@ export default {
       // 调用计算价格的函数
       this.getLandEndPrice(this.saveEndLandCarriageSales, this.landEndLevel2);
       console.log(this.landEndLevel2,this.saveEndLandCarriageSales,this.landEndLevel2);
+    },
+    getLandStartCarType(data){
+      var serverList = data.landProductTypeDTOS
+      serverList.forEach(ele=>{
+        if(ele.productType ==1){
+          this.selectServer.saveLandStartCarType = ele.list
+        }
+      })
+    },
+    getLandEndCarType(data){
+      var serverList = data.landProductTypeDTOS
+      serverList.forEach(ele=>{
+        if(ele.productType ==1){
+          this.selectServer.saveLandEndCarType = ele.list
+        }
+      })
     },
     setlandStartLevel2Data(index) {
       this.landStartLevel2Data = [];
@@ -876,6 +893,7 @@ export default {
     },
     getLandStartPrice(obj, serverType) {
       // 获取对象中的landProductTypeDTOS
+      console.log(obj.landProductTypeDTOS);
       var landProductTypeDTOS = obj.landProductTypeDTOS;
       landProductTypeDTOS.forEach((ele, index) => {
         // console.log('ele',ele.productType);
@@ -906,6 +924,7 @@ export default {
     },
     getLandEndPrice(obj, serverType) {
       // 获取对象中的landProductTypeDTOS
+
       var landProductTypeDTOS = obj.landProductTypeDTOS;
       landProductTypeDTOS.forEach((ele, index) => {
         // console.log('ele',ele.productType);
@@ -1000,24 +1019,30 @@ export default {
     getLandStartCarPrice() {
       if (this.selectServer.landStart1Ton) {
         this.setSaveLandStartServerData("1吨金杯车")
+        console.log('1吨金杯车',this.selectServer.landStartPrice.car1DonPrice,111111);
         return this.selectServer.landStartPrice.car1DonPrice;
       } else if (this.selectServer.landStart2Ton) {
         this.setSaveLandStartServerData("2吨厢式货车")
+        console.log('2吨厢式货车',this.selectServer.landStartPrice.car2DonPrice,222222);
         return this.selectServer.landStartPrice.car2DonPrice;
       } else if (this.selectServer.landStart3Ton) {
         this.setSaveLandStartServerData("3吨厢式货车")
+        console.log('3吨厢式货车',this.selectServer.landStartPrice.car3DonPrice,333333);
         return this.selectServer.landStartPrice.car3DonPrice;
       }
     },
     getLandEndCarPrice() {
       if (this.selectServer.landEnd1Ton) {
         this.setSaveLandEndServerData("1吨金杯车")
+        console.log('1吨金杯车');
         return this.selectServer.landEndPrice.car1DonPrice;
       } else if (this.selectServer.landEnd2Ton) {
         this.setSaveLandEndServerData("2吨厢式货车")
+        console.log('2吨厢式货车');
         return this.selectServer.landEndPrice.car2DonPrice;
       } else if (this.selectServer.landEnd3Ton) {
         this.setSaveLandEndServerData("3吨厢式货车")
+        console.log('3吨厢式货车');
         return this.selectServer.landEndPrice.car3DonPrice;
       }
     },
@@ -1461,7 +1486,7 @@ export default {
                 margin-left: -70px;
               }
               .detail-list4 {
-                margin-bottom: -55px;
+                // margin-bottom: -55px;
               }
               .detail-list {
                 display: flex;
@@ -1479,7 +1504,7 @@ export default {
             .detail-btn-box {
               width: 190px;
               .detail-address {
-                height: 110px;
+                // height: 110px;
                 width: 100%;
                 display: flex;
                 flex-direction: column;
@@ -1492,8 +1517,10 @@ export default {
                   text-indent: 20px;
                   display: flex;
                   justify-content: space-around;
+                  flex-wrap: wrap;
                   .address-btn {
                     padding: 2px 12px 2px 0px;
+                    margin: 4px 0;
                     height: 20px;
                     color: rgba(252, 207, 0, 1);
                     border: 1px solid rgba(252, 207, 0, 1);
@@ -1547,7 +1574,7 @@ export default {
             display: flex;
             flex-direction: column;
             .select-big {
-              height: 130px;
+              // height: 130px;
               .detail-address {
                 .address-info {
                   .el-select {
