@@ -4,16 +4,16 @@
       <h4>会员积分</h4>
       <div class="is-flex wrap">
         <div class="opt">
-          <input v-model="last" value="7" name="last" id="last7" type="radio">
-          <label for="last7">最近7天</label>
+          <input v-model="last" value="1" name="last" id="last7" type="radio">
+          <label for="last7" @click="fnLast">最近7天</label>
         </div>
         <div class="opt">
-          <input v-model="last" value="30" name="last" id="last30" type="radio">
-          <label for="last30">最近30天</label>
+          <input v-model="last" value="2" name="last" id="last30" type="radio">
+          <label for="last30" @click="fnLast">最近30天</label>
         </div>
         <div class="opt">
-          <input v-model="last" value="365" name="last" id="last365" type="radio">
-          <label for="last365">最近1年</label>
+          <input v-model="last" value="3" name="last" id="last365" type="radio">
+          <label for="last365" @click="fnLast">最近1年</label>
         </div>
       </div>
       <span class="btn btn-export">导出</span>
@@ -26,7 +26,7 @@
           :default-sort = "{prop: 'date', order: 'descending'}"
         >
           <el-table-column
-            prop="date"
+            prop="value"
             label="时间"
             align="center"
             sortable
@@ -59,57 +59,110 @@
           </el-table-column>
         </el-table>
       </div>
+      <el-pagination
+        v-show="total"
+        class="is-flex jst-center page-pos"
+        layout="prev, pager, next"
+        :total="total"
+        :page-size="pageSize"
+        :current-page="curPage"
+        @current-change="changePage"
+      >
+      </el-pagination>
     </section>
   </div>
 </template>
 <script>
+import { mapGetters } from "vuex";
 export default {
   data() {
     return {
-      last: "7",
+      last: "3",
+      curPage: 1,
+      pageSize: 1,
       tableData: [
-        {
-          date: "2018-1-8 12:00:00",
+        /* {
+          value: "2018-1-8 12:00:00",
           change: "+180",
           integral: "3360",
           people: "系统",
           note: "【订单完成】201709299392"
-        },
-        {
-          date: "2017-12-1 12:00:00",
-          change: "+180",
-          integral: "3360",
-          people: "系统",
-          note: "【订单完成】201709299392"
-        },
-        {
-          date: "2017-6-1 12:00:00",
-          change: "+180",
-          integral: "3360",
-          people: "系统",
-          note: "【订单完成】201709299392"
-        }
-      ]
+        } */
+      ],
+      total: 0
     };
   },
   computed: {
+    ...mapGetters(["id", "token"]),
     filterTableDate() {
-      var date = new Date();
-      date.setDate(date.getDate() - this.last);
-      return this.tableData.filter(item => {
-        var itemTime = this.getTime(item.date);
-        if (itemTime > date.getTime()) return true;
+      var arr = this.tableData.map((obj, index, arr) => {
+        var sign = {
+          1: "+",
+          2: "-"
+        };
+        obj.people = "系统";
+        obj.change = sign[obj.changeType] + obj.change;
+        return obj;
       });
+      return arr;
     }
   },
   methods: {
-    getTime(str) {
-      var strDate = str.split(" ")[0].replace(/-/, "/");
-      var date = new Date(strDate);
-      return date.getTime();
+    changePage(page) {
+      // 分页插件触发
+      this.curPage = page;
+      this.check();
+    },
+    fnLast() {
+      // 最近天数触发
+      this.curPage = 1;
+      this.check();
+    },
+    createArrayFromJson(arr, json) {
+      var newArr = [];
+      for (var i = 0; i < arr.length; i++) {
+        var obj = {};
+        for (var name in json) {
+          obj[json[name]] = arr[i][name];
+        }
+        newArr.push(obj);
+      }
+      return newArr;
+    },
+    check() {
+      this.axios
+        .post("/app/v1/integral/getIntegrals", {
+          id: this.id,
+          token: this.token,
+          pageIndex: this.curPage,
+          recordTimeType: this.last,
+          size: this.pageSize
+        })
+        .then(res => {
+          console.log(res);
+          if (res.data.code == 1) {
+            this.total = res.data.data.total;
+            this.tableData = this.createArrayFromJson(
+              // 函数将传入的数组，对数组每一项对象进行键名的修改，根据json的键值对修改为对应键名
+              res.data.data.integralDTOS,
+              {
+                changeIntegral: "change",
+                changeTime: "value",
+                changeType: "changeType",
+                cumulaIntegral: "integral",
+                remark: "note"
+              }
+            );
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
   },
-  mounted() {}
+  mounted() {
+    this.check();
+  }
 };
 </script>
 <style lang="scss" scoped>
@@ -166,6 +219,9 @@ ul {
   padding: 20px 30px;
   color: #b3b3b3;
 }
+.page-pos {
+  margin-top: 10px;
+}
 </style>
 <style lang="scss">
 .integral {
@@ -192,5 +248,125 @@ ul {
   }
 }
 </style>
+<style lang="scss" scoped>
+/* position */
+
+.is-relative {
+  position: relative;
+}
+
+.is-absolute {
+  position: absolute;
+}
+
+.is-fixed {
+  position: fixed;
+}
+/* flex */
+
+.is-flex {
+  display: flex;
+}
+
+.dir-row {
+  flex-direction: row;
+}
+
+.dir-column {
+  flex-direction: column;
+}
+
+.jst-around {
+  justify-content: space-around;
+}
+
+.jst-between {
+  justify-content: space-between;
+}
+
+.jst-left {
+  justify-content: left;
+}
+
+.jst-center {
+  justify-content: center;
+}
+
+.jst-right {
+  justify-content: right;
+}
+
+.ali-around {
+  align-items: space-around;
+}
+
+.ali-between {
+  align-items: space-between;
+}
+
+.ali-left {
+  align-items: left;
+}
+
+.ali-center {
+  align-items: center;
+}
+
+.ali-right {
+  align-items: right;
+}
+/* display */
+
+.is-block {
+  display: block;
+}
+
+.is-none {
+  display: none;
+}
+
+.is-inline-block {
+  display: inline-block;
+}
+/* text */
+
+.text-left {
+  text-align: left;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-jst {
+  text-align: justify;
+}
+
+.text-jst:after {
+  content: "";
+  display: inline-block;
+  width: 100%;
+  overflow: hidden;
+  height: 0;
+}
+
+.text-top {
+  vertical-align: text-top;
+}
+
+.text-middle {
+  vertical-align: middle;
+}
+
+.text-bottom {
+  vertical-align: text-bottom;
+}
+/* 颜色类 */
+</style>
+
 
 

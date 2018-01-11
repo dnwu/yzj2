@@ -129,7 +129,7 @@ export default {
         ]
       },
       orders: [
-        {
+        /* {
           accountId: 83,
           accountName: "罗国鸿",
           accountNo: "HH10011",
@@ -149,7 +149,7 @@ export default {
           goodsWeight: "1000",
           id: 4,
           originalAmount: 4.5
-        }
+        } */
       ],
       orderStatus: {
         undefined: {
@@ -182,27 +182,36 @@ export default {
     endportvalue(val) {
       this.endPort = val;
     },
-    check(bool) {
-      this.axios
-        .post("/app/v1/bargaining/getBargainingList", {
-          id: this.id,
-          token: this.token,
-          applyStatus: 0,
-          /* cityStart: this.startPort,
-          cityEnd: this.endPort, */
-          /* startTime: this.formatDate(this.orderTime[0]),
-          endTime: this.formatDate(this.orderTime[1]), */
-          orderNo: this.input,
-          pageIndex: 1,
-          size: 10
-        })
-        .then(res => {
-          this.orders = res.data.data;
-          console.log(this.orders);
-        })
-        .catch(err => {
-          console.log(err);
-        });
+    check() {
+      if (
+        this.startPort !== "" &&
+        this.endPort !== "" &&
+        this.orderTime[0] &&
+        this.orderTime[1]
+      ) {
+        this.axios
+          .post("/app/v1/bargaining/getBargainingList", {
+            id: this.id,
+            token: this.token,
+            applyStatus: this.orderStatu == "" ? 0 : this.orderStatu,
+            /* cityStart: this.startPort,
+              cityEnd: this.endPort, */
+            /* startTime: this.formatDate(this.orderTime[0]),
+              endTime: this.formatDate(this.orderTime[1]), */
+            orderNo: this.input,
+            pageIndex: 1,
+            size: 10
+          })
+          .then(res => {
+            this.orders = res.data.data;
+            console.log(this.orders);
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      } else {
+        this.$message("请正确填写查询条件");
+      }
     },
     formatDate(strTime) {
       var date = new Date(strTime);
@@ -251,6 +260,7 @@ ul {
 .green {
   color: #7ac943;
 }
+
 .red {
   color: red;
 }
