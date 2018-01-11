@@ -54,7 +54,7 @@
         <span class="wide wide8">操作</span>
       </div>
       <ul>
-        <li class="card" v-for="order in orders">
+        <li class="card" v-for="order in pageTableData">
           <div class="is-flex tip">
             <span class="name">申请编号：</span>
             <span class="value" v-text="order.applyNo"></span>
@@ -76,6 +76,17 @@
         </li>
       </ul>
     </div>
+    申请状态状态还不可用
+    <el-pagination
+      v-show="orders.length"
+      class="is-flex jst-center page-pos"
+      layout="prev, pager, next"
+      :total="orders.length"
+      :page-size="pageSize"
+      :current-page="curPage"
+      @current-change="changePage"
+    >
+    </el-pagination>
   </div>
 </template>
 <script>
@@ -94,7 +105,7 @@ export default {
       input: "", // 搜索输入框
       startPort: "", // 始发港
       endPort: "", // 目的港
-      orderTime: [], // [ "2018-01-10T16:00:00.000Z", "2018-02-05T16:00:00.000Z" ],
+      orderTime: [], // [ "2018-01-10T16:00:00.000Z", "2018-02-05T16:00:00.000Z" ], // 起始地点
       orderStatu: "", // 订单状态 // 0 1 2
       // 以下为选项数据
       pickerOptions2: {
@@ -172,10 +183,16 @@ export default {
           name: "已拒绝",
           value: 2
         }
-      }
+      },
+      curPage: 1,
+      pageSize: 2
     };
   },
   methods: {
+    changePage(page) {
+      this.curPage = page;
+      this.check();
+    },
     startportvalue(val) {
       this.startPort = val;
     },
@@ -193,9 +210,12 @@ export default {
           .post("/app/v1/bargaining/getBargainingList", {
             id: this.id,
             token: this.token,
-            applyStatus: this.orderStatu == "" ? 0 : this.orderStatu,
+            /* applyStatus: this.orderStatu == "" ? 0 : this.orderStatu, */
             /* cityStart: this.startPort,
-              cityEnd: this.endPort, */
+            cityEnd: this.endPort, */
+            cityStart: "北京（PEK）",
+            cityEnd: "上海（PVG）",
+            applyStatus: 1,
             /* startTime: this.formatDate(this.orderTime[0]),
               endTime: this.formatDate(this.orderTime[1]), */
             orderNo: this.input,
@@ -203,8 +223,14 @@ export default {
             size: 10
           })
           .then(res => {
-            this.orders = res.data.data;
-            console.log(this.orders);
+            if (res.data.data.length !== 0) {
+              this.orders = res.data.data;
+              return;
+            }
+            this.$message({
+              message: "暂无相关信息",
+              type: "success"
+            });
           })
           .catch(err => {
             console.log(err);
@@ -224,7 +250,15 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["token", "id"])
+    ...mapGetters(["token", "id"]),
+    pageTableData() {
+      var arr = this.orders;
+      var cur = this.curPage,
+        size = this.pageSize,
+        start = (cur - 1) * size,
+        end = start + size;
+      return arr.slice(start, end);
+    }
   },
   mounted() {}
 };
@@ -460,3 +494,124 @@ ul {
   }
 }
 </style>
+<style lang="scss" scoped>
+/* position */
+
+.is-relative {
+  position: relative;
+}
+
+.is-absolute {
+  position: absolute;
+}
+
+.is-fixed {
+  position: fixed;
+}
+/* flex */
+
+.is-flex {
+  display: flex;
+}
+
+.dir-row {
+  flex-direction: row;
+}
+
+.dir-column {
+  flex-direction: column;
+}
+
+.jst-around {
+  justify-content: space-around;
+}
+
+.jst-between {
+  justify-content: space-between;
+}
+
+.jst-left {
+  justify-content: left;
+}
+
+.jst-center {
+  justify-content: center;
+}
+
+.jst-right {
+  justify-content: right;
+}
+
+.ali-around {
+  align-items: space-around;
+}
+
+.ali-between {
+  align-items: space-between;
+}
+
+.ali-left {
+  align-items: left;
+}
+
+.ali-center {
+  align-items: center;
+}
+
+.ali-right {
+  align-items: right;
+}
+/* display */
+
+.is-block {
+  display: block;
+}
+
+.is-none {
+  display: none;
+}
+
+.is-inline-block {
+  display: inline-block;
+}
+/* text */
+
+.text-left {
+  text-align: left;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-jst {
+  text-align: justify;
+}
+
+.text-jst:after {
+  content: "";
+  display: inline-block;
+  width: 100%;
+  overflow: hidden;
+  height: 0;
+}
+
+.text-top {
+  vertical-align: text-top;
+}
+
+.text-middle {
+  vertical-align: middle;
+}
+
+.text-bottom {
+  vertical-align: text-bottom;
+}
+/* 颜色类 */
+</style>
+
+

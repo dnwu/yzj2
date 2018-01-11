@@ -67,10 +67,10 @@
         </el-table>
       </div>
       <el-pagination
-            v-show="tableData.length"
+            v-show="total"
             class="is-flex jst-center page-pos"
             layout="prev, pager, next"
-            :total="tableData.length"
+            :total="total"
             :page-size="pageSize"
             :current-page="curPage"
             @current-change="changePage"
