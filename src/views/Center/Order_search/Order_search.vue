@@ -5,7 +5,7 @@
       <div class="input">
         <span>订单号</span>
         <i class="el-icon-search"></i>
-        <el-input v-model="orderNum" placeholder="请输入订单号"></el-input>
+        <el-input v-model="orderNum" @keyup.enter.native="getOrderInfo" placeholder="请输入订单号"></el-input>
       </div>
     </div>
     <div class="main">
@@ -36,6 +36,8 @@
           <div class="block">
             <el-date-picker
               v-model="orderTime"
+              value-format="yyyy-MM-dd"
+              @change="setOrderTime"
               type="daterange"
               align="right"
               unlink-panels
@@ -99,7 +101,7 @@
             </div>
             <div class="needPayWeight">
               <p class="gray">预计：{{item.orderGoodsDetail.valuationWeight}}</p>
-              <p class="black">实际：{{item.orderGoodsDetail.valuationWeight}}</p>
+              <p class="black">实际：{{item.orderGoodsDetail.reviewWeight}}</p>
             </div>
             <!-- 待支付 -->
             <template v-if="item.orderStatus=='3'">
@@ -352,8 +354,12 @@ export default {
       orderNum: "",
       orderListData: [],
       pageTotal: 60,
+      cityStart:'',
+      cityEnd:"",
+      startTime:'',
+      endTime:'',
       goodsTypes: [],
-      goodsType: "",
+      goodsType: "0",
       pickerOptions2: {
         shortcuts: [
           {
@@ -388,8 +394,16 @@ export default {
       orderTime: "",
       orderStatus: [
         {
-          value: "-1",
+          value: "0",
           label: "全部"
+        },
+        {
+          value: "1",
+          label: "待提交"
+        },
+        {
+          value: "2",
+          label: "待受理"
         },
         {
           value: "3",
@@ -408,18 +422,23 @@ export default {
           label: "待补缴"
         },
         {
-          value: "2",
-          label: "待受理"
-        },
-        {
           value: "7",
           label: "已完成"
+        },
+        {
+          value: "8",
+          label: "已取消"
         }
       ],
-      orderStatu: ""
+      orderStatu: "0"
     };
   },
   created() {
+    if(this.$route.query.status == undefined){
+      this.orderStatu = '0'
+    }else{
+      this.orderStatu = this.$route.query.status
+    }
     this.getOrderList(1, 10);
     this.getGoodsTypeList();
   },
@@ -433,25 +452,29 @@ export default {
         message: title
       });
     },
-    startportvalue(val){
-      console.log(val);
+    startportvalue(val) {
+      this.cityStart = val
     },
-    endportvalue(val){
-      console.log(val);
+    endportvalue(val) {
+      this.cityEnd = val
+    },
+    setOrderTime(val){
+      this.startTime = val[0]
+      this.endTime = val[1]
     },
     searchList() {
-      this.getOrderList(1, 10, this.orderStatu);
+      this.getOrderList(1, 10);
     },
-    goDetail(orderNo, id,status) {
+    goDetail(orderNo, id, status) {
       this.$router.push({
         path: "/center/order_detail",
-        query: { orderNo: orderNo, id: id,orderStatus:status }
+        query: { orderNo: orderNo, id: id, orderStatus: status }
       });
     },
-    goTrack(orderNo, id,status) {
+    goTrack(orderNo, id, status) {
       this.$router.push({
         path: "/center/order_track",
-        query: { orderNo: orderNo, id: id ,orderStatus:status}
+        query: { orderNo: orderNo, id: id, orderStatus: status }
       });
     },
     getGoodsTypeList() {
@@ -461,6 +484,13 @@ export default {
         .then(data => {
           // console.log(data.data.data.detailDTOS);
           this.goodsTypes = data.data.data.detailDTOS;
+          this.goodsTypes.unshift({
+            dataCode:'',
+            dataName:'全部',
+            dataSort:'',
+            dataType:'',
+            id:'0'
+          })
         });
     },
     getGoodsType(val) {
@@ -477,7 +507,7 @@ export default {
       }
       return type;
     },
-    getOrderList(pageindex, size, orderStatus) {
+    getOrderList(pageindex, size) {
       this.orderListData = [];
       // size为页面显示数据量 ; pageindex为第几页
       if (size == undefined) {
@@ -491,29 +521,40 @@ export default {
       this.axios
         .post("/app/v1/order/getOrderList", {
           id: this.id,
-          orderStatus: orderStatus,
+          orderStatus: this.orderStatu,
           pageIndex: _pageindex,
           size: _size,
-          token: this.token
+          token: this.token,
+          cityEnd: this.cityEnd,
+          cityStart: this.cityStart,
+          startTime: this.startTime,
+          endTime: this.endTime,
+          goodType: this.goodsType,
         })
         .then(data => {
-          // console.log(data.data.data.total);
+          console.log(data.data.data);
           if (data.data.code == 1) {
             this.pageTotal = data.data.data.total;
             var orderList = data.data.data.orderBaseDTOS;
             this.orderListData.push(...orderList);
-            console.log(this.orderListData);
+            // console.log(this.orderListData);
           }
           if (data.data.code == 10001) {
             this.errorAlert("登录已失效，请重新登录");
           }
         });
     },
+    getOrderInfo(){
+      this.$router.push({
+        path: "/center/order_detail",
+        query: { orderNo: this.orderNum }
+      });
+    },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+      // console.log(`当前页: ${val}`);
       this.getOrderList(val, 10);
     }
   },
@@ -581,15 +622,15 @@ export default {
         span:first-child {
           margin-right: 20px;
         }
-        .el-select{
-          .el-input{
-            input{
+        .el-select {
+          .el-input {
+            input {
               border: none;
               border-radius: 0;
               background-color: #e6e6e6;
             }
-            .el-input__suffix{
-              .el-input__suffix-inner{
+            .el-input__suffix {
+              .el-input__suffix-inner {
                 margin-right: 0;
               }
             }
@@ -683,25 +724,25 @@ export default {
         padding-left: 10px;
         color: #9f9f9f;
         text-align: center;
-        .goodsName{
+        .goodsName {
           width: 100px;
         }
-        .address{
+        .address {
           width: 250px;
         }
-        .num{
+        .num {
           width: 176px;
         }
-        .weight{
+        .weight {
           width: 176px;
         }
-        .needPayWeight{
+        .needPayWeight {
           width: 176px;
         }
-        .status{
+        .status {
           width: 176px;
         }
-        .operate{
+        .operate {
           width: 176px;
         }
       }

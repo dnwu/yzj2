@@ -32,10 +32,11 @@
             <li @click.stop="goto(6,'/supplier/making_bill')" :class="activeIndex == '6'?'active':''"><span class="icon"><img :src="activeIndex == '6'?iconARR[6].active:iconARR[6].default" alt=""></span><span class="title">制单管理</span></li>
             <li class="title">产品管理</li>
             <li @click.stop="goto(7,'/supplier/air_plan')" :class="activeIndex == '7'?'active':''"><span class="icon"><img :src="activeIndex == '7'?iconARR[7].active:iconARR[7].default" alt=""></span><span class="title">航班计划维护</span></li>
-            <li @click.stop="goto(8,'/supplier/airlift')" :class="activeIndex == '8'?'active':''"><span class="icon"><img :src="activeIndex == '8'?iconARR[8].active:iconARR[8].default" alt=""></span><span class="title">空运产品管理</span></li>
-            <li @click.stop="goto(9,'/supplier/land_transport')" :class="activeIndex == '9'?'active':''"><span class="icon"><img :src="activeIndex == '9'?iconARR[9].active:iconARR[9].default" alt=""></span><span class="title">陆运产品管理</span></li>
-            <li @click.stop="goto(10,'/supplier/airport_operation')" :class="activeIndex == '10'?'active':''"><span class="icon"><img :src="activeIndex == '10'?iconARR[10].active:iconARR[10].default" alt=""></span><span class="title">机场操作产品管理</span></li>
-            <li @click.stop="goto(11,'/supplier/value_add')" :class="activeIndex == '11'?'active':''"><span class="icon"><img :src="activeIndex == '11'?iconARR[11].active:iconARR[11].default" alt=""></span><span class="title">增值服务产品管理</span></li>
+            <li @click.stop="goto(8,'/supplier/plane_manage')" :class="activeIndex == '8'?'active':''"><span class="icon"><img :src="activeIndex == '8'?iconARR[8].active:iconARR[8].default" alt=""></span><span class="title">航班管理</span></li>
+            <li @click.stop="goto(9,'/supplier/airlift')" :class="activeIndex == '9'?'active':''"><span class="icon"><img :src="activeIndex == '9'?iconARR[9].active:iconARR[9].default" alt=""></span><span class="title">空运产品管理</span></li>
+            <li @click.stop="goto(10,'/supplier/land_transport')" :class="activeIndex == '10'?'active':''"><span class="icon"><img :src="activeIndex == '10'?iconARR[10].active:iconARR[10].default" alt=""></span><span class="title">陆运产品管理</span></li>
+            <li @click.stop="goto(11,'/supplier/airport_operation')" :class="activeIndex == '11'?'active':''"><span class="icon"><img :src="activeIndex == '11'?iconARR[11].active:iconARR[11].default" alt=""></span><span class="title">机场操作产品管理</span></li>
+            <li @click.stop="goto(12,'/supplier/value_add')" :class="activeIndex == '12'?'active':''"><span class="icon"><img :src="activeIndex == '12'?iconARR[12].active:iconARR[12].default" alt=""></span><span class="title">增值服务产品管理</span></li>
           </ul>
         </div>
       </div>
@@ -60,6 +61,7 @@ export default {
               {default:require('../../assets/nav15.png'),active:require('../../assets/nav15_15.png')},
               {default:require('../../assets/nav16.png'),active:require('../../assets/nav16_16.png')},
               {default:require('../../assets/nav17.png'),active:require('../../assets/nav17_17.png')},
+              {default:require('../../assets/nav18.png'),active:require('../../assets/nav18_18.png')},
               {default:require('../../assets/nav18.png'),active:require('../../assets/nav18_18.png')},
               {default:require('../../assets/nav19.png'),active:require('../../assets/nav19_19.png')},
               {default:require('../../assets/nav20.png'),active:require('../../assets/nav20_20.png')},
@@ -93,20 +95,22 @@ export default {
       this.activeIndex = 6
       this.title = '制单管理'
     }else if(this.fullPath.includes('air_plan')){
-      console.log('lailemei');
       this.activeIndex = 7
       this.title = '航班计划维护'
-    }else if(this.fullPath.includes('irlift')){
+    }else if(this.fullPath.includes('plane_manage')){
       this.activeIndex = 8
+      this.title = '航班管理'
+    }else if(this.fullPath.includes('irlift')){
+      this.activeIndex = 9
       this.title = '空运产品管理'
     }else if(this.fullPath.includes('and_transport')){
-      this.activeIndex = 9
+      this.activeIndex = 10
       this.title = '陆运产品管理'
     }else if(this.fullPath.includes('irport_operation')){
-      this.activeIndex = 10
+      this.activeIndex = 11
       this.title = '机场操作产品管理'
     }else if(this.fullPath.includes('alue_add')){
-      this.activeIndex = 11
+      this.activeIndex = 12
       this.title = '增值服务产品管理'
     }
   },
@@ -145,12 +149,14 @@ export default {
       }else if(index == 7){
         this.title = '航班计划维护'
       }else if(index == 8){
-        this.title = '空运产品管理'
+        this.title = '航班管理'
       }else if(index == 9){
-        this.title = '陆运产品管理'
+        this.title = '空运产品管理'
       }else if(index == 10){
-        this.title = '机场操作产品管理'
+        this.title = '陆运产品管理'
       }else if(index == 11){
+        this.title = '机场操作产品管理'
+      }else if(index == 12){
         this.title = '增值服务产品管理'
       }
     }

@@ -35,28 +35,28 @@
           </div>
         </div>
         <div class="goods-info">
-          <div class="confirm">
+          <div class="confirm" @click="gotoOrderList('1')">
             <el-badge :value="userInfo.waitSubmitOrders" class="item">
               <img src="../../../assets/account_icon1.png">
             </el-badge>
             <p>{{userInfo.waitSubmitOrders}}</p>
             <p>代提交</p>
           </div>
-          <div class="pay">
+          <div class="pay" @click="gotoOrderList('3')">
             <el-badge :value="userInfo.waitPayOrders" class="item">
               <img src="../../../assets/account_icon2.png">
             </el-badge>
             <p>{{userInfo.waitPayOrders}}</p>
             <p>待支付</p>
           </div>
-          <div class="received">
+          <div class="received" @click="gotoOrderList('5')">
             <el-badge :value="userInfo.waitReceiveOrders" class="item">
               <img src="../../../assets/account_icon3.png">
             </el-badge>
             <p>{{ userInfo.waitReceiveOrders}}</p>
             <p>待收货</p>
           </div>
-          <div class="done">
+          <div class="done" @click="gotoOrderList('0')">
             <el-badge :value="userInfo.totalOrders" class="item">
               <img src="../../../assets/account_icon4.png">
             </el-badge>
@@ -301,6 +301,15 @@ export default {
       setUsername: "SET_USERNAME",
       setId: "SET_ID"
     }),
+    gotoOrderList(data){
+      console.log(data);
+      this.$router.push({
+        path:'/center/order_search',
+        query:{
+          status:data
+        }
+      })
+    },
     resetPasswordBtn(id) {
       // this.$router.push("/center/change_password");
       this.changePassModel = true;
