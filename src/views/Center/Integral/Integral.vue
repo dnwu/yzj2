@@ -42,6 +42,7 @@
             prop="integral"
             align="center"
             label="剩余积分"
+            width="180"
           >
           </el-table-column>
           </el-table-column>
@@ -49,6 +50,7 @@
             prop="people"
             align="center"
             label="操作人"
+            width="180"
           >
           </el-table-column>
           <el-table-column
@@ -79,7 +81,7 @@ export default {
     return {
       last: "3",
       curPage: 1,
-      pageSize: 1,
+      pageSize: 10,
       tableData: [
         /* {
           value: "2018-1-8 12:00:00",
@@ -166,6 +168,9 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+@import "../../../common/css/flex-pos.css";
+@import "../../../common/scss/center/header.scss";
+
 ul {
   padding-left: 0;
 }
@@ -179,15 +184,6 @@ ul {
 }
 .card {
   box-shadow: 0px 2px 8px -1px rgba(0, 0, 0, 0.1);
-}
-@mixin header {
-  height: 61px;
-  align-items: center;
-  padding-left: 20px;
-  color: #b3b3b3;
-  h4 {
-    font-weight: normal;
-  }
 }
 
 .header {
@@ -248,125 +244,3 @@ ul {
   }
 }
 </style>
-<style lang="scss" scoped>
-/* position */
-
-.is-relative {
-  position: relative;
-}
-
-.is-absolute {
-  position: absolute;
-}
-
-.is-fixed {
-  position: fixed;
-}
-/* flex */
-
-.is-flex {
-  display: flex;
-}
-
-.dir-row {
-  flex-direction: row;
-}
-
-.dir-column {
-  flex-direction: column;
-}
-
-.jst-around {
-  justify-content: space-around;
-}
-
-.jst-between {
-  justify-content: space-between;
-}
-
-.jst-left {
-  justify-content: left;
-}
-
-.jst-center {
-  justify-content: center;
-}
-
-.jst-right {
-  justify-content: right;
-}
-
-.ali-around {
-  align-items: space-around;
-}
-
-.ali-between {
-  align-items: space-between;
-}
-
-.ali-left {
-  align-items: left;
-}
-
-.ali-center {
-  align-items: center;
-}
-
-.ali-right {
-  align-items: right;
-}
-/* display */
-
-.is-block {
-  display: block;
-}
-
-.is-none {
-  display: none;
-}
-
-.is-inline-block {
-  display: inline-block;
-}
-/* text */
-
-.text-left {
-  text-align: left;
-}
-
-.text-center {
-  text-align: center;
-}
-
-.text-right {
-  text-align: right;
-}
-
-.text-jst {
-  text-align: justify;
-}
-
-.text-jst:after {
-  content: "";
-  display: inline-block;
-  width: 100%;
-  overflow: hidden;
-  height: 0;
-}
-
-.text-top {
-  vertical-align: text-top;
-}
-
-.text-middle {
-  vertical-align: middle;
-}
-
-.text-bottom {
-  vertical-align: text-bottom;
-}
-/* 颜色类 */
-</style>
-
-
-

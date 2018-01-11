@@ -214,22 +214,14 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+@import "../../../common/css/flex-pos.css";
+@import "../../../common/scss/center/header.scss";
 .green {
   background: green;
 }
 
 ul {
   padding-left: 0;
-}
-
-@mixin header {
-  height: 61px;
-  align-items: center;
-  padding-left: 20px;
-  color: #b3b3b3;
-  h4 {
-    font-weight: normal;
-  }
 }
 
 $yellow: #fccf00;
@@ -406,91 +398,4 @@ $green: #7ac943;
     }
   }
 }
-</style>
-<style lang="scss" scoped>
-/* flex */
-
-.is-flex {
-  display: flex;
-}
-
-.dir-row {
-  flex-direction: row;
-}
-
-.dir-column {
-  flex-direction: column;
-}
-
-.jst-around {
-  justify-content: space-around;
-}
-
-.jst-between {
-  justify-content: space-between;
-}
-
-.ali-left {
-  align-items: left;
-}
-.ali-center {
-  align-items: center;
-}
-.ali-right {
-  align-items: right;
-}
-
-/* display */
-
-.is-block {
-  display: block;
-}
-
-.is-none {
-  display: none;
-}
-
-.is-inline-block {
-  display: inline-block;
-}
-
-/* text */
-
-.text-left {
-  text-align: left;
-}
-
-.text-center {
-  text-align: center;
-}
-
-.text-right {
-  text-align: right;
-}
-
-.text-jst {
-  text-align: justify;
-}
-
-.text-jst:after {
-  content: "";
-  display: inline-block;
-  width: 100%;
-  overflow: hidden;
-  height: 0;
-}
-
-.text-top {
-  vertical-align: text-top;
-}
-
-.text-middle {
-  vertical-align: middle;
-}
-
-.text-bottom {
-  vertical-align: text-bottom;
-}
-
-/* 颜色类 */
 </style>

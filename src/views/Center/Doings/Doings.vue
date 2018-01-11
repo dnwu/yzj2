@@ -37,7 +37,7 @@
           </el-option>
         </el-select>
       </span>
-      <span class="btn btn-check" @click="check">查询</span>
+      <span class="btn btn-check" @click="handleCheck">查询</span>
     </div>
     <div class="wrap">
       <div class="is-flex title">
@@ -78,10 +78,10 @@
     </div>
     申请状态状态还不可用
     <el-pagination
-      v-show="orders.length"
+      v-show="total"
       class="is-flex jst-center page-pos"
       layout="prev, pager, next"
-      :total="orders.length"
+      :total="total"
       :page-size="pageSize"
       :current-page="curPage"
       @current-change="changePage"
@@ -185,12 +185,17 @@ export default {
         }
       },
       curPage: 1,
-      pageSize: 2
+      pageSize: 10,
+      total: 0
     };
   },
   methods: {
     changePage(page) {
       this.curPage = page;
+      this.check();
+    },
+    handleCheck() {
+      this.curPage = 1;
       this.check();
     },
     startportvalue(val) {
@@ -210,20 +215,22 @@ export default {
           .post("/app/v1/bargaining/getBargainingList", {
             id: this.id,
             token: this.token,
-            /* applyStatus: this.orderStatu == "" ? 0 : this.orderStatu, */
-            /* cityStart: this.startPort,
-            cityEnd: this.endPort, */
-            cityStart: "北京（PEK）",
+            applyStatus: this.orderStatu == "" ? 0 : this.orderStatu,
+            cityStart: this.startPort,
+            cityEnd: this.endPort,
+            /* cityStart: "北京（PEK）",
             cityEnd: "上海（PVG）",
-            applyStatus: 1,
-            /* startTime: this.formatDate(this.orderTime[0]),
-              endTime: this.formatDate(this.orderTime[1]), */
+            applyStatus: 1, */
+            startTime: this.formatDate(this.orderTime[0]),
+            endTime: this.formatDate(this.orderTime[1]),
             orderNo: this.input,
-            pageIndex: 1,
-            size: 10
+            pageIndex: this.curPage,
+            size: this.pageSize
           })
           .then(res => {
+            console.log(res);
             if (res.data.data.length !== 0) {
+              this.total = res.data.total;
               this.orders = res.data.data;
               return;
             }
@@ -264,16 +271,8 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-// 默认样式
-@mixin header {
-  height: 61px;
-  align-items: center;
-  padding-left: 20px;
-  color: #b3b3b3;
-  h4 {
-    font-weight: normal;
-  }
-}
+@import "../../../common/css/flex-pos.css";
+@import "../../../common/scss/center/header.scss";
 
 .doings {
   color: #999999;
@@ -493,125 +492,6 @@ ul {
     }
   }
 }
-</style>
-<style lang="scss" scoped>
-/* position */
-
-.is-relative {
-  position: relative;
-}
-
-.is-absolute {
-  position: absolute;
-}
-
-.is-fixed {
-  position: fixed;
-}
-/* flex */
-
-.is-flex {
-  display: flex;
-}
-
-.dir-row {
-  flex-direction: row;
-}
-
-.dir-column {
-  flex-direction: column;
-}
-
-.jst-around {
-  justify-content: space-around;
-}
-
-.jst-between {
-  justify-content: space-between;
-}
-
-.jst-left {
-  justify-content: left;
-}
-
-.jst-center {
-  justify-content: center;
-}
-
-.jst-right {
-  justify-content: right;
-}
-
-.ali-around {
-  align-items: space-around;
-}
-
-.ali-between {
-  align-items: space-between;
-}
-
-.ali-left {
-  align-items: left;
-}
-
-.ali-center {
-  align-items: center;
-}
-
-.ali-right {
-  align-items: right;
-}
-/* display */
-
-.is-block {
-  display: block;
-}
-
-.is-none {
-  display: none;
-}
-
-.is-inline-block {
-  display: inline-block;
-}
-/* text */
-
-.text-left {
-  text-align: left;
-}
-
-.text-center {
-  text-align: center;
-}
-
-.text-right {
-  text-align: right;
-}
-
-.text-jst {
-  text-align: justify;
-}
-
-.text-jst:after {
-  content: "";
-  display: inline-block;
-  width: 100%;
-  overflow: hidden;
-  height: 0;
-}
-
-.text-top {
-  vertical-align: text-top;
-}
-
-.text-middle {
-  vertical-align: middle;
-}
-
-.text-bottom {
-  vertical-align: text-bottom;
-}
-/* 颜色类 */
 </style>
 
 

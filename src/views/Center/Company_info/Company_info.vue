@@ -223,15 +223,8 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@mixin header {
-  height: 61px;
-  align-items: center;
-  padding-left: 20px;
-  color: #b3b3b3;
-  h4 {
-    font-weight: normal;
-  }
-}
+@import "../../../common/css/flex-pos.css";
+@import "../../../common/scss/center/header.scss";
 .is-flex {
   display: flex;
 }
