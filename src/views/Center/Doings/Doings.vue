@@ -54,7 +54,7 @@
         <span class="wide wide8">操作</span>
       </div>
       <ul>
-        <li class="card" v-for="order in pageTableData">
+        <li class="card" v-for="order in orders">
           <div class="is-flex tip">
             <span class="name">申请编号：</span>
             <span class="value" v-text="order.applyNo"></span>
@@ -191,10 +191,12 @@ export default {
   },
   methods: {
     changePage(page) {
+      // 分页按钮触发，从新请求当前数据
       this.curPage = page;
       this.check();
     },
     handleCheck() {
+      // 最近天数切换时重置分页按钮，重新请求数据
       this.curPage = 1;
       this.check();
     },
@@ -206,6 +208,7 @@ export default {
     },
     check() {
       if (
+        // 当所选数据均有值时进行请求发送
         this.startPort !== "" &&
         this.endPort !== "" &&
         this.orderTime[0] &&
@@ -216,8 +219,6 @@ export default {
             id: this.id,
             token: this.token,
             applyStatus: this.orderStatu == "" ? 0 : this.orderStatu,
-            cityStart: this.startPort,
-            cityEnd: this.endPort,
             /* cityStart: "北京（PEK）",
             cityEnd: "上海（PVG）",
             applyStatus: 1, */
@@ -228,7 +229,6 @@ export default {
             size: this.pageSize
           })
           .then(res => {
-            console.log(res);
             if (res.data.data.length !== 0) {
               this.total = res.data.total;
               this.orders = res.data.data;
@@ -247,6 +247,7 @@ export default {
       }
     },
     formatDate(strTime) {
+      // 将传入的字符传时间格式化成 xxxx-xx-xx
       var date = new Date(strTime);
       var year = date.getFullYear();
       var month = date.getMonth() + 1;
@@ -257,25 +258,25 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["token", "id"]),
-    pageTableData() {
+    ...mapGetters(["token", "id"])
+    /* pageTableData() {
       var arr = this.orders;
       var cur = this.curPage,
         size = this.pageSize,
         start = (cur - 1) * size,
         end = start + size;
       return arr.slice(start, end);
-    }
+    } */
   },
   mounted() {}
 };
 </script>
 <style lang="scss" scoped>
-@import "../../../common/css/flex-pos.css";
-@import "../../../common/scss/center/header.scss";
+@import "../../../common/css/base.css";
+@import "../../../common/scss/center/index.scss";
 
 .doings {
-  color: #999999;
+  color: $gray;
   width: 90%;
 }
 
@@ -287,15 +288,15 @@ ul {
 }
 
 .yellow {
-  color: #fccf00;
+  color: $yellow;
 }
 
 .green {
-  color: #7ac943;
+  color: $green;
 }
 
 .red {
-  color: red;
+  color: $red;
 }
 
 .key {
@@ -325,7 +326,7 @@ ul {
   top: 46%;
   width: 15px;
   height: 1px;
-  background-color: #c0c4cc;
+  background-color: $gray;
 } //局部样式
 .header {
   @include header;
@@ -369,7 +370,7 @@ ul {
     margin-left: 40px;
     padding: 0 30px;
     line-height: $opt-height;
-    background: #f52831;
+    background: $red;
     color: white;
     box-shadow: 1px 2px 10px 2px rgba(0, 0, 0, 0.1);
   }

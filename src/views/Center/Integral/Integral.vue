@@ -5,15 +5,15 @@
       <div class="is-flex wrap">
         <div class="opt">
           <input v-model="last" value="1" name="last" id="last7" type="radio">
-          <label for="last7" @click="fnLast">最近7天</label>
+          <label for="last7" @click="fnLast(1)">最近7天</label>
         </div>
         <div class="opt">
           <input v-model="last" value="2" name="last" id="last30" type="radio">
-          <label for="last30" @click="fnLast">最近30天</label>
+          <label for="last30" @click="fnLast(2)">最近30天</label>
         </div>
         <div class="opt">
           <input v-model="last" value="3" name="last" id="last365" type="radio">
-          <label for="last365" @click="fnLast">最近1年</label>
+          <label for="last365" @click="fnLast(3)">最近1年</label>
         </div>
       </div>
       <span class="btn btn-export">导出</span>
@@ -111,12 +111,11 @@ export default {
   },
   methods: {
     changePage(page) {
-      // 分页插件触发
       this.curPage = page;
       this.check();
     },
-    fnLast() {
-      // 最近天数触发
+    fnLast(index) {
+      this.last = index; // 手动触发last更新，避免v-model延迟的更新影响接口调用
       this.curPage = 1;
       this.check();
     },
@@ -168,8 +167,8 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import "../../../common/css/flex-pos.css";
-@import "../../../common/scss/center/header.scss";
+@import "../../../common/css/base.css";
+@import "../../../common/scss/center/index.scss";
 
 ul {
   padding-left: 0;
@@ -207,13 +206,13 @@ ul {
   .btn-export {
     margin-left: 40px;
     padding: 2px 30px;
-    background: #f52831;
+    background: $red;
     color: white;
   }
 }
 .main {
   padding: 20px 30px;
-  color: #b3b3b3;
+  color: $gray;
 }
 .page-pos {
   margin-top: 10px;

@@ -124,6 +124,10 @@
 
 /* 光标类 */
 
+.btn {
+  text-align: center;
+}
+
 .btn:hover {
   cursor: pointer;
 }

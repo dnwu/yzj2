@@ -235,8 +235,8 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import "../../../common/css/flex-pos.css";
-@import "../../../common/scss/center/header.scss";
+@import "../../../common/css/base.css";
+@import "../../../common/scss/center/index.scss";
 
 .header {
   @include header;
@@ -251,7 +251,6 @@ export default {
   .val {
   }
 }
-$yellow: #fccf00;
 .title {
   margin-top: 20px;
   padding: 10px 40px;
@@ -261,6 +260,7 @@ $yellow: #fccf00;
   font-size: 16px;
 }
 .search {
+  color: $gray;
   padding: 20px 120px;
   .btn-search {
     line-height: 2.3em;

@@ -32,7 +32,7 @@
           <span class="wide wide6">身份证</span>
           <span class="wide wide7">创建时间</span>
           <span class="wide wide8">
-            <img src="../../../assets/son_add.png" alt="" @click="dialogVisible = true">
+            <img class="btn" src="../../../assets/son_add.png" alt="" @click="dialogVisible = true">
           </span>
         </div>
         <div class="contain">
@@ -48,10 +48,10 @@
               <span class="wide wide6" v-text="list.id"></span>
               <span class="wide wide7" v-text="list.time"></span>
               <span class="wide8 is-flex jst-between">
-                <img src="../../../assets/son_modify.png" alt="">
-                <img src="../../../assets/son_state_1.png" alt="" v-show="!list.state" @click="cutState(index)">
-                <img src="../../../assets/son_stop.png" alt="" v-show="list.state" @click="cutState(index)">
-                <img src="../../../assets/son_delete.png" alt="">
+                <img class="btn" src="../../../assets/son_modify.png" alt="">
+                <img class="btn" src="../../../assets/son_state_1.png" alt="" v-show="!list.state" @click="cutState(index)">
+                <img class="btn" src="../../../assets/son_stop.png" alt="" v-show="list.state" @click="cutState(index)">
+                <img class="btn" src="../../../assets/son_delete.png" alt="">
               </span>
             </li>
           </ul>
@@ -64,7 +64,7 @@
         <div class="dialog-title">
           <i class="el-icon-plus"></i> 添加子账号
         </div>
-        <i class="el-icon-close" @click="dialogVisible = false"></i>
+        <i class="btn el-icon-close" @click="dialogVisible = false"></i>
       </header>
       <main class="content">
         <ul>
@@ -214,8 +214,8 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import "../../../common/css/flex-pos.css";
-@import "../../../common/scss/center/header.scss";
+@import "../../../common/css/base.css";
+@import "../../../common/scss/center/index.scss";
 .green {
   background: green;
 }
@@ -224,11 +224,8 @@ ul {
   padding-left: 0;
 }
 
-$yellow: #fccf00;
-$green: #7ac943;
-
 .son_account {
-  color: #999999;
+  color: $gray;
   .header {
     @include header;
   }
@@ -240,8 +237,8 @@ $green: #7ac943;
         45deg,
         $yellow 0%,
         $yellow 50%,
-        red 50%,
-        red 100%
+        $red 50%,
+        $red 100%
       );
       background-size: 40px 3px;
     }
@@ -295,7 +292,7 @@ $green: #7ac943;
         background: $yellow;
       }
       .green {
-        background: #7ac943;
+        background: $green;
       }
     }
     .wide {
@@ -358,7 +355,7 @@ $green: #7ac943;
       }
       .left,
       .right {
-        border-bottom: 1px solid #999999;
+        border-bottom: 1px solid $gray;
         margin-bottom: 35px;
       }
       .no-border {
