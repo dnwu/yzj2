@@ -229,7 +229,7 @@
                 <div class="key">货物尺寸</div>
                 <div class="list">
                   <EasyScrollbar>
-                    <div class="wrapper" id="wrapper">
+                    <div class="wrapper" id="wrapper" style="height: 80px;">
                       <div>
                         <p>1</p>
                         <p>100*100*10/5</p>
@@ -715,11 +715,21 @@ export default {
     .body-main {
       padding: 30px;
       .wrapper {
-        display: grid;
-        grid-template-columns: 100px 250px 100px 200px repeat(6, 1fr);
+        // display: grid;
+        // grid-template-columns: 100px 250px 100px 200px repeat(6, 1fr);
+        display: flex;
         padding-left: 10px;
         color: #9f9f9f;
         text-align: center;
+        .status,.line-time{
+          width: 100px;
+        }
+        .line{
+          width: 250px;
+        }
+        .main-order-num,.goodsName,.num,.weight,.needPayWeight,.size,.operate{
+          width: 96px;
+        }
       }
       .tbody {
         margin-top: 10px;
@@ -771,7 +781,7 @@ export default {
                 display: inline-block;
                 position: absolute;
                 top: 20px;
-                left: -20px;
+                left: 40px;
                 width: 1px;
                 height: 50%;
                 background-color: #9c9c9c;
@@ -781,7 +791,7 @@ export default {
                 display: inline-block;
                 position: absolute;
                 top: 20px;
-                left: -20px;
+                left: 40px;
                 width: 10px;
                 height: 1px;
                 background-color: #9c9c9c;
@@ -793,7 +803,7 @@ export default {
                 display: inline-block;
                 position: absolute;
                 bottom: 20px;
-                left: -20px;
+                left: 40px;
                 width: 10px;
                 height: 1px;
                 background-color: #9c9c9c;
@@ -993,6 +1003,7 @@ export default {
                   border: 1px solid #a0a0a0;
                   .wrapper {
                     height: 80px;
+                    width: 120px;
                     p {
                       margin: 0;
                     }
