@@ -1,0 +1,133 @@
+/* position */
+
+.is-relative {
+  position: relative;
+}
+
+.is-absolute {
+  position: absolute;
+}
+
+.is-fixed {
+  position: fixed;
+}
+
+
+/* flex */
+
+.is-flex {
+  display: flex;
+}
+
+.dir-row {
+  flex-direction: row;
+}
+
+.dir-column {
+  flex-direction: column;
+}
+
+.jst-around {
+  justify-content: space-around;
+}
+
+.jst-between {
+  justify-content: space-between;
+}
+
+.jst-left {
+  justify-content: left;
+}
+
+.jst-center {
+  justify-content: center;
+}
+
+.jst-right {
+  justify-content: right;
+}
+
+.ali-around {
+  align-items: space-around;
+}
+
+.ali-between {
+  align-items: space-between;
+}
+
+.ali-left {
+  align-items: left;
+}
+
+.ali-center {
+  align-items: center;
+}
+
+.ali-right {
+  align-items: right;
+}
+
+
+/* display */
+
+.is-block {
+  display: block;
+}
+
+.is-none {
+  display: none;
+}
+
+.is-inline-block {
+  display: inline-block;
+}
+
+
+/* text */
+
+.text-left {
+  text-align: left;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-jst {
+  text-align: justify;
+}
+
+.text-jst:after {
+  content: "";
+  display: inline-block;
+  width: 100%;
+  overflow: hidden;
+  height: 0;
+}
+
+.text-top {
+  vertical-align: text-top;
+}
+
+.text-middle {
+  vertical-align: middle;
+}
+
+.text-bottom {
+  vertical-align: text-bottom;
+}
+
+
+/* 光标类 */
+
+.btn {
+  text-align: center;
+}
+
+.btn:hover {
+  cursor: pointer;
+}

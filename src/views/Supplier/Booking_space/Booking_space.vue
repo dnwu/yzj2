@@ -756,11 +756,21 @@ export default {
     .body-main {
       padding: 30px;
       .wrapper {
-        display: grid;
-        grid-template-columns: 100px 100px 250px repeat(7, 1fr);
+        // display: grid;
+        // grid-template-columns: 100px 100px 250px repeat(7, 1fr);
+        display: flex;
         padding-left: 10px;
         color: #9f9f9f;
         text-align: center;
+        .status,.plane-num{
+          width: 100px;
+        }
+        .line{
+          width: 250px;
+        }
+        .plane-data,.plane-time,.name,.num,.weight,.pay-weight,.operate{
+          width: 111px;
+        }
       }
       .thead {
         margin-bottom: 20px;
@@ -815,7 +825,7 @@ export default {
                 display: inline-block;
                 position: absolute;
                 top: 20px;
-                left: -20px;
+                left: 60px;
                 width: 1px;
                 height: 50%;
                 background-color: #9c9c9c;
@@ -825,7 +835,7 @@ export default {
                 display: inline-block;
                 position: absolute;
                 top: 20px;
-                left: -20px;
+                left: 60px;
                 width: 10px;
                 height: 1px;
                 background-color: #9c9c9c;
@@ -837,7 +847,7 @@ export default {
                 display: inline-block;
                 position: absolute;
                 bottom: 20px;
-                left: -20px;
+                left: 60px;
                 width: 10px;
                 height: 1px;
                 background-color: #9c9c9c;

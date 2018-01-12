@@ -856,10 +856,11 @@ export default {
           token: this.token
         })
         .then(data => {
-          // console.log(data.data.data.senderList);
+          console.log('senderList',data.data.data.senderList);
           var sendList = data.data.data.senderList
           sendList.forEach(ele=>{
             if(ele.asDefault == 1){
+              console.log('senderList',ele);
               this.sendAddressData.addressid = ele.id
               this.sendAddressData.name = ele.contactName
               this.sendAddressData.id = ele.identityCard
@@ -881,10 +882,11 @@ export default {
           token: this.token
         })
         .then(data => {
-          // console.log(data.data.data.receiverList);
+          console.log('receiverList',data.data.data.receiverList);
           var receiveList = data.data.data.receiverList
           receiveList.forEach(ele=>{
             if(ele.asDefault == 1){
+              console.log('receiverList',ele);
               this.receiveAddressData.addressid = ele.id
               this.receiveAddressData.name = ele.contactName
               this.receiveAddressData.id = ele.identityCard
@@ -954,10 +956,10 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           // alert("submitOrder!");
-          if (this.receiveAddressData.addressid == "" || this.sendAddressData.addressid == "") {
-            this.prompt("请输入地址，点击确定");
-            return;
-          }
+          // if (this.receiveAddressData.addressid == "" || this.sendAddressData.addressid == "") {
+          //   this.prompt("请输入地址，点击确定");
+          //   return;
+          // }
           this.axios
             .post("/app/v1/order/saveOrder", {
               agentCode: "",
@@ -1002,7 +1004,12 @@ export default {
               if (data.data.code == 1) {
                 this.promptsuccess("下单成功");
                 setTimeout(() => {
-                  this.$router.push("/center/online_product/complete");
+                  this.$router.push({
+                    path: "/center/online_product/complete",
+                    query: {
+                      step: 3
+                    }
+                  });
                 }, 1000);
               }
             });
@@ -1037,79 +1044,89 @@ export default {
       var LandEndServerFee = 0
       var LandStartServerFee = 0
       // 计算基础服务收费
-      var airfreightCharge = parseFloat(this.getProductIndexData.selectServer.saveBaseServerData.airfreightCharge).mul(this.goodsInfo.payWeight)>
-                      parseFloat(this.getProductIndexData.selectServer.saveBaseServerData.minAirfreightCharge)?
-                      parseFloat(this.getProductIndexData.selectServer.saveBaseServerData.airfreightCharge).mul(this.goodsInfo.payWeight):
-                      parseFloat(this.getProductIndexData.selectServer.saveBaseServerData.minAirfreightCharge)
-      var fuelCharge = parseFloat(this.getProductIndexData.selectServer.saveBaseServerData.fuelCharge).mul(this.goodsInfo.payWeight)
-      BaseServerFee = airfreightCharge + fuelCharge
+      if(this.getProductIndexData.selectServer.baseServer){
+        var airfreightCharge = parseFloat(this.getProductIndexData.selectServer.saveBaseServerData.airfreightCharge).mul(this.goodsInfo.payWeight)>
+                        parseFloat(this.getProductIndexData.selectServer.saveBaseServerData.minAirfreightCharge)?
+                        parseFloat(this.getProductIndexData.selectServer.saveBaseServerData.airfreightCharge).mul(this.goodsInfo.payWeight):
+                        parseFloat(this.getProductIndexData.selectServer.saveBaseServerData.minAirfreightCharge)
+        var fuelCharge = parseFloat(this.getProductIndexData.selectServer.saveBaseServerData.fuelCharge).mul(this.goodsInfo.payWeight)
+        BaseServerFee = airfreightCharge.add(fuelCharge)
+      }
       // 计算目的港交货收费
       // airportEnd11为单位收费，airportEnd12为固定收费
-      var airportEnd11 = 0
-      var airportEnd12 = 0
       var airportEndFee = 0
-      if('airportEnd' in this.getProductIndexData.selectServer.saveAirportFee){
-        var airportEndData = this.getProductIndexData.selectServer.saveAirportFee.airportEnd.priceDTOS
-        airportEndData.forEach(ele=>{
-          if(ele.priceType == 11){
-            airportEnd11 += parseFloat(ele.price).mul(this.goodsInfo.payWeight)>parseFloat(ele.minPrice)?parseFloat(ele.price).mul(this.goodsInfo.payWeight):parseFloat(ele.minPrice)
-          }else if(ele.priceType == 12){
-            airportEnd12 += parseFloat(ele.price)
-          }
-        })
-        airportEndFee = airportEnd11+airportEnd12
+      if(this.getProductIndexData.selectServer.airportEnd){
+        var airportEnd11 = 0
+        var airportEnd12 = 0
+        if('airportEnd' in this.getProductIndexData.selectServer.saveAirportFee){
+          var airportEndData = this.getProductIndexData.selectServer.saveAirportFee.airportEnd.priceDTOS
+          airportEndData.forEach(ele=>{
+            if(ele.priceType == 11){
+              airportEnd11 = airportEnd11.add(parseFloat(ele.price).mul(this.goodsInfo.payWeight)>parseFloat(ele.minPrice)?parseFloat(ele.price).mul(this.goodsInfo.payWeight):parseFloat(ele.minPrice))
+            }else if(ele.priceType == 12){
+              airportEnd12 = airportEnd12.add(parseFloat(ele.price))
+            }
+          })
+          airportEndFee = airportEnd11.add(airportEnd12)
+        }
       }
       // 计算始发港交货收费
       // airportEnd11为单位收费，airportEnd12为固定收费
-      var airportStart11 = 0
-      var airportStart12 = 0
       var airportStartFee = 0
-      if('airportStart' in this.getProductIndexData.selectServer.saveAirportFee){
-        var airportStartData = this.getProductIndexData.selectServer.saveAirportFee.airportStart.priceDTOS
-        airportStartData.forEach(ele=>{
-          if(ele.priceType == 11){
-            airportStart11 += parseFloat(ele.price).mul(this.goodsInfo.payWeight)>parseFloat(ele.minPrice)?parseFloat(ele.price).mul(this.goodsInfo.payWeight):parseFloat(ele.minPrice)
-          }else if(ele.priceType == 12){
-            airportStart12 += parseFloat(ele.price)
-          }
-        })
-        airportStartFee = airportStart11+airportStart12
+      if(this.getProductIndexData.selectServer.airportStart){
+        var airportStart11 = 0
+        var airportStart12 = 0
+        if('airportStart' in this.getProductIndexData.selectServer.saveAirportFee){
+          var airportStartData = this.getProductIndexData.selectServer.saveAirportFee.airportStart.priceDTOS
+          airportStartData.forEach(ele=>{
+            if(ele.priceType == 11){
+              airportStart11 = airportStart11.add(parseFloat(ele.price).mul(this.goodsInfo.payWeight)>parseFloat(ele.minPrice)?parseFloat(ele.price).mul(this.goodsInfo.payWeight):parseFloat(ele.minPrice))
+            }else if(ele.priceType == 12){
+              airportStart12 = airportStart12.add(parseFloat(ele.price))
+            }
+          })
+          airportStartFee = airportStart11.add(airportStart12)
+        }
       }
-      AirportFee = airportStartFee+airportEndFee
+      AirportFee = airportStartFee.add(airportEndFee)
 
       // 计算上门取货费用
-      if('id' in this.getProductIndexData.selectServer.saveLandStartServerData){
-        var saveLandStartServerData = this.getProductIndexData.selectServer.saveLandStartServerData
-        if(saveLandStartServerData.priceType == 11){
-          LandStartServerFee += parseFloat(saveLandStartServerData.price).mul(this.goodsInfo.payWeight)>parseFloat(saveLandStartServerData.minPrice)?
-                                parseFloat(saveLandStartServerData.price).mul(this.goodsInfo.payWeight):parseFloat(saveLandStartServerData.minPrice)
-        }else if(saveLandStartServerData.priceType == 12){
-          LandStartServerFee += parseFloat(saveLandStartServerData.price)
+      if(this.getProductIndexData.selectServer.landStart){
+        if('id' in this.getProductIndexData.selectServer.saveLandStartServerData){
+          var saveLandStartServerData = this.getProductIndexData.selectServer.saveLandStartServerData
+          if(saveLandStartServerData.priceType == 11){
+            LandStartServerFee += parseFloat(saveLandStartServerData.price).mul(this.goodsInfo.payWeight)>parseFloat(saveLandStartServerData.minPrice)?
+                                  parseFloat(saveLandStartServerData.price).mul(this.goodsInfo.payWeight):parseFloat(saveLandStartServerData.minPrice)
+          }else if(saveLandStartServerData.priceType == 12){
+            LandStartServerFee += parseFloat(saveLandStartServerData.price)
+          }
         }
       }
 
       // 计算落地配送费用
-      if('id' in this.getProductIndexData.selectServer.saveLandEndServerData){
-        var saveLandEndServerData = this.getProductIndexData.selectServer.saveLandEndServerData
-        if(saveLandEndServerData.priceType == 11){
-          LandEndServerFee += parseFloat(saveLandEndServerData.price).mul(this.goodsInfo.payWeight)>parseFloat(saveLandEndServerData.minPrice)?
-                                parseFloat(saveLandEndServerData.price).mul(this.goodsInfo.payWeight):parseFloat(saveLandEndServerData.minPrice)
-        }else if(saveLandEndServerData.priceType == 12){
-          LandEndServerFee += parseFloat(saveLandEndServerData.price)
+      if(this.getProductIndexData.selectServer.landEnd){
+        if('id' in this.getProductIndexData.selectServer.saveLandEndServerData){
+          var saveLandEndServerData = this.getProductIndexData.selectServer.saveLandEndServerData
+          if(saveLandEndServerData.priceType == 11){
+            LandEndServerFee += parseFloat(saveLandEndServerData.price).mul(this.goodsInfo.payWeight)>parseFloat(saveLandEndServerData.minPrice)?
+                                  parseFloat(saveLandEndServerData.price).mul(this.goodsInfo.payWeight):parseFloat(saveLandEndServerData.minPrice)
+          }else if(saveLandEndServerData.priceType == 12){
+            LandEndServerFee += parseFloat(saveLandEndServerData.price)
+          }
         }
       }
 
-      return AirportFee.add(BaseServerFee).add(LandEndServerFee).add(LandStartServerFee)
+      return BaseServerFee.add(AirportFee).add(LandEndServerFee).add(LandStartServerFee)
     }
   },
-  watch: {
-    goodsInfo:{
-      handler(newValue, oldValue) {
-　　　　console.log(newValue)
-　　　},
-　　　deep: true
-    }
-  }
+//   watch: {
+//     goodsInfo:{
+//       handler(newValue, oldValue) {
+// // 　　　　console.log(newValue)
+// 　　　},
+// 　　　deep: true
+//     }
+//   }
 };
 </script>
 

@@ -885,11 +885,36 @@ export default {
     .body-main {
       padding: 30px;
       .wrapper {
-        display: grid;
-        grid-template-columns: 100px 250px repeat(6, 1fr);
+        // display: grid;
+        // grid-template-columns: 100px 250px repeat(6, 1fr);
+        display: flex;
         padding-left: 10px;
         color: #9f9f9f;
         text-align: center;
+        .goodsName{
+          width: 100px;
+        }
+        .address{
+          width: 250px;
+        }
+        .num{
+          width: 146px;
+        }
+        .weight{
+          width: 146px;
+        }
+        .needPayWeight{
+          width: 146px;
+        }
+        .server{
+          width: 146px;
+        }
+        .status{
+          width: 146px;
+        }
+        .operate{
+          width: 146px;
+        }
       }
       .tbody {
         margin-top: 10px;
@@ -945,7 +970,7 @@ export default {
                 display: inline-block;
                 position: absolute;
                 top: 20px;
-                left: -20px;
+                left: 60px;
                 width: 1px;
                 height: 50%;
                 background-color: #9c9c9c;
@@ -955,7 +980,7 @@ export default {
                 display: inline-block;
                 position: absolute;
                 top: 20px;
-                left: -20px;
+                left: 60px;
                 width: 10px;
                 height: 1px;
                 background-color: #9c9c9c;
@@ -967,7 +992,7 @@ export default {
                 display: inline-block;
                 position: absolute;
                 bottom: 20px;
-                left: -20px;
+                left: 60px;
                 width: 10px;
                 height: 1px;
                 background-color: #9c9c9c;

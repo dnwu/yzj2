@@ -235,15 +235,8 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@mixin header {
-  height: 61px;
-  align-items: center;
-  padding-left: 20px;
-  color: #b3b3b3;
-  h4 {
-    font-weight: normal;
-  }
-}
+@import "../../../common/css/base.css";
+@import "../../../common/scss/center/index.scss";
 
 .header {
   @include header;
@@ -258,7 +251,6 @@ export default {
   .val {
   }
 }
-$yellow: #fccf00;
 .title {
   margin-top: 20px;
   padding: 10px 40px;
@@ -268,6 +260,7 @@ $yellow: #fccf00;
   font-size: 16px;
 }
 .search {
+  color: $gray;
   padding: 20px 120px;
   .btn-search {
     line-height: 2.3em;
@@ -289,104 +282,4 @@ $yellow: #fccf00;
   .el-range-editor--mini.el-input__inner {
   }
 }
-</style>
-
-<style lang="scss" scoped>
-/* position */
-
-.is-relative {
-  position: relative;
-}
-
-.is-absolute {
-  position: absolute;
-}
-
-.is-fixed {
-  position: fixed;
-}
-/* flex */
-
-.is-flex {
-  display: flex;
-}
-
-.dir-row {
-  flex-direction: row;
-}
-
-.dir-column {
-  flex-direction: column;
-}
-
-.jst-around {
-  justify-content: space-around;
-}
-
-.jst-between {
-  justify-content: space-between;
-}
-
-.ali-left {
-  align-items: left;
-}
-
-.ali-center {
-  align-items: center;
-}
-
-.ali-right {
-  align-items: right;
-}
-/* display */
-
-.is-block {
-  display: block;
-}
-
-.is-none {
-  display: none;
-}
-
-.is-inline-block {
-  display: inline-block;
-}
-/* text */
-
-.text-left {
-  text-align: left;
-}
-
-.text-center {
-  text-align: center;
-}
-
-.text-right {
-  text-align: right;
-}
-
-.text-jst {
-  text-align: justify;
-}
-
-.text-jst:after {
-  content: "";
-  display: inline-block;
-  width: 100%;
-  overflow: hidden;
-  height: 0;
-}
-
-.text-top {
-  vertical-align: text-top;
-}
-
-.text-middle {
-  vertical-align: middle;
-}
-
-.text-bottom {
-  vertical-align: text-bottom;
-}
-/* 颜色类 */
 </style>

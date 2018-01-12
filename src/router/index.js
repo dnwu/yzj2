@@ -36,7 +36,6 @@ import Join from '@/views/About/Join'
 import store from '@/store'
 import PIndex from '@/views/Center/Online_product/product_index'
 import productWrite from '@/views/Center/Online_product/product_write'
-import productComplete from '@/views/Center/Online_product/product_complete'
 import * as types from '@/store/mutation-type'
 
 const LoginIndex = () => import ('@/views/Login/Login')
@@ -61,6 +60,8 @@ const Integral = () => import ('@/views/Center/Integral/Integral')
 const Address = () => import ('@/views/Center/Address/Address')
 const Son_account = () => import ('@/views/Center/Son_account/Son_account')
 const Online_product = () => import ('@/views/Center/Online_product/Online_product')
+const Online_product_complete = ()=> import('@/views/Center/Online_product/product_complete')
+const Online_product_pay_complete = ()=> import('@/views/Center/Online_product/product_pay_complete')
 const Online_write = () => import ('@/views/Center/Online_write/Online_write')
 const Online_check = () => import ('@/views/Center/Online_check/Online_check')
 const Online_order_s = () => import ('@/views/Center/Online_order_s/Online_order_s')
@@ -372,11 +373,14 @@ let router = new Router({
         }, {
           path: '/center/online_product',
           component: Online_product,
+          redirect:'/center/online_product/index',
           children: [
             {
-              path: '/center/online_product',
+              path: '/center/online_product/index',
               component: PIndex,
               meta:{
+                requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+                usertype:'personal',
                 keepAlive:true
               }
             },
@@ -384,13 +388,26 @@ let router = new Router({
               path: '/center/online_product/write',
               component: productWrite,
               meta:{
+                requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+                usertype:'personal',
                 keepAlive:false
               }
             },
             {
               path: '/center/online_product/complete',
-              component: productComplete,
+              component: Online_product_complete,
               meta:{
+                requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+                usertype:'personal',
+                keepAlive:false
+              }
+            },
+            {
+              path: '/center/online_product/pay_complete',
+              component: Online_product_pay_complete,
+              meta:{
+                requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+                usertype:'personal',
                 keepAlive:false
               }
             }

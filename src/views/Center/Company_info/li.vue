@@ -12,17 +12,21 @@
             :style="widthStyle"
             v-if="obj.value === false"
             v-show="edit"
+            action="https://jsonplaceholder.typicode.com/posts/"
             :limit="1"
             :multiple="false"
+            :on-change="onChange"
             class="upload-demo"
-            ref="upload"
-            action="https://jsonplaceholder.typicode.com/posts/"
-            :on-preview="handlePreview"
-            :on-remove="handleRemove"
             :auto-upload="false">
-            <el-button  slot="trigger" size="small" type="primary">选取文件</el-button>
+            <el-button slot="trigger" size="small" type="primary" @click="setName(name)">选取文件</el-button>
         </el-upload>
     </li>
+    <!--             
+      ref="upload"
+      action="https://jsonplaceholder.typicode.com/posts/"
+      :on-preview="handlePreview"
+      :on-remove="handleRemove"
+    -->
 </div>
 
 </template>
@@ -31,25 +35,32 @@ export default {
   props: ["info", "edit", "width"],
   data() {
     return {
-      widthStyle: ""
+      widthStyle: "",
+      name: ""
     };
   },
   methods: {
     getWitdthStyle() {
       this.widthStyle = `width:${this.width}px`;
     },
+    setName(name) {
+      this.name = name;
+    },
+    onChange(event) {
+      this.$emit("fileChange", this.name, event.raw);
+    },
     submitUpload() {
-      var arrName = Object.keys(this.info);
+      /* var arrName = Object.keys(this.info);
       for (var i = 0; i < arrName.length; i++) {
         this.$refs[arrName[i]] && this.$refs[arrName[i]][0].submit();
-      }
-    },
-    handleRemove(file, fileList) {
+      } */
+    }
+    /* handleRemove(file, fileList) {
       console.log(file, fileList);
     },
     handlePreview(file) {
       console.log(file);
-    }
+    }*/
   },
   mounted() {
     this.getWitdthStyle();
