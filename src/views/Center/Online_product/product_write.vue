@@ -856,10 +856,11 @@ export default {
           token: this.token
         })
         .then(data => {
-          // console.log(data.data.data.senderList);
+          console.log('senderList',data.data.data.senderList);
           var sendList = data.data.data.senderList
           sendList.forEach(ele=>{
             if(ele.asDefault == 1){
+              console.log('senderList',ele);
               this.sendAddressData.addressid = ele.id
               this.sendAddressData.name = ele.contactName
               this.sendAddressData.id = ele.identityCard
@@ -881,10 +882,11 @@ export default {
           token: this.token
         })
         .then(data => {
-          // console.log(data.data.data.receiverList);
+          console.log('receiverList',data.data.data.receiverList);
           var receiveList = data.data.data.receiverList
           receiveList.forEach(ele=>{
             if(ele.asDefault == 1){
+              console.log('receiverList',ele);
               this.receiveAddressData.addressid = ele.id
               this.receiveAddressData.name = ele.contactName
               this.receiveAddressData.id = ele.identityCard
@@ -954,10 +956,10 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           // alert("submitOrder!");
-          if (this.receiveAddressData.addressid == "" || this.sendAddressData.addressid == "") {
-            this.prompt("请输入地址，点击确定");
-            return;
-          }
+          // if (this.receiveAddressData.addressid == "" || this.sendAddressData.addressid == "") {
+          //   this.prompt("请输入地址，点击确定");
+          //   return;
+          // }
           this.axios
             .post("/app/v1/order/saveOrder", {
               agentCode: "",
@@ -1002,7 +1004,12 @@ export default {
               if (data.data.code == 1) {
                 this.promptsuccess("下单成功");
                 setTimeout(() => {
-                  this.$router.push("/center/online_product/complete");
+                  this.$router.push({
+                    path: "/center/online_product/complete",
+                    query: {
+                      step: 3
+                    }
+                  });
                 }, 1000);
               }
             });
@@ -1108,20 +1115,18 @@ export default {
           }
         }
       }
-      console.log(BaseServerFee,AirportFee,LandEndServerFee,LandStartServerFee,'这个是费用');
-
 
       return BaseServerFee.add(AirportFee).add(LandEndServerFee).add(LandStartServerFee)
     }
   },
-  watch: {
-    goodsInfo:{
-      handler(newValue, oldValue) {
-　　　　console.log(newValue)
-　　　},
-　　　deep: true
-    }
-  }
+//   watch: {
+//     goodsInfo:{
+//       handler(newValue, oldValue) {
+// // 　　　　console.log(newValue)
+// 　　　},
+// 　　　deep: true
+//     }
+//   }
 };
 </script>
 

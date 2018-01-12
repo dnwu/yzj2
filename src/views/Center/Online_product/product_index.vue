@@ -72,7 +72,51 @@
                   <div class="detail-list2 detail-list" v-if="productSearchResult.airfreightDTO.fuelCharge != 0"><span class="detail-name">燃油附加费</span><span class="detail-cost">{{productSearchResult.airfreightDTO.fuelCharge}}元/千克</span></div>
                 </div>
                 <!-- 运价申请模态框 -->
-
+                <div class="trans-price-apply-model">
+                  <el-dialog top='200px' width='800px' :visible.sync="transPriceApplyModel">
+                    <div slot="title"><span class="el-icon-service"></span>运价申请</div>
+                    <div class="body">
+                      <div class="top">
+                        <div>
+                          <div class="key">申请编号：</div>
+                          <div class="value red">SQ986878584828</div>
+                        </div>
+                        <div>
+                          <div class="key">会员名称：</div>
+                          <div class="value">深圳***</div>
+                        </div>
+                        <div>
+                          <div class="key">会员编号：</div>
+                          <div class="value">HH007</div>
+                        </div>
+                        <div>
+                          <div class="key">运输路线：</div>
+                          <div class="value">深圳（）-上海（）</div>
+                        </div>
+                        <div>
+                          <div class="key">货物重量：</div>
+                          <div class="value">1000千克</div>
+                        </div>
+                        <div>
+                          <div class="key">货物类型：</div>
+                          <div class="value">普货</div>
+                        </div>
+                        <div>
+                          <div class="key">起飞时间：</div>
+                          <div class="value">2017-10-10 10:10-10:10</div>
+                        </div>
+                      </div>
+                      <div class="bottom">
+                        <div class="key">申请运价</div>
+                        <div class="value"><el-input size="mini" v-model="applyPrice" placeholder="请输入理想运价"></el-input></div>
+                        <div class="unit">元/千克</div>
+                      </div>
+                    </div>
+                    <div slot="footer" class="dialog-footer">
+                      <el-button type="warning" size="mini">立即申请</el-button>
+                    </div>
+                  </el-dialog>
+                </div>
                 <div class="detail-btn-box"><span class="inner-right-btn">运价申请</span></div>
                 <div class="detail-img active el-icon-success" :class="selectServer.baseServer?'active':''">
                 </div>
@@ -328,16 +372,19 @@
 <script type="text/javascript">
 import StartPortselect from "@/components/StartPortselect";
 import EndPortselect from "@/components/EndPortselect";
-import productSelect from "./product_select";
+// import productSelect from "./product_select";
 export default {
   components: {
     // PServer,
     StartPortselect,
     EndPortselect,
-    productSelect
+    // productSelect
   },
   data() {
     return {
+      // 运价申请
+      applyPrice:'',
+      transPriceApplyModel:true,
       searchData: {
         // 搜索条件
         startPort: "",
@@ -475,16 +522,14 @@ export default {
           this.selectServer.landStart1Ton = false
           this.selectServer.landStart2Ton = false
           this.selectServer.landStart3Ton = false
+          // 调用设置储存服务项的函数
+          this.setLandStartGeneralServerData(this.saveStartLandCarriageSales,this.landStartLevel2);
         }
         // 选择二级后，默认勾选服务,然后重置controlLandStartServer
         this.controlLandStartServer = true
         this.selectServer.landStart = true
-        // 调用计算价格的函数
-        this.getLandStartPrice(
-          this.saveStartLandCarriageSales,
-          this.landStartLevel2
-        );
-        console.log(this.selectServer.saveLandStartCarType);
+
+        // console.log(this.selectServer.saveLandStartCarType);
         // console.log(this.saveStartLandCarriageSales,this.landStartLevel2);
       }
     },
@@ -531,14 +576,15 @@ export default {
           this.selectServer.landEnd1Ton = false
           this.selectServer.landEnd2Ton = false
           this.selectServer.landEnd3Ton = false
+          // 调用设置储存服务项的函数
+          this.setLandEndGeneralServerData(this.saveEndLandCarriageSales, this.landEndLevel2);
         }
         // 选择二级后，默认勾选服务,然后重置controlLandEndServer
         this.controlLandEndServer = true
         this.selectServer.landEnd = true
-        // 调用计算价格的函数
-        this.getLandEndPrice(this.saveEndLandCarriageSales, this.landEndLevel2);
+
         // console.log(this.landEndLevel2,this.saveEndLandCarriageSales,this.landEndLevel2);
-        console.log(this.selectServer.saveLandEndCarType);
+        // console.log(this.selectServer.saveLandEndCarType);
       }
     },
     getLandStartCarType(data){
@@ -559,7 +605,7 @@ export default {
     },
     // 当二级标签变化的时候，初始化专车配送的价格，也就是this.selectServer.saveLandStartServerData
     initLandStartCarPrice(item){
-      console.log(item);
+      // console.log(item);
       var serverList = item.landProductTypeDTOS
       serverList.forEach(ele=>{
         if(ele.productType ==1){
@@ -615,12 +661,10 @@ export default {
     },
     toggleLandStartServer(item,index) {
       this.selectServer.landStartIndex = index
-      console.log(item);
       this.selectServer.saveLandStartServerData = item
     },
     toggleLandEndServer(item,index) {
       this.selectServer.landEndIndex = index
-      console.log(item);
       // 如果是专车配送的时候，把一般配送的收费细节存在this.selectServer.saveLandStartServerData
       this.selectServer.saveLandEndServerData = item
     },
@@ -710,7 +754,7 @@ export default {
           weight: this.searchData.goodsWeight
         })
         .then(data => {
-          console.log(data.data.data);
+          // console.log(data.data.data);
           this.productSearchResult = {};
           if (data.data.code == 1) {
             // 储存航空货运ID
@@ -775,129 +819,24 @@ export default {
       if (this.selectServer.landStart) {
         let idArr = this.productSearchResult.landStart.landCarriageSales[this.landStartLevel1].landProductTypeDTOS;
         // 上门取货服务中的具体服务
-        // 一般配送
-        if (this.selectServer.landStartGeneral) {
-          idArr.forEach(ele => {
-            if (ele.productType == 2) {
-              this.selectServer.landCarriageProductIds.push({
-                priceId: ele.list[0].id,
-                productId: ele.id
-              });
-            }
-          });
-        }
-        // 1吨金杯车
-        if (this.selectServer.landStart1Ton) {
-          // let idArr = this.productSearchResult.landStart.landCarriageSales.landProductTypeDTOS;
-          let newObj = {};
-          idArr.forEach(ele => {
-            if (ele.productType == 1) {
-              newObj["productId"] = ele.id;
-              ele.list.forEach(e => {
-                if (e.name == "1吨金杯车") {
-                  newObj["priceId"] = e.id;
-                }
-              });
-            }
-          });
-          this.selectServer.landCarriageProductIds.push(newObj);
-        }
-        // 2吨厢式货车
-        if (this.selectServer.landStart2Ton) {
-          // let idArr = this.productSearchResult.landStart.landCarriageSales.landProductTypeDTOS;
-          let newObj = {};
-          idArr.forEach(ele => {
-            if (ele.productType == 1) {
-              newObj["productId"] = ele.id;
-              ele.list.forEach(e => {
-                if (e.name == "2吨厢式货车") {
-                  newObj["priceId"] = e.id;
-                }
-              });
-            }
-          });
-          this.selectServer.landCarriageProductIds.push(newObj);
-        }
-        // 3吨厢式货车
-        if (this.selectServer.landStart3Ton) {
-          // let idArr = this.productSearchResult.landStart.landCarriageSales.landProductTypeDTOS;
-          let newObj = {};
-          idArr.forEach(ele => {
-            if (ele.productType == 1) {
-              newObj["productId"] = ele.id;
-              ele.list.forEach(e => {
-                if (e.name == "3吨厢式货车") {
-                  newObj["priceId"] = e.id;
-                }
-              });
-            }
-          });
-          this.selectServer.landCarriageProductIds.push(newObj);
-        }
+        // console.log(this.selectServer.saveLandStartServerData);
+        let data = this.selectServer.saveLandStartServerData
+        this.selectServer.landCarriageProductIds.push({
+          priceId: data.id,
+          productId: data.productId
+        });
+
       }
       // 判断是否落地配送
       if (this.selectServer.landEnd) {
         let idArr = this.productSearchResult.landEnd.landCarriageSales[this.landEndLevel1].landProductTypeDTOS;
         //  落地配送服务中的具体服务
-        // 一般配送
-        if (this.selectServer.landEndGeneral) {
-          idArr.forEach(ele => {
-            if (ele.productType == 2) {
-              this.selectServer.landCarriageProductIds.push({
-                priceId: ele.list[0].id,
-                productId: ele.id
-              });
-            }
-          });
-        }
-        // 1吨金杯车
-        if (this.selectServer.landEnd1Ton) {
-          // let idArr = this.productSearchResult.landEnd.landCarriageSales.landProductTypeDTOS;
-          let newObj = {};
-          idArr.forEach(ele => {
-            if (ele.productType == 1) {
-              newObj["productId"] = ele.id;
-              ele.list.forEach(e => {
-                if (e.name == "1吨金杯车") {
-                  newObj["priceId"] = e.id;
-                }
-              });
-            }
-          });
-          this.selectServer.landCarriageProductIds.push(newObj);
-        }
-        // 2吨厢式货车
-        if (this.selectServer.landEnd2Ton) {
-          // let idArr = this.productSearchResult.landEnd.landCarriageSales.landProductTypeDTOS;
-          let newObj = {};
-          idArr.forEach(ele => {
-            if (ele.productType == 1) {
-              newObj["productId"] = ele.id;
-              ele.list.forEach(e => {
-                if (e.name == "2吨厢式货车") {
-                  newObj["priceId"] = e.id;
-                }
-              });
-            }
-          });
-          this.selectServer.landCarriageProductIds.push(newObj);
-        }
-        // 3吨厢式货车
-        if (this.selectServer.landEnd3Ton) {
-          // let idArr = this.productSearchResult.landEnd.landCarriageSales.landProductTypeDTOS;
-          let newObj = {};
-          idArr.forEach(ele => {
-            if (ele.productType == 1) {
-              newObj["productId"] = ele.id;
-              ele.list.forEach(e => {
-                if (e.name == "3吨厢式货车") {
-                  newObj["priceId"] = e.id;
-                }
-              });
-            }
-          });
-          this.selectServer.landCarriageProductIds.push(newObj);
-        }
+        let data = this.selectServer.saveLandEndServerData
+        this.selectServer.landCarriageProductIds.push({
+          priceId: data.id,
+          productId: data.productId
+        });
+        // console.log(this.selectServer.saveLandEndServerData);
       }
 
       // 收集数据， 传到下一步
@@ -915,6 +854,10 @@ export default {
         }
       }
       window.localStorage.setItem('productIndex',JSON.stringify(transObj))
+
+
+
+
       if(this.controlSubimt){
         this.$router.push({
           path: "/center/Online_product/write",
@@ -923,17 +866,18 @@ export default {
           }
         });
       }
-      // console.log(1, this.selectServer.airfreightProductId);
-      // console.log(2, this.selectServer.airportProductIds);
-      // console.log(3, this.selectServer.landCarriageProductIds);
+
+
+
+
+      // console.log(1, this.selectServer);
     },
-    getLandStartPrice(obj, serverType) {
+    setLandStartGeneralServerData(obj, serverType) {
       // 获取对象中的landProductTypeDTOS
       var landProductTypeDTOS = obj.landProductTypeDTOS;
       landProductTypeDTOS.forEach((ele, index) => {
         // console.log('ele',ele.productType);
-        if (serverType == 1) {
-        } else if (serverType == 2) {
+        if (serverType == 2) {
           if (ele.productType == 2) {
             let priceList = ele.list[0];
             this.selectServer.landStartPrice.price = priceList.price;
@@ -945,14 +889,13 @@ export default {
         }
       });
     },
-    getLandEndPrice(obj, serverType) {
+    setLandEndGeneralServerData(obj, serverType) {
       // 获取对象中的landProductTypeDTOS
 
       var landProductTypeDTOS = obj.landProductTypeDTOS;
       landProductTypeDTOS.forEach((ele, index) => {
         // console.log('ele',ele.productType);
-        if (serverType == 1) {
-        } else if (serverType == 2) {
+        if (serverType == 2) {
           if (ele.productType == 2) {
             let priceList = ele.list[0];
             this.selectServer.landEndPrice.price = priceList.price;
@@ -966,34 +909,34 @@ export default {
     },
 
     // 这两个函数的主要作用是在选择不同专车服务的时候，设置saveLandStartServerData，saveLandEndServerData
-    setSaveLandStartServerData(type){
-      var landProductTypeDTOS = this.saveStartLandCarriageSales.landProductTypeDTOS
-      landProductTypeDTOS.forEach(ele=>{
-        if(ele.productType==1){
-          let priceList = ele.list;
-          priceList.forEach(e=>{
-            if(e.name == type){
-              // 如果是一般配送的时候，把一般配送的收费细节存在this.selectServer.saveLandStartServerData
-              this.selectServer.saveLandStartServerData = e
-            }
-          })
-        }
-      })
-    },
-    setSaveLandEndServerData(type){
-      var landProductTypeDTOS = this.saveEndLandCarriageSales.landProductTypeDTOS
-      landProductTypeDTOS.forEach(ele=>{
-        if(ele.productType==1){
-          let priceList = ele.list;
-          priceList.forEach(e=>{
-            if(e.name == type){
-              // 如果是专车配送的时候，把一般配送的收费细节存在this.selectServer.saveLandStartServerData
-              this.selectServer.saveLandEndServerData = e
-            }
-          })
-        }
-      })
-    }
+    // setSaveLandStartServerData(type){
+    //   var landProductTypeDTOS = this.saveStartLandCarriageSales.landProductTypeDTOS
+    //   landProductTypeDTOS.forEach(ele=>{
+    //     if(ele.productType==1){
+    //       let priceList = ele.list;
+    //       priceList.forEach(e=>{
+    //         if(e.name == type){
+    //           // 如果是一般配送的时候，把一般配送的收费细节存在this.selectServer.saveLandStartServerData
+    //           this.selectServer.saveLandStartServerData = e
+    //         }
+    //       })
+    //     }
+    //   })
+    // },
+    // setSaveLandEndServerData(type){
+    //   var landProductTypeDTOS = this.saveEndLandCarriageSales.landProductTypeDTOS
+    //   landProductTypeDTOS.forEach(ele=>{
+    //     if(ele.productType==1){
+    //       let priceList = ele.list;
+    //       priceList.forEach(e=>{
+    //         if(e.name == type){
+    //           // 如果是专车配送的时候，把一般配送的收费细节存在this.selectServer.saveLandStartServerData
+    //           this.selectServer.saveLandEndServerData = e
+    //         }
+    //       })
+    //     }
+    //   })
+    // }
 
   },
   computed: {
@@ -1167,6 +1110,10 @@ export default {
 
 <style lang="scss">
 .m-product-container {
+  .red{
+    color:#F52C35;
+    font-weight: 700;
+  }
   color: rgba(153, 153, 153, 1);
   flex: 1;
   width: 100%;
@@ -1215,7 +1162,7 @@ export default {
               position: absolute;
               top: 14px;
               left: 429px;
-              z-index: 10000;
+              z-index: 100;
             }
             .dist-list1 {
               margin-left: -70px;
@@ -1328,7 +1275,6 @@ export default {
         width: 860px;
         margin-top: 10px;
         box-shadow: 0 0 15px #ccc;
-
         .product-server {
           background: #fff;
           padding: 10px 15px;
@@ -1350,7 +1296,6 @@ export default {
               margin-right: 30px;
             }
           }
-
           .server-nav-select {
             flex: 1;
             display: flex;
@@ -1467,6 +1412,55 @@ export default {
             .select-little {
               height: 80px;
               position: relative;
+              .trans-price-apply-model{
+                .el-dialog__header{
+                  background-color: #FCD832;
+                  color: #fff;
+                  font-size: 18px;
+                  font-weight: 600;
+                }
+                .el-dialog__body{
+                  .body{
+                    .top{
+                      border-bottom: 1px dotted #e0e0e0;
+                      padding-bottom: 30px;
+                      >div{
+                        color: #9F9F9F;
+                        display: flex;
+                        width: 400px;
+                        margin: 10px auto;
+                        padding-left: 90px;
+                        .key{
+                          margin-right: 20px;
+                        }
+                      }
+                    }
+                    .bottom{
+                      color: #9F9F9F;
+                      display: flex;
+                      width: 400px;
+                      margin: 30px auto 0;
+                      padding-left: 90px;
+                      .key,.value,.unit{
+                        border-bottom: 1px solid #e0e0e0;
+                      }
+                      .value{
+                        .el-input{
+                          input{
+                            border: none;
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+                .el-dialog__footer{
+                  text-align: center;
+                  button{
+                    padding: 7px 60px;
+                  }
+                }
+              }
             }
           }
           .server-more {
@@ -1586,7 +1580,7 @@ export default {
     }
     .wave{
       position: absolute;
-      z-index: 99999;
+      z-index: 99;
       bottom: 0px;
       left:0;
       width: 300px;
