@@ -219,7 +219,6 @@ export default {
             id: this.id,
             token: this.token,
             applyStatus: this.orderStatu == "" ? 0 : this.orderStatu,
-            zort,
             /* cityStart: "北京（PEK）",
             cityEnd: "上海（PVG）",
             applyStatus: 1, */
