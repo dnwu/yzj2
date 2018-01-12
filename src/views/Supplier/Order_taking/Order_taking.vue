@@ -407,7 +407,7 @@
         </div>
       </div>
       <div v-else>
-        <p style="text-align: center;margin-top: 50px">没有找到相关订单信息</p>
+        <p style="text-align: center;margin-top: 50px">暂无数据</p>
       </div>
     </div>
     <!-- 查看订单的模态框 -->
@@ -641,7 +641,7 @@ export default {
       orderNum: "",
       goodsTypeData: [
         {
-          value: '7',
+          value: 7,
           label: "普货"
         },
         {

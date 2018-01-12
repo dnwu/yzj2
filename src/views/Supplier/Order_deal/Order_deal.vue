@@ -750,11 +750,6 @@ export default {
       if(data.data.code === 1){
         if(data.data.data.detailDTOS.length){
           this.options2 = data.data.data.detailDTOS;
-        }else{
-          this.$notify.error({
-            title: '错误',
-            message: data.data.msg
-          });
         }
       }
     });

@@ -1,6 +1,6 @@
 <template>
 <div class="company-info">
-  <div class="head">接单管理</div>
+  <div class="head">企业信息</div>
   <div class="body">
     <div class="Basic-information">
       <p class="title"><img src="../../../assets/company_info_1.png"><span>公司基本信息</span></p>
@@ -142,10 +142,27 @@
 </div>
 </template>
 <script>
-export default {
+  import { mapGetters } from "vuex";
+  export default {
   data () {
     return {
     }
+  },
+  created (){
+    this.getCompanyInfo();
+  },
+  methods: {
+    getCompanyInfo (){
+      this.axios.post("/web/v1/supplier/enterprise/info",{
+        "id": this.id,
+        "token": this.token,
+      }).then(data => {
+          console.log(data);
+      });
+    }
+  },
+  computed: {
+    ...mapGetters(["id", "token"]),
   }
 }
 </script>
