@@ -130,18 +130,18 @@
                 <span class="nav-select-text">上门取货</span>
                 <div class="nav-select-detail">
                   <template v-if="selectServer.landStartGeneral">
-                    <div class="detail-list1 detail-list"><span class="detail-name">地面运输费</span><span class="detail-cost">{{selectServer.landStartPrice.price}}元/千克</span></div>
-                    <div class="detail-list2 detail-list"><span class="detail-name">最低收费</span><span class="detail-cost">{{selectServer.landStartPrice.minPrice}}元/单</span></div>
+                    <div class="detail-list1 detail-list"><span class="detail-name">地面运输费</span><span class="detail-cost">{{selectServer.saveLandStartServerData.price}}元/千克</span></div>
+                    <div class="detail-list2 detail-list"><span class="detail-name">最低收费</span><span class="detail-cost">{{selectServer.saveLandStartServerData.minPrice}}元/单</span></div>
                   </template>
                   <template v-if="!selectServer.landStartGeneral">
-                    <div class="detail-list4 detail-list"><span class="detail-name">配送费</span><span class="detail-cost">{{getLandStartCarPrice}}元/辆</span></div>
+                    <div class="detail-list4 detail-list"><span class="detail-name">配送费</span><span class="detail-cost">{{selectServer.saveLandStartServerData.price}}元/辆</span></div>
                     <div class="detail-list3 detail-list">1吨金杯车：小于1000千克/1.8*1.3*1.1/5立方米</div>
                   </template>
                 </div>
                 <div class="detail-btn-box">
                   <div class="detail-address">
                     <div class="address-info">
-                      <el-select @change="landStartLevel1Change" v-model="landStartLevel1" placeholder="请选择地区">
+                      <el-select @visible-change='(toggle)=>landStartLevel1Change(toggle)' v-model="landStartLevel1" placeholder="请选择地区">
                         <el-option
                           v-for="item in landStartLevel1Data"
                           :key="item.value"
@@ -151,7 +151,7 @@
                       </el-select>
                     </div>
                     <div class="address-info">
-                      <el-select @change="landStartLevel2Change" v-model="landStartLevel2" placeholder="请选择服务">
+                      <el-select @visible-change='(toggle)=>landStartLevel2Change(toggle)' v-model="landStartLevel2" placeholder="请选择服务">
                         <el-option
                           v-for="item in landStartLevel2Data"
                           :key="item.value"
@@ -162,9 +162,14 @@
                     </div>
                     <!-- <span class="address-little" v-if="landStartLevel3ProductType2">实际落地时间在24:00之前的航班，次日到达</span> -->
                     <div class="address-little" v-if="landStartLevel3ProductType1">
-                      <div class="address-btn" @click="toggleLandStartServer('landStart1Ton')" :class="selectServer.landStart1Ton?'btn-active':''">1吨金杯车</div>
-                      <div class="address-btn" @click="toggleLandStartServer('landStart2Ton')" :class="selectServer.landStart2Ton?'btn-active':''">2吨厢式货车</div>
-                      <div class="address-btn" @click="toggleLandStartServer('landStart3Ton')" :class="selectServer.landStart3Ton?'btn-active':''">3吨厢式货车</div>
+                      <div v-for="(item,index) in selectServer.saveLandStartCarType"
+                           :key="index" class="address-btn"
+                           @click="toggleLandStartServer(item,index)"
+                           :class="selectServer.landStartIndex == index?'btn-active':''">
+                           {{item.name}}
+                      </div>
+                      <!-- <div class="address-btn" @click="toggleLandStartServer('landStart2Ton')" :class="selectServer.landStart2Ton?'btn-active':''">2吨厢式货车</div>
+                      <div class="address-btn" @click="toggleLandStartServer('landStart3Ton')" :class="selectServer.landStart3Ton?'btn-active':''">3吨厢式货车</div> -->
                     </div>
                   </div>
                 </div>
@@ -177,18 +182,18 @@
                 <span class="nav-select-text">落地配送</span>
                 <div class="nav-select-detail">
                   <template v-if="selectServer.landEndGeneral">
-                    <div class="detail-list1 detail-list"><span class="detail-name">地面运输费</span><span class="detail-cost">{{selectServer.landEndPrice.price}}元/千克</span></div>
-                    <div class="detail-list2 detail-list"><span class="detail-name">最低收费</span><span class="detail-cost">{{selectServer.landEndPrice.minPrice}}元/单</span></div>
+                    <div class="detail-list1 detail-list"><span class="detail-name">地面运输费</span><span class="detail-cost">{{selectServer.saveLandEndServerData.price}}元/千克</span></div>
+                    <div class="detail-list2 detail-list"><span class="detail-name">最低收费</span><span class="detail-cost">{{selectServer.saveLandEndServerData.minPrice}}元/单</span></div>
                   </template>
                   <template v-if="!selectServer.landEndGeneral">
-                    <div class="detail-list4 detail-list"><span class="detail-name">配送费</span><span class="detail-cost">{{getLandEndCarPrice}}元/辆</span></div>
+                    <div class="detail-list4 detail-list"><span class="detail-name">配送费</span><span class="detail-cost">{{selectServer.saveLandEndServerData.price}}元/辆</span></div>
                     <div class="detail-list3 detail-list">1吨金杯车：小于1000千克/1.8*1.3*1.1/5立方米</div>
                   </template>
                 </div>
                 <div class="detail-btn-box">
                   <div class="detail-address">
-                    <span class="address-info">
-                      <el-select  @change="landEndLevel1Change" v-model="landEndLevel1" placeholder="请选择地区">
+                    <div class="address-info">
+                      <el-select @visible-change='(toggle)=>landEndLevel1Change(toggle)' v-model="landEndLevel1" placeholder="请选择地区">
                         <el-option
                           v-for="item in landEndLevel1Data"
                           :key="item.value"
@@ -196,9 +201,9 @@
                           :value="item.value">
                         </el-option>
                       </el-select>
-                    </span>
-                    <span class="address-info">
-                      <el-select  @change="landEndLevel2Change" v-model="landEndLevel2" placeholder="请选择服务">
+                    </div>
+                    <div class="address-info">
+                      <el-select @visible-change='(toggle)=>landEndLevel2Change(toggle)' v-model="landEndLevel2" placeholder="请选择服务">
                         <el-option
                           v-for="item in landEndLevel2Data"
                           :key="item.value"
@@ -206,13 +211,17 @@
                           :value="item.value">
                         </el-option>
                       </el-select>
-                    </span>
+                    </div>
                     <!-- <span class="address-little" v-if="landEndLevel3ProductType2">实际落地时间在24:00之前的航班，次日到达</span> -->
-                    <span class="address-little" v-if="landEndLevel3ProductType1">
-                      <span class="address-btn" @click="toggleLandEndServer('landEnd1Ton')" :class="selectServer.landEnd1Ton?'btn-active':''">1吨金杯车</span>
-                      <span class="address-btn" @click="toggleLandEndServer('landEnd2Ton')" :class="selectServer.landEnd2Ton?'btn-active':''">2吨厢式货车</span>
-                      <span class="address-btn" @click="toggleLandEndServer('landEnd3Ton')" :class="selectServer.landEnd3Ton?'btn-active':''">3吨厢式货车</span>
-                    </span>
+                    <div class="address-little" v-if="landEndLevel3ProductType1">
+                      <div class="address-btn"
+                           v-for="(item,index) in selectServer.saveLandEndCarType"
+                           :key="index"
+                           @click="toggleLandEndServer(item,index)"
+                           :class="selectServer.landEndIndex == index?'btn-active':''">{{item.name}}</div>
+                      <!-- <div class="address-btn" @click="toggleLandEndServer('landEnd2Ton')" :class="selectServer.landEnd2Ton?'btn-active':''">2吨厢式货车</div>
+                      <div class="address-btn" @click="toggleLandEndServer('landEnd3Ton')" :class="selectServer.landEnd3Ton?'btn-active':''">3吨厢式货车</div> -->
+                    </div>
                   </div>
                 </div>
                 <div class="detail-img el-icon-success" @click="toggleSelect('landEnd')" :class="selectServer.landEnd?'active':''">
@@ -295,33 +304,6 @@
             <span class="cost-number">{{landEndTranFee}}元</span>
           </div>
         </div>
-        <!-- <div class="right-content-nav" v-if="selectServer.airportStart">
-          <div class="right-content-cost">
-            <span class="cost-text">出港服务费</span>
-            <span class="cost-number">{{landStartServerFee}}元</span>
-          </div>
-          <div class="right-content-cost">
-            <span class="cost-text">制单代理费</span>
-            <span class="cost-number">{{landStartMakeBillFee}}元</span>
-          </div>
-        </div>
-        <div class="right-content-nav" v-if="selectServer.airportEnd">
-          <div class="right-content-cost">
-            <span class="cost-text">进港提货费</span>
-            <span class="cost-number">{{landEndGetGoodsFee}}元</span>
-          </div>
-
-        </div>
-        <div class="right-content-nav">
-          <div class="right-content-cost" v-if="selectServer.landStart">
-            <span class="cost-text">上门提货费</span>
-            <span class="cost-number">{{landStartGetGoodsFee}}元</span>
-          </div>
-          <div class="right-content-cost" v-if="selectServer.landEnd">
-            <span class="cost-text">落地配送费</span>
-            <span class="cost-number">{{landEndTranFee}}元</span>
-          </div>
-        </div> -->
         <div class="right-content-free" v-if="false">
           <span class="cost-free cost-text">优惠</span>
           <span class="cost-number">
@@ -382,6 +364,7 @@ export default {
         landStart1Ton: false, // 上门取货服务类一吨金杯车
         landStart2Ton: false, // 上门取货服务类2吨厢式车
         landStart3Ton: false, // 上门取货服务类3吨厢式车
+        landStartIndex:'0',   // 标记添加class - acitve,默认第一个被选中
         landStartPrice: {
           // 上门取货服务费
           price: "", // 价格
@@ -394,6 +377,7 @@ export default {
         landEnd1Ton: false, // 落地配送服务类一吨金杯车
         landEnd2Ton: false, // 落地配送服务类2吨厢式车
         landEnd3Ton: false, // 落地配送服务类3吨厢式车
+        landEndIndex:'0',   // 标记添加class - acitve，默认第一个被选中
         landEndPrice: {
           // 落地配送上门取货服务费
           price: "", // 落地配送价格
@@ -449,99 +433,113 @@ export default {
         duration: 2000
       });
     },
-    landStartLevel1Change() {
-      // 每次点击一级选择的时候重置服务的是否勾选，然后重置controlLandStartServer
-      this.controlLandStartServer = false
-      this.selectServer.landStart = false
-      this.setlandStartLevel2Data(this.landStartLevel1);
-      // this.setlandStartLevel2Placeholder(this.landStartLevel1);
-      this.landStartLevel2 = "";
-      this.landStartLevel3ProductType1 = false;
-      this.landStartLevel3ProductType2 = false;
-      this.saveStartLandCarriageSales = this.productSearchResult.landStart.landCarriageSales[
-        this.landStartLevel1
-      ];
-      // 每次变化的时候。重置服务项为false
-      this.selectServer.landStartGeneral = false
-      this.selectServer.landStart1Ton = false
-      this.selectServer.landStart2Ton = false
-      this.selectServer.landStart3Ton = false
-      // console.log(this.saveStartLandCarriageSales);
-      // 把储存的选择数据也清空
-      this.selectServer.saveLandStartServerData = {}
-    },
-    landStartLevel2Change() {
-      if (this.landStartLevel2 == 1) {
-        // 专车配送
-        this.landStartLevel3ProductType1 = true;
-        this.landStartLevel3ProductType2 = false;
-        this.selectServer.landStartGeneral = false;
-        this.selectServer.landStart1Ton = true
-      } else if (this.landStartLevel2 == 2) {
-        // 一般配送
+    landStartLevel1Change(onoff) {
+      if(onoff == false){
+        // 每次点击一级选择的时候重置服务的是否勾选，然后重置controlLandStartServer
+        this.controlLandStartServer = false
+        this.selectServer.landStart = false
+        this.setlandStartLevel2Data(this.landStartLevel1);
+        // this.setlandStartLevel2Placeholder(this.landStartLevel1);
+        this.landStartLevel2 = "";
         this.landStartLevel3ProductType1 = false;
-        this.landStartLevel3ProductType2 = true;
-        this.selectServer.landStartGeneral = true;
+        this.landStartLevel3ProductType2 = false;
+        this.saveStartLandCarriageSales = this.productSearchResult.landStart.landCarriageSales[
+          this.landStartLevel1
+        ];
+        // 每次变化的时候。重置服务项为false
+        this.selectServer.landStartGeneral = false
         this.selectServer.landStart1Ton = false
         this.selectServer.landStart2Ton = false
         this.selectServer.landStart3Ton = false
+        // console.log(this.saveStartLandCarriageSales);
+        // 把储存的选择数据也清空
+        this.selectServer.saveLandStartServerData = {}
       }
-      // 选择二级后，默认勾选服务,然后重置controlLandStartServer
-      this.controlLandStartServer = true
-      this.selectServer.landStart = true
-      // 调用计算价格的函数
-      this.getLandStartPrice(
-        this.saveStartLandCarriageSales,
-        this.landStartLevel2
-      );
-      console.log(this.saveStartLandCarriageSales,this.landStartLevel2);
     },
-    landEndLevel1Change() {
-      // 每次点击一级选择的时候重置服务的是否勾选，然后重置controlLandStartServer
-      this.controlLandEndServer = false
-      this.selectServer.landEnd = false
-      this.setlandEndLevel2Data(this.landEndLevel1);
-      // this.setlandEndLevel2Placeholder(this.landEndLevel1);
-      this.landEndLevel2 = "";
-      this.landEndLevel3ProductType1 = false;
-      this.landEndLevel3ProductType2 = false;
-      this.saveEndLandCarriageSales = this.productSearchResult.landEnd.landCarriageSales[
-        this.landEndLevel1
-      ];
-      // console.log(this.saveEndLandCarriageSales);
-      // 每次变化的时候。重置服务项为false
-      this.selectServer.landEndGeneral = false
-      this.selectServer.landEnd1Ton = false
-      this.selectServer.landEnd2Ton = false
-      this.selectServer.landEnd3Ton = false
-      // 把储存的选择数据也清空
-      this.selectServer.saveLandEndServerData = {}
+    landStartLevel2Change(onoff) {
+      if(onoff == false){
+        if (this.landStartLevel2 == 1) {
+          // 专车配送
+          this.landStartLevel3ProductType1 = true;
+          this.landStartLevel3ProductType2 = false;
+          this.selectServer.landStartGeneral = false;
+          this.selectServer.landStart1Ton = true
+          this.selectServer.landStartIndex = '0'
+          this.getLandStartCarType(this.saveStartLandCarriageSales)
+          this.initLandStartCarPrice(this.saveStartLandCarriageSales)
+        } else if (this.landStartLevel2 == 2) {
+          // 一般配送
+          this.landStartLevel3ProductType1 = false;
+          this.landStartLevel3ProductType2 = true;
+          this.selectServer.landStartGeneral = true;
+          this.selectServer.landStart1Ton = false
+          this.selectServer.landStart2Ton = false
+          this.selectServer.landStart3Ton = false
+        }
+        // 选择二级后，默认勾选服务,然后重置controlLandStartServer
+        this.controlLandStartServer = true
+        this.selectServer.landStart = true
+        // 调用计算价格的函数
+        this.getLandStartPrice(
+          this.saveStartLandCarriageSales,
+          this.landStartLevel2
+        );
+        console.log(this.selectServer.saveLandStartCarType);
+        // console.log(this.saveStartLandCarriageSales,this.landStartLevel2);
+      }
     },
-    landEndLevel2Change() {
-      // console.log("landEndLevel2Change", this.landEndLevel2);
-      if (this.landEndLevel2 == 1) {
-        // 专车配送
-        this.landEndLevel3ProductType1 = true;
-        this.landEndLevel3ProductType2 = false;
-        this.selectServer.landEndGeneral = false;
-        this.selectServer.landEnd1Ton = true
-      } else if (this.landEndLevel2 == 2) {
-        // 一般配送
+    landEndLevel1Change(onoff) {
+      if(onoff == false){
+        // 每次点击一级选择的时候重置服务的是否勾选，然后重置controlLandStartServer
+        this.controlLandEndServer = false
+        this.selectServer.landEnd = false
+        this.setlandEndLevel2Data(this.landEndLevel1);
+        // this.setlandEndLevel2Placeholder(this.landEndLevel1);
+        this.landEndLevel2 = "";
         this.landEndLevel3ProductType1 = false;
-        this.landEndLevel3ProductType2 = true;
-        this.selectServer.landEndGeneral = true;
+        this.landEndLevel3ProductType2 = false;
+        this.saveEndLandCarriageSales = this.productSearchResult.landEnd.landCarriageSales[
+          this.landEndLevel1
+        ];
+        // console.log(this.saveEndLandCarriageSales);
+        // 每次变化的时候。重置服务项为false
+        this.selectServer.landEndGeneral = false
         this.selectServer.landEnd1Ton = false
         this.selectServer.landEnd2Ton = false
         this.selectServer.landEnd3Ton = false
-
-
+        // 把储存的选择数据也清空
+        this.selectServer.saveLandEndServerData = {}
       }
-      // 选择二级后，默认勾选服务,然后重置controlLandEndServer
-      this.controlLandEndServer = true
-      this.selectServer.landEnd = true
-      // 调用计算价格的函数
-      this.getLandEndPrice(this.saveEndLandCarriageSales, this.landEndLevel2);
-      console.log(this.landEndLevel2,this.saveEndLandCarriageSales,this.landEndLevel2);
+    },
+    landEndLevel2Change(onoff) {
+      if(onoff == false){
+        // console.log("landEndLevel2Change", this.landEndLevel2);
+        if (this.landEndLevel2 == 1) {
+          // 专车配送
+          this.landEndLevel3ProductType1 = true;
+          this.landEndLevel3ProductType2 = false;
+          this.selectServer.landEndGeneral = false;
+          this.selectServer.landEnd1Ton = true
+          this.selectServer.landEndIndex = '0'
+          this.getLandEndCarType(this.saveEndLandCarriageSales)
+          this.initLandEndCarPrice(this.saveEndLandCarriageSales)
+        } else if (this.landEndLevel2 == 2) {
+          // 一般配送
+          this.landEndLevel3ProductType1 = false;
+          this.landEndLevel3ProductType2 = true;
+          this.selectServer.landEndGeneral = true;
+          this.selectServer.landEnd1Ton = false
+          this.selectServer.landEnd2Ton = false
+          this.selectServer.landEnd3Ton = false
+        }
+        // 选择二级后，默认勾选服务,然后重置controlLandEndServer
+        this.controlLandEndServer = true
+        this.selectServer.landEnd = true
+        // 调用计算价格的函数
+        this.getLandEndPrice(this.saveEndLandCarriageSales, this.landEndLevel2);
+        // console.log(this.landEndLevel2,this.saveEndLandCarriageSales,this.landEndLevel2);
+        console.log(this.selectServer.saveLandEndCarType);
+      }
     },
     getLandStartCarType(data){
       var serverList = data.landProductTypeDTOS
@@ -556,6 +554,25 @@ export default {
       serverList.forEach(ele=>{
         if(ele.productType ==1){
           this.selectServer.saveLandEndCarType = ele.list
+        }
+      })
+    },
+    // 当二级标签变化的时候，初始化专车配送的价格，也就是this.selectServer.saveLandStartServerData
+    initLandStartCarPrice(item){
+      console.log(item);
+      var serverList = item.landProductTypeDTOS
+      serverList.forEach(ele=>{
+        if(ele.productType ==1){
+          this.selectServer.saveLandStartServerData = ele.list[0]
+        }
+      })
+    },
+    // 当二级标签变化的时候，初始化专车配送的价格，也就是this.selectServer.saveLandStartServerData
+    initLandEndCarPrice(item){
+      var serverList = item.landProductTypeDTOS
+      serverList.forEach(ele=>{
+        if(ele.productType ==1){
+          this.selectServer.saveLandEndServerData = ele.list[0]
         }
       })
     },
@@ -596,24 +613,16 @@ export default {
         }
       });
     },
-    toggleLandStartServer(type) {
-      var arr = [
-        "landStartGeneral",
-        "landStart1Ton",
-        "landStart2Ton",
-        "landStart3Ton"
-      ];
-      for (var i = 0; i < arr.length; i++) {
-        this.selectServer[arr[i]] = false;
-      }
-      this.selectServer[type] = true;
+    toggleLandStartServer(item,index) {
+      this.selectServer.landStartIndex = index
+      console.log(item);
+      this.selectServer.saveLandStartServerData = item
     },
-    toggleLandEndServer(type) {
-      var arr = ["landEndGeneral", "landEnd1Ton", "landEnd2Ton", "landEnd3Ton"];
-      for (var i = 0; i < arr.length; i++) {
-        this.selectServer[arr[i]] = false;
-      }
-      this.selectServer[type] = true;
+    toggleLandEndServer(item,index) {
+      this.selectServer.landEndIndex = index
+      console.log(item);
+      // 如果是专车配送的时候，把一般配送的收费细节存在this.selectServer.saveLandStartServerData
+      this.selectServer.saveLandEndServerData = item
     },
     toggleSelect(type) {
       if(type=='airportStart'){
@@ -644,7 +653,6 @@ export default {
         }
         this.selectServer[type] = !this.selectServer[type];
       }
-      console.log(this.selectServer.saveAirportFee);
     },
     startportvalue(data) {
       this.searchData.startPort = data;
@@ -663,6 +671,34 @@ export default {
     },
     productSearch() {
       // console.log(this.searchData);
+      // 搜索前，重置所有的服务项
+      this.selectServer.airportStart = false
+      this.selectServer.airportEnd = false
+      this.selectServer.landStart = false
+      this.selectServer.landEnd = false
+      this.selectServer.customs = false
+      this.selectServer.insurance = false
+      this.landStartLevel2Data=[]
+      this.landStartLevel2 = ''
+      this.landEndLevel2 = ''
+      this.landEndLevel2Data = []
+      this.selectServer.landStartGeneral = false
+      this.selectServer.landEndGeneral = false
+      this.landStartLevel3ProductType1 = false,
+      this.landStartLevel3ProductType2 = false,
+      this.landEndLevel3ProductType1 = false,
+      this.landEndLevel3ProductType2 = false,
+      this.controlLandEndServer = false
+      this.controlLandStartServer = false
+      this.selectServer.landEndIndex = '0'
+      this.selectServer.landStartIndex = '0'
+      this.saveAirportFee = {},  //储存始发港目的港服务内容以及收费
+      this.saveBaseServerData = {},  //储存基础服务内容以及收费情况
+      this.selectServer.saveLandStartServerData = {},   //储存选择上门取货的服务内容
+      this.selectServer.saveLandEndServerData = {},   //储存选择落地配送的服务内容
+      this.saveLandStartCarType = [],   // 储存选择二级标签专车服务后，专车类型的list
+      this.saveLandEndCarType = [],   // 储存选择二级标签专车服务后，专车类型的list
+
       this.axios
         .post("/app/v1/product/queryProduct", {
           airportEnd: this.searchData.endPort,
@@ -893,23 +929,10 @@ export default {
     },
     getLandStartPrice(obj, serverType) {
       // 获取对象中的landProductTypeDTOS
-      console.log(obj.landProductTypeDTOS);
       var landProductTypeDTOS = obj.landProductTypeDTOS;
       landProductTypeDTOS.forEach((ele, index) => {
         // console.log('ele',ele.productType);
         if (serverType == 1) {
-          if (ele.productType == 1) {
-            let priceList = ele.list;
-            priceList.forEach(e => {
-              if (e.name == "1吨金杯车") {
-                this.selectServer.landStartPrice.car1DonPrice = e.price;
-              } else if (e.name == "2吨厢式货车") {
-                this.selectServer.landStartPrice.car2DonPrice = e.price;
-              } else if (e.name == "3吨厢式货车") {
-                this.selectServer.landStartPrice.car3DonPrice = e.price;
-              }
-            });
-          }
         } else if (serverType == 2) {
           if (ele.productType == 2) {
             let priceList = ele.list[0];
@@ -929,18 +952,6 @@ export default {
       landProductTypeDTOS.forEach((ele, index) => {
         // console.log('ele',ele.productType);
         if (serverType == 1) {
-          if (ele.productType == 1) {
-            let priceList = ele.list;
-            priceList.forEach(e => {
-              if (e.name == "1吨金杯车") {
-                this.selectServer.landEndPrice.car1DonPrice = e.price;
-              } else if (e.name == "2吨厢式货车") {
-                this.selectServer.landEndPrice.car2DonPrice = e.price;
-              } else if (e.name == "3吨厢式货车") {
-                this.selectServer.landEndPrice.car3DonPrice = e.price;
-              }
-            });
-          }
         } else if (serverType == 2) {
           if (ele.productType == 2) {
             let priceList = ele.list[0];
@@ -962,7 +973,7 @@ export default {
           let priceList = ele.list;
           priceList.forEach(e=>{
             if(e.name == type){
-              // 如果是专车配送的时候，把一般配送的收费细节存在this.selectServer.saveLandStartServerData
+              // 如果是一般配送的时候，把一般配送的收费细节存在this.selectServer.saveLandStartServerData
               this.selectServer.saveLandStartServerData = e
             }
           })
@@ -1014,37 +1025,6 @@ export default {
         });
       });
       return arr;
-    },
-    // 计算配送费的显示价格
-    getLandStartCarPrice() {
-      if (this.selectServer.landStart1Ton) {
-        this.setSaveLandStartServerData("1吨金杯车")
-        console.log('1吨金杯车',this.selectServer.landStartPrice.car1DonPrice,111111);
-        return this.selectServer.landStartPrice.car1DonPrice;
-      } else if (this.selectServer.landStart2Ton) {
-        this.setSaveLandStartServerData("2吨厢式货车")
-        console.log('2吨厢式货车',this.selectServer.landStartPrice.car2DonPrice,222222);
-        return this.selectServer.landStartPrice.car2DonPrice;
-      } else if (this.selectServer.landStart3Ton) {
-        this.setSaveLandStartServerData("3吨厢式货车")
-        console.log('3吨厢式货车',this.selectServer.landStartPrice.car3DonPrice,333333);
-        return this.selectServer.landStartPrice.car3DonPrice;
-      }
-    },
-    getLandEndCarPrice() {
-      if (this.selectServer.landEnd1Ton) {
-        this.setSaveLandEndServerData("1吨金杯车")
-        console.log('1吨金杯车');
-        return this.selectServer.landEndPrice.car1DonPrice;
-      } else if (this.selectServer.landEnd2Ton) {
-        this.setSaveLandEndServerData("2吨厢式货车")
-        console.log('2吨厢式货车');
-        return this.selectServer.landEndPrice.car2DonPrice;
-      } else if (this.selectServer.landEnd3Ton) {
-        this.setSaveLandEndServerData("3吨厢式货车")
-        console.log('3吨厢式货车');
-        return this.selectServer.landEndPrice.car3DonPrice;
-      }
     },
 
     // 计算右侧费用
@@ -1135,80 +1115,16 @@ export default {
       }
     },
 
-    /*landStartServerFee() {
-      if (this.getResultSuccess) {
-        if (this.selectServer.airportStart) {
-          let priceDTOS = this.productSearchResult.airportStart.priceDTOS;
-          let totalUnivalent = null;
-          priceDTOS.forEach(ele => {
-            if (ele.priceType == 11) {
-              totalUnivalent = ele.price;
-            }
-          });
-          let totalWeight = this.searchData.goodsWeight;
-          return totalUnivalent * totalWeight;
-        }
-      } else {
-        return 0;
-      }
-    },
-    // 制单代理费
-    landStartMakeBillFee() {
-      if (this.getResultSuccess) {
-        if (this.selectServer.airportStart) {
-          let priceDTOS = this.productSearchResult.airportStart.priceDTOS;
-          let totalUnivalent = null;
-          priceDTOS.forEach(ele => {
-            if (ele.priceType == 12) {
-              totalUnivalent = ele.price;
-            }
-          });
-          let totalWeight = this.searchData.goodsWeight;
-          return totalUnivalent * totalWeight;
-        }
-      } else {
-        return 0;
-      }
-    },
-    // 进港提货费
-    landEndGetGoodsFee() {
-      if (this.getResultSuccess) {
-        if (this.selectServer.airportEnd) {
-          let priceDTOS = this.productSearchResult.airportEnd.priceDTOS;
-          let totalUnivalent = null;
-          priceDTOS.forEach(ele => {
-            if (ele.priceType == 11) {
-              totalUnivalent = ele.price;
-            }
-          });
-          let totalWeight = this.searchData.goodsWeight;
-          return totalUnivalent * totalWeight;
-        }
-      } else {
-        return 0;
-      }
-    },*/
     // 上门提货费
     landStartGetGoodsFee() {
       if (this.getResultSuccess) {
         if (this.selectServer.landStart) {
-          var totalWeight = this.searchData.goodsWeight;
-          var minPrice = this.selectServer.landStartPrice.minPrice;
-          var totalFee = null;
-          if (this.selectServer.landStartGeneral) {
-            var priceDTOS = this.selectServer.landStartPrice.price;
-            totalFee = totalWeight * priceDTOS;
-            if (totalFee > minPrice) {
-              return totalFee;
-            } else {
-              return minPrice;
-            }
-          } else if (this.selectServer.landStart1Ton) {
-            return this.selectServer.landStartPrice.car1DonPrice;
-          } else if (this.selectServer.landStart2Ton) {
-            return this.selectServer.landStartPrice.car2DonPrice;
-          } else if (this.selectServer.landStart3Ton) {
-            return this.selectServer.landStartPrice.car3DonPrice;
+          var totalWeight = parseFloat(this.searchData.goodsWeight);
+          var item = this.selectServer.saveLandStartServerData
+          if(item.priceType == 11){
+            return totalWeight.mul(item.price) > item.minPrice?totalWeight.mul(item.price):item.minPrice
+          }else if(item.priceType == 12){
+            return item.price
           }
         }
       } else {
@@ -1219,23 +1135,12 @@ export default {
     landEndTranFee() {
       if (this.getResultSuccess) {
         if (this.selectServer.landEnd) {
-          var totalWeight = this.searchData.goodsWeight;
-          var minPrice = this.selectServer.landEndPrice.minPrice;
-          var totalFee = null;
-          if (this.selectServer.landEndGeneral) {
-            var priceDTOS = this.selectServer.landEndPrice.price;
-            totalFee = totalWeight * priceDTOS;
-            if (totalFee > minPrice) {
-              return totalFee;
-            } else {
-              return minPrice;
-            }
-          } else if (this.selectServer.landEnd1Ton) {
-            return this.selectServer.landEndPrice.car1DonPrice;
-          } else if (this.selectServer.landEnd2Ton) {
-            return this.selectServer.landEndPrice.car2DonPrice;
-          } else if (this.selectServer.landEnd3Ton) {
-            return this.selectServer.landEndPrice.car3DonPrice;
+          var totalWeight = parseFloat(this.searchData.goodsWeight);
+          var item = this.selectServer.saveLandEndServerData
+          if(item.priceType == 11){
+            return totalWeight.mul(item.price) > item.minPrice?totalWeight.mul(item.price):item.minPrice
+          }else if(item.priceType == 12){
+            return item.price
           }
         }
       } else {
@@ -1253,12 +1158,7 @@ export default {
       var landStartGetGoodsFee =this.landStartGetGoodsFee == undefined? 0: parseFloat(this.landStartGetGoodsFee);
       var landEndTranFee = this.landEndTranFee == undefined ? 0 : parseFloat(this.landEndTranFee);
       return (
-        airTransFee +
-        airOilAnnexFee +
-        airportStartFee +
-        airportEndFee +
-        landStartGetGoodsFee +
-        landEndTranFee
+        airTransFee.add(airOilAnnexFee).add(airportStartFee).add(airportEndFee).add(landStartGetGoodsFee).add(landEndTranFee)
       );
     }
   }
