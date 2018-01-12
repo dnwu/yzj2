@@ -690,7 +690,7 @@ export default {
             .then(data => {
               console.log(data);
               if (data.data.code == 1) {
-                this.sendAddressData.addressid = data.data.data.id;
+                // this.sendAddressData.addressid = data.data.data.id;
                 this.promptsuccess("地址更新成功");
               } else {
                 this.promptwarning("地址更新失败");
@@ -722,7 +722,7 @@ export default {
             .then(data => {
               console.log(data);
               if (data.data.code == 1) {
-                this.receiveAddressData.addressid = data.data.data.id;
+                // this.receiveAddressData.addressid = data.data.data.id;
                 this.promptsuccess("地址更新成功");
               } else {
                 this.promptwarning("地址更新失败");

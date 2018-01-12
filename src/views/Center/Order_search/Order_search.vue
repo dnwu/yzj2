@@ -76,6 +76,32 @@
           <div class="status">状态</div>
           <div class="operate">操作<el-button size="mini" type="warning">导出</el-button></div>
         </div>
+        <!-- 选择支付方式月结，现结的模态框 -->
+        <div class="pay-method">
+          <el-dialog width='600px' :visible.sync="payMethodModel">
+            <div slot="title">
+              <span>¥</span>
+              <span>费用支付</span>
+            </div>
+            <div class="body">
+              <div>
+                <div class="key">待支付费用总计</div>
+                <div class="value">10000元</div>
+              </div>
+              <div>
+                <div class="key">支付方式</div>
+                <div class="value">
+                  <el-radio v-model="radio" label="1">月结</el-radio>
+                  <el-radio v-model="radio" label="2">现结</el-radio>
+                </div>
+              </div>
+            </div>
+            <div slot="footer" class="dialog-footer">
+              <el-button type="warning" size="mini">确 定</el-button>
+              <span class="cancle" @click="payMethodModel=false">取消</span>
+            </div>
+          </el-dialog>
+        </div>
         <!-- 待支付 -->
         <div class="tbody" v-for="(item,index) in orderListData" :key="index">
           <div class="tbody-head">
@@ -103,6 +129,7 @@
               <p class="gray">预计：{{item.orderGoodsDetail.valuationWeight}}</p>
               <p class="black">实际：{{item.orderGoodsDetail.reviewWeight}}</p>
             </div>
+
             <!-- 待支付 -->
             <template v-if="item.orderStatus=='3'">
               <div class="status">
@@ -351,6 +378,8 @@ export default {
   components: { VDistpicker, StartPortselect, EndPortselect },
   data() {
     return {
+      payMethodModel:true,
+      radio:'2',
       orderNum: "",
       orderListData: [],
       pageTotal: 60,
@@ -755,6 +784,43 @@ export default {
             top: -5px;
             right: 0;
             // transform: translateY(-5px);
+          }
+        }
+      }
+      .pay-method{
+        .el-dialog__header{
+          background-color: #fcce00;
+          font-size: 18px;
+          font-weight: 600;
+          color:#fff;
+        }
+        .el-dialog__body{
+          .body{
+            width: 300px;
+            margin: 0 auto;
+            >div{
+              display: flex;
+              margin: 10px 0;
+              .key{
+                width: 100px;
+                text-align-last: justify;
+                margin-right: 20px;
+              }
+            }
+            >div:first-child{
+              color: #fcce00;
+            }
+          }
+        }
+        .el-dialog__footer{
+          text-align: center;
+          button{
+            padding: 7px 60px;
+          }
+          .cancle{
+            color: #909090;
+            margin-left: 20px;
+            cursor: pointer;
           }
         }
       }

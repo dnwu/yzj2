@@ -9,8 +9,8 @@
         <div class="base-info">
           <div class="head-img"><img src="../../../assets/head_img.png"></div>
           <div class="info">
-            <p class="company-name">会员名称：<span>{{userInfo.fullName}}</span></p>
-            <p class="account-type">会员类型：<span>{{userInfo.accountType}}</span></p>
+            <p class="company-name">会员名称：<span>{{userInfo.fullName}}（{{userInfo.accountType}}）</span></p>
+            <!-- <p class="account-type">会员类型：<span>{{userInfo.accountType}}</span></p> -->
             <div class="star" v-if="'level' in this.userInfo">
               <div class="key">会员级别：</div>
               <el-rate
@@ -21,8 +21,9 @@
                 score-template="{value}">
               </el-rate>
             </div>
-            <div class="member">
               <div class="integral">会员积分：<span class="score" v-if="'integral' in userInfo">{{userInfo.integral}}</span></div>
+            <div class="member">
+              <div class="paymethod">会员积分：<span class="score">月结</span></div>
               <div class="doings">
                 <el-badge
                   :value='activity'
@@ -619,16 +620,25 @@ export default {
               color: #999999;
             }
           }
+          .integral {
+            flex: 1;
+            color: #999999;
+            font-size: 16px;
+            .score {
+              color: #fccf00;
+            }
+          }
+          .paymethod {
+            flex: 1;
+            color: #999999;
+            font-size: 16px;
+            .score {
+              color: #fccf00;
+            }
+          }
           .member {
             display: flex;
-            .integral {
-              flex: 1;
-              color: #999999;
-              font-size: 16px;
-              .score {
-                color: #fccf00;
-              }
-            }
+            margin-top: 20px;
             .doings {
               flex: 1;
               .el-badge {
