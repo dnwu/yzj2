@@ -283,6 +283,7 @@ export default {
       for (var i = 0; i < arr.length; i++) {
         // 数据绑定用了多个对象进行数据绑定和渲染，通过循环汇总所有参数
         for (var name in this[arr[i]]) {
+          console.log(this.param[name]);
           if (!this.param[name].uid) {
             // 更具当前对象是否具有uid属性判断是否是文件对象，是的话则不处理该对象，文件对象的赋值直接有li.vue通过触发父组件的onChang方法直接对参数对象进行修改
             var obj = this[arr[i]][name];
