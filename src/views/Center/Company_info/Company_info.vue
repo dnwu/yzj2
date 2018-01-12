@@ -223,8 +223,8 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import "../../../common/css/flex-pos.css";
-@import "../../../common/scss/center/header.scss";
+@import "../../../common/css/base.css";
+@import "../../../common/scss/center/index.scss";
 .is-flex {
   display: flex;
 }

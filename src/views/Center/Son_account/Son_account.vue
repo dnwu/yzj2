@@ -214,8 +214,8 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import "../../../common/css/flex-pos.css";
-@import "../../../common/scss/center/header.scss";
+@import "../../../common/css/base.css";
+@import "../../../common/scss/center/index.scss";
 .green {
   background: green;
 }
@@ -224,11 +224,8 @@ ul {
   padding-left: 0;
 }
 
-$yellow: #fccf00;
-$green: #7ac943;
-
 .son_account {
-  color: #999999;
+  color: $gray;
   .header {
     @include header;
   }
@@ -240,8 +237,8 @@ $green: #7ac943;
         45deg,
         $yellow 0%,
         $yellow 50%,
-        red 50%,
-        red 100%
+        $red 50%,
+        $red 100%
       );
       background-size: 40px 3px;
     }
@@ -295,7 +292,7 @@ $green: #7ac943;
         background: $yellow;
       }
       .green {
-        background: #7ac943;
+        background: $green;
       }
     }
     .wide {
@@ -358,7 +355,7 @@ $green: #7ac943;
       }
       .left,
       .right {
-        border-bottom: 1px solid #999999;
+        border-bottom: 1px solid $gray;
         margin-bottom: 35px;
       }
       .no-border {

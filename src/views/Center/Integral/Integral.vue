@@ -168,8 +168,8 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import "../../../common/css/flex-pos.css";
-@import "../../../common/scss/center/header.scss";
+@import "../../../common/css/base.css";
+@import "../../../common/scss/center/index.scss";
 
 ul {
   padding-left: 0;
@@ -207,13 +207,13 @@ ul {
   .btn-export {
     margin-left: 40px;
     padding: 2px 30px;
-    background: #f52831;
+    background: $red;
     color: white;
   }
 }
 .main {
   padding: 20px 30px;
-  color: #b3b3b3;
+  color: $gray;
 }
 .page-pos {
   margin-top: 10px;

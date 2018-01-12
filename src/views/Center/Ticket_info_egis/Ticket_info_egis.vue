@@ -169,8 +169,8 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import "../../../common/css/flex-pos.css";
-@import "../../../common/scss/center/header.scss";
+@import "../../../common/css/base.css";
+@import "../../../common/scss/center/index.scss";
 .border {
   position: absolute;
   top: 0;
@@ -178,31 +178,33 @@ export default {
   height: 100%;
   background-size: 10px 10px;
 }
+$colorRight: #e2e2e2;
+$colorLeft: #f2f2f2;
 .border-right {
   right: 0;
   background-image: linear-gradient(
       -45deg,
-      #e2e2e2 50%,
+      $colorRight 50%,
       transparent 50%,
       transparent
     ),
-    linear-gradient(45deg, transparent 50%, #e2e2e2 50%);
+    linear-gradient(45deg, transparent 50%, $colorRight 50%);
 }
 .border-left {
   left: 0;
   background-image: linear-gradient(
       45deg,
-      #f2f2f2 25%,
+      $colorLeft 25%,
       transparent 25%,
       transparent
     ),
-    linear-gradient(-45deg, transparent 75%, #f2f2f2 75%);
+    linear-gradient(-45deg, transparent 75%, $colorLeft 75%);
 }
 .header {
   @include header;
 }
 .main {
-  color: #999999;
+  color: $gray;
   padding: 10px 50px 0;
   .card {
     box-shadow: 3px 0px 8px 1px rgba(0, 0, 0, 0.1);
@@ -224,7 +226,6 @@ export default {
     }
   }
 }
-$yellow: #fccf00;
 .dialog {
   position: fixed;
   left: 50%;
@@ -240,7 +241,7 @@ $yellow: #fccf00;
     font-size: 18px;
   }
   .contain {
-    color: #999999;
+    color: $gray;
     margin-left: 370px;
     .row {
       margin-top: 20px;
@@ -255,7 +256,7 @@ $yellow: #fccf00;
       border: 0;
     }
     input {
-      color: #999999;
+      color: $gray;
     }
   }
   .btn-save {
