@@ -33,7 +33,7 @@
       <span class="key key-choose-name">申请状态</span>
       <span class="opt opt-state">
         <el-select v-model="orderStatu" placeholder="待审核">
-          <el-option v-for="item in orderStatus" :key="item.value" :label="item.name" :value="item.value">
+          <el-option v-for="item in orderStatus" :key="item.value" v-if="item.value!==-1" :label="item.name" :value="item.value">
           </el-option>
         </el-select>
       </span>
@@ -219,8 +219,8 @@ export default {
             cityStart: this.startPort,
             cityEnd: this.endPort,
             /* cityStart: "北京（PEK）",
-            cityEnd: "上海（PVG）",
-            applyStatus: 1, */
+            cityEnd: "上海浦东（PVG）", */
+            /* applyStatus: 1, */
             startTime: this.formatDate(this.orderTime[0]),
             endTime: this.formatDate(this.orderTime[1]),
             orderNo: this.input,
