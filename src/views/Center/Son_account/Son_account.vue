@@ -37,24 +37,33 @@
         </div>
         <div class="contain">
           <ul>
-            <li class="is-flex jst-between ali-center card" v-for="(list,index) in lists">
+            <li class="is-flex jst-between ali-center card" v-for="(list,index) in listsFilters">
               <span class="wide wide1">
-                <div :class="['circle',color[list.state]]"></div>
+                <div :class="['circle',color[list.accountStatus]]"></div>
               </span>
               <span class="wide wide2" v-text="list.account"></span>
-              <span class="wide wide3" v-text="list.name"></span>
-              <span class="wide wide4" v-text="list.tel"></span>
+              <span class="wide wide3" v-text="list.fullName"></span>
+              <span class="wide wide4" v-text="list.phone"></span>
               <span class="wide wide5" v-text="list.email"></span>
               <span class="wide wide6" v-text="list.id"></span>
-              <span class="wide wide7" v-text="list.time"></span>
+              <span class="wide wide7" v-text="list.createtime"></span>
               <span class="wide8 is-flex jst-between">
                 <img class="btn" src="../../../assets/son_modify.png" alt="">
-                <img class="btn" src="../../../assets/son_state_1.png" alt="" v-show="!list.state" @click="cutState(index)">
-                <img class="btn" src="../../../assets/son_stop.png" alt="" v-show="list.state" @click="cutState(index)">
+                <img class="btn" src="../../../assets/son_state_1.png" alt="" v-show="list.accountStatus == 2 " @click="cutState(index)">
+                <img class="btn" src="../../../assets/son_stop.png" alt="" v-show="list.accountStatus == 1 " @click="cutState(index)">
                 <img class="btn" src="../../../assets/son_delete.png" alt="">
               </span>
             </li>
           </ul>
+          <el-pagination
+            class="is-flex jst-center"
+            layout="prev, pager, next"
+            :total="total"
+            :page-size="size"
+            :current-page="pageIndex"
+            @current-change="changePage"
+          >
+          </el-pagination>
         </div>
       </div>
     </section>
@@ -71,24 +80,25 @@
           <li class="wrap is-flex jst-between" v-for="(item,index) in dialogs">
             <div :class="['left' ,'is-flex',{'choose':choose[index*2-1]},{'no-border':!item.left.name}]" @click="fnChoose(index*2-1)">
               <span class="name text-jst" v-text="item.left.name" v-show="item.left.name"></span>
-              <input class="value" type="text" :placeholder="item.left.placeholder" v-show="item.left.placeholder">
+              <input class="value" type="text" v-model="item.left.value" :placeholder="item.left.placeholder" v-show="item.left.placeholder">
             </div>
             <div :class="['right' ,'is-flex',{'choose':choose[index*2]}]" @click="fnChoose(index*2)">
               <span class="name text-jst" v-text="item.right.name"></span>
               <input class="tip" type="text" :placeholder="item.right.tip">
-              <input :class="['value',{'tel-wide':item.right.tip}]" type="text" :placeholder="item.right.placeholder">
+              <input :class="['value',{'tel-wide':item.right.tip}]" v-model="item.right.value" type="text" :placeholder="item.right.placeholder">
             </div>
           </li>
         </ul>
       </main>
       <footer>
-        <div class="btn-add">立即添加</div>
+        <div class="btn-add" @click="addAccount">立即添加</div>
       </footer>
     </div>
-    
+    {{account}}
   </div>
 </template>
 <script>
+import { mapGetters } from "vuex";
 export default {
   data() {
     return {
@@ -122,18 +132,18 @@ export default {
       },
       lists: [
         {
-          state: true,
+          /* accountStatus: 0,
           account: "ske0001",
-          name: "李大师",
-          tel: "13528809121",
+          fullName: "李大师",
+          phone: "13528809121",
           email: "lcy888@aliyun.com",
           id: "lcy888@aliyun.com",
-          time: "2017-05-05 12:00"
+          createtime: "2017-05-05 12:00" */
         }
       ],
       color: {
-        true: "green",
-        false: "yellow"
+        1: "green",
+        2: "yellow"
       },
       dialogVisible: false,
       choose: [],
@@ -192,12 +202,19 @@ export default {
             placeholder: "请输入电子邮箱"
           }
         }
-      ]
+      ],
+      pageIndex: 1,
+      size: 10,
+      total: 0
     };
   },
   methods: {
+    changePage(page) {
+      this.pageIndex = page;
+    },
     cutState(index) {
-      this.lists[index].state = !this.lists[index].state;
+      this.lists[index].accountStatus =
+        this.lists[index].accountStatus == 1 ? 2 : 1;
     },
     handleClose(done) {
       done();
@@ -208,9 +225,84 @@ export default {
         this.choose[i] = false;
       }
       this.$set(this.choose, index, "choose");
+    },
+    getAccountList() {
+      var params = {
+        id: this.id,
+        token: this.token,
+        pageIndex: this.pageIndex,
+        size: this.size
+      };
+      this.axios
+        .post("/app/v1/subaccount/list", params)
+        .then(res => {
+          var arr = res.data.hnaAccounts;
+          this.lists = arr;
+          console.log(arr);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    addAccount() {
+      var params = {
+        account: this.account,
+        email: this.email,
+        fullName: this.fullName,
+        id: this.id,
+        identityCard: this.identityCard,
+        password: this.password,
+        phone: this.phone,
+        // subAccountId: 0, // 子帐号ID，修改时传入，新增时不传入参数,
+        telephone: this.telephone,
+        token: this.token
+      };
+      console.log(params);
+      /* this.axios
+        .post("/app/v1/subaccount/save", params)
+        .then(res => {
+          console.log(res);
+        })
+        .catch(err => {
+          console.log(err);
+        }); */
     }
   },
-  conputed: {}
+  computed: {
+    ...mapGetters(["id", "token"]),
+    listsFilters() {
+      return this.lists.filter(item => {
+        if (item.accountStatus == 3) {
+          return false;
+        }
+        return true;
+      });
+    },
+    fullName() {
+      return this.dialogs[0].right.value;
+    },
+    account() {
+      return this.dialogs[1].left.value;
+    },
+    identityCard() {
+      return this.dialogs[1].right.value;
+    },
+    password() {
+      return this.dialogs[2].left.value;
+    },
+    phone() {
+      return this.dialogs[2].right.value;
+    },
+    telephone() {
+      return this.dialogs[3].right.value;
+    },
+    email() {
+      return this.dialogs[4].right.value;
+    }
+  },
+  mounted() {
+    this.getAccountList();
+  }
 };
 </script>
 <style lang="scss" scoped>
