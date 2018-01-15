@@ -4,7 +4,39 @@
       <h4>账单查看</h4>
     </header>
     <main>
-      <section class="is-flex jst-between search">
+      <section class="search">
+        <div class="is-flex  ali-center row">
+          <div class="is-flex ali-center">
+            <span class="name time">交易时间</span>
+            <el-date-picker v-model="orderTime" type="daterange" align="center" unlink-panels range-separator="至" start-placeholder="开始日期"
+                end-placeholder="结束日期" size='mini' :picker-options="pickerOptions2">
+            </el-date-picker>       
+          </div>
+          <div class="is-flex ali-center">
+            <span class="name keyword">关键字</span>
+            <el-input v-model="keyword" placeholder="请输入关键字"></el-input>
+          </div>
+        </div>
+        <div class="is-flex  ali-center row">
+          <div class="is-flex ali-center order">
+            <span class="name time">订单号</span>
+            <input v-model="keyword" placeholder="请输入订单号"></input>   
+          </div>
+          <div class="is-flex ali-center">
+            <span class="name keyword">流水号</span>
+            <el-input v-model="keyword" placeholder="请输入流水号"></el-input>
+          </div>
+          <div class="btn btn-check">查询</div>
+        </div>
+        <div class="is-flex ali-center row import">
+          <div class="btn btn-import">导出</div>
+        </div>
+        <!-- <div class="name-val">
+          <span class="name time">交易时间</span>
+          <div class="val value">
+                 
+          </div>
+        </div>
         <div class="name-val">
           <span class="name number">订单号</span>
           <div class="val value">
@@ -18,35 +50,13 @@
           </div>
         </div>
         <div class="name-val">
-          <span class="name time">交易时间</span>
-          <div class="val value">
-            <el-date-picker class="val time" v-model="orderTime" type="daterange" align="center" unlink-panels range-separator="至" start-placeholder="开始日期"
-              end-placeholder="结束日期" size='mini' :picker-options="pickerOptions2">
-            </el-date-picker>            
-          </div>
-        </div>
-        <div class="name-val">
           <div class="btn btn-search">
             <i class="el-icon-search"></i>
             <span>查询</span>
           </div>          
-        </div>
+        </div> -->
       </section>
       <section class="result">
-        <header class="title is-flex ali-center jst-between">
-          <div>
-              <i class="el-icon-tickets"></i>
-              <span>查询结果</span>   
-          </div>
-         <el-pagination
-            layout="prev, pager, next"
-            :total="tableData.length"
-            :page-size="pageSize"
-            :current-page="curPage"
-            @current-change="changePage"
-          >
-          </el-pagination>
-        </header>
         <div class="contain">
           <el-table
             :data="pageTableData"
@@ -69,16 +79,40 @@
               label="订单号">
             </el-table-column>
             <el-table-column
+            align="center"
+              prop="num"
+              label="会员编号">
+            </el-table-column>
+            <el-table-column
+            align="center"
+              prop="account"
+              label="账号">
+            </el-table-column>
+            <el-table-column
+            align="center"
+              prop="name"
+              label="姓名">
+            </el-table-column>
+            <el-table-column
              align="center"
               prop="cash"
               label="交易金额">
             </el-table-column>
             <el-table-column
              align="center"
-              prop="state"
-              label="订单状态">
+              prop="pay"
+              label="支付方式">
             </el-table-column>
           </el-table>
+          <el-pagination
+            class="is-flex jst-center"
+            layout="prev, pager, next"
+            :total="tableData.length"
+            :page-size="pageSize"
+            :current-page="curPage"
+            @current-change="changePage"
+          >
+          </el-pagination>
         </div>
       </section>
     </main>
@@ -88,9 +122,11 @@
 export default {
   data() {
     return {
-      item: {},
-      number: "",
-      orderTime: "",
+      item: {}, // 当前选中的对象
+      keyword: "", // 关键字
+      orderTime: "", // 订单时间范围
+      orderNumber: "", // 订单号
+      serialNumber: "", // 流水号
       pickerOptions2: {
         shortcuts: [
           {
@@ -127,19 +163,13 @@ export default {
       tableData: [
         {
           date: "2016-05-02",
-          serial: "王小虎",
-          value: "123",
-          cash: "1",
-          address: "上海市普陀区金沙江路 1518 弄",
-          state: "待受理"
-        },
-        {
-          date: "2016-05-02",
-          serial: "王小虎",
-          value: "123",
-          cash: "2",
-          address: "上海市普陀区金沙江路 1518 弄",
-          state: "成功"
+          serial: "1440624203",
+          value: "11224445632",
+          num: "0658",
+          account: "10613190",
+          name: "王小虎",
+          cash: "998",
+          pay: "现金"
         },
         {
           date: "2016-05-02",
@@ -261,25 +291,70 @@ export default {
 }
 .search {
   color: $gray;
-  padding: 20px 120px;
-  .btn-search {
-    line-height: 2.3em;
-    width: 10em;
-    text-align: center;
-    background: $yellow;
+  margin: 10px 0px;
+  .name {
+    width: 100px;
+    text-align: right;
+    margin-right: 20px;
+    color: #000;
+    font-size: 12px;
+  }
+  .order input {
+    padding: 4px 20px;
+    border: 1px solid #dcdfe6;
+    border-radius: 3px;
+    &::-webkit-input-placeholder {
+      color: #c0c4cc;
+    }
+    background-color: #e6e6e6;
+  }
+  .row {
+    position: relative;
+    width: 1300px;
+    margin-bottom: 5px;
+    height: 25px;
+    padding: 5px;
+  }
+  .btn-check {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    margin: 0 40px 0 0;
+    padding: 3px 30px;
     color: white;
+    background: $red;
+    box-shadow: 2px 1px 1px 1px rgba(0, 0, 0, 0.1);
+  }
+  .btn-import {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    margin: 0 40px 0 0;
+    padding: 3px 30px;
+    color: white;
+    background: $yellow;
+    box-shadow: 2px 1px 1px 1px rgba(0, 0, 0, 0.1);
+  }
+  .import {
+    border-top: 1px solid #e5e5e5;
   }
 }
 .contain {
-  padding: 20px 120px;
+  padding: 20px 20px;
 }
 </style>
 <style lang='scss'>
 .bill_look {
   .el-input__inner {
-    height: 40px;
+    height: 25px;
+    background-color: #e6e6e6;
   }
   .el-range-editor--mini.el-input__inner {
+    background-color: #e6e6e6;
+  }
+  .el-range-editor--mini .el-range-input {
+    font-size: 12px;
+    background-color: #e6e6e6;
   }
 }
 </style>
