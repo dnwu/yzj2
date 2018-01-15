@@ -83,27 +83,27 @@
                         </div>
                         <div>
                           <div class="key">会员名称：</div>
-                          <div class="value">深圳***</div>
+                          <div class="value">{{userInfo.fullName}}</div>
                         </div>
                         <div>
                           <div class="key">会员编号：</div>
-                          <div class="value">HH007</div>
+                          <div class="value"></div>
                         </div>
                         <div>
                           <div class="key">运输路线：</div>
-                          <div class="value">深圳（）-上海（）</div>
+                          <div class="value">{{searchData.startPort}}-{{searchData.endPort}}</div>
                         </div>
                         <div>
                           <div class="key">货物重量：</div>
-                          <div class="value">1000千克</div>
+                          <div class="value">{{searchData.goodsWeight}}千克</div>
                         </div>
                         <div>
                           <div class="key">货物类型：</div>
-                          <div class="value">普货</div>
+                          <div class="value">{{transGoodsType}}</div>
                         </div>
                         <div>
                           <div class="key">起飞时间：</div>
-                          <div class="value">2017-10-10 10:10-10:10</div>
+                          <div class="value">{{formatPlaneData}} {{searchData.planeTime[0]}}-{{searchData.planeTime[1]}}</div>
                         </div>
                       </div>
                       <div class="bottom">
@@ -113,11 +113,11 @@
                       </div>
                     </div>
                     <div slot="footer" class="dialog-footer">
-                      <el-button type="warning" size="mini">立即申请</el-button>
+                      <el-button type="warning" size="mini" @click="applyPriceBtn">立即申请</el-button>
                     </div>
                   </el-dialog>
                 </div>
-                <div class="detail-btn-box"><span class="inner-right-btn">运价申请</span></div>
+                <div class="detail-btn-box"><span @click="priceApply" class="inner-right-btn">运价申请</span></div>
                 <div class="detail-img active el-icon-success" :class="selectServer.baseServer?'active':''">
                 </div>
               </div>
@@ -372,31 +372,35 @@
 <script type="text/javascript">
 import StartPortselect from "@/components/StartPortselect";
 import EndPortselect from "@/components/EndPortselect";
+import { mapGetters } from "vuex";
 // import productSelect from "./product_select";
 export default {
   components: {
     // PServer,
     StartPortselect,
-    EndPortselect,
+    EndPortselect
     // productSelect
   },
   data() {
     return {
+      userInfo: {},
       // 运价申请
-      applyPrice:'',
-      transPriceApplyModel:true,
+      applyPrice: "",
+      transPriceApplyModel: false,
       searchData: {
         // 搜索条件
         startPort: "",
         endPort: "",
         planeData: new Date(),
-        planeTime: ['00:00','23:59'],
+        planeTime: ["00:00", "23:59"],
         goodsWeight: "",
         goodsType: 7
       },
+      transGoodsType: "普货",   // 用于申请运价框
       //  选择的服务
+      judgeTopage:true,//只选择基础服务，就会跳转到带有航空主运单号的和代理人代码的页面，还选择的其他服务 ，就会跳转到不带有航空主运单号的和代理人代码的页面，这个是控制跳转到那个页面的开关
       selectServer: {
-        baseServer:true,    // 基础服务
+        baseServer: true, // 基础服务
         airportStart: false, // 始发港交货
         airportEnd: false, // 目的港提货
         landStart: false, // 上门取货
@@ -404,14 +408,14 @@ export default {
         customs: false, // 报关报检
         insurance: false, // 运输保险
         airfreightProductId: 0, // 航空运输产品ID
-        airportProductIds:[], // 始发，目的港提货服务ID
-        landCarriageProductIds:[], //上门取货，落地配送 路面运输产品ID列表,
-        flightRecordId:'',
+        airportProductIds: [], // 始发，目的港提货服务ID
+        landCarriageProductIds: [], //上门取货，落地配送 路面运输产品ID列表,
+        flightRecordId: "",
         landStartGeneral: false, // 上门取货服务类一般服务
         landStart1Ton: false, // 上门取货服务类一吨金杯车
         landStart2Ton: false, // 上门取货服务类2吨厢式车
         landStart3Ton: false, // 上门取货服务类3吨厢式车
-        landStartIndex:'0',   // 标记添加class - acitve,默认第一个被选中
+        landStartIndex: "0", // 标记添加class - acitve,默认第一个被选中
         landStartPrice: {
           // 上门取货服务费
           price: "", // 价格
@@ -424,7 +428,7 @@ export default {
         landEnd1Ton: false, // 落地配送服务类一吨金杯车
         landEnd2Ton: false, // 落地配送服务类2吨厢式车
         landEnd3Ton: false, // 落地配送服务类3吨厢式车
-        landEndIndex:'0',   // 标记添加class - acitve，默认第一个被选中
+        landEndIndex: "0", // 标记添加class - acitve，默认第一个被选中
         landEndPrice: {
           // 落地配送上门取货服务费
           price: "", // 落地配送价格
@@ -433,12 +437,12 @@ export default {
           car2DonPrice: "", // 落地配送上门取货专车费
           car3DonPrice: "" // 落地配送上门取货专车费
         },
-        saveAirportFee:{},  //储存始发港目的港服务内容以及收费
-        saveBaseServerData:{},  //储存基础服务内容以及收费情况
-        saveLandStartServerData:{},   //储存选择上门取货的服务内容
-        saveLandEndServerData:{},   //储存选择落地配送的服务内容
-        saveLandStartCarType:[],   // 储存选择二级标签专车服务后，专车类型的list
-        saveLandEndCarType:[],   // 储存选择二级标签专车服务后，专车类型的list
+        saveAirportFee: {}, //储存始发港目的港服务内容以及收费
+        saveBaseServerData: {}, //储存基础服务内容以及收费情况
+        saveLandStartServerData: {}, //储存选择上门取货的服务内容
+        saveLandEndServerData: {}, //储存选择落地配送的服务内容
+        saveLandStartCarType: [], // 储存选择二级标签专车服务后，专车类型的list
+        saveLandEndCarType: [] // 储存选择二级标签专车服务后，专车类型的list
       },
       landStartLevel1: "", // 上门取货一级选择value，为index
       landEndLevel1: "", // 落地配送一级选择value,为index
@@ -461,15 +465,15 @@ export default {
       saveStartLandCarriageSales: {}, // 储存一级选择时候变化后的选择的地区对象,计算价格
       saveEndLandCarriageSales: {}, // 储存一级选择时候变化后的选择的地区对象，计算价格
 
-      controlLandStartServer:false,  //控制上门取货服务是否可以勾选，当选择服务后才可以勾选
-      controlLandEndServer:false,  //控制落地配送服务是否可以勾选，当选择服务后才可以勾选
+      controlLandStartServer: false, //控制上门取货服务是否可以勾选，当选择服务后才可以勾选
+      controlLandEndServer: false, //控制落地配送服务是否可以勾选，当选择服务后才可以勾选
       controlSubimt: false, // 控制提交按钮的提交
       ControlIncreaseInValueServer: false // 控制增值服务隐藏
     };
   },
   created() {
     this.getGoodsTypeList();
-
+    this.getAccountInfo();
   },
   methods: {
     // 弹出窗
@@ -480,11 +484,52 @@ export default {
         duration: 2000
       });
     },
+    priceApply() {
+      this.transPriceApplyModel = true;
+    },
+    applyPriceBtn() {
+      if(this.applyPrice == ''){
+        this.$message({
+          message: '申请的运价不能为空',
+          type: 'warning'
+        });
+        return
+      }
+      this.axios.post("/app/v1/bargaining/saveBargaining", {
+        applyAmount: parseFloat(this.applyPrice),
+        applyNo: "",
+        arrivalTime: this.searchData.planeTime[1],
+        cityEnd: this.searchData.endPort,
+        cityStart: this.searchData.startPort,
+        departureTime: this.searchData.planeTime[0],
+        flightTime: this.formatPlaneData,
+        goodsType: this.searchData.goodsType,
+        goodsWeight: this.searchData.goodsWeight,
+        id: this.id,
+        originalAmount: this.productSearchResult.airfreightDTO.airfreightCharge,
+        token: this.token
+      }).then(data=>{
+        console.log(data,'运价申请');
+      });
+    },
+    getAccountInfo() {
+      this.axios
+        .post("/app/v1/user/userInfo", {
+          id: this.id,
+          token: this.token
+        })
+        .then(data => {
+          console.log(data);
+          if (data.data.code == 1) {
+            this.userInfo = data.data.data;
+          }
+        });
+    },
     landStartLevel1Change(onoff) {
-      if(onoff == false){
+      if (onoff == false) {
         // 每次点击一级选择的时候重置服务的是否勾选，然后重置controlLandStartServer
-        this.controlLandStartServer = false
-        this.selectServer.landStart = false
+        this.controlLandStartServer = false;
+        this.selectServer.landStart = false;
         this.setlandStartLevel2Data(this.landStartLevel1);
         // this.setlandStartLevel2Placeholder(this.landStartLevel1);
         this.landStartLevel2 = "";
@@ -494,50 +539,53 @@ export default {
           this.landStartLevel1
         ];
         // 每次变化的时候。重置服务项为false
-        this.selectServer.landStartGeneral = false
-        this.selectServer.landStart1Ton = false
-        this.selectServer.landStart2Ton = false
-        this.selectServer.landStart3Ton = false
+        this.selectServer.landStartGeneral = false;
+        this.selectServer.landStart1Ton = false;
+        this.selectServer.landStart2Ton = false;
+        this.selectServer.landStart3Ton = false;
         // console.log(this.saveStartLandCarriageSales);
         // 把储存的选择数据也清空
-        this.selectServer.saveLandStartServerData = {}
+        this.selectServer.saveLandStartServerData = {};
       }
     },
     landStartLevel2Change(onoff) {
-      if(onoff == false){
+      if (onoff == false) {
         if (this.landStartLevel2 == 1) {
           // 专车配送
           this.landStartLevel3ProductType1 = true;
           this.landStartLevel3ProductType2 = false;
           this.selectServer.landStartGeneral = false;
-          this.selectServer.landStart1Ton = true
-          this.selectServer.landStartIndex = '0'
-          this.getLandStartCarType(this.saveStartLandCarriageSales)
-          this.initLandStartCarPrice(this.saveStartLandCarriageSales)
+          this.selectServer.landStart1Ton = true;
+          this.selectServer.landStartIndex = "0";
+          this.getLandStartCarType(this.saveStartLandCarriageSales);
+          this.initLandStartCarPrice(this.saveStartLandCarriageSales);
         } else if (this.landStartLevel2 == 2) {
           // 一般配送
           this.landStartLevel3ProductType1 = false;
           this.landStartLevel3ProductType2 = true;
           this.selectServer.landStartGeneral = true;
-          this.selectServer.landStart1Ton = false
-          this.selectServer.landStart2Ton = false
-          this.selectServer.landStart3Ton = false
+          this.selectServer.landStart1Ton = false;
+          this.selectServer.landStart2Ton = false;
+          this.selectServer.landStart3Ton = false;
           // 调用设置储存服务项的函数
-          this.setLandStartGeneralServerData(this.saveStartLandCarriageSales,this.landStartLevel2);
+          this.setLandStartGeneralServerData(
+            this.saveStartLandCarriageSales,
+            this.landStartLevel2
+          );
         }
         // 选择二级后，默认勾选服务,然后重置controlLandStartServer
-        this.controlLandStartServer = true
-        this.selectServer.landStart = true
+        this.controlLandStartServer = true;
+        this.selectServer.landStart = true;
 
         // console.log(this.selectServer.saveLandStartCarType);
         // console.log(this.saveStartLandCarriageSales,this.landStartLevel2);
       }
     },
     landEndLevel1Change(onoff) {
-      if(onoff == false){
+      if (onoff == false) {
         // 每次点击一级选择的时候重置服务的是否勾选，然后重置controlLandStartServer
-        this.controlLandEndServer = false
-        this.selectServer.landEnd = false
+        this.controlLandEndServer = false;
+        this.selectServer.landEnd = false;
         this.setlandEndLevel2Data(this.landEndLevel1);
         // this.setlandEndLevel2Placeholder(this.landEndLevel1);
         this.landEndLevel2 = "";
@@ -548,79 +596,82 @@ export default {
         ];
         // console.log(this.saveEndLandCarriageSales);
         // 每次变化的时候。重置服务项为false
-        this.selectServer.landEndGeneral = false
-        this.selectServer.landEnd1Ton = false
-        this.selectServer.landEnd2Ton = false
-        this.selectServer.landEnd3Ton = false
+        this.selectServer.landEndGeneral = false;
+        this.selectServer.landEnd1Ton = false;
+        this.selectServer.landEnd2Ton = false;
+        this.selectServer.landEnd3Ton = false;
         // 把储存的选择数据也清空
-        this.selectServer.saveLandEndServerData = {}
+        this.selectServer.saveLandEndServerData = {};
       }
     },
     landEndLevel2Change(onoff) {
-      if(onoff == false){
+      if (onoff == false) {
         // console.log("landEndLevel2Change", this.landEndLevel2);
         if (this.landEndLevel2 == 1) {
           // 专车配送
           this.landEndLevel3ProductType1 = true;
           this.landEndLevel3ProductType2 = false;
           this.selectServer.landEndGeneral = false;
-          this.selectServer.landEnd1Ton = true
-          this.selectServer.landEndIndex = '0'
-          this.getLandEndCarType(this.saveEndLandCarriageSales)
-          this.initLandEndCarPrice(this.saveEndLandCarriageSales)
+          this.selectServer.landEnd1Ton = true;
+          this.selectServer.landEndIndex = "0";
+          this.getLandEndCarType(this.saveEndLandCarriageSales);
+          this.initLandEndCarPrice(this.saveEndLandCarriageSales);
         } else if (this.landEndLevel2 == 2) {
           // 一般配送
           this.landEndLevel3ProductType1 = false;
           this.landEndLevel3ProductType2 = true;
           this.selectServer.landEndGeneral = true;
-          this.selectServer.landEnd1Ton = false
-          this.selectServer.landEnd2Ton = false
-          this.selectServer.landEnd3Ton = false
+          this.selectServer.landEnd1Ton = false;
+          this.selectServer.landEnd2Ton = false;
+          this.selectServer.landEnd3Ton = false;
           // 调用设置储存服务项的函数
-          this.setLandEndGeneralServerData(this.saveEndLandCarriageSales, this.landEndLevel2);
+          this.setLandEndGeneralServerData(
+            this.saveEndLandCarriageSales,
+            this.landEndLevel2
+          );
         }
         // 选择二级后，默认勾选服务,然后重置controlLandEndServer
-        this.controlLandEndServer = true
-        this.selectServer.landEnd = true
+        this.controlLandEndServer = true;
+        this.selectServer.landEnd = true;
 
         // console.log(this.landEndLevel2,this.saveEndLandCarriageSales,this.landEndLevel2);
         // console.log(this.selectServer.saveLandEndCarType);
       }
     },
-    getLandStartCarType(data){
-      var serverList = data.landProductTypeDTOS
-      serverList.forEach(ele=>{
-        if(ele.productType ==1){
-          this.selectServer.saveLandStartCarType = ele.list
+    getLandStartCarType(data) {
+      var serverList = data.landProductTypeDTOS;
+      serverList.forEach(ele => {
+        if (ele.productType == 1) {
+          this.selectServer.saveLandStartCarType = ele.list;
         }
-      })
+      });
     },
-    getLandEndCarType(data){
-      var serverList = data.landProductTypeDTOS
-      serverList.forEach(ele=>{
-        if(ele.productType ==1){
-          this.selectServer.saveLandEndCarType = ele.list
+    getLandEndCarType(data) {
+      var serverList = data.landProductTypeDTOS;
+      serverList.forEach(ele => {
+        if (ele.productType == 1) {
+          this.selectServer.saveLandEndCarType = ele.list;
         }
-      })
+      });
     },
     // 当二级标签变化的时候，初始化专车配送的价格，也就是this.selectServer.saveLandStartServerData
-    initLandStartCarPrice(item){
+    initLandStartCarPrice(item) {
       // console.log(item);
-      var serverList = item.landProductTypeDTOS
-      serverList.forEach(ele=>{
-        if(ele.productType ==1){
-          this.selectServer.saveLandStartServerData = ele.list[0]
+      var serverList = item.landProductTypeDTOS;
+      serverList.forEach(ele => {
+        if (ele.productType == 1) {
+          this.selectServer.saveLandStartServerData = ele.list[0];
         }
-      })
+      });
     },
     // 当二级标签变化的时候，初始化专车配送的价格，也就是this.selectServer.saveLandStartServerData
-    initLandEndCarPrice(item){
-      var serverList = item.landProductTypeDTOS
-      serverList.forEach(ele=>{
-        if(ele.productType ==1){
-          this.selectServer.saveLandEndServerData = ele.list[0]
+    initLandEndCarPrice(item) {
+      var serverList = item.landProductTypeDTOS;
+      serverList.forEach(ele => {
+        if (ele.productType == 1) {
+          this.selectServer.saveLandEndServerData = ele.list[0];
         }
-      })
+      });
     },
     setlandStartLevel2Data(index) {
       this.landStartLevel2Data = [];
@@ -659,41 +710,41 @@ export default {
         }
       });
     },
-    toggleLandStartServer(item,index) {
-      this.selectServer.landStartIndex = index
-      this.selectServer.saveLandStartServerData = item
+    toggleLandStartServer(item, index) {
+      this.selectServer.landStartIndex = index;
+      this.selectServer.saveLandStartServerData = item;
     },
-    toggleLandEndServer(item,index) {
-      this.selectServer.landEndIndex = index
+    toggleLandEndServer(item, index) {
+      this.selectServer.landEndIndex = index;
       // 如果是专车配送的时候，把一般配送的收费细节存在this.selectServer.saveLandStartServerData
-      this.selectServer.saveLandEndServerData = item
+      this.selectServer.saveLandEndServerData = item;
     },
     toggleSelect(type) {
-      if(type=='airportStart'){
+      if (type == "airportStart") {
         this.selectServer[type] = !this.selectServer[type];
-        if(this.selectServer.airportStart){
-          this.selectServer.saveAirportFee.airportStart = this.productSearchResult.airportStart
-        }else{
-          delete this.selectServer.saveAirportFee.airportStart
+        if (this.selectServer.airportStart) {
+          this.selectServer.saveAirportFee.airportStart = this.productSearchResult.airportStart;
+        } else {
+          delete this.selectServer.saveAirportFee.airportStart;
         }
       }
-      if(type=='airportEnd'){
+      if (type == "airportEnd") {
         this.selectServer[type] = !this.selectServer[type];
-        if(this.selectServer.airportEnd){
-          this.selectServer.saveAirportFee.airportEnd = this.productSearchResult.airportEnd
-        }else{
-          delete this.selectServer.saveAirportFee.airportEnd
+        if (this.selectServer.airportEnd) {
+          this.selectServer.saveAirportFee.airportEnd = this.productSearchResult.airportEnd;
+        } else {
+          delete this.selectServer.saveAirportFee.airportEnd;
         }
       }
-      if(type=='landStart'){
-        if(!this.controlLandStartServer){
-          return
+      if (type == "landStart") {
+        if (!this.controlLandStartServer) {
+          return;
         }
         this.selectServer[type] = !this.selectServer[type];
       }
-      if(type=='landEnd'){
-        if(!this.controlLandEndServer){
-          return
+      if (type == "landEnd") {
+        if (!this.controlLandEndServer) {
+          return;
         }
         this.selectServer[type] = !this.selectServer[type];
       }
@@ -709,99 +760,100 @@ export default {
       this.axios
         .post("/app/v1/common/queryDict", { dataType: 2 })
         .then(data => {
-          // console.log(data.data.data.detailDTOS);
+          console.log(data.data.data.detailDTOS);
           this.goodsTypesList = data.data.data.detailDTOS;
         });
     },
     productSearch() {
       // console.log(this.searchData);
       // 搜索前，重置所有的服务项
-      this.selectServer.airportStart = false
-      this.selectServer.airportEnd = false
-      this.selectServer.landStart = false
-      this.selectServer.landEnd = false
-      this.selectServer.customs = false
-      this.selectServer.insurance = false
-      this.landStartLevel2Data=[]
-      this.landStartLevel2 = ''
-      this.landEndLevel2 = ''
-      this.landEndLevel2Data = []
-      this.selectServer.landStartGeneral = false
-      this.selectServer.landEndGeneral = false
-      this.landStartLevel3ProductType1 = false,
-      this.landStartLevel3ProductType2 = false,
-      this.landEndLevel3ProductType1 = false,
-      this.landEndLevel3ProductType2 = false,
-      this.controlLandEndServer = false
-      this.controlLandStartServer = false
-      this.selectServer.landEndIndex = '0'
-      this.selectServer.landStartIndex = '0'
-      this.saveAirportFee = {},  //储存始发港目的港服务内容以及收费
-      this.saveBaseServerData = {},  //储存基础服务内容以及收费情况
-      this.selectServer.saveLandStartServerData = {},   //储存选择上门取货的服务内容
-      this.selectServer.saveLandEndServerData = {},   //储存选择落地配送的服务内容
-      this.saveLandStartCarType = [],   // 储存选择二级标签专车服务后，专车类型的list
-      this.saveLandEndCarType = [],   // 储存选择二级标签专车服务后，专车类型的list
-
-      this.axios
-        .post("/app/v1/product/queryProduct", {
-          airportEnd: this.searchData.endPort,
-          airportStart: this.searchData.startPort,
-          flightDate: this.formatPlaneData,
-          goodsType: this.searchData.goodsType,
-          hourEnd: this.searchData.planeTime[1],
-          hourStart: this.searchData.planeTime[0],
-          weight: this.searchData.goodsWeight
-        })
-        .then(data => {
-          // console.log(data.data.data);
-          this.productSearchResult = {};
-          if (data.data.code == 1) {
-            // 储存航空货运ID
-            this.selectServer.flightRecordId = data.data.data.flightRecordId
-            // 储存基础服务的收费内容
-            this.selectServer.saveBaseServerData = data.data.data.airfreightDTO
-            Object.assign(this.productSearchResult, data.data.data);
-            // this.productSearchResult =  data.data.data
-            this.getResultSuccess = true;
-            this.searchNone = false;
-            this.searchShow = true;
-            // 这里初始化一下二级选择项
-            if (this.productSearchResult.landStart) {
-              this.setlandStartLevel2Data(0);
+      this.selectServer.airportStart = false;
+      this.selectServer.airportEnd = false;
+      this.selectServer.landStart = false;
+      this.selectServer.landEnd = false;
+      this.selectServer.customs = false;
+      this.selectServer.insurance = false;
+      this.landStartLevel2Data = [];
+      this.landStartLevel2 = "";
+      this.landEndLevel2 = "";
+      this.landEndLevel2Data = [];
+      this.selectServer.landStartGeneral = false;
+      this.selectServer.landEndGeneral = false;
+      (this.landStartLevel3ProductType1 = false),
+        (this.landStartLevel3ProductType2 = false),
+        (this.landEndLevel3ProductType1 = false),
+        (this.landEndLevel3ProductType2 = false),
+        (this.controlLandEndServer = false);
+      this.controlLandStartServer = false;
+      this.selectServer.landEndIndex = "0";
+      this.selectServer.landStartIndex = "0";
+      (this.saveAirportFee = {}), //储存始发港目的港服务内容以及收费
+        (this.saveBaseServerData = {}), //储存基础服务内容以及收费情况
+        (this.selectServer.saveLandStartServerData = {}), //储存选择上门取货的服务内容
+        (this.selectServer.saveLandEndServerData = {}), //储存选择落地配送的服务内容
+        (this.saveLandStartCarType = []), // 储存选择二级标签专车服务后，专车类型的list
+        (this.saveLandEndCarType = []), // 储存选择二级标签专车服务后，专车类型的list
+        this.axios
+          .post("/app/v1/product/queryProduct", {
+            airportEnd: this.searchData.endPort,
+            airportStart: this.searchData.startPort,
+            flightDate: this.formatPlaneData,
+            goodsType: this.searchData.goodsType,
+            hourEnd: this.searchData.planeTime[1],
+            hourStart: this.searchData.planeTime[0],
+            weight: this.searchData.goodsWeight
+          })
+          .then(data => {
+            // console.log(data.data.data);
+            this.productSearchResult = {};
+            if (data.data.code == 1) {
+              // 储存航空货运ID
+              this.selectServer.flightRecordId = data.data.data.flightRecordId;
+              // 储存基础服务的收费内容
+              this.selectServer.saveBaseServerData =
+                data.data.data.airfreightDTO;
+              Object.assign(this.productSearchResult, data.data.data);
+              // this.productSearchResult =  data.data.data
+              this.getResultSuccess = true;
+              this.searchNone = false;
+              this.searchShow = true;
+              // 这里初始化一下二级选择项
+              if (this.productSearchResult.landStart) {
+                this.setlandStartLevel2Data(0);
+              }
+              if (this.productSearchResult.landEnd) {
+                this.setlandEndLevel2Data(0);
+              }
+              // 查询成功 ， 就可以提交
+              this.controlSubimt = true;
+            } else {
+              // console.log(data);
+              this.prompt(data.data.msg);
+              this.getResultSuccess = false;
+              this.searchShow = false;
+              this.searchNone = true;
             }
-            if (this.productSearchResult.landEnd) {
-              this.setlandEndLevel2Data(0);
+          })
+          .catch(data => {
+            // console.log('失败',data);
+            this.prompt("请求失败");
+            if (data.status) {
+              this.getResultSuccess = false;
+              this.searchShow = false;
+              this.searchNone = true;
             }
-            // 查询成功 ， 就可以提交
-            this.controlSubimt = true;
-          } else {
-            // console.log(data);
-            this.prompt(data.data.msg);
-            this.getResultSuccess = false;
-            this.searchShow = false;
-            this.searchNone = true;
-          }
-        })
-        .catch(data => {
-          // console.log('失败',data);
-          this.prompt("请求失败");
-          if (data.status) {
-            this.getResultSuccess = false;
-            this.searchShow = false;
-            this.searchNone = true;
-          }
-        });
+          });
     },
     productConfirm() {
       // 点击前重置
-      this.selectServer.airportProductIds = []
-      this.selectServer.landCarriageProductIds = []
+      this.selectServer.airportProductIds = [];
+      this.selectServer.landCarriageProductIds = [];
       // 这里提交前判断所选择的服务，然后把id复制给data里边的对应项，然后把data储存在浏览器中
       // 判断是否有航空运输服务
       this.selectServer.airfreightProductId = this.productSearchResult.airfreightDTO.id;
       // 判断是否有始发港交货
       if (this.selectServer.airportStart) {
+        this.judgeTopage = false
         // this.airportProductIds
         let idArr = this.productSearchResult.airportStart.priceDTOS;
         idArr.forEach(ele => {
@@ -810,6 +862,7 @@ export default {
       }
       // 判断是否有目的港提货
       if (this.selectServer.airportEnd) {
+        this.judgeTopage = false
         let idArr = this.productSearchResult.airportEnd.priceDTOS;
         idArr.forEach(ele => {
           this.selectServer.airportProductIds.push(ele.id);
@@ -817,21 +870,26 @@ export default {
       }
       // 判断是否上门取货服务
       if (this.selectServer.landStart) {
-        let idArr = this.productSearchResult.landStart.landCarriageSales[this.landStartLevel1].landProductTypeDTOS;
+        this.judgeTopage = false
+        let idArr = this.productSearchResult.landStart.landCarriageSales[
+          this.landStartLevel1
+        ].landProductTypeDTOS;
         // 上门取货服务中的具体服务
         // console.log(this.selectServer.saveLandStartServerData);
-        let data = this.selectServer.saveLandStartServerData
+        let data = this.selectServer.saveLandStartServerData;
         this.selectServer.landCarriageProductIds.push({
           priceId: data.id,
           productId: data.productId
         });
-
       }
       // 判断是否落地配送
       if (this.selectServer.landEnd) {
-        let idArr = this.productSearchResult.landEnd.landCarriageSales[this.landEndLevel1].landProductTypeDTOS;
+        this.judgeTopage = false
+        let idArr = this.productSearchResult.landEnd.landCarriageSales[
+          this.landEndLevel1
+        ].landProductTypeDTOS;
         //  落地配送服务中的具体服务
-        let data = this.selectServer.saveLandEndServerData
+        let data = this.selectServer.saveLandEndServerData;
         this.selectServer.landCarriageProductIds.push({
           priceId: data.id,
           productId: data.productId
@@ -841,34 +899,38 @@ export default {
 
       // 收集数据， 传到下一步
       var transObj = {
-        searchData:this.searchData,
-        selectServer:this.selectServer,
-        FeeInfo:{
-          airTransFee:this.airTransFee,
-          airOilAnnexFee:this.airOilAnnexFee,
-          airportStartFee:this.airportStartFee,
-          airportEndFee:this.airportEndFee,
-          landStartGetGoodsFee:this.landStartGetGoodsFee,
-          landEndTranFee:this.landEndTranFee,
-          totalFee:this.totalFee
+        searchData: this.searchData,
+        selectServer: this.selectServer,
+        FeeInfo: {
+          airTransFee: this.airTransFee,
+          airOilAnnexFee: this.airOilAnnexFee,
+          airportStartFee: this.airportStartFee,
+          airportEndFee: this.airportEndFee,
+          landStartGetGoodsFee: this.landStartGetGoodsFee,
+          landEndTranFee: this.landEndTranFee,
+          totalFee: this.totalFee
         }
+      };
+      window.localStorage.setItem("productIndex", JSON.stringify(transObj));
+
+      if (this.controlSubimt) {
+        if(this.judgeTopage){
+          this.$router.push({
+            path: "/center/online_product/write_base",
+            query: {
+              step: 2
+            }
+          });
+        }else{
+          this.$router.push({
+            path: "/center/Online_product/write",
+            query: {
+              step: 2
+            }
+          });
+        }
+
       }
-      window.localStorage.setItem('productIndex',JSON.stringify(transObj))
-
-
-
-
-      if(this.controlSubimt){
-        this.$router.push({
-          path: "/center/Online_product/write",
-          query: {
-            step: 2
-          }
-        });
-      }
-
-
-
 
       // console.log(1, this.selectServer);
     },
@@ -884,7 +946,7 @@ export default {
             this.selectServer.landStartPrice.minPrice = priceList.minPrice;
 
             // 如果是一般配送的话，把一般配送的收费细节存在this.selectServer.saveLandStartServerData
-            this.selectServer.saveLandStartServerData = priceList
+            this.selectServer.saveLandStartServerData = priceList;
           }
         }
       });
@@ -902,11 +964,11 @@ export default {
             this.selectServer.landEndPrice.minPrice = priceList.minPrice;
 
             // 如果是一般配送的话，把一般配送的收费细节存在this.selectServer.saveLandEndServerData中
-            this.selectServer.saveLandEndServerData = priceList
+            this.selectServer.saveLandEndServerData = priceList;
           }
         }
       });
-    },
+    }
 
     // 这两个函数的主要作用是在选择不同专车服务的时候，设置saveLandStartServerData，saveLandEndServerData
     // setSaveLandStartServerData(type){
@@ -937,15 +999,19 @@ export default {
     //     }
     //   })
     // }
-
   },
   computed: {
-    formatPlaneData(){
-      var newDate = this.searchData.planeData
-      var year = newDate.getFullYear()
-      var month = (newDate.getMonth()+1)<10?`0${newDate.getMonth()+1}`:newDate.getMonth()+1
-      var date = newDate.getDate()<10?`0${newDate.getDate()}`:newDate.getDate()
-      return `${year}-${month}-${date}`
+    ...mapGetters(["id", "token"]),
+    formatPlaneData() {
+      var newDate = this.searchData.planeData;
+      var year = newDate.getFullYear();
+      var month =
+        newDate.getMonth() + 1 < 10
+          ? `0${newDate.getMonth() + 1}`
+          : newDate.getMonth() + 1;
+      var date =
+        newDate.getDate() < 10 ? `0${newDate.getDate()}` : newDate.getDate();
+      return `${year}-${month}-${date}`;
     },
     landStartLevel1Data() {
       var arr = [];
@@ -974,12 +1040,14 @@ export default {
     // 航空运费
     airTransFee() {
       if (this.getResultSuccess) {
-        let totalUnivalent = this.productSearchResult.airfreightDTO.airfreightCharge;
-        let minAirfreightCharge = this.productSearchResult.airfreightDTO.minAirfreightCharge;
+        let totalUnivalent = this.productSearchResult.airfreightDTO
+          .airfreightCharge;
+        let minAirfreightCharge = this.productSearchResult.airfreightDTO
+          .minAirfreightCharge;
         let totalWeight = parseFloat(this.searchData.goodsWeight);
-        if(parseFloat(totalUnivalent).mul(totalWeight)>minAirfreightCharge){
+        if (parseFloat(totalUnivalent).mul(totalWeight) > minAirfreightCharge) {
           return parseFloat(totalUnivalent).mul(totalWeight);
-        }else{
+        } else {
           return minAirfreightCharge;
         }
       } else {
@@ -1004,13 +1072,13 @@ export default {
         if (this.selectServer.airportStart) {
           let priceDTOS = this.productSearchResult.airportStart.priceDTOS;
           let totalUnivalent = 0;
-          let totalWeight =parseFloat(this.searchData.goodsWeight);
+          let totalWeight = parseFloat(this.searchData.goodsWeight);
           let arr = [];
-          let fixPay = 0
+          let fixPay = 0;
           priceDTOS.forEach(ele => {
-            if(ele.priceType == 12){
-              fixPay = fixPay.add(parseFloat(ele.price))
-            }else if(ele.priceType == 11){
+            if (ele.priceType == 12) {
+              fixPay = fixPay.add(parseFloat(ele.price));
+            } else if (ele.priceType == 11) {
               if (ele.minPrice < parseFloat(ele.price).mul(totalWeight)) {
                 arr.push(parseFloat(ele.price).mul(totalWeight));
               } else {
@@ -1019,9 +1087,9 @@ export default {
             }
           });
           for (let i = 0; i < arr.length; i++) {
-            totalUnivalent =totalUnivalent.add(parseFloat(arr[i]));
+            totalUnivalent = totalUnivalent.add(parseFloat(arr[i]));
           }
-          return parseFloat(totalUnivalent).add(parseFloat(fixPay))
+          return parseFloat(totalUnivalent).add(parseFloat(fixPay));
         }
       } else {
         return 0;
@@ -1036,11 +1104,11 @@ export default {
           let totalUnivalent = 0;
           let totalWeight = parseFloat(this.searchData.goodsWeight);
           let arr = [];
-          let fixPay = 0
+          let fixPay = 0;
           priceDTOS.forEach(ele => {
-            if(ele.priceType == 12){
-              fixPay = fixPay.add(parseFloat(ele.price))
-            }else if(ele.priceType == 11){
+            if (ele.priceType == 12) {
+              fixPay = fixPay.add(parseFloat(ele.price));
+            } else if (ele.priceType == 11) {
               if (ele.minPrice < parseFloat(ele.price).mul(totalWeight)) {
                 arr.push(parseFloat(ele.price).mul(totalWeight));
               } else {
@@ -1049,9 +1117,9 @@ export default {
             }
           });
           for (let i = 0; i < arr.length; i++) {
-            totalUnivalent =totalUnivalent.add(parseFloat(arr[i]));
+            totalUnivalent = totalUnivalent.add(parseFloat(arr[i]));
           }
-          return parseFloat(totalUnivalent).add(parseFloat(fixPay))
+          return parseFloat(totalUnivalent).add(parseFloat(fixPay));
         }
       } else {
         return 0;
@@ -1063,11 +1131,13 @@ export default {
       if (this.getResultSuccess) {
         if (this.selectServer.landStart) {
           var totalWeight = parseFloat(this.searchData.goodsWeight);
-          var item = this.selectServer.saveLandStartServerData
-          if(item.priceType == 11){
-            return totalWeight.mul(item.price) > item.minPrice?totalWeight.mul(item.price):item.minPrice
-          }else if(item.priceType == 12){
-            return item.price
+          var item = this.selectServer.saveLandStartServerData;
+          if (item.priceType == 11) {
+            return totalWeight.mul(item.price) > item.minPrice
+              ? totalWeight.mul(item.price)
+              : item.minPrice;
+          } else if (item.priceType == 12) {
+            return item.price;
           }
         }
       } else {
@@ -1079,11 +1149,13 @@ export default {
       if (this.getResultSuccess) {
         if (this.selectServer.landEnd) {
           var totalWeight = parseFloat(this.searchData.goodsWeight);
-          var item = this.selectServer.saveLandEndServerData
-          if(item.priceType == 11){
-            return totalWeight.mul(item.price) > item.minPrice?totalWeight.mul(item.price):item.minPrice
-          }else if(item.priceType == 12){
-            return item.price
+          var item = this.selectServer.saveLandEndServerData;
+          if (item.priceType == 11) {
+            return totalWeight.mul(item.price) > item.minPrice
+              ? totalWeight.mul(item.price)
+              : item.minPrice;
+          } else if (item.priceType == 12) {
+            return item.price;
           }
         }
       } else {
@@ -1093,16 +1165,41 @@ export default {
     // 总费用
     totalFee() {
       // console.log(this.airTransFee,this.airOilAnnexFee,this.landStartServerFee,this.landStartMakeBillFee,this.landEndGetGoodsFee,this.landStartGetGoodsFee,this.landEndTranFee);
-      var airTransFee = this.airTransFee == undefined ? 0 : parseFloat(this.airTransFee);
-      var airOilAnnexFee =this.airOilAnnexFee == undefined ? 0 : parseFloat(this.airOilAnnexFee);
-      var airportStartFee =this.airportStartFee == undefined? 0: parseFloat(this.airportStartFee);
-      var airportEndFee =this.airportEndFee == undefined? 0: parseFloat(this.airportEndFee);
+      var airTransFee =
+        this.airTransFee == undefined ? 0 : parseFloat(this.airTransFee);
+      var airOilAnnexFee =
+        this.airOilAnnexFee == undefined ? 0 : parseFloat(this.airOilAnnexFee);
+      var airportStartFee =
+        this.airportStartFee == undefined
+          ? 0
+          : parseFloat(this.airportStartFee);
+      var airportEndFee =
+        this.airportEndFee == undefined ? 0 : parseFloat(this.airportEndFee);
 
-      var landStartGetGoodsFee =this.landStartGetGoodsFee == undefined? 0: parseFloat(this.landStartGetGoodsFee);
-      var landEndTranFee = this.landEndTranFee == undefined ? 0 : parseFloat(this.landEndTranFee);
-      return (
-        airTransFee.add(airOilAnnexFee).add(airportStartFee).add(airportEndFee).add(landStartGetGoodsFee).add(landEndTranFee)
-      );
+      var landStartGetGoodsFee =
+        this.landStartGetGoodsFee == undefined
+          ? 0
+          : parseFloat(this.landStartGetGoodsFee);
+      var landEndTranFee =
+        this.landEndTranFee == undefined ? 0 : parseFloat(this.landEndTranFee);
+      return airTransFee
+        .add(airOilAnnexFee)
+        .add(airportStartFee)
+        .add(airportEndFee)
+        .add(landStartGetGoodsFee)
+        .add(landEndTranFee);
+    }
+  },
+  watch: {
+    searchData: {
+      handler(newValue, oldValue) {
+        this.goodsTypesList.forEach(ele => {
+          if (ele.id == this.searchData.goodsType) {
+            this.transGoodsType = ele.dataName;
+          }
+        });
+      },
+      deep: true
     }
   }
 };
@@ -1110,8 +1207,8 @@ export default {
 
 <style lang="scss">
 .m-product-container {
-  .red{
-    color:#F52C35;
+  .red {
+    color: #f52c35;
     font-weight: 700;
   }
   color: rgba(153, 153, 153, 1);
@@ -1412,41 +1509,43 @@ export default {
             .select-little {
               height: 80px;
               position: relative;
-              .trans-price-apply-model{
-                .el-dialog__header{
-                  background-color: #FCD832;
+              .trans-price-apply-model {
+                .el-dialog__header {
+                  background-color: #fcd832;
                   color: #fff;
                   font-size: 18px;
                   font-weight: 600;
                 }
-                .el-dialog__body{
-                  .body{
-                    .top{
+                .el-dialog__body {
+                  .body {
+                    .top {
                       border-bottom: 1px dotted #e0e0e0;
                       padding-bottom: 30px;
-                      >div{
-                        color: #9F9F9F;
+                      > div {
+                        color: #9f9f9f;
                         display: flex;
                         width: 400px;
                         margin: 10px auto;
                         padding-left: 90px;
-                        .key{
+                        .key {
                           margin-right: 20px;
                         }
                       }
                     }
-                    .bottom{
-                      color: #9F9F9F;
+                    .bottom {
+                      color: #9f9f9f;
                       display: flex;
                       width: 400px;
                       margin: 30px auto 0;
                       padding-left: 90px;
-                      .key,.value,.unit{
+                      .key,
+                      .value,
+                      .unit {
                         border-bottom: 1px solid #e0e0e0;
                       }
-                      .value{
-                        .el-input{
-                          input{
+                      .value {
+                        .el-input {
+                          input {
                             border: none;
                           }
                         }
@@ -1454,9 +1553,9 @@ export default {
                     }
                   }
                 }
-                .el-dialog__footer{
+                .el-dialog__footer {
                   text-align: center;
-                  button{
+                  button {
                     padding: 7px 60px;
                   }
                 }
@@ -1525,7 +1624,7 @@ export default {
         flex-direction: column;
         align-items: center;
         justify-content: space-around;
-        &.box1{
+        &.box1 {
           border-bottom: 1px solid #e0e0e0;
           padding-bottom: 20px;
         }
@@ -1551,7 +1650,7 @@ export default {
           display: inline-block;
           text-align-last: justify;
         }
-        .cost-number{
+        .cost-number {
           flex: 1;
           text-align: right;
           padding-right: 10px;
@@ -1574,22 +1673,30 @@ export default {
         }
         .total-content {
           width: 80px;
-          color: #FCD832;
+          color: #fcd832;
         }
       }
     }
-    .wave{
+    .wave {
       position: absolute;
       z-index: 99;
       bottom: 0px;
-      left:0;
+      left: 0;
       width: 300px;
       height: 15px;
-      background-image: -webkit-gradient(linear,50% 0,0 100%,from(transparent), color-stop(.5,transparent),color-stop(.5,#e0e0e0),to(#e0e0e0)),
-                        -webkit-gradient(linear,50% 0,100% 100%,from(transparent), color-stop(.5,transparent),color-stop(.5,#e0e0e0),to(#e0e0e0));
+      background-image: -webkit-gradient(
+          linear,
+          50% 0,
+          0 100%,
+          from(transparent),
+          color-stop(0.5, transparent),
+          color-stop(0.5, #e0e0e0),
+          to(#e0e0e0)
+        ),
+        -webkit-gradient(linear, 50% 0, 100% 100%, from(transparent), color-stop(0.5, transparent), color-stop(0.5, #e0e0e0), to(#e0e0e0));
       background-size: 20px 10px;
-      background-repeat:repeat-x;
-      background-position:0 100%;
+      background-repeat: repeat-x;
+      background-position: 0 100%;
     }
     .confirm {
       position: absolute;

@@ -34,8 +34,6 @@ import Member from '@/views/About/Member'
 import Join from '@/views/About/Join'
 
 import store from '@/store'
-import PIndex from '@/views/Center/Online_product/product_index'
-import productWrite from '@/views/Center/Online_product/product_write'
 import * as types from '@/store/mutation-type'
 
 const LoginIndex = () => import ('@/views/Login/Login')
@@ -60,6 +58,12 @@ const Integral = () => import ('@/views/Center/Integral/Integral')
 const Address = () => import ('@/views/Center/Address/Address')
 const Son_account = () => import ('@/views/Center/Son_account/Son_account')
 const Online_product = () => import ('@/views/Center/Online_product/Online_product')
+const PIndex = () => import ('@/views/Center/Online_product/product_index')
+const productWrite = () => import ('@/views/Center/Online_product/product_write')
+const productWriteBase = () => import ('@/views/Center/Online_product/product_write_base')
+
+
+
 const Online_product_complete = ()=> import('@/views/Center/Online_product/product_complete')
 const Online_product_pay_complete = ()=> import('@/views/Center/Online_product/product_pay_complete')
 const Online_write = () => import ('@/views/Center/Online_write/Online_write')
@@ -387,6 +391,15 @@ let router = new Router({
             {
               path: '/center/online_product/write',
               component: productWrite,
+              meta:{
+                requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+                usertype:'personal',
+                keepAlive:false
+              }
+            },
+            {
+              path: '/center/online_product/write_base',
+              component: productWriteBase,
               meta:{
                 requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
                 usertype:'personal',
