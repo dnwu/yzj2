@@ -1,5 +1,5 @@
 <template>
-  <div class="write-wrapper li-product-write">
+  <div class="write-wrapper-base li-product-write">
     <div class="write-container">
       <div class="write-inner">
         <div class="write-content">
@@ -228,9 +228,30 @@
         </el-form>
       </div>
     <div class="product-title">货物信息</div>
+    <el-form :model="goodsInfo" :rules="goodsInfoRules" ref="goodsInfo" class="goodsInfo">
+    <!-- 货物信息上部分 -->
+      <div class="goodsInfo-top">
+          <div class="box main-orderNo">
+            <div class="key"><span class="star">*</span>航空主运单</div>
+            <el-form-item prop="mainOrderNo1">
+              <div class="value1"><el-input v-model="goodsInfo.mainOrderNo1" size="mini" placeholder="前三位"></el-input></div>
+            </el-form-item>
+            <div class="line">--</div>
+            <el-form-item prop="mainOrderNo2">
+              <div class="value2"><el-input v-model="goodsInfo.mainOrderNo2" size="mini" placeholder="后八位"></el-input></div>
+            </el-form-item>
+          </div>
+          <div class="box proxy-code">
+            <div class="key"><span class="star">*</span>代理人代码</div>
+            <el-form-item prop="proxyCode">
+              <div class="value"><el-input v-model="goodsInfo.proxyCode" size="mini" placeholder="请输入代理人代码"></el-input></div>
+            </el-form-item>
+          </div>
+        <!-- </el-form> -->
+      </div>
       <div class="product-information">
         <div class="info-left">
-          <el-form :model="goodsInfo" :rules="goodsInfoRules" ref="goodsInfo" class="goodsInfo">
+          <!-- <el-form :model="goodsInfo" :rules="goodsInfoRules" ref="goodsInfo" class="goodsInfo"> -->
             <div class="info-list info-list1">
               <span class="name-logo">*</span>
               <span class="name-nav">货物重量</span>
@@ -267,7 +288,6 @@
                 <el-input size="mini" v-model="goodsInfo.pack" placeholder="请输入货物包装"></el-input>
               </span>
             </div>
-          </el-form>
         </div>
         <div class="info-mid">
           <span class="mid-text">
@@ -323,7 +343,7 @@
           </el-form>
         </div>
       </div>
-
+    </el-form>
     <div class="product-title" v-if="false">活动信息</div>
     <div class="product-pre" v-if="false">
       <input type="text" v-model="inviteCode" name="" placeholder="推荐人邀请码">
@@ -475,9 +495,9 @@ export default {
         // tellPhone2: [{ required: true, message: "请输入座机号", trigger: "blur" }]
       },
       goodsInfoRules: {
-        // mainOrderNo1: [{ required: true, message: "请输前三位", trigger: "blur" }],
-        // mainOrderNo2: [{ required: true, message: "请输后八位", trigger: "blur" }],
-        // proxyCode: [{ required: true, message: "请输入代理人代码", trigger: "blur" }],
+        mainOrderNo1: [{ required: true, message: "请输前三位", trigger: "blur" }],
+        mainOrderNo2: [{ required: true, message: "请输后八位", trigger: "blur" }],
+        proxyCode: [{ required: true, message: "请输入代理人代码", trigger: "blur" }],
         weight: [{ required: true, message: "请输入货物重量", trigger: "blur" }],
         num: [{ required: true, message: "请输入货物件数", trigger: "blur" }],
         name: [{ required: true, message: "请输入货物名称", trigger: "blur" }],
@@ -494,9 +514,9 @@ export default {
         postal: ""
       },
       goodsInfo: {
-        // mainOrderNo1:'',
-        // mainOrderNo2:'',
-        // proxyCode:'',
+        mainOrderNo1:'',
+        mainOrderNo2:'',
+        proxyCode:'',
         weight: "",
         num: "",
         name: "",
@@ -1131,7 +1151,7 @@ export default {
 </script>
 
 <style lang="scss">
-.write-wrapper {
+.write-wrapper-base {
   color: rgba(153, 153, 153, 1);
   width: 1100px;
   .write-container {

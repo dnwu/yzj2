@@ -492,7 +492,7 @@ export default {
     totalPay(){
       var total = 0
       this.orderDetailData.productPriceList.forEach(ele => {
-        total +=parseFloat(ele.price)
+        total =total.add(parseFloat(ele.price))
       });
       return total
     },
