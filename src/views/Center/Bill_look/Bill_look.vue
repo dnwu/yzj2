@@ -31,30 +31,6 @@
         <div class="is-flex ali-center row import">
           <div class="btn btn-import">导出</div>
         </div>
-        <!-- <div class="name-val">
-          <span class="name time">交易时间</span>
-          <div class="val value">
-                 
-          </div>
-        </div>
-        <div class="name-val">
-          <span class="name number">订单号</span>
-          <div class="val value">
-            <el-autocomplete
-              class="inline-input"
-              v-model="number"
-              :fetch-suggestions="querySearch"
-              placeholder="请输入内容"
-              @select="handleSelect"
-            ></el-autocomplete>
-          </div>
-        </div>
-        <div class="name-val">
-          <div class="btn btn-search">
-            <i class="el-icon-search"></i>
-            <span>查询</span>
-          </div>          
-        </div> -->
       </section>
       <section class="result">
         <div class="contain">
@@ -242,15 +218,15 @@ export default {
       };
     },
     handleSelect(item) {
-      this.itme = item;
+      /* this.itme = item; */
     },
-    search() {
+    /* search() {
       if (this.number !== "") {
         this.tableData = [];
         this.tableData.push(item);
         this.curPage = 1;
       }
-    }
+    } */
   },
   computed: {
     pageTableData() {

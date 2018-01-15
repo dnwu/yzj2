@@ -214,20 +214,24 @@ export default {
         this.orderTime[0] &&
         this.orderTime[1]
       ) {
-        this.axios
-          .post("/app/v1/bargaining/getBargainingList", {
-            id: this.id,
-            token: this.token,
-            applyStatus: this.orderStatu == "" ? 0 : this.orderStatu,
-            /* cityStart: "北京（PEK）",
+        var parms = {
+          id: this.id,
+          token: this.token,
+          applyStatus: this.orderStatu == "" ? 0 : this.orderStatu,
+          /* cityStart: "北京（PEK）",
             cityEnd: "上海（PVG）",
             applyStatus: 1, */
-            startTime: this.formatDate(this.orderTime[0]),
-            endTime: this.formatDate(this.orderTime[1]),
-            orderNo: this.input,
-            pageIndex: this.curPage,
-            size: this.pageSize
-          })
+          cityStart: this.startPort,
+          cityEnd: this.endPort,
+          startTime: this.formatDate(this.orderTime[0]),
+          endTime: this.formatDate(this.orderTime[1]),
+          orderNo: this.input,
+          pageIndex: this.curPage,
+          size: this.pageSize
+        };
+        console.log(parms);
+        this.axios
+          .post("/app/v1/bargaining/getBargainingList", parms)
           .then(res => {
             if (res.data.data.length !== 0) {
               this.total = res.data.total;
