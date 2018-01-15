@@ -378,7 +378,7 @@ export default {
   components: { VDistpicker, StartPortselect, EndPortselect },
   data() {
     return {
-      payMethodModel:true,
+      payMethodModel:false,
       radio:'2',
       orderNum: "",
       orderListData: [],

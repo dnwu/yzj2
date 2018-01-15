@@ -77,7 +77,7 @@
                     <div slot="title"><span class="el-icon-service"></span>运价申请</div>
                     <div class="body">
                       <div class="top">
-                        <div>
+                        <div v-if="false">
                           <div class="key">申请编号：</div>
                           <div class="value red">SQ986878584828</div>
                         </div>
@@ -87,7 +87,7 @@
                         </div>
                         <div>
                           <div class="key">会员编号：</div>
-                          <div class="value"></div>
+                          <div class="value">{{userInfo.level.memberNo}}</div>
                         </div>
                         <div>
                           <div class="key">运输路线：</div>

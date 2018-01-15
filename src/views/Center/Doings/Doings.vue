@@ -26,13 +26,21 @@
       </span>
       <span class="key key-choose-name">申请日期</span>
       <span class="opt opt-time">
-        <el-date-picker v-model="orderTime" type="daterange" align="center" unlink-panels range-separator="至" start-placeholder="开始日期"
-          end-placeholder="结束日期" size='mini' :picker-options="pickerOptions2">
+        <el-date-picker
+          v-model="orderTime"
+          type="daterange"
+          align="center"
+          unlink-panels
+          range-separator="至" start-placeholder="开始日期"
+          end-placeholder="结束日期"
+          size='mini'
+          value-format='yyyy-MM-dd'
+          :picker-options="pickerOptions2">
         </el-date-picker>
       </span>
       <span class="key key-choose-name">申请状态</span>
       <span class="opt opt-state">
-        <el-select v-model="orderStatu" placeholder="待审核">
+        <el-select v-model="orderStatu" placeholder="全部">
           <el-option v-for="item in orderStatus" :key="item.value" :label="item.name" :value="item.value">
           </el-option>
         </el-select>
@@ -54,7 +62,7 @@
         <span class="wide wide8">操作</span>
       </div>
       <ul>
-        <li class="card" v-for="order in orders">
+        <li class="card" v-for="order in orders" :key="order.id">
           <div class="is-flex tip">
             <span class="name">申请编号：</span>
             <span class="value" v-text="order.applyNo"></span>
@@ -62,7 +70,7 @@
             <span class="value" v-text="formatDate(order.applyDate)"></span>
           </div>
           <div class="is-flex contain">
-            <span :class="['wide','wide1','state',orderStatus[order.applyStatus].color]" v-text="orderStatus[order.applyStatus].name"></span>
+            <span :class="['wide','wide1','state',orderStatus[order.applyStatus+1].color]" v-text="orderStatus[order.applyStatus+1].name"></span>
             <span class="wide wide2 line" v-text="order.cityStart + '—— ' + order.cityEnd"></span>
             <span class="wide wide3 time" v-text="order.flightTime"></span>
             <span class="wide wide4 apply yellow" v-text="order.applyAmount"></span>
@@ -76,14 +84,13 @@
         </li>
       </ul>
     </div>
-    申请状态状态还不可用
     <el-pagination
       v-show="total"
       class="is-flex jst-center page-pos"
       layout="prev, pager, next"
       :total="total"
       :page-size="pageSize"
-      :current-page="curPage"
+      :current-page="1"
       @current-change="changePage"
     >
     </el-pagination>
@@ -106,7 +113,7 @@ export default {
       startPort: "", // 始发港
       endPort: "", // 目的港
       orderTime: [], // [ "2018-01-10T16:00:00.000Z", "2018-02-05T16:00:00.000Z" ], // 起始地点
-      orderStatu: "", // 订单状态 // 0 1 2
+      orderStatu: -1, // 订单状态 // 0待审核 1已通过 2已拒绝
       // 以下为选项数据
       pickerOptions2: {
         shortcuts: [
@@ -162,43 +169,42 @@ export default {
           originalAmount: 4.5
         } */
       ],
-      orderStatus: {
-        undefined: {
-          color: "red",
-          name: "查询异常",
-          value: -1
+      orderStatus: [
+        {
+          color:'#000',
+          name:'全部',
+          value:-1
         },
-        0: {
+        {
           color: "yellow",
           name: "待审核",
           value: 0
         },
-        1: {
+        {
           color: "green",
           name: "已通过",
           value: 1
         },
-        2: {
+        {
           color: "red",
           name: "已拒绝",
           value: 2
         }
-      },
-      curPage: 1,
+      ],
       pageSize: 10,
       total: 0
     };
   },
+  created(){
+    this.check(1);
+  },
   methods: {
     changePage(page) {
       // 分页按钮触发，从新请求当前数据
-      this.curPage = page;
-      this.check();
+      this.check(page);
     },
     handleCheck() {
-      // 最近天数切换时重置分页按钮，重新请求数据
-      this.curPage = 1;
-      this.check();
+      this.check(1);
     },
     startportvalue(val) {
       this.startPort = val;
@@ -206,49 +212,41 @@ export default {
     endportvalue(val) {
       this.endPort = val;
     },
-    check() {
-      if (
-        // 当所选数据均有值时进行请求发送
-        this.startPort !== "" &&
-        this.endPort !== "" &&
-        this.orderTime[0] &&
-        this.orderTime[1]
-      ) {
-        var parms = {
-          id: this.id,
-          token: this.token,
-          applyStatus: this.orderStatu == "" ? 0 : this.orderStatu,
-          /* cityStart: "北京（PEK）",
-            cityEnd: "上海（PVG）",
-            applyStatus: 1, */
-          cityStart: this.startPort,
-          cityEnd: this.endPort,
-          startTime: this.formatDate(this.orderTime[0]),
-          endTime: this.formatDate(this.orderTime[1]),
-          orderNo: this.input,
-          pageIndex: this.curPage,
-          size: this.pageSize
-        };
-        console.log(parms);
-        this.axios
-          .post("/app/v1/bargaining/getBargainingList", parms)
-          .then(res => {
+    check(pageNo) {
+      // console.log(this.orderStatu);
+      var parms = {
+        applyStatus: this.orderStatu,
+        cityEnd: this.endPort,
+        cityStart: this.startPort,
+        endTime: this.orderTime[1],
+        id: this.id,
+        orderNo: "",
+        pageIndex: pageNo,
+        size: this.pageSize,
+        startTime: this.orderTime[0],
+        token: this.token
+      };
+      console.log(parms);
+      this.axios
+        .post("/app/v1/bargaining/getBargainingList", parms)
+        .then(res => {
+          if(res.data.code == 1){
+            console.log(res);
             if (res.data.data.length !== 0) {
               this.total = res.data.total;
               this.orders = res.data.data;
-              return;
             }
-            this.$message({
-              message: "暂无相关信息",
-              type: "success"
-            });
-          })
-          .catch(err => {
-            console.log(err);
-          });
-      } else {
-        this.$message("请正确填写查询条件");
-      }
+            if(res.data.data.length == 0){
+              this.$message({
+                message: "暂无相关信息",
+                type: "success"
+              });
+            }
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
     formatDate(strTime) {
       // 将传入的字符传时间格式化成 xxxx-xx-xx
