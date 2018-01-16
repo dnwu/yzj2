@@ -300,7 +300,10 @@
           </div>
         </div>
         <div class="left-detail-none" v-if="searchNone">
-          <div class="none-text">还没有查到任何产品服务</div>
+          <div class="none-text">
+            <div class="pic"><img src="../../../assets/product20.png" alt=""></div>
+            <div class="word">还没有查到任何产品服务......</div>
+            </div>
         </div>
       </div>
     </div>
@@ -510,6 +513,9 @@ export default {
         token: this.token
       }).then(data=>{
         console.log(data,'运价申请');
+        if(data.status == 200){
+          this.transPriceApplyModel = false;
+        }
       });
     },
     getAccountInfo() {
@@ -760,7 +766,7 @@ export default {
       this.axios
         .post("/app/v1/common/queryDict", { dataType: 2 })
         .then(data => {
-          console.log(data.data.data.detailDTOS);
+          // console.log(data.data.data.detailDTOS);
           this.goodsTypesList = data.data.data.detailDTOS;
         });
     },
@@ -846,6 +852,7 @@ export default {
     },
     productConfirm() {
       // 点击前重置
+      this.judgeTopage = true
       this.selectServer.airportProductIds = [];
       this.selectServer.landCarriageProductIds = [];
       // 这里提交前判断所选择的服务，然后把id复制给data里边的对应项，然后把data储存在浏览器中
@@ -912,7 +919,6 @@ export default {
         }
       };
       window.localStorage.setItem("productIndex", JSON.stringify(transObj));
-
       if (this.controlSubimt) {
         if(this.judgeTopage){
           this.$router.push({
@@ -1589,14 +1595,19 @@ export default {
         }
       }
       .left-detail-none {
-        background: #fff;
+        // background: #fff;
         width: 860px;
         margin-top: 10px;
-        box-shadow: 0 0 15px #ccc;
+        // box-shadow: 0 0 15px #ccc;
         display: flex;
         justify-content: center;
         align-items: center;
         font-size: 20px;
+        text-align: center;
+        .word{
+          font-size: 16px;
+          color: #e0e0e0;
+        }
       }
     }
   }

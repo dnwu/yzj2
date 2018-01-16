@@ -29,7 +29,7 @@
                   :value='activity'
                   :max="10"
                   class="item">
-                  <el-button size="small">我的活动</el-button>
+                  <el-button size="small" @click="myDoings">我的活动</el-button>
                 </el-badge>
               </div>
             </div>
@@ -72,7 +72,7 @@
             <p>账号信息</p>
           </div>
           <div class="account-coding">
-            <span class="title">会员编码</span><span class="colon">:</span><span class="content">{{userInfo.level.memberNo}}</span>
+            <span class="title">会员编码</span><span class="colon">:</span><span class="content" v-if="'level' in userInfo">{{userInfo.level.memberNo}}</span>
           </div>
           <div class="account">
             <span class="title">账号</span><span class="colon">:</span><span class="content">{{userInfo.account}}</span>
@@ -302,6 +302,9 @@ export default {
       setUsername: "SET_USERNAME",
       setId: "SET_ID"
     }),
+    myDoings(){
+      this.$router.push('/center/doings')
+    },
     gotoOrderList(data){
       console.log(data);
       this.$router.push({

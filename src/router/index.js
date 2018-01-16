@@ -1,37 +1,38 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from '@/views/Home'
-import AirCargoServices from '@/views/Product/AirCargoServices/AirCargoServices'
-import Haihang from '@/views/Product/AirCargoServices/Haihang'
-import Spa_truck from '@/views/Product/AirCargoServices/Spa_truck'
-import Make_up from '@/views/Product/AirCargoServices/Make_up'
-import Class from '@/views/Product/AirCargoServices/Class'
-import Goods_server from '@/views/Product/AirCargoServices/Goods_server'
-import Contract from '@/views/Product/AirCargoServices/Contract'
-import EntrepotServices from '@/views/Product/EntrepotServices/EntrepotServices'
-import ManagerServices from '@/views/Product/ManagerServices/ManagerServices'
-import FinanceServices from '@/views/Product/FinanceServices/FinanceServices'
-import SmartServices from '@/views/Product/SmartServices/SmartServices'
-import AirCompany from '@/views/Resource/AirCompany'
-import AirwayResource from '@/views/Resource/AirwayResource'
-import AirModelResource from '@/views/Resource/AirModelResource'
-import EntrepotResource from '@/views/Resource/EntrepotResource'
-import CooperativePartner from '@/views/Resource/CooperativePartner'
-import TCElectronics from '@/views/Success/3CElectronics'
-import HealthCare from '@/views/Success/HealthCare'
-import FreshProduce from '@/views/Success/FreshProduce'
-import FMCG from '@/views/Success/FMCG'
-import Deliver from '@/views/Service/Deliver'
-import Order from '@/views/Service/Order'
-import Price from '@/views/Service/Price'
-import Range from '@/views/Service/Range'
-import Standard from '@/views/Service/Standard/Standard'
-import More from '@/views/Service/More'
-import Company from '@/views/About/Company'
-import News from '@/views/About/News/News'
-import Promotion from '@/views/About/Promotion'
-import Member from '@/views/About/Member'
-import Join from '@/views/About/Join'
+
+const Home = () => import('@/views/Home')
+const AirCargoServices = () => import('@/views/Product/AirCargoServices/AirCargoServices')
+const Haihang = () => import('@/views/Product/AirCargoServices/Haihang')
+const Spa_truck = () => import('@/views/Product/AirCargoServices/Spa_truck')
+const Make_up = () => import('@/views/Product/AirCargoServices/Make_up')
+const Class = () => import('@/views/Product/AirCargoServices/Class')
+const Goods_server = () => import('@/views/Product/AirCargoServices/Goods_server')
+const Contract = () => import('@/views/Product/AirCargoServices/Contract')
+const EntrepotServices = () => import('@/views/Product/EntrepotServices/EntrepotServices')
+const ManagerServices = () => import('@/views/Product/ManagerServices/ManagerServices')
+const FinanceServices = () => import('@/views/Product/FinanceServices/FinanceServices')
+const SmartServices = () => import('@/views/Product/SmartServices/SmartServices')
+const AirCompany = () => import('@/views/Resource/AirCompany')
+const AirwayResource = () => import('@/views/Resource/AirwayResource')
+const AirModelResource = () => import('@/views/Resource/AirModelResource')
+const EntrepotResource = () => import('@/views/Resource/EntrepotResource')
+const CooperativePartner = () => import('@/views/Resource/CooperativePartner')
+const TCElectronics = () => import('@/views/Success/3CElectronics')
+const HealthCare = () => import('@/views/Success/HealthCare')
+const FreshProduce = () => import('@/views/Success/FreshProduce')
+const FMCG = () => import('@/views/Success/FMCG')
+const Deliver = () => import('@/views/Service/Deliver')
+const Order = () => import('@/views/Service/Order')
+const Price = () => import('@/views/Service/Price')
+const Range = () => import('@/views/Service/Range')
+const Standard = () => import('@/views/Service/Standard/Standard')
+const More = () => import('@/views/Service/More')
+const Company = () => import('@/views/About/Company')
+const News = () => import('@/views/About/News/News')
+const Promotion = () => import('@/views/About/Promotion')
+const Member = () => import('@/views/About/Member')
+const Join = () => import('@/views/About/Join')
 
 import store from '@/store'
 import * as types from '@/store/mutation-type'
@@ -50,7 +51,6 @@ const About = () => import ('@/views/About/About')
 const NewsDetail = () => import ('@/views/About/NewsDetail/NewsDetail')
 const Center = () => import ('@/views/Center/Center')
 const Account = () => import ('@/views/Center/Account/Account')
-const Personal = () => import ('@/views/Center/Personal/Personal')
 const Company_info = () => import ('@/views/Center/Company_info/Company_info')
 const Doings = () => import ('@/views/Center/Doings/Doings')
 const Experience = () => import ('@/views/Center/Experience/Experience')
@@ -66,20 +66,13 @@ const productWriteBase = () => import ('@/views/Center/Online_product/product_wr
 
 const Online_product_complete = ()=> import('@/views/Center/Online_product/product_complete')
 const Online_product_pay_complete = ()=> import('@/views/Center/Online_product/product_pay_complete')
-const Online_write = () => import ('@/views/Center/Online_write/Online_write')
-const Online_check = () => import ('@/views/Center/Online_check/Online_check')
-const Online_order_s = () => import ('@/views/Center/Online_order_s/Online_order_s')
-const Online_pay_s = () => import ('@/views/Center/Online_pay_s/Online_pay_s')
 const Client_product = () => import ('@/views/Center/Client_product/Client_product')
-const Jinpeng_client = () => import ('@/views/Center/Jinpeng_Client/Jinpeng_client')
 const Order_search = () => import ('@/views/Center/Order_search/Order_search')
 const Order_detail = () => import ('@/views/Center/Order_detail/Order_detail')
 const Order_track = () => import ('@/views/Center/Order_track/Order_track')
 const Order_track_index = () => import ('@/views/Center/Order_track_index/Order_track_index')
 const Ticket_info_egis = () => import ('@/views/Center/Ticket_info_egis/Ticket_info_egis')
 const Bill_look = () => import ('@/views/Center/Bill_look/Bill_look')
-const My_finance = () => import ('@/views/Center/My_finance/My_finance')
-const Change_password = () => import ('@/views/Center/Change_password/Change_password')
 
 // 供应商组件
 const SupplierIndex = () => import('@/views/Supplier/Supplier')
@@ -319,20 +312,6 @@ let router = new Router({
             usertype:'personal'
           }
         }, {
-          path: '/center/change_password',
-          component: Change_password,
-          meta: {
-            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
-            usertype:'personal'
-          }
-        }, {
-          path: '/center/personal',
-          component: Personal,
-          meta: {
-            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
-            usertype:'personal'
-          }
-        }, {
           path: '/center/company_info',
           component: Company_info,
           meta: {
@@ -429,35 +408,7 @@ let router = new Router({
             requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
             usertype:'personal'
           }
-        }, {
-          path: '/center/online_write',
-          component: Online_write,
-          meta: {
-            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
-            usertype:'personal'
-          }
-        }, {
-          path: '/center/online_check',
-          component: Online_check,
-          meta: {
-            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
-            usertype:'personal'
-          }
-        }, {
-          path: '/center/online_order_s',
-          component: Online_order_s,
-          meta: {
-            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
-            usertype:'personal'
-          }
-        }, {
-          path: '/center/online_pay_s',
-          component: Online_pay_s,
-          meta: {
-            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
-            usertype:'personal'
-          }
-        }, {
+        },  {
           path: '/center/client_product',
           component: Client_product,
           meta: {
