@@ -302,17 +302,24 @@ export default {
           token: this.token
         })
         .then(res => {
+          console.log(res);
           if (res.data.code == 1) {
-            var data = res.data.hnaEnterprise;
-            var arr = this.arr;
-            console.log(data);
-            for (var i = 0; i < arr.length; i++) {
-              for (var name in this[arr[i]]) {
-                if (data[name]) {
-                  this[arr[i]][name].value = data[name];
+            if (res.data.hnaEnterprise) {
+              var data = res.data.hnaEnterprise;
+              var arr = this.arr;
+              console.log(data);
+              for (var i = 0; i < arr.length; i++) {
+                for (var name in this[arr[i]]) {
+                  if (data[name]) {
+                    this[arr[i]][name].value = data[name];
+                  }
                 }
               }
             }
+            this.$message({
+              message: "请填写企业信息",
+              type: "success"
+            });
           } else {
             this.$message({
               message: "企业状态获取失败，请稍后再试",

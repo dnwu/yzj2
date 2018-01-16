@@ -131,15 +131,18 @@ export default {
       this.check();
     },
     createArrayFromJson(arr, json) {
-      var newArr = [];
-      for (var i = 0; i < arr.length; i++) {
-        var obj = {};
-        for (var name in json) {
-          obj[json[name]] = arr[i][name];
+      if (arr) {
+        var newArr = [];
+        for (var i = 0; i < arr.length; i++) {
+          var obj = {};
+          for (var name in json) {
+            obj[json[name]] = arr[i][name];
+          }
+          newArr.push(obj);
         }
-        newArr.push(obj);
+        return newArr;
       }
-      return newArr;
+      return [];
     },
     check() {
       this.axios

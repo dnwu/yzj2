@@ -118,22 +118,28 @@ export default {
     }
   },
   methods: {
-    changePage(page) { // 分页触发，重新请求
+    changePage(page) {
+      // 分页触发，重新请求
       this.curPage = page;
       this.check();
     },
-    createArrayFromJson(arr, json) { // 将请求到的数组类型的数据进行键名的修改，使之适应列表显示和排序所需的格式
-      var newArr = [];
-      for (var i = 0; i < arr.length; i++) {
-        var obj = {};
-        for (var name in json) {
-          obj[json[name]] = arr[i][name];
+    createArrayFromJson(arr, json) {
+      // 将请求到的数组类型的数据进行键名的修改，使之适应列表显示和排序所需的格式
+      if (arr) {
+        var newArr = [];
+        for (var i = 0; i < arr.length; i++) {
+          var obj = {};
+          for (var name in json) {
+            obj[json[name]] = arr[i][name];
+          }
+          newArr.push(obj);
         }
-        newArr.push(obj);
+        return newArr;
       }
-      return newArr;
+      return [];
     },
-    check() { // 获取积分信息
+    check() {
+      // 获取积分信息
       this.axios
         .post("/app/v1/integral/getIntegrals", {
           id: this.id,

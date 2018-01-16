@@ -171,7 +171,7 @@ export default {
             name: "手机好",
             value: "",
             placeholder: "请输入手机好",
-            tip: "+86"
+            /* tip: "+86" */
           }
         },
         {
@@ -184,7 +184,7 @@ export default {
             name: "固定电话",
             value: "",
             placeholder: "请输入手机好",
-            tip: "0755"
+            /* tip: "0755" */
           }
         },
         {
