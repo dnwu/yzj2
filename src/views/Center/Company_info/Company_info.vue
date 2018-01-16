@@ -315,11 +315,12 @@ export default {
                   }
                 }
               }
+            } else {
+              this.$message({
+                message: "请填写企业信息",
+                type: "success"
+              });
             }
-            this.$message({
-              message: "请填写企业信息",
-              type: "success"
-            });
           } else {
             this.$message({
               message: "企业状态获取失败，请稍后再试",
