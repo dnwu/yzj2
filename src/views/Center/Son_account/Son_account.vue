@@ -45,24 +45,18 @@
               <span class="wide wide3" v-text="list.fullName"></span>
               <span class="wide wide4" v-text="list.phone"></span>
               <span class="wide wide5" v-text="list.email"></span>
-              <span class="wide wide6" v-text="list.id"></span>
+              <span class="wide wide6" v-text="list.identityCard"></span>
               <span class="wide wide7" v-text="list.createtime"></span>
-              <span class="wide8 is-flex jst-between">
-                <img class="btn" src="../../../assets/son_modify.png" alt="">
-                <img class="btn" src="../../../assets/son_state_1.png" alt="" v-show="list.accountStatus == 2 " @click="cutState(index)">
-                <img class="btn" src="../../../assets/son_stop.png" alt="" v-show="list.accountStatus == 1 " @click="cutState(index)">
-                <img class="btn" src="../../../assets/son_delete.png" alt="">
+              <span class="wide8 is-flex jst-right">
+                <!-- <img class="btn" src="../../../assets/son_modify.png" alt=""> -->
+                <img class="btn" src="../../../assets/son_state_1.png" alt="" v-show="list.accountStatus == 2 " @click="changeStatus(list.id,list.accountStatus)">
+                <img class="btn" src="../../../assets/son_stop.png" alt="" v-show="list.accountStatus == 1 " @click="changeStatus(list.id,list.accountStatus)">
+                <img class="btn" src="../../../assets/son_delete.png" alt="" @click="delAccount(list.id)">
               </span>
             </li>
           </ul>
-          <el-pagination
-            class="is-flex jst-center"
-            layout="prev, pager, next"
-            :total="total"
-            :page-size="size"
-            :current-page="pageIndex"
-            @current-change="changePage"
-          >
+          <el-pagination class="is-flex jst-center" layout="prev, pager, next" :total="total" :page-size="size" :current-page="pageIndex"
+            @current-change="changePage">
           </el-pagination>
         </div>
       </div>
@@ -103,11 +97,11 @@ export default {
   data() {
     return {
       msg: {
-        member: {
+        memberName: {
           name: "会员名称",
           value: "深圳云捷讯"
         },
-        code: {
+        memberNo: {
           name: "会员编码",
           value: "HH00001"
         },
@@ -117,15 +111,15 @@ export default {
         }
       },
       info: {
-        name: {
+        fullName: {
           name: "姓名",
           value: "王六"
         },
-        tel: {
+        phone: {
           name: "手机号",
           value: "17688772007"
         },
-        emali: {
+        email: {
           name: "邮箱",
           value: "lcy888@aliyun.com"
         }
@@ -212,10 +206,6 @@ export default {
     changePage(page) {
       this.pageIndex = page;
     },
-    cutState(index) {
-      this.lists[index].accountStatus =
-        this.lists[index].accountStatus == 1 ? 2 : 1;
-    },
     handleClose(done) {
       done();
     },
@@ -225,6 +215,31 @@ export default {
         this.choose[i] = false;
       }
       this.$set(this.choose, index, "choose");
+    },
+    getUserInfo() {
+      var params = {
+        id: this.id,
+        token: this.token,
+        pageIndex: this.pageIndex,
+        size: this.size
+      };
+      var arr = ["msg", "info"];
+      this.axios
+        .post("/app/v1/user/userInfo", params)
+        .then(res => {
+          if (res.data.code == 1) {
+            var data = res.data.data;
+            for (var i = 0; i < arr.length; i++) {
+              for (var name in this[arr[i]]) {
+                this[arr[i]][name].value =
+                  data[name] || data.level[name] || undefined;
+              }
+            }
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
     getAccountList() {
       var params = {
@@ -258,14 +273,56 @@ export default {
         token: this.token
       };
       console.log(params);
-      /* this.axios
+      this.axios
         .post("/app/v1/subaccount/save", params)
         .then(res => {
           console.log(res);
+          if (res.data.code == 1) {
+            this.dialogVisible = false;
+            this.getAccountList();
+          }
         })
         .catch(err => {
           console.log(err);
-        }); */
+        });
+    },
+    changeStatus(accountId, status) {
+      status = status == 2 ? 1 : 2;
+      var params = {
+        id: this.id,
+        status: status,
+        subAccountId: accountId,
+        token: this.token
+      };
+
+      this.axios
+        .post("/app/v1/subaccount/acstatus", params)
+        .then(res => {
+          if (res.data.code == 1) {
+            this.getAccountList();
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    delAccount(accountId) {
+      var params = {
+        id: this.id,
+        recordId: accountId,
+        token: this.token
+      };
+      this.axios
+        .post("/app/v1/subaccount/del", params)
+        .then(res => {
+          console.log(res);
+          if (res.data.code == 1) {
+            this.getAccountList();
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
   },
   computed: {
@@ -301,6 +358,7 @@ export default {
     }
   },
   mounted() {
+    this.getUserInfo();
     this.getAccountList();
   }
 };
@@ -372,7 +430,7 @@ ul {
       }
     }
     .card {
-      padding-bottom: 10px;
+      padding: 10px 0;
       box-shadow: 0px 2px 8px -1px rgba(0, 0, 0, 0.1);
       .circle {
         margin: 0 auto;
@@ -416,6 +474,9 @@ ul {
     .wide8 {
       text-align: right;
       width: 80px;
+      img {
+        margin-right: 20px;
+      }
     }
   }
   .dialog {
