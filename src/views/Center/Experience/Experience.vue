@@ -160,9 +160,12 @@ export default {
                 remark: "note"
               }
             );
+          }else{
+            this.$message.error('获取会员经验失败，请稍后尝试');
           }
         })
         .catch(err => {
+          this.$message.error("发生未知错误，请刷新网页或稍后尝试");
           console.log(err);
         });
     }

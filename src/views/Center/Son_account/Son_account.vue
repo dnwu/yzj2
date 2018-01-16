@@ -88,7 +88,6 @@
         <div class="btn-add" @click="addAccount">立即添加</div>
       </footer>
     </div>
-    {{account}}
   </div>
 </template>
 <script>
@@ -219,9 +218,7 @@ export default {
     getUserInfo() {
       var params = {
         id: this.id,
-        token: this.token,
-        pageIndex: this.pageIndex,
-        size: this.size
+        token: this.token
       };
       var arr = ["msg", "info"];
       this.axios
@@ -235,9 +232,15 @@ export default {
                   data[name] || data.level[name] || undefined;
               }
             }
+          } else {
+            this.$message({
+              message: "会员信息查询",
+              type: "warning"
+            });
           }
         })
         .catch(err => {
+          this.$message.error("发生未知错误，请刷新网页或稍后尝试");
           console.log(err);
         });
     },
@@ -251,11 +254,20 @@ export default {
       this.axios
         .post("/app/v1/subaccount/list", params)
         .then(res => {
-          var arr = res.data.hnaAccounts;
-          this.lists = arr;
-          console.log(arr);
+          console.log(res);
+          if (res.data.code == 1) {
+            this.total = res.data.total;
+            var arr = res.data.hnaAccounts;
+            this.lists = arr;
+          } else {
+            this.$message({
+              message: "子账号信息查询",
+              type: "warning"
+            });
+          }
         })
         .catch(err => {
+          this.$message.error("发生未知错误，请刷新网页或稍后尝试");
           console.log(err);
         });
     },
@@ -280,9 +292,19 @@ export default {
           if (res.data.code == 1) {
             this.dialogVisible = false;
             this.getAccountList();
+            this.$message({
+              message: "子账号保存成功",
+              type: "success"
+            });
+          } else {
+            this.$message({
+              message: "子账号保存失败",
+              type: "warning"
+            });
           }
         })
         .catch(err => {
+          this.$message.error("发生未知错误，请刷新网页或稍后尝试");
           console.log(err);
         });
     },
@@ -300,9 +322,15 @@ export default {
         .then(res => {
           if (res.data.code == 1) {
             this.getAccountList();
+          } else {
+            this.$message({
+              message: "子账号状态修改失败",
+              type: "warning"
+            });
           }
         })
         .catch(err => {
+          this.$message.error("发生未知错误，请刷新网页或稍后尝试");
           console.log(err);
         });
     },
@@ -318,9 +346,15 @@ export default {
           console.log(res);
           if (res.data.code == 1) {
             this.getAccountList();
+          } else {
+            this.$message({
+              message: "子账号删除失败",
+              type: "warning"
+            });
           }
         })
         .catch(err => {
+          this.$message.error("发生未知错误，请刷新网页或稍后尝试");
           console.log(err);
         });
     }

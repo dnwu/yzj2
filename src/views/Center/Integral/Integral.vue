@@ -140,7 +140,6 @@ export default {
           size: this.pageSize
         })
         .then(res => {
-          console.log(res);
           if (res.data.code == 1) {
             this.total = res.data.data.total;
             this.tableData = this.createArrayFromJson(
@@ -154,9 +153,15 @@ export default {
                 remark: "note"
               }
             );
+          } else {
+            this.$message({
+              message: "会员积分查询失败",
+              type: "warning"
+            });
           }
         })
         .catch(err => {
+          this.$message.error("发生未知错误，请刷新网页或稍后尝试");
           console.log(err);
         });
     }

@@ -340,9 +340,20 @@ export default {
       this.axios
         .post("/app/v1/enterprise/save", this.param)
         .then(res => {
-          console.log(res);
+          if (res.data.code == 1) {
+            this.$message({
+              message: "保存成功",
+              type: "success"
+            });
+          } else {
+            this.$message({
+              message: "保存失败",
+              type: "warning"
+            });
+          }
         })
         .catch(err => {
+          this.$message.error("发生未知错误，请刷新网页或稍后尝试");
           console.log(err);
         });
     }
