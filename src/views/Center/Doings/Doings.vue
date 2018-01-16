@@ -6,7 +6,7 @@
         <span class="key">申请编号</span>
         <span class="is-flex opt opt-search">
           <i class="el-icon-search"></i>
-          <el-input class="inline-input" v-model="input" placeholder="请输入内容"></el-input>
+          <el-input class="inline-input" v-model="orderNo" placeholder="请输入内容"></el-input>
           <!-- <el-autocomplete
             class="inline-input"
             v-model="input"
@@ -109,7 +109,7 @@ export default {
   },
   data() {
     return {
-      input: "", // 搜索输入框
+      orderNo: "", // 搜索输入框
       startPort: "", // 始发港
       endPort: "", // 目的港
       orderTime: [], // [ "2018-01-10T16:00:00.000Z", "2018-02-05T16:00:00.000Z" ], // 起始地点
@@ -220,7 +220,7 @@ export default {
         cityStart: this.startPort,
         endTime: this.orderTime[1],
         id: this.id,
-        orderNo: "",
+        orderNo: this.orderNo,
         pageIndex: pageNo,
         size: this.pageSize,
         startTime: this.orderTime[0],
@@ -375,6 +375,9 @@ ul {
     background: $red;
     color: white;
     box-shadow: 1px 2px 10px 2px rgba(0, 0, 0, 0.1);
+    &:active{
+      background-color: #f55757;
+    }
   }
 }
 

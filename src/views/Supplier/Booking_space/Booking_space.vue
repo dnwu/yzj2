@@ -40,7 +40,8 @@
             <el-date-picker
               v-model="searchData.time"
               type="date"
-               size="mini"
+              size="mini"
+              value-format='yyyy-MM-dd'
               placeholder="选择日期">
             </el-date-picker>
           </div>
@@ -60,7 +61,7 @@
         </div>
       </div>
       <div class="column4">
-        <el-button size="mini" type="danger">查询</el-button>
+        <el-button size="mini" type="danger" @click.native="searchOrderList">查询</el-button>
       </div>
     </div>
     <div class="body-main">
@@ -265,6 +266,7 @@
               @current-change='currentChange'
               background
               layout="prev, pager, next"
+              :page-size='pagesize'
               :total="totalPage">
             </el-pagination>
           </div>
@@ -431,9 +433,10 @@ export default {
         end: "",
         ordernum: "",
         time: "",
-        orderstatus: ""
+        orderstatus: "-1"
       },
       totalPage: 0,
+      pagesize:30,
       orderListData: [],
       bodyformData: {
         planenum: "",
@@ -516,6 +519,9 @@ export default {
       // 当改变页数的时候，重置
       this.storeSelectItem = [];
       this.initFormData(this.storeSelectItem);
+    },
+    searchOrderList(){
+      this.getOrderList(1, this.searchData.orderstatus)
     },
     addGoodsSize() {
       console.log(typeof this.addSizeDialogFormData.length);
@@ -620,10 +626,11 @@ export default {
           id: this.id,
           orderNo: this.searchData.ordernum,
           pageIndex: pageIndex,
-          size: 10,
+          size: this.pagesize,
           token: this.token
         })
         .then(data => {
+          console.log(data.data.data);
           if (data.data.code == 1) {
             this.totalPage = data.data.total;
             this.orderListData.push(...data.data.data);
