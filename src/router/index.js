@@ -1,37 +1,38 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from '@/views/Home'
-import AirCargoServices from '@/views/Product/AirCargoServices/AirCargoServices'
-import Haihang from '@/views/Product/AirCargoServices/Haihang'
-import Spa_truck from '@/views/Product/AirCargoServices/Spa_truck'
-import Make_up from '@/views/Product/AirCargoServices/Make_up'
-import Class from '@/views/Product/AirCargoServices/Class'
-import Goods_server from '@/views/Product/AirCargoServices/Goods_server'
-import Contract from '@/views/Product/AirCargoServices/Contract'
-import EntrepotServices from '@/views/Product/EntrepotServices/EntrepotServices'
-import ManagerServices from '@/views/Product/ManagerServices/ManagerServices'
-import FinanceServices from '@/views/Product/FinanceServices/FinanceServices'
-import SmartServices from '@/views/Product/SmartServices/SmartServices'
-import AirCompany from '@/views/Resource/AirCompany'
-import AirwayResource from '@/views/Resource/AirwayResource'
-import AirModelResource from '@/views/Resource/AirModelResource'
-import EntrepotResource from '@/views/Resource/EntrepotResource'
-import CooperativePartner from '@/views/Resource/CooperativePartner'
-import TCElectronics from '@/views/Success/3CElectronics'
-import HealthCare from '@/views/Success/HealthCare'
-import FreshProduce from '@/views/Success/FreshProduce'
-import FMCG from '@/views/Success/FMCG'
-import Deliver from '@/views/Service/Deliver'
-import Order from '@/views/Service/Order'
-import Price from '@/views/Service/Price'
-import Range from '@/views/Service/Range'
-import Standard from '@/views/Service/Standard/Standard'
-import More from '@/views/Service/More'
-import Company from '@/views/About/Company'
-import News from '@/views/About/News/News'
-import Promotion from '@/views/About/Promotion'
-import Member from '@/views/About/Member'
-import Join from '@/views/About/Join'
+
+const Home = () => import('@/views/Home')
+const AirCargoServices = () => import('@/views/Product/AirCargoServices/AirCargoServices')
+const Haihang = () => import('@/views/Product/AirCargoServices/Haihang')
+const Spa_truck = () => import('@/views/Product/AirCargoServices/Spa_truck')
+const Make_up = () => import('@/views/Product/AirCargoServices/Make_up')
+const Class = () => import('@/views/Product/AirCargoServices/Class')
+const Goods_server = () => import('@/views/Product/AirCargoServices/Goods_server')
+const Contract = () => import('@/views/Product/AirCargoServices/Contract')
+const EntrepotServices = () => import('@/views/Product/EntrepotServices/EntrepotServices')
+const ManagerServices = () => import('@/views/Product/ManagerServices/ManagerServices')
+const FinanceServices = () => import('@/views/Product/FinanceServices/FinanceServices')
+const SmartServices = () => import('@/views/Product/SmartServices/SmartServices')
+const AirCompany = () => import('@/views/Resource/AirCompany')
+const AirwayResource = () => import('@/views/Resource/AirwayResource')
+const AirModelResource = () => import('@/views/Resource/AirModelResource')
+const EntrepotResource = () => import('@/views/Resource/EntrepotResource')
+const CooperativePartner = () => import('@/views/Resource/CooperativePartner')
+const TCElectronics = () => import('@/views/Success/3CElectronics')
+const HealthCare = () => import('@/views/Success/HealthCare')
+const FreshProduce = () => import('@/views/Success/FreshProduce')
+const FMCG = () => import('@/views/Success/FMCG')
+const Deliver = () => import('@/views/Service/Deliver')
+const Order = () => import('@/views/Service/Order')
+const Price = () => import('@/views/Service/Price')
+const Range = () => import('@/views/Service/Range')
+const Standard = () => import('@/views/Service/Standard/Standard')
+const More = () => import('@/views/Service/More')
+const Company = () => import('@/views/About/Company')
+const News = () => import('@/views/About/News/News')
+const Promotion = () => import('@/views/About/Promotion')
+const Member = () => import('@/views/About/Member')
+const Join = () => import('@/views/About/Join')
 
 import store from '@/store'
 import * as types from '@/store/mutation-type'

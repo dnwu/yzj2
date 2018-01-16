@@ -234,11 +234,11 @@
           <div class="box main-orderNo">
             <div class="key"><span class="star">*</span>航空主运单</div>
             <el-form-item prop="mainOrderNo1">
-              <div class="value1"><el-input v-model="goodsInfo.mainOrderNo1" size="mini" placeholder="前三位"></el-input></div>
+              <div class="value1"><el-input v-model="goodsInfo.mainOrderNo1" size="mini" placeholder="前缀"></el-input></div>
             </el-form-item>
             <div class="line">--</div>
             <el-form-item prop="mainOrderNo2">
-              <div class="value2"><el-input v-model="goodsInfo.mainOrderNo2" size="mini" placeholder="后八位"></el-input></div>
+              <div class="value2"><el-input v-model="goodsInfo.mainOrderNo2" size="mini" placeholder="八位运单号"></el-input></div>
             </el-form-item>
           </div>
           <div class="box proxy-code">

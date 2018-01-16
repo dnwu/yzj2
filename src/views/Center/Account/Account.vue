@@ -72,7 +72,7 @@
             <p>账号信息</p>
           </div>
           <div class="account-coding">
-            <span class="title">会员编码</span><span class="colon">:</span><span class="content">{{userInfo.level.memberNo}}</span>
+            <span class="title">会员编码</span><span class="colon">:</span><span class="content" v-if="'level' in userInfo">{{userInfo.level.memberNo}}</span>
           </div>
           <div class="account">
             <span class="title">账号</span><span class="colon">:</span><span class="content">{{userInfo.account}}</span>

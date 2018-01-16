@@ -510,6 +510,9 @@ export default {
         token: this.token
       }).then(data=>{
         console.log(data,'运价申请');
+        if(data.status == 200){
+          this.transPriceApplyModel = false;
+        }
       });
     },
     getAccountInfo() {
@@ -846,6 +849,7 @@ export default {
     },
     productConfirm() {
       // 点击前重置
+      this.judgeTopage = true
       this.selectServer.airportProductIds = [];
       this.selectServer.landCarriageProductIds = [];
       // 这里提交前判断所选择的服务，然后把id复制给data里边的对应项，然后把data储存在浏览器中
@@ -912,7 +916,6 @@ export default {
         }
       };
       window.localStorage.setItem("productIndex", JSON.stringify(transObj));
-
       if (this.controlSubimt) {
         if(this.judgeTopage){
           this.$router.push({
