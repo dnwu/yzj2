@@ -203,12 +203,11 @@ export default {
   },
   methods: {
     changePage(page) {
+      // 分页切换赋值
       this.pageIndex = page;
     },
-    handleClose(done) {
-      done();
-    },
     fnChoose(index) {
+      // 子账号添加，输入框选中时添加样式
       this.choose[index] = false;
       for (var i = -1; i < this.choose.length; i++) {
         this.choose[i] = false;
@@ -216,6 +215,7 @@ export default {
       this.$set(this.choose, index, "choose");
     },
     getUserInfo() {
+      // 获取用户信息
       var params = {
         id: this.id,
         token: this.token
@@ -245,6 +245,7 @@ export default {
         });
     },
     getAccountList() {
+      // 获取子账号列表
       var params = {
         id: this.id,
         token: this.token,
@@ -261,7 +262,7 @@ export default {
             this.lists = arr;
           } else {
             this.$message({
-              message: "子账号信息查询",
+              message: "子账号列表信息查询",
               type: "warning"
             });
           }
@@ -272,6 +273,7 @@ export default {
         });
     },
     addAccount() {
+      // 添加子账号
       var params = {
         account: this.account,
         email: this.email,
@@ -309,6 +311,7 @@ export default {
         });
     },
     changeStatus(accountId, status) {
+      // 切花子账号启用或停用状态
       status = status == 2 ? 1 : 2;
       var params = {
         id: this.id,
@@ -335,6 +338,7 @@ export default {
         });
     },
     delAccount(accountId) {
+      // 删除子账号
       var params = {
         id: this.id,
         recordId: accountId,
@@ -362,6 +366,7 @@ export default {
   computed: {
     ...mapGetters(["id", "token"]),
     listsFilters() {
+      // 过滤账户为3的用户，此为删除用户
       return this.lists.filter(item => {
         if (item.accountStatus == 3) {
           return false;
@@ -370,25 +375,25 @@ export default {
       });
     },
     fullName() {
-      return this.dialogs[0].right.value;
+      return this.dialogs[0].right.value; // 姓名
     },
     account() {
-      return this.dialogs[1].left.value;
+      return this.dialogs[1].left.value; // 用户名
     },
     identityCard() {
-      return this.dialogs[1].right.value;
+      return this.dialogs[1].right.value; // 身份证
     },
     password() {
-      return this.dialogs[2].left.value;
+      return this.dialogs[2].left.value; // 密码
     },
     phone() {
-      return this.dialogs[2].right.value;
+      return this.dialogs[2].right.value; // 手机号
     },
     telephone() {
-      return this.dialogs[3].right.value;
+      return this.dialogs[3].right.value; // 固定电话
     },
     email() {
-      return this.dialogs[4].right.value;
+      return this.dialogs[4].right.value; // 电子邮箱
     }
   },
   mounted() {

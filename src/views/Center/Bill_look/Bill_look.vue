@@ -149,51 +149,23 @@ export default {
         },
         {
           date: "2016-05-02",
-          serial: "王小虎",
-          value: "123",
-          cash: "3",
-          address: "上海市普陀区金沙江路 1518 弄",
-          state: "待受理"
+          serial: "1440624203",
+          value: "11224445632",
+          num: "0658",
+          account: "10613190",
+          name: "王小虎",
+          cash: "998",
+          pay: "现金"
         },
         {
           date: "2016-05-02",
-          serial: "王小虎",
-          value: "123",
-          cash: "4",
-          address: "上海市普陀区金沙江路 1518 弄",
-          state: "成功"
-        },
-        {
-          date: "2016-05-02",
-          serial: "王小虎",
-          value: "123",
-          cash: "5",
-          address: "上海市普陀区金沙江路 1518 弄",
-          state: "待受理"
-        },
-        {
-          date: "2016-05-02",
-          serial: "王小虎",
-          value: "123",
-          cash: "6",
-          address: "上海市普陀区金沙江路 1518 弄",
-          state: "成功"
-        },
-        {
-          date: "2016-05-02",
-          serial: "王小虎",
-          value: "123",
-          cash: "7",
-          address: "上海市普陀区金沙江路 1518 弄",
-          state: "待受理"
-        },
-        {
-          date: "2016-05-02",
-          serial: "王小虎",
-          value: "123",
-          cash: "8",
-          address: "上海市普陀区金沙江路 1518 弄",
-          state: "成功"
+          serial: "1440624203",
+          value: "11224445632",
+          num: "0658",
+          account: "10613190",
+          name: "王小虎",
+          cash: "998",
+          pay: "现金"
         }
       ]
     };
@@ -219,7 +191,7 @@ export default {
     },
     handleSelect(item) {
       /* this.itme = item; */
-    },
+    }
     /* search() {
       if (this.number !== "") {
         this.tableData = [];

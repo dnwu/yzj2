@@ -63,13 +63,11 @@ export default {
   },
   data() {
     return {
-      /* code: "", */
-      /* infoId: "", */
-      /* isFirst: true, */
       isApply: false, // 认证状态 1：待认证 2：通过 3：拒绝,
-      edit: false,
-      widthLeft: 300,
-      widthRight: 280,
+      edit: false, // 是否可以编辑状态
+      widthLeft: 300, // 企业信息左栏宽度控制（提供给Li组件使用，进行统一修改）
+      widthRight: 280, // 企业信息右栏宽度控制（提供给Li组件使用，进行统一修改）
+      // 下面数据均为企业信息内容
       info1: {
         enterpriseName: {
           name: "公司名称",
@@ -245,12 +243,10 @@ export default {
   },
   methods: {
     fileChange(name, file) {
-      // 该方法由子组件进行调用，将对param对象中的对应文件对象进行赋值操作
-      console.log(name, file);
+      // 该方法由子组件进行调用（用于传递文件数据），将对param对象中的对应文件对象进行赋值操作
       this.param[name] = file;
     },
     apply() {
-      // this.edit = false;
       if (this.isApply != 1) {
         this.axios
           .post("/app/v1/enterprise/apply", {
@@ -258,9 +254,21 @@ export default {
             token: this.token
           })
           .then(res => {
-            console.log(res);
+            if (res.data.code == 1) {
+              this.$message({
+                message: "企业申请替提交成功，请耐心等待",
+                type: "success"
+              });
+              this.edit = false;
+            } else {
+              this.$message({
+                message: "企业申请替提交失败，请稍后再试",
+                type: "warning"
+              });
+            }
           })
           .catch(err => {
+            this.$message.error("发生未知错误，请刷新网页或稍后尝试");
             console.log(err);
           });
       }
@@ -272,12 +280,18 @@ export default {
           token: this.token
         })
         .then(res => {
-          var status = res.data.data.authStatus;
-          this.isApply = status || false;
-          console.log(res.data.data);
-          // this.isApply = 0;
+          if (res.data.code == 1) {
+            var status = res.data.data.authStatus;
+            this.isApply = status || false;
+          } else {
+            this.$message({
+              message: "企业申请替提交失败，请稍后再试",
+              type: "warning"
+            });
+          }
         })
         .catch(err => {
+          this.$message.error("发生未知错误，请刷新网页或稍后尝试");
           console.log(err);
         });
     },
@@ -288,21 +302,26 @@ export default {
           token: this.token
         })
         .then(res => {
-          // 返回数据的code // 返回数据id
-          /* this.code = res.data.code; */ /* this.infoId = res.data.hnaEnterprise.id; */
-
-          var data = res.data.hnaEnterprise;
-          var arr = this.arr;
-          console.log(data);
-          for (var i = 0; i < arr.length; i++) {
-            for (var name in this[arr[i]]) {
-              if (data[name]) {
-                this[arr[i]][name].value = data[name];
+          if (res.data.code == 1) {
+            var data = res.data.hnaEnterprise;
+            var arr = this.arr;
+            console.log(data);
+            for (var i = 0; i < arr.length; i++) {
+              for (var name in this[arr[i]]) {
+                if (data[name]) {
+                  this[arr[i]][name].value = data[name];
+                }
               }
             }
+          } else {
+            this.$message({
+              message: "企业状态获取失败，请稍后再试",
+              type: "warning"
+            });
           }
         })
         .catch(err => {
+          this.$message.error("发生未知错误，请刷新网页或稍后尝试");
           console.log(err);
         });
     },

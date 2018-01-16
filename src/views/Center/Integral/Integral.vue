@@ -98,6 +98,7 @@ export default {
     ...mapGetters(["id", "token"]),
     filterTableDate() {
       var arr = this.tableData.map((obj, index, arr) => {
+        // 显示数据之前，对数据进行处理
         var sign = {
           1: "+",
           2: "-"
@@ -117,11 +118,11 @@ export default {
     }
   },
   methods: {
-    changePage(page) {
+    changePage(page) { // 分页触发，重新请求
       this.curPage = page;
       this.check();
     },
-    createArrayFromJson(arr, json) {
+    createArrayFromJson(arr, json) { // 将请求到的数组类型的数据进行键名的修改，使之适应列表显示和排序所需的格式
       var newArr = [];
       for (var i = 0; i < arr.length; i++) {
         var obj = {};
@@ -132,7 +133,7 @@ export default {
       }
       return newArr;
     },
-    check() {
+    check() { // 获取积分信息
       this.axios
         .post("/app/v1/integral/getIntegrals", {
           id: this.id,
