@@ -51,7 +51,6 @@ const About = () => import ('@/views/About/About')
 const NewsDetail = () => import ('@/views/About/NewsDetail/NewsDetail')
 const Center = () => import ('@/views/Center/Center')
 const Account = () => import ('@/views/Center/Account/Account')
-const Personal = () => import ('@/views/Center/Personal/Personal')
 const Company_info = () => import ('@/views/Center/Company_info/Company_info')
 const Doings = () => import ('@/views/Center/Doings/Doings')
 const Experience = () => import ('@/views/Center/Experience/Experience')
@@ -67,20 +66,13 @@ const productWriteBase = () => import ('@/views/Center/Online_product/product_wr
 
 const Online_product_complete = ()=> import('@/views/Center/Online_product/product_complete')
 const Online_product_pay_complete = ()=> import('@/views/Center/Online_product/product_pay_complete')
-const Online_write = () => import ('@/views/Center/Online_write/Online_write')
-const Online_check = () => import ('@/views/Center/Online_check/Online_check')
-const Online_order_s = () => import ('@/views/Center/Online_order_s/Online_order_s')
-const Online_pay_s = () => import ('@/views/Center/Online_pay_s/Online_pay_s')
 const Client_product = () => import ('@/views/Center/Client_product/Client_product')
-const Jinpeng_client = () => import ('@/views/Center/Jinpeng_Client/Jinpeng_client')
 const Order_search = () => import ('@/views/Center/Order_search/Order_search')
 const Order_detail = () => import ('@/views/Center/Order_detail/Order_detail')
 const Order_track = () => import ('@/views/Center/Order_track/Order_track')
 const Order_track_index = () => import ('@/views/Center/Order_track_index/Order_track_index')
 const Ticket_info_egis = () => import ('@/views/Center/Ticket_info_egis/Ticket_info_egis')
 const Bill_look = () => import ('@/views/Center/Bill_look/Bill_look')
-const My_finance = () => import ('@/views/Center/My_finance/My_finance')
-const Change_password = () => import ('@/views/Center/Change_password/Change_password')
 
 // 供应商组件
 const SupplierIndex = () => import('@/views/Supplier/Supplier')
@@ -320,20 +312,6 @@ let router = new Router({
             usertype:'personal'
           }
         }, {
-          path: '/center/change_password',
-          component: Change_password,
-          meta: {
-            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
-            usertype:'personal'
-          }
-        }, {
-          path: '/center/personal',
-          component: Personal,
-          meta: {
-            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
-            usertype:'personal'
-          }
-        }, {
           path: '/center/company_info',
           component: Company_info,
           meta: {
@@ -430,35 +408,7 @@ let router = new Router({
             requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
             usertype:'personal'
           }
-        }, {
-          path: '/center/online_write',
-          component: Online_write,
-          meta: {
-            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
-            usertype:'personal'
-          }
-        }, {
-          path: '/center/online_check',
-          component: Online_check,
-          meta: {
-            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
-            usertype:'personal'
-          }
-        }, {
-          path: '/center/online_order_s',
-          component: Online_order_s,
-          meta: {
-            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
-            usertype:'personal'
-          }
-        }, {
-          path: '/center/online_pay_s',
-          component: Online_pay_s,
-          meta: {
-            requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
-            usertype:'personal'
-          }
-        }, {
+        },  {
           path: '/center/client_product',
           component: Client_product,
           meta: {

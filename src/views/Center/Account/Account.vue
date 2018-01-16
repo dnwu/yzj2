@@ -29,7 +29,7 @@
                   :value='activity'
                   :max="10"
                   class="item">
-                  <el-button size="small">我的活动</el-button>
+                  <el-button size="small" @click="myDoings">我的活动</el-button>
                 </el-badge>
               </div>
             </div>
@@ -302,6 +302,9 @@ export default {
       setUsername: "SET_USERNAME",
       setId: "SET_ID"
     }),
+    myDoings(){
+      this.$router.push('/center/doings')
+    },
     gotoOrderList(data){
       console.log(data);
       this.$router.push({
