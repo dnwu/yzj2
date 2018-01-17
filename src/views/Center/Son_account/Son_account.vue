@@ -62,7 +62,7 @@
       </div>
     </section>
 
-    <div v-show="dialogVisible" class="dialog">
+    <!-- <div v-show="dialogVisible" class="dialog">
       <header class="dialog-header is-flex jst-between ali-center">
         <div class="dialog-title">
           <i class="el-icon-plus"></i> 添加子账号
@@ -138,7 +138,88 @@
       <footer>
         <div class="btn btn-add" @click="submitForm('ruleForm')">立即添加</div>
       </footer>
-    </div>
+    </div> -->
+
+
+    <el-dialog
+      class="dialog"
+      :visible.sync="dialogVisible"
+      width="1000px"
+    >
+      <span slot="title" class="dialog-header">
+        <i class="el-icon-plus"></i> 添加子账号
+      </span>
+      <main class="content">
+        <el-form :model="addAccountInfo" :rules="rules" ref="ruleForm">
+          <ul>
+            <li class="row is-flex jst-between">
+              <div class="is-flex ali-center left no-border"></div>
+              <div :class="['is-flex','ali-center','right',choose[1]]">
+                <span class="name text-jst">姓名</span>
+                <el-form-item prop="fullName">
+                  <el-input v-model="addAccountInfo.fullName" @focus="fnChoose(1)"></el-input>
+                </el-form-item>
+              </div>
+            </li>
+            <li class="row is-flex jst-between">
+              <div :class="['is-flex','ali-center','left',choose[2]]">
+                <span class="name text-jst">用户名</span>
+                <el-form-item prop="account">
+                  <el-input v-model="addAccountInfo.account" @focus="fnChoose(2)"></el-input>
+                </el-form-item>
+              </div>
+              <div :class="['is-flex','ali-center','right',choose[3]]">
+                <span class="name text-jst">身份证</span>
+                <el-form-item prop="identityCard">
+                  <el-input v-model="addAccountInfo.identityCard" @focus="fnChoose(3)"></el-input>
+                </el-form-item>
+              </div>
+            </li>
+            <li class="row is-flex jst-between">
+              <div :class="['is-flex','ali-center','left',choose[4]]">
+                <span class="name text-jst">登陆密码</span>
+                <el-form-item prop="password">
+                  <el-input type="password" v-model="addAccountInfo.password" @focus="fnChoose(4)"></el-input>
+                </el-form-item>
+              </div>
+              <div :class="['is-flex','ali-center','right',choose[5]]">
+                <span class="name text-jst">手机号</span>
+                <el-form-item prop="phone">
+                  <el-input v-model="addAccountInfo.phone" @focus="fnChoose(5)"></el-input>
+                </el-form-item>
+              </div>
+            </li>
+            <li class="row is-flex jst-between">
+              <div  :class="['is-flex','ali-center','left',choose[6]]">
+                <span class="name text-jst">确认密码</span>
+                <el-form-item prop="secondPassword">
+                  <el-input type="password" v-model="addAccountInfo.secondPassword" @focus="fnChoose(6)"></el-input>
+                </el-form-item>
+              </div>
+              <div :class="['is-flex','ali-center','right',choose[7]]">
+                <span class="name text-jst">固定电话</span>
+                <el-form-item prop="telephone">
+                  <el-input v-model="addAccountInfo.telephone" @focus="fnChoose(7)"></el-input>
+                </el-form-item>
+              </div>
+            </li>
+            <li class="row is-flex jst-between">
+              <div class="is-flex ali-center left no-border"></div>
+              <div :class="['is-flex','ali-center','right',choose[9]]">
+                <span class="name text-jst">电子邮箱</span>
+                <el-form-item prop="email">
+                  <el-input v-model="addAccountInfo.email" @focus="fnChoose(9)"></el-input>
+                </el-form-item>
+              </div>
+            </li>
+          </ul>
+        </el-form>
+      </main>
+      <span slot="footer" class="dialog-footer">
+        <el-button class="btn btn-add" type="primary" @click="submitForm('ruleForm')">立即添加</el-button>
+      </span>
+    </el-dialog>
+
   </div>
 </template>
 <script>
@@ -161,14 +242,14 @@ export default {
           { required: true, message: "请输入用户名", trigger: "blur" }
           /* { min: 6, max: 60, message: '长度在 6 到 60 个字符之间', trigger: 'blur' } */
         ],
-        identityCard: [
-          { required: false, message: "请输入真实身份证号", trigger: "blur" }
-        ],
         password: [
           { required: true, message: "请输入密码", trigger: "blur" }
           /* { min: 6, max: 20, message: '长度在 6 到 20 个字母数字组成', trigger: 'blur' } */
         ],
         secondPassword: [{ validator: validatePass, trigger: "blur" }],
+        identityCard: [
+          { required: false, message: "请输入真实身份证号", trigger: "blur" }
+        ],
         phone: [{ required: false, message: "请输入手机号", trigger: "blur" }],
         telephone: [
           { required: false, message: "请输入固定电话", trigger: "blur" }
@@ -566,21 +647,13 @@ ul {
     }
   }
   .dialog {
-    position: fixed;
-    padding-bottom: 40px;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    width: 1000px;
-    background: white;
-    box-shadow: 0px 2px 8px -1px rgba(0, 0, 0, 0.1);
     .dialog-header {
-      background: $yellow;
+      /* background: $yellow;
       padding: 10px 20px;
-      color: white;
+      color: white; */
     }
     .content {
-      padding: 40px;
+      padding: 0 40px;
     }
     .row {
       .name {
@@ -615,6 +688,10 @@ ul {
         .name {
           color: $yellow;
         }
+        .el-input .el-input__inner {
+          color: $yellow !important;
+          background: red;
+        }
         input::-webkit-input-placeholder {
           color: $yellow;
         }
@@ -638,11 +715,37 @@ ul {
     .el-input__inner {
       vertical-align: middle;
       border: 0;
-      /* height: 30px; */
+      height: 30px;
+    }
+    .choose {
+      .el-input .el-input__inner {
+        color: #fccf00;
+      }
     }
     .el-form-item {
       margin-bottom: 0;
       width: 100%;
+    }
+
+    .el-dialog__header {
+      background: #fccf00;
+      padding: 10px 20px;
+      color: white;
+      font-size: 18px;
+      .el-dialog__headerbtn .el-dialog__close {
+        color: white;
+      }
+    }
+    .el-dialog__footer {
+      text-align: center;
+      .el-button {
+        margin: 0 auto;
+        box-sizing: content-box;
+        padding: 3px 20px;
+      }
+      .el-button--primary {
+        border: 0;
+      }
     }
   }
 }
