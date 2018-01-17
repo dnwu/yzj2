@@ -1,5 +1,5 @@
 <template>
-  <div class="value-add">
+  <div class="airport-operation">
     <div class="head">增值服务产品管理</div>
     <div class="body">
       <div class="query">
@@ -20,12 +20,12 @@
           <div class="box airport">
             <div class="label">所在机场</div>
             <div class="value">
-              <el-select size="mini" v-model="airPort" placeholder="请选择">
+              <el-select size="mini" filterable v-model="airPort" placeholder="请选择">
                 <el-option
-                  v-for="item in airPortList"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value">
+                  v-for="item in portList"
+                  :key="item.id"
+                  :label="item.cnName+'（'+item.airportCode+'）'"
+                  :value="item.cnName+'（'+item.airportCode+'）'">
                 </el-option>
               </el-select>
             </div>
@@ -33,9 +33,9 @@
           <div class="box domestic-abroad">
             <div class="label">国内/国际</div>
             <div class="value">
-              <el-select size="mini" v-model="airPort" placeholder="请选择">
+              <el-select size="mini" v-model="domesticAbroad" placeholder="请选择">
                 <el-option
-                  v-for="item in airPortList"
+                  v-for="item in domesticAbroadList"
                   :key="item.value"
                   :label="item.label"
                   :value="item.value">
@@ -46,9 +46,9 @@
           <div class="box start-end">
             <div class="label">始发/目的</div>
             <div class="value">
-              <el-select size="mini" v-model="airPort" placeholder="请选择">
+              <el-select size="mini" v-model="startEnd" placeholder="请选择">
                 <el-option
-                  v-for="item in airPortList"
+                  v-for="item in startEndList"
                   :key="item.value"
                   :label="item.label"
                   :value="item.value">
@@ -64,19 +64,6 @@
               <el-select size="mini" v-model="goodsType" placeholder="请选择">
                 <el-option
                   v-for="item in goodsTypeList"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value">
-                </el-option>
-              </el-select>
-            </div>
-          </div>
-          <div class="box cost">
-            <div class="label">费用项</div>
-            <div class="value">
-              <el-select size="mini" v-model="airPort" placeholder="请选择">
-                <el-option
-                  v-for="item in airPortList"
                   :key="item.value"
                   :label="item.label"
                   :value="item.value">
@@ -120,81 +107,77 @@
             <li><button @click="checkProduct" type="button" class="gray">{{checkMore}}</button></li>
             <li><button :class="{disableStyle:isDisable}" type="button">导出</button></li>
             <li><button :class="{disableStyle:isDisable}">导入</button></li>
-            <li class="add"><button @click="addProduct = true" :class="{disableStyle:isDisable}"><img class="addIcon" src="../../../assets/son_add.png"></button></li>
+            <li class="add"><button title="新增/修改机场产品" @click="addProduct = true" :class="{disableStyle:isDisable}"><img class="addIcon" src="../../../assets/son_add.png"></button></li>
           </ul>
           <ul :class="{show:isShow}" class="menu2">
-            <li><button type="button" class="green">启用</button></li>
-            <li><button type="button" class="red">禁用</button></li>
-            <li><button type="button" class="gray">删除</button></li>
+            <li><button @click="enableMoreProduct" type="button" class="green">启用</button></li>
+            <li><button @click="disableMoreProduct" type="button" class="red">禁用</button></li>
+            <li><button @click="deleteMoreProduct" type="button" class="gray">删除</button></li>
           </ul>
         </div>
         <ul class="product-list">
           <li class="list-head">
             <div class="detail">
               <p>状态</p>
-              <p>供应商</p>
               <p>机场</p>
               <p>产品名称</p>
               <p>费用项</p>
-              <p>单位（元/公斤）</p>
+              <p>单价（元/公斤）</p>
               <p>最低消费（元/票）</p>
               <p>固定收费</p>
               <p>生效开始时间</p>
               <p>生效结束时间</p>
             </div>
           </li>
-          <li>
+          <li v-if="productList.length!==0" v-for="(item,index) in productList" @click="clickItem(index)" :class="{hand:isShow}">
             <div class="title">
-              <p>第三方</p>
-              <p>普货</p>
-              <p>国内</p>
-              <p>始发</p>
-              <img :class="{hide:isShow}" src="../../../assets/air_delete.png">
-              <img :class="{hide:isShow}" src="../../../assets/airport_operation_2.png">
-              <img :class="{hide:isShow}" src="../../../assets/airport_operation_1.png">
+              <p>{{item.resourceType===1?'自营':'第三方'}}</p>
+              <p>{{item.hnaDataName}}</p>
+              <p>{{item.countryType===1?'国际':'国内'}}</p>
+              <p>{{item.departureArrival===1?'目的地':'始发站'}}</p>
+              <img title="删除" @click="deleteProduct(item.id)" :class="{hide:isShow}" src="../../../assets/air_delete.png">
+              <img title="修改" @click="getModifyProduct(item)" :class="{hide:isShow}" src="../../../assets/airport_operation_2.png">
+              <img :title="item.productStatus===0?'禁用':'启用'" @click="switchProduct(item.id,item.productStatus)" :class="{hide:isShow||item.productStatus===2}" :src="item.productStatus===0?productStatusSrc1:productStatusSrc2">
+              <span :class="{active:item.check}" class="sign"></span>
             </div>
             <div class="detail">
               <p class="state">
-                <span><img src="../../../assets/air_state_1.png"></span>
-                <span>启用</span>
+                <span><img :src="productStatusImg(item.productStatus)"></span>
+                <span>{{productStatusName(item.productStatus)}}</span>
               </p>
-              <p>华宇物流</p>
-              <p>北京</p>
-              <p>报关报检</p>
-              <p>相关报检费</p>
-              <p>0.3</p>
-              <p>15</p>
-              <p>10</p>
-              <p>2017-11-01</p>
-              <p>2017-12-31</p>
+              <p>{{item.airportName}}</p>
+              <p>{{item.priceName}}</p>
+              <p>{{priceTypeName(item.priceType)}}</p>
+              <p>{{item.unitPrice}}</p>
+              <p>{{item.minPrice}}</p>
+              <p>{{item.priceType===12?item.unitPrice:'-'}}</p>
+              <p>{{item.effectiveStart.substring(0,10)}}</p>
+              <p>{{item.effectiveEnd.substring(0,10)}}</p>
             </div>
           </li>
+          <li v-if="productList.length===0" class="handle">暂无数据</li>
         </ul>
+        <!--分页-->
+        <div class="block pagination">
+          <el-pagination
+            layout="prev, pager, next"
+            :page-size = 10
+            @current-change = "flipList"
+            :total="pageTotal">
+          </el-pagination>
+        </div>
         <!--新增/修改空运产品模态框-->
         <div class="add-product">
-          <el-dialog width="1100px" title="新增/修改机场产品" :visible.sync="addProduct">
+          <el-dialog width="1000px" title="新增/修改机场产品" :visible.sync="addProduct">
             <div class="content">
               <div class="up">
                 <div class="left">
                   <div class="box">
-                    <div class="label">供应商:</div>
-                    <div class="value">
-                      <el-select size="small" v-model="resourcesType">
-                        <el-option
-                          v-for="item in resourcesTypeList"
-                          :key="item.value"
-                          :label="item.label"
-                          :value="item.value">
-                        </el-option>
-                      </el-select>
-                    </div>
-                  </div>
-                  <div class="box">
                     <div class="label">货物类型:</div>
                     <div class="value">
-                      <el-select size="small" v-model="resourcesType">
+                      <el-select size="small" v-model="addProductParameter.goodsType">
                         <el-option
-                          v-for="item in resourcesTypeList"
+                          v-for="item in goodsTypeList"
                           :key="item.value"
                           :label="item.label"
                           :value="item.value">
@@ -207,22 +190,24 @@
                   <div class="box">
                     <div class="label">所在机场:</div>
                     <div class="value">
-                      <el-select size="small" v-model="resourcesType">
+                      <el-select size="mini" filterable v-model="addProductParameter.airPort" placeholder="请选择">
                         <el-option
-                          v-for="item in resourcesTypeList"
-                          :key="item.value"
-                          :label="item.label"
-                          :value="item.value">
+                          v-for="item in portList"
+                          :key="item.id"
+                          :label="item.cnName+'（'+item.airportCode+'）'"
+                          :value="item.cnName+'（'+item.airportCode+'）'">
                         </el-option>
                       </el-select>
                     </div>
                   </div>
+                </div>
+                <div class="right">
                   <div class="box">
-                    <div class="label">资源类型:</div>
+                    <div class="label">始发/目的:</div>
                     <div class="value">
-                      <el-select size="small" v-model="resourcesType">
+                      <el-select size="small" v-model="addProductParameter.startEnd">
                         <el-option
-                          v-for="item in resourcesTypeList"
+                          v-for="item in startEndList"
                           :key="item.value"
                           :label="item.label"
                           :value="item.value">
@@ -231,47 +216,35 @@
                     </div>
                   </div>
                 </div>
-                <div class="right">
-                  <div class="box two">
-                    <div class="start-end">
-                      <div class="label">始发/目的:</div>
-                      <div class="value">
-                        <el-select size="small" v-model="resourcesType">
-                          <el-option
-                            v-for="item in resourcesTypeList"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value">
-                          </el-option>
-                        </el-select>
-                      </div>
-                    </div>
-                    <div class="domestic-abroad">
-                      <div class="label">国内/国外:</div>
-                      <div class="value">
-                        <el-select size="small" v-model="resourcesType">
-                          <el-option
-                            v-for="item in resourcesTypeList"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value">
-                          </el-option>
-                        </el-select>
-                      </div>
+                <div class="left">
+                  <div class="box">
+                    <div class="label">国内/国际:</div>
+                    <div class="value">
+                      <el-select size="small" v-model="addProductParameter.domesticAbroad">
+                        <el-option
+                          v-for="item in domesticAbroadList"
+                          :key="item.value"
+                          :label="item.label"
+                          :value="item.value">
+                        </el-option>
+                      </el-select>
                     </div>
                   </div>
+                </div>
+                <div class="bottom">
                   <div class="box date">
                     <div class="label">生效时间:</div>
                     <div class="value">
                       <el-date-picker
-                        v-model="effectiveDate"
-                        type="date"
-                        size="mini"
+                        v-model="addProductParameter.addDateRange"
+                        :clearable=false
                         :editable=false
-                        placeholder="选择日期">
+                        type="daterange"
+                        value-format = "yyyy-MM-dd"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期">
                       </el-date-picker>
                     </div>
-                    <div class="arrow el-icon-arrow-down"></div>
                   </div>
                 </div>
               </div>
@@ -280,12 +253,12 @@
                   <div class="box cost">
                     <div class="label">费用项:</div>
                     <div class="value">
-                      <el-select size="small" v-model="resourcesType">
+                      <el-select size="small" v-model="addProductParameter.costName">
                         <el-option
-                          v-for="item in resourcesTypeList"
-                          :key="item.value"
-                          :label="item.label"
-                          :value="item.value">
+                          v-for="item in costTypeList"
+                          :key="item.dataName"
+                          :label="item.dataName"
+                          :value="item.dataName">
                         </el-option>
                       </el-select>
                     </div>
@@ -293,12 +266,12 @@
                   <div class="box billing-method">
                     <div class="label">计费方式:</div>
                     <div class="value">
-                      <el-select size="small" v-model="resourcesType">
+                      <el-select size="small" @change="initPrice" v-model="addProductParameter.priceType">
                         <el-option
-                          v-for="item in resourcesTypeList"
-                          :key="item.value"
-                          :label="item.label"
-                          :value="item.value">
+                          v-for="item in priceTypeList"
+                          :key="item.id"
+                          :label="item.dataName"
+                          :value="item.id">
                         </el-option>
                       </el-select>
                     </div>
@@ -307,22 +280,22 @@
                 <ul class="detail">
                   <li>
                     <p class="label">单价</p>
-                    <input @keyup="formatNumber($event)" type="number">
+                    <input v-model="addProductParameter.unitPrice" :disabled="addProductParameter.priceType===12" @keyup="formatNumber($event)" type="number">
                   </li>
                   <li>
-                    <p class="label">最低消费</p>
-                    <input @keyup="formatNumber($event)" type="number">
+                    <p class="label">最低收费</p>
+                    <input v-model="addProductParameter.minPrice" :disabled="addProductParameter.priceType===12" @keyup="formatNumber($event)" type="number">
                   </li>
                   <li>
                     <p class="label">固定费用</p>
-                    <input @keyup="formatNumber($event)" type="number">
+                    <input v-model="addProductParameter.fixedPrice" :disabled="addProductParameter.priceType===11" @keyup="formatNumber($event)" type="number">
                   </li>
                 </ul>
               </div>
             </div>
             <div slot="footer" class="dialog-footer">
               <span class="cancel" @click="addProduct = false">取 消</span>
-              <el-button @click="getAddFlight" size="mini" class="sure" type="warning">保 存</el-button>
+              <el-button @click="getAddProduct" size="mini" class="sure" type="warning">保 存</el-button>
             </div>
           </el-dialog>
         </div>
@@ -331,90 +304,473 @@
   </div>
 </template>
 <script>
-  import StartPortselect from "@/components/StartPortselect";
-  import EndPortselect from "@/components/EndPortselect";
+  import { mapGetters } from "vuex";
   export default {
-    components: {
-      StartPortselect,
-      EndPortselect,
-    },
     data () {
       return {
 //    搜索的初始值
         resourcesType: '',
         resourcesTypeList: [
           {
-            value: "1",
-            label: "选项1"
+            value: 1,
+            label: "自营"
           },
           {
-            value: "2",
-            label: "选项2"
+            value: 2,
+            label: "第三方"
           },
         ],
         airPort: '',
-        airPortList: [
+        portList: [],
+        domesticAbroad: '',
+        domesticAbroadList: [
           {
-            value: "1",
-            label: "选项1"
+            value: 0,
+            label: "国内"
           },
           {
-            value: "2",
-            label: "选项1"
+            value: 1,
+            label: "国际"
+          },
+        ],
+        startEnd: '',
+        startEndList: [
+          {
+            value: 0,
+            label: "始发站"
+          },
+          {
+            value: 1,
+            label: "目的站"
           },
         ],
         goodsType: '',
-        goodsTypeList: [
-          {
-            value: "1",
-            label: "选项1"
-          },
-          {
-            value: "2",
-            label: "选项1"
-          },
-        ],
+        goodsTypeList: [],
         productStatus: '',
         productStatusList: [
           {
-            value: "1",
-            label: "选项1"
+            value: 0,
+            label: "启用"
           },
           {
-            value: "2",
-            label: "选项1"
+            value: 1,
+            label: "禁用"
+          },
+          {
+            value: 2,
+            label: "审核中"
           },
         ],
         effectiveDate: '',
         checkMore: '批量选择',
+        productList: [],
+        productStatusSrc1: require('../../../assets/airport_operation_1.png'),
+        productStatusSrc2: require('../../../assets/airport_operation_3.png'),
+        priceTypeList: [],
+        costTypeList: [],
+        pageTotal: 0,
 //    模态框状态
         addProduct: false,
+        addProductParameter: {},
+        productId: '',
       }
     },
-    methods:{
-      startPortValue (value){
-        this.startPort = value
+    created() {
+      this.getPortList();
+      this.getGoodTypeList();
+      this.getPriceTypeList();
+      this.getCostTypeList();
+      this.getProductList(1);
+    },
+    watch: {
+      addProduct (){
+        if (this.addProduct === false) {
+          this.addProductParameter = {};
+        }
       },
-      endPortValue (value){
-        this.endPort = value
+    },
+    methods:{
+      getPortList (){
+        this.axios.get("/airport/list").then(data => {
+          this.portList = data.data;
+        });
+      },
+      getGoodTypeList (){
+        this.axios.post("/app/v1/common/queryDict",{
+          "dataType": 2
+        }).then(data => {
+          let arr = [];
+          if(data.data.data.detailDTOS.length){
+            for(let i=0;i<data.data.data.detailDTOS.length;i++){
+              let obj={};
+              obj.value = data.data.data.detailDTOS[i].id;
+              obj.label = data.data.data.detailDTOS[i].dataName;
+              arr.push(obj);
+            }
+          }
+          this.goodsTypeList = arr;
+        });
+      },
+      getPriceTypeList (){
+        this.axios.post("/app/v1/common/queryDict",{
+          "dataType": 3
+        }).then(data => {
+          if(data.data.data.detailDTOS.length){
+            this.priceTypeList = data.data.data.detailDTOS
+          }
+        });
+      },
+      getCostTypeList (){
+        this.axios.post("/app/v1/common/queryDict",{
+          "dataType": 8
+        }).then(data => {
+          if(data.data.data.detailDTOS.length){
+            this.costTypeList = data.data.data.detailDTOS
+          }
+        });
+      },
+      getProductList (page){
+        this.productList =[];
+        let resourcesType = this.resourcesType || -1;
+        let goodsType = this.goodsType || -1;
+        let productStatus;
+        if(this.productStatus === 0){
+          productStatus = 0;
+        }else {
+          productStatus = this.productStatus || -1;
+        }
+        let startEnd;
+        if(this.startEnd === 0){
+          startEnd = 0;
+        }else{
+          startEnd = this.startEnd || -1;
+        }
+        let domesticAbroad;
+        if(this.domesticAbroad === 0){
+          domesticAbroad = 0;
+        }else{
+          domesticAbroad = this.domesticAbroad || -1;
+        }
+        this.axios.post("/web/v1/product/increment/getList",{
+          "id": this.id,
+          "token": this.token,
+          "airportName": this.airPort,
+          "countryType": domesticAbroad,
+          "departureArrival": startEnd,
+          "effectiveDate": this.effectiveDate,
+          "goodsType": goodsType,
+          "productStatus": productStatus,
+          "resourceType": resourcesType,
+          "pageIndex": page,
+          "size": 10,
+        }).then(data => {
+          if(data.data.code === 1){
+            if(data.data.hnaIncrementProducts.length){
+              this.productList = data.data.hnaIncrementProducts;
+              this.pageTotal = data.data.total;
+            }
+          }
+        });
+      },
+      getAddProduct (){
+        let pass1 = false;
+        let pass2 = false;
+        let pass3 = false;
+        let unitPrice = '';
+        if(!this.addProductParameter.goodsType
+          ||!this.addProductParameter.airPort
+          ||!(this.addProductParameter.startEnd===0||this.addProductParameter.startEnd===1)
+          ||!(this.addProductParameter.domesticAbroad===0||this.addProductParameter.domesticAbroad===1)
+          ||!this.addProductParameter.addDateRange
+          ||!this.addProductParameter.costName
+          ||!this.addProductParameter.priceType
+        ){
+          pass1 = true;
+        }
+        if(this.addProductParameter.priceType === 11){
+          if(!this.addProductParameter.unitPrice||!this.addProductParameter.minPrice){
+            pass2 = true;
+          }
+          unitPrice = this.addProductParameter.unitPrice;
+        }else{
+          if(!this.addProductParameter.fixedPrice){
+            pass3 = true;
+          }
+          unitPrice = this.addProductParameter.fixedPrice;
+        }
+        if(pass1||pass2||pass3){
+          this.$notify.error({
+            title: '错误',
+            message: '填写有误，所有的项都是必须选择或填写的，请检查！'
+          });
+          return
+        }
+        let minPrice = this.addProductParameter.minPrice || 0;
+        if(this.productId){
+          this.axios.post("/web/v1/product/increment/save",{
+            "id": this.id,
+            "token": this.token,
+            "airportName": this.addProductParameter.airPort,
+            "countryType": this.addProductParameter.domesticAbroad,
+            "departureArrival": this.addProductParameter.startEnd,
+            "effectiveStart": this.addProductParameter.addDateRange[0],
+            "effectiveEnd": this.addProductParameter.addDateRange[1],
+            "goodsType": this.addProductParameter.goodsType,
+            "minPrice": parseInt(minPrice,10),
+            "priceName": this.addProductParameter.costName,
+            "priceType": this.addProductParameter.priceType,
+            "unitPrice": parseInt(unitPrice,10),
+            "incrementId": this.productId,
+          }).then(data => {
+            if(data.data.code === 1){
+              this.$notify({
+                title: '成功',
+                message: '操作成功！',
+                type: 'success'
+              });
+              this.addProduct =false;
+              this.getProductList (1);
+            }else{
+              this.$notify.error({
+                title: '错误',
+                message: data.data.msg
+              });
+            }
+          });
+        }else{
+          this.axios.post("/web/v1/product/increment/save",{
+            "id": this.id,
+            "token": this.token,
+            "airportName": this.addProductParameter.airPort,
+            "countryType": this.addProductParameter.domesticAbroad,
+            "departureArrival": this.addProductParameter.startEnd,
+            "effectiveStart": this.addProductParameter.addDateRange[0],
+            "effectiveEnd": this.addProductParameter.addDateRange[1],
+            "goodsType": this.addProductParameter.goodsType,
+            "minPrice": parseInt(minPrice,10),
+            "priceName": this.addProductParameter.costName,
+            "priceType": this.addProductParameter.priceType,
+            "unitPrice": parseInt(unitPrice,10),
+          }).then(data => {
+            if(data.data.code === 1){
+              this.$notify({
+                title: '成功',
+                message: '操作成功！',
+                type: 'success'
+              });
+              this.addProduct =false;
+              this.getProductList (1);
+            }else{
+              this.$notify.error({
+                title: '错误',
+                message: data.data.msg
+              });
+            }
+          });
+        }
+      },
+      getModifyProduct (obj){
+        this.addProduct = true;
+        this.addProductParameter.goodsType = obj.goodsType;
+        this.addProductParameter.airPort = obj.airportName;
+        this.addProductParameter.startEnd = obj.departureArrival;
+        this.addProductParameter.domesticAbroad = obj.countryType;
+        this.addProductParameter.addDateRange = [obj.effectiveStart.substring(0,10),obj.effectiveEnd.substring(0,10)];
+        this.addProductParameter.costName = obj.priceName;
+        this.addProductParameter.priceType = obj.priceType;
+        if(obj.priceType === 11){
+          this.addProductParameter.minPrice = obj.minPrice;
+          this.addProductParameter.unitPrice = obj.unitPrice;
+        }else{
+          this.addProductParameter.fixedPrice = obj.unitPrice;
+        }
+        this.productId = obj.id;
+      },
+      switchProduct (productId,status){
+        let url = '';
+        if(status===1){
+          url = '/web/v1/product/increment/setEnable';
+        }else{
+          url = '/web/v1/product/increment/setDisable';
+        }
+        this.axios.post(url, {
+          "id": this.id,
+          "token": this.token,
+          "ids": productId,
+        }).then(data => {
+          if(data.data.code === 1){
+            this.$notify({
+              title: '成功',
+              message: '操作成功！',
+              type: 'success'
+            });
+            this.getProductList(1);
+          }else{
+            this.$notify.error({
+              title: '错误',
+              message: data.data.msg
+            });
+          }
+        });
+      },
+      deleteProduct (id){
+        this.$confirm('此操作将删除所选空运产品，无法恢复, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.axios.post("/web/v1/product/increment/del",{
+            "id": this.id,
+            "token": this.token,
+            "ids": id
+          }).then(data => {
+            if(data.data.code === 1){
+              this.$notify({
+                title: '成功',
+                message: '删除成功！',
+                type: 'success'
+              });
+              this.getProductList(1);
+            }else{
+              this.$notify.error({
+                title: '错误',
+                message: data.data.msg
+              });
+            }
+          });
+        });
+      },
+      deleteMoreProduct (){
+        let ids = this.getCheckId();
+        if(ids){
+          this.deleteProduct(ids);
+        }else{
+          this.$notify.error({
+            title: '警告',
+            message: '您还没有勾选要删除的空运产品，请点击勾选！',
+            type: 'warning'
+          });
+        }
+      },
+      enableMoreProduct (){
+        let ids = this.getCheckId2();
+        if(!ids) {
+          this.$notify.error({
+            title: '警告',
+            message: '您还没有勾选要启用的空运产品，请勾选！',
+            type: 'warning'
+          });
+        }else if(ids==='审核中'){
+          this.$notify.error({
+            title: '警告',
+            message: '勾选中含有审核中的产品，审核中的产品无法变更状态，请重新勾选！',
+            type: 'warning'
+          });
+        }else{
+          this.switchProduct(ids,1);
+        }
+      },
+      disableMoreProduct (){
+        let ids = this.getCheckId2();
+        if(!ids) {
+          this.$notify.error({
+            title: '警告',
+            message: '您还没有勾选要禁用的空运产品，请勾选！',
+            type: 'warning'
+          });
+        }else if(ids==='审核中'){
+          this.$notify.error({
+            title: '警告',
+            message: '勾选中含有审核中的产品，审核中的产品无法变更状态，请重新勾选！',
+            type: 'warning'
+          });
+        }else{
+          this.switchProduct(ids,2);
+        }
+      },
+      initPrice (){
+        this.addProductParameter.unitPrice = '';
+        this.addProductParameter.minPrice = '';
+        this.addProductParameter.fixedPrice = '';
       },
       queryProduct (){
-        alert("待开发")
+        this.getProductList(1);
+      },
+      productStatusName (type){
+        let name = '';
+        switch (type){
+          case 0: name = "启用"; break;
+          case 1: name = "禁用"; break;
+          case 2: name = "审核中"; break;
+        }
+        return name
+      },
+      productStatusImg (type){
+        let imgSrc = '';
+        switch (type){
+          case 0: imgSrc = require('../../../assets/air_state_1.png'); break;
+          case 1: imgSrc = require('../../../assets/air_state_2.png'); break;
+          case 2: imgSrc = require('../../../assets/air_state_3.png'); break;
+        }
+        return imgSrc
+      },
+      priceTypeName (type){
+        let name = '';
+        for(let i=0;i<this.priceTypeList.length;i++){
+          if(this.priceTypeList[i].id === type){
+            name = this.priceTypeList[i].dataName;
+          }
+        }
+        return name
+      },
+      flipList (page){
+        this.getProductList(page)
+      },
+      getCheckId (){
+        let ids = '';
+        for(let i=0;i<this.productList.length;i++){
+          if(this.productList[i].check){
+            ids += this.productList[i].id+',';
+          }
+        }
+        return ids
+      },
+      getCheckId2 (){
+        let ids = '';
+        for(let i=0;i<this.productList.length;i++){
+          if(this.productList[i].check){
+            if(this.productList[i].productStatus === 2){
+              return '审核中'
+            }
+            ids += this.productList[i].id+',';
+          }
+        }
+        return ids
       },
       checkProduct (){
         this.checkMore = (this.checkMore === '批量选择')?'取消选择':'批量选择';
+        if(this.checkMore === '批量选择'){
+          this.removeCheck();
+        }
+      },
+      removeCheck (){
+        let productList = this.productList;
+        for(let i=0;i<productList.length;i++){
+          this.$set(this.productList[i],'check',false);
+        }
+      },
+      clickItem (index){
+        if(this.checkMore === '批量选择'){
+          return
+        }
+        this.$set(this.productList[index],'check',!this.productList[index].check)
       },
       formatNumber(e){//保留小数点后一位
         e.target.value = e.target.value&&Math.floor(parseFloat(e.target.value)*10)/10;
       },
-      getAddFlight (){
-        alert("待开发")
-      },
-      getFlightGenerate (){
-        alert("待开发")
-      }
     },
     computed: {
+      ...mapGetters(["id", "token"]),
       isDisable: function () {
         return this.checkMore === '取消选择'
       },
@@ -425,7 +781,7 @@
   }
 </script>
 <style lang="scss">
-  .value-add{
+  .airport-operation{
     .head{
       height: 61px;
       line-height: 61px;
@@ -607,6 +963,8 @@
         .product-list{
           padding: 0;
           margin: 0;
+          min-height: 600px;
+          padding-left: 30px;
           li{
             height: 100px;
             box-sizing: border-box;
@@ -614,9 +972,11 @@
             .title{
               height: 30px;
               padding-left: 33px;
+              padding-right: 30px;
               position: relative;
               .sign{
                 position: absolute;
+                display: none;
                 width: 0;
                 height: 0;
                 border-top: 15px solid #fccf00;
@@ -625,6 +985,9 @@
                 border-left: 15px solid transparent;
                 right: 0;
                 top: 10px;
+              }
+              .active{
+                display: block;
               }
               p{
                 float: left;
@@ -674,16 +1037,23 @@
               }
               p:nth-child(1){width: 8%}
               p:nth-child(2){width: 12%}
-              p:nth-child(3){width: 10%}
+              p:nth-child(3){width: 12%}
               p:nth-child(4){width: 10%}
-              p:nth-child(5){width: 9%}
-              p:nth-child(6){width: 9%}
-              p:nth-child(7){width: 9%}
-              p:nth-child(8){width: 9%}
-              p:nth-child(9){width: 12%}
-              p:nth-child(10){width: 12%}
+              p:nth-child(5){width: 10%}
+              p:nth-child(6){width: 10%}
+              p:nth-child(7){width: 10%}
+              p:nth-child(8){width: 14%}
+              p:nth-child(9){width: 14%}
             }
 
+          }
+          .handle{
+            text-align: center;
+            border: 0;
+            margin-top: 30px;
+          }
+          .hand{
+            cursor: pointer;
           }
           .list-head{
             height: 40px;
@@ -695,6 +1065,10 @@
               }
             }
           }
+        }
+        .pagination{
+          text-align: center;
+          margin-bottom: 30px;
         }
         .add-product{
           .el-dialog {
@@ -726,66 +1100,46 @@
                       }
                       .value{
                         display: inline-block;
-                        input{
+                        .el-date-editor{
+                          width: 300px;
                           border: 0;
-                          width: 160px;
                         }
-                      }
-                    }
-                    .two{
-                      border: 0;
-                      box-sizing: border-box;
-                      .start-end{
-                        float: left;
-                        height: 40px;
-                        width: 47%;
-                        margin-right: 6%;
-                        border-bottom: 1px solid #E6E6E6;
-                        input{
-                          width: 110px;
+                        .el-input{
+                          width: 180px;
+                          input{
+                            border: 0;
+                            width: 180px;
+                          }
                         }
-                      }
-                      .domestic-abroad{
-                        float: left;
-                        height: 40px;
-                        width: 47%;
-                        border-bottom: 1px solid #E6E6E6;
-                        input{
-                          width: 110px;
-                        }
-                      }
-                    }
-                    .date{
-                      position: relative;
-                      .arrow{
-                        position: absolute;
-                        right: 19px;
-                        top: 13px;
-                        color: #c0c4cc;
                       }
                     }
                   }
                   .left{
                     float: left;
-                    width: 26%;
-                    margin-right: 2%;
+                    width: 30%;
+                    margin-right: 5%;
                   }
                   .center{
                     float: left;
-                    width: 26%;
-                    margin-right: 2%;
+                    width: 30%;
+                    margin-right: 5%;
                   }
                   .right{
                     float: left;
-                    width: 44%;
+                    width: 30%;
+                  }
+                  .bottom{
+                    float: left;
+                    width: 400px;
                   }
                 }
                 .down{
                   .costTerm{
                     margin-top: 50px;
+                    margin-bottom: 20px;
                     box-sizing: border-box;
                     overflow: hidden;
-                    padding-left: 161px;
+                    padding-left: 111px;
                     .box{
                       float: left;
                       height: 40px;
@@ -821,7 +1175,7 @@
                   .detail{
                     overflow: hidden;
                     box-sizing: border-box;
-                    padding-left: 250px;
+                    padding-left: 200px;
                     margin: 0;
                     li{
                       float: left;
@@ -859,6 +1213,7 @@
 
             }
             .el-dialog__footer {
+              padding-bottom: 30px;
               .dialog-footer {
                 text-align: center;
                 position: relative;

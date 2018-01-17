@@ -489,14 +489,16 @@
             value: 1,
             label: "禁用"
           },
+          {
+            value: 2,
+            label: "审核中"
+          },
         ],
         effectiveDate: '',
         checkMore: '批量选择',
         productList: [],
-        statusSrc1: require('../../../assets/air_state_1.png'),
-        statusSrc2: require('../../../assets/air_state_2.png'),
-        productStatusSrc1: require('../../../assets/air_state_4.png'),
-        productStatusSrc2: require('../../../assets/son_state_1.png'),
+        productStatusSrc1: require('../../../assets/airport_operation_1.png'),
+        productStatusSrc2: require('../../../assets/airport_operation_3.png'),
         pageTotal: 0,
 //    模态框状态
         //一般配送
@@ -711,7 +713,8 @@
               message: '操作成功！',
               type: 'success'
             });
-            this.generalDistribution =false;
+            this.generalDistribution = false;
+            this.carDistribution = false;
             this.getProductList (1);
           }else{
             this.$notify.error({
@@ -788,51 +791,111 @@
         }
       },
       enableMoreProduct (){
-        let ids = this.getCheckId();
-        if(ids){
-          this.switchProduct(ids,1);
-        }else{
+        let ids = this.getCheckId2();
+        if(!ids) {
           this.$notify.error({
             title: '警告',
-            message: '您还没有勾选要启用的空运产品，请点击勾选！',
+            message: '您还没有勾选要启用的空运产品，请勾选！',
             type: 'warning'
           });
+        }else if(ids==='审核中'){
+          this.$notify.error({
+            title: '警告',
+            message: '勾选中含有审核中的产品，审核中的产品无法变更状态，请重新勾选！',
+            type: 'warning'
+          });
+        }else{
+          this.switchProduct(ids,1);
         }
       },
       disableMoreProduct (){
-        let ids = this.getCheckId();
-        if(ids){
-          this.switchProduct(ids,2);
-        }else{
+        let ids = this.getCheckId2();
+        if(!ids) {
           this.$notify.error({
             title: '警告',
-            message: '您还没有勾选要禁用的空运产品，请点击勾选！',
+            message: '您还没有勾选要禁用的空运产品，请勾选！',
             type: 'warning'
           });
+        }else if(ids==='审核中'){
+          this.$notify.error({
+            title: '警告',
+            message: '勾选中含有审核中的产品，审核中的产品无法变更状态，请重新勾选！',
+            type: 'warning'
+          });
+        }else{
+          this.switchProduct(ids,2);
         }
       },
       seeRangeAndPrice (id,type){
-        /*if(type === 2){
+        if(type === 2){
           this.generalDistribution = true;
         }else{
           this.carDistribution = true;
-        }*/
+        }
         this.axios.post("/web/v1/product/landCarriage/getDetail",{
           "id": this.id,
           "token": this.token,
           "recordId": id
         }).then(data => {
           console.log(data);
-        });
-      },
-      getCheckId (){
-        let ids = '';
-        for(let i=0;i<this.productList.length;i++){
-          if(this.productList[i].check){
-            ids += this.productList[i].id+',';
+          if(data.data.code === 1){
+            let hnaLandCarriage = data.data.hnaLandCarriage;
+            let map = data.data.map;
+            if(type === 2){
+              this.generalParameter.goodsType = hnaLandCarriage.goodsType;
+              this.generalParameter.airPort = hnaLandCarriage.city;
+              this.generalParameter.startEnd = hnaLandCarriage.departureArrival;
+              this.generalParameter.resourcesType = hnaLandCarriage.resourceType;
+              this.generalParameter.addDateRange = [hnaLandCarriage.effectiveStart.substring(0,10),hnaLandCarriage.effectiveEnd.substring(0,10)];
+              let arr = [];
+              let areaList = [];
+              let priceList = [];
+              for(let key in map){
+                areaList.push(key);
+                priceList.push(map[key]);
+              }
+              for(let i=0;i<areaList.length;i++){
+                let obj = {};
+                obj.city = areaList[i].split(',')[0].split('=')[1];
+                obj.county = areaList[i].split(',')[1].split('=')[1].slice(0,-1);
+                obj.unitPrice = priceList[i][0].priceValue;
+                obj.minimumPrice = priceList[i][0].minValue;
+                arr.push(obj);
+              }
+              this.chargeStandardList = arr;
+            }else{
+              this.carParameter.goodsType = hnaLandCarriage.goodsType;
+              this.carParameter.airPort = hnaLandCarriage.city;
+              this.carParameter.startEnd = hnaLandCarriage.departureArrival;
+              this.carParameter.resourcesType = hnaLandCarriage.resourceType;
+              this.carParameter.addDateRange = [hnaLandCarriage.effectiveStart.substring(0,10),hnaLandCarriage.effectiveEnd.substring(0,10)];
+              let arr = [];
+              let areaList = [];
+              let priceList = [];
+              for(let key in map){
+                areaList.push(key);
+                priceList.push(map[key]);
+              }
+              for(let i=0;i<areaList.length;i++){
+                let obj = {};
+                let list = [];
+                obj.city = areaList[i].split(',')[0].split('=')[1];
+                obj.county = areaList[i].split(',')[1].split('=')[1].slice(0,-1);
+                for(let j=0;j<this.carTypeList.length;j++){
+                  for(let k=0;k<priceList[i].length;k++){
+                    if(priceList[i][k].staticDataId === this.carTypeList[j].id){
+                      list.push(priceList[i][k].priceValue);
+                      break;
+                    }
+                  }
+                }
+                obj.priceList = list;
+                arr.push(obj);
+              }
+              this.chargeStandardList2 = arr;
+            }
           }
-        }
-        return ids
+        });
       },
       addOneLine (){
         let obj = {
@@ -851,30 +914,6 @@
         };
         this.chargeStandardList2.push(obj);
       },
-      checkProduct (){
-        this.checkMore = (this.checkMore === '批量选择')?'取消选择':'批量选择';
-        if(this.checkMore === '批量选择'){
-          this.removeCheck();
-        }
-      },
-      removeCheck (){
-        let productList = this.productList;
-        for(let i=0;i<productList.length;i++){
-          this.$set(this.productList[i],'check',false);
-        }
-      },
-      flipList (page){
-        this.getProductList(page)
-      },
-      queryProduct (){
-        this.getProductList(1);
-      },
-      clickItem (index){
-        if(this.checkMore === '批量选择'){
-          return
-        }
-        this.$set(this.productList[index],'check',!this.productList[index].check)
-      },
       productStatusName (type){
         let name = '';
         switch (type){
@@ -892,6 +931,51 @@
           case 2: imgSrc = require('../../../assets/air_state_3.png'); break;
         }
         return imgSrc
+      },
+      queryProduct (){
+        this.getProductList(1);
+      },
+      flipList (page){
+        this.getProductList(page)
+      },
+      getCheckId (){
+        let ids = '';
+        for(let i=0;i<this.productList.length;i++){
+          if(this.productList[i].check){
+            ids += this.productList[i].id+',';
+          }
+        }
+        return ids
+      },
+      getCheckId2 (){
+        let ids = '';
+        for(let i=0;i<this.productList.length;i++){
+          if(this.productList[i].check){
+            if(this.productList[i].productStatus === 2){
+              return '审核中'
+            }
+            ids += this.productList[i].id+',';
+          }
+        }
+        return ids
+      },
+      checkProduct (){
+        this.checkMore = (this.checkMore === '批量选择')?'取消选择':'批量选择';
+        if(this.checkMore === '批量选择'){
+          this.removeCheck();
+        }
+      },
+      removeCheck (){
+        let productList = this.productList;
+        for(let i=0;i<productList.length;i++){
+          this.$set(this.productList[i],'check',false);
+        }
+      },
+      clickItem (index){
+        if(this.checkMore === '批量选择'){
+          return
+        }
+        this.$set(this.productList[index],'check',!this.productList[index].check)
       },
       formatNumber(e){//保留小数点后一位
         e.target.value = e.target.value&&Math.floor(parseFloat(e.target.value)*10)/10;

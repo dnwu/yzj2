@@ -348,6 +348,10 @@ export default {
           value: 1,
           label: "禁用"
         },
+        {
+          value: 2,
+          label: "审核中"
+        },
       ],
       startPort: '',
       endPort: '',
@@ -618,33 +622,57 @@ export default {
       }
     },
     enableMoreProduct (){
-      let ids = this.getCheckId();
-      if(ids){
-        this.switchProduct(ids,1);
-      }else{
+      let ids = this.getCheckId2();
+      if(!ids) {
         this.$notify.error({
           title: '警告',
-          message: '您还没有勾选要启用的空运产品，请点击勾选！',
+          message: '您还没有勾选要启用的空运产品，请勾选！',
           type: 'warning'
         });
+      }else if(ids==='审核中'){
+        this.$notify.error({
+          title: '警告',
+          message: '勾选中含有审核中的产品，审核中的产品无法变更状态，请重新勾选！',
+          type: 'warning'
+        });
+      }else{
+        this.switchProduct(ids,1);
       }
     },
     disableMoreProduct (){
-      let ids = this.getCheckId();
-      if(ids){
-        this.switchProduct(ids,2);
-      }else{
+      let ids = this.getCheckId2();
+      if(!ids) {
         this.$notify.error({
           title: '警告',
-          message: '您还没有勾选要禁用的空运产品，请点击勾选！',
+          message: '您还没有勾选要禁用的空运产品，请勾选！',
           type: 'warning'
         });
+      }else if(ids==='审核中'){
+        this.$notify.error({
+          title: '警告',
+          message: '勾选中含有审核中的产品，审核中的产品无法变更状态，请重新勾选！',
+          type: 'warning'
+        });
+      }else{
+        this.switchProduct(ids,2);
       }
     },
     getCheckId (){
       let ids = '';
       for(let i=0;i<this.productList.length;i++){
         if(this.productList[i].check){
+          ids += this.productList[i].id+',';
+        }
+      }
+      return ids
+    },
+    getCheckId2 (){
+      let ids = '';
+      for(let i=0;i<this.productList.length;i++){
+        if(this.productList[i].check){
+          if(this.productList[i].productStatus === 2){
+            return '审核中'
+          }
           ids += this.productList[i].id+',';
         }
       }
@@ -890,7 +918,7 @@ export default {
           padding: 0;
           margin: 0;
           min-height: 600px;
-
+          padding-left: 30px;
           li{
             height: 100px;
             box-sizing: border-box;
