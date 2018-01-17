@@ -7,6 +7,7 @@
         </div>
         <input :style="widthStyle" class="value" v-text="obj.value" v-if="!obj.file" v-show="edit" v-model="obj.value"></input>
         <span :style="widthStyle" class="value" v-text="obj.value" v-if="!obj.file" v-show="!edit"></span>
+        <span :style="widthStyle" v-if="obj.file&&!obj.value" v-show="!edit" class="value"></span>
         <span :style="widthStyle" v-if="obj.file&&obj.value" v-show="!edit" class="value"><i class="el-icon-picture"></i></span>
         <el-upload
             :style="widthStyle"

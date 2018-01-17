@@ -4,7 +4,7 @@
       <span class="info">企业信息</span>
       <span class="btn btn-apply" v-if="isApply == false" v-show="!edit" @click="edit = true">完善企业信息</span>
       <span class="btn btn-apply" v-if="isApply == false" v-show="edit" @click="saveInfo">保存</span>
-      <span :class="['btn','btn-apply',{'is-no-apply':isApply===1}]" v-if="isApply !== 2 && isApply !== 3" @click="apply">企业注册申请</span>
+      <span :class="['btn','btn-apply',{'is-no-apply':isApply===1}]" v-if="isApply !== 2 && isApply !== 3" @click="submit">企业注册申请</span>
     </div>
     <div class="main">
       <section class="card">
@@ -252,33 +252,52 @@ export default {
       // 该方法由子组件进行调用（用于传递文件数据），将对param对象中的对应文件对象进行赋值操作
       this.param[name] = file;
     },
-    apply() {
+    submit() {
+      // 企业注册申请，提示权限
       // 判断用户申请状态，避免按钮重复请求
       if (this.isApply != 1) {
-        this.axios
-          .post("/app/v1/enterprise/apply", {
-            id: this.id,
-            token: this.token
+        this.$confirm("请务必保证企业信息填写正确性和完整性，<br>申请后将不能再次修改", "提示", {
+          confirmButtonText: "继续申请",
+          cancelButtonText: "再次检查",
+          type: "warning",
+          dangerouslyUseHTMLString: true
+        })
+          .then(() => {
+            this.apply();
           })
-          .then(res => {
-            if (res.data.code == 1) {
-              this.$message({
-                message: "企业申请替提交成功，请耐心等待",
-                type: "success"
-              });
-              this.edit = false;
-            } else {
-              this.$message({
-                message: `企业申请替提交失败(${res.data.msg})`,
-                type: "warning"
-              });
-            }
-          })
-          .catch(err => {
-            this.$message.error("发生未知错误，请刷新网页或稍后尝试");
-            console.log(err);
+          .catch(() => {
+            this.$message({
+              type: "info",
+              message: "已取消企业申请"
+            });
           });
       }
+    },
+    apply() {
+      // 企业注册申请
+      this.axios
+        .post("/app/v1/enterprise/apply", {
+          id: this.id,
+          token: this.token
+        })
+        .then(res => {
+          if (res.data.code == 1) {
+            this.$message({
+              message: "企业申请替提交成功，请耐心等待",
+              type: "success"
+            });
+            this.edit = false;
+          } else {
+            this.$message({
+              message: `企业申请替提交失败(${res.data.msg})`,
+              type: "warning"
+            });
+          }
+        })
+        .catch(err => {
+          this.$message.error("发生未知错误，请刷新网页或稍后尝试");
+          console.log(err);
+        });
     },
     getAuthStatus() {
       // 进入页面查询用户当前权限状态 // 控制按钮的可执行状态
