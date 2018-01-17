@@ -329,13 +329,20 @@ export default {
           if (data.data.code == "1") {
             this.userInfo = data.data.data;
             this.resetEmailData.oldEmail = data.data.data.email;
-            console.log(this.userInfo);
+            // console.log(this.userInfo);
           } else if (data.data.code == 10001) {
             this.logout();
           }
         });
     },
     submit(formName) {
+      if(this.resetPasswordData.old_password == ''){
+        this.$message({
+          message: "原密码不能为空",
+          type: "warning"
+        });
+        return;
+      }
       this.$refs[formName].validate(valid => {
         console.log(valid);
         if (valid) {
@@ -376,6 +383,13 @@ export default {
       });
     },
     submitPhone() {
+      if(this.resetPhoneData.code == ''){
+        this.$message({
+          message: "验证码不能为空",
+          type: "warning"
+        });
+        return
+      }
       this.axios
         .post("/app/v1/user/userModifyInfo", {
           address: "",
@@ -482,6 +496,20 @@ export default {
       });
     },
     verificationPhone() {
+      if(!(/^1(3|4|5|7|8)\d{9}$/.test(this.resetPhoneData.newPhone))){
+        this.$message({
+          message: "新手机格式错误",
+          type: "warning"
+        });
+        return
+      }
+      if(!(/^1(3|4|5|7|8)\d{9}$/.test(this.resetPhoneData.oldPhone))){
+        this.$message({
+          message: "当前手机格式错误",
+          type: "warning"
+        });
+        return
+      }
       this.axios
         .post("/app/v1/user/userValidateAccount", {
           phone: this.resetPhoneData.newPhone

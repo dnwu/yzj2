@@ -230,6 +230,7 @@ export default {
       this.axios
         .post("/app/v1/bargaining/getBargainingList", parms)
         .then(res => {
+          console.log(res);
           if(res.data.code == 1){
             console.log(res);
             if (res.data.data.length !== 0) {

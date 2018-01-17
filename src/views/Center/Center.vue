@@ -154,7 +154,7 @@ export default {
       }
     },
     initNav() {
-      if (this.fullPath.includes("account")) {
+      if (this.fullPath.includes("center/account")) {
         this.activeIndex = 0;
         this.title = "账号信息";
       } else if (this.fullPath.includes("company_info")) {

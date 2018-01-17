@@ -125,9 +125,12 @@
               </div>
             </div>
             <div class="left-btn">
-              <span class="btn-box box1" @click="addSendAddress('sendAddress')">添加地址簿</span>
+              <!-- <span class="btn-box box1" @click="addSendAddress('sendAddress')">添加地址簿</span>
               <span class="btn-box box2" @click="setDefaultSendAddress('sendAddress')">设为默认</span>
-              <span class="btn-box box3" @click="resetSendAddressForm('sendAddress')">确定</span>
+              <span class="btn-box box3" @click="resetSendAddressForm('sendAddress')">确定</span> -->
+              <el-button @click="addSendAddress('sendAddress')" size="mini" type="success">添加地址簿</el-button>
+              <el-button @click="setDefaultSendAddress('sendAddress')" size="mini" type="success">设为默认</el-button>
+              <el-button @click="resetSendAddressForm('sendAddress')" size="mini" type="warning">确定</el-button>
             </div>
           </div>
         </el-form>
@@ -220,9 +223,12 @@
               </div>
             </div>
             <div class="left-btn">
-              <span class="btn-box box1" @click="addReceiveAddress('receiveAddress')">添加地址簿</span>
+              <!-- <span class="btn-box box1" @click="addReceiveAddress('receiveAddress')">添加地址簿</span>
               <span class="btn-box box2" @click="setDefaultReceiveAddress('receiveAddress')">设为默认</span>
-              <span class="btn-box box3" @click="resetReceiveAddressForm('receiveAddress')">确定</span>
+              <span class="btn-box box3" @click="resetReceiveAddressForm('receiveAddress')">确定</span> -->
+              <el-button @click="addReceiveAddress('receiveAddress')" size="mini" type="success">添加地址簿</el-button>
+              <el-button @click="setDefaultReceiveAddress('receiveAddress')" size="mini" type="success">设为默认</el-button>
+              <el-button @click="resetReceiveAddressForm('receiveAddress')" size="mini" type="warning">确定</el-button>
             </div>
           </div>
         </el-form>
@@ -718,9 +724,9 @@ export default {
               console.log(data);
               if (data.data.code == 1) {
                 // this.sendAddressData.addressid = data.data.data.id;
-                this.promptsuccess("地址更新成功");
+                this.promptsuccess("发货地址更新成功");
               } else {
-                this.promptwarning("地址更新失败");
+                this.promptwarning("发货地址更新失败");
               }
             });
         } else {
@@ -750,9 +756,9 @@ export default {
               console.log(data);
               if (data.data.code == 1) {
                 // this.receiveAddressData.addressid = data.data.data.id;
-                this.promptsuccess("地址更新成功");
+                this.promptsuccess("收货地址更新成功");
               } else {
-                this.promptwarning("地址更新失败");
+                this.promptwarning("收货地址更新失败");
               }
             });
         } else {
@@ -782,9 +788,9 @@ export default {
               console.log(data);
               if (data.data.code == 1) {
                 this.sendAddressData.addressid = data.data.data.id;
-                this.promptsuccess("地址添加成功");
+                this.promptsuccess("发货地址添加成功");
               } else {
-                this.promptwarning("地址添加失败");
+                this.promptwarning("发货地址添加失败");
               }
             });
         } else {
@@ -814,9 +820,9 @@ export default {
               console.log(data);
               if (data.data.code == 1) {
                 this.receiveAddressData.addressid = data.data.data.id;
-                this.promptsuccess("地址添加成功");
+                this.promptsuccess("收货地址添加成功");
               } else {
-                this.promptwarning("地址添加失败");
+                this.promptwarning("收货地址添加失败");
               }
             });
         } else {
@@ -839,9 +845,9 @@ export default {
             .then(data => {
               console.log(data);
               if (data.data.code == 1) {
-                this.promptsuccess("设置默认地址成功");
+                this.promptsuccess("设置默认发货地址成功");
               } else {
-                this.promptwarning("设置默认地址成功");
+                this.promptwarning("设置默认发货地址成功");
               }
             });
         } else {
@@ -863,9 +869,9 @@ export default {
             .then(data => {
               console.log(data);
               if (data.data.code == 1) {
-                this.promptsuccess("设置默认地址成功");
+                this.promptsuccess("设置默认收货地址成功");
               } else {
-                this.promptwarning("设置默认地址成功");
+                this.promptwarning("设置默认收货地址成功");
               }
             });
         } else {
@@ -1540,28 +1546,28 @@ export default {
         display: flex;
         align-items: center;
         justify-content: flex-end;
-        .btn-box {
-          margin-right: 10px;
-          color: #fff;
-          border-radius: 3px;
-          height: 26px;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          cursor: pointer;
-        }
-        .box1 {
-          background: rgba(139, 200, 63, 1);
-          width: 100px;
-        }
-        .box2 {
-          background: rgba(139, 200, 63, 1);
-          width: 80px;
-        }
-        .box3 {
-          background: rgba(252, 207, 0, 1);
-          width: 80px;
-        }
+        // .btn-box {
+        //   margin-right: 10px;
+        //   color: #fff;
+        //   border-radius: 3px;
+        //   height: 26px;
+        //   display: flex;
+        //   justify-content: center;
+        //   align-items: center;
+        //   cursor: pointer;
+        // }
+        // .box1 {
+        //   background: rgba(139, 200, 63, 1);
+        //   width: 100px;
+        // }
+        // .box2 {
+        //   background: rgba(139, 200, 63, 1);
+        //   width: 80px;
+        // }
+        // .box3 {
+        //   background: rgba(252, 207, 0, 1);
+        //   width: 80px;
+        // }
       }
     }
     .address-right {
@@ -1823,28 +1829,28 @@ export default {
         display: flex;
         align-items: center;
         justify-content: flex-end;
-        .btn-box {
-          margin-right: 10px;
-          color: #fff;
-          border-radius: 3px;
-          height: 26px;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          cursor: pointer;
-        }
-        .box1 {
-          background: rgba(139, 200, 63, 1);
-          width: 100px;
-        }
-        .box2 {
-          background: rgba(139, 200, 63, 1);
-          width: 80px;
-        }
-        .box3 {
-          background: rgba(252, 207, 0, 1);
-          width: 80px;
-        }
+        // .btn-box {
+        //   margin-right: 10px;
+        //   color: #fff;
+        //   border-radius: 3px;
+        //   height: 26px;
+        //   display: flex;
+        //   justify-content: center;
+        //   align-items: center;
+        //   cursor: pointer;
+        // }
+        // .box1 {
+        //   background: rgba(139, 200, 63, 1);
+        //   width: 100px;
+        // }
+        // .box2 {
+        //   background: rgba(139, 200, 63, 1);
+        //   width: 80px;
+        // }
+        // .box3 {
+        //   background: rgba(252, 207, 0, 1);
+        //   width: 80px;
+        // }
       }
     }
     .address-img {

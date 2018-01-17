@@ -135,8 +135,6 @@ export default {
           } else if (this.type === "company") {
             this.axios
               .post("/web/v1/supplier/logining", {
-                // "password": "96e79218965eb72c92a549dd5a330112",
-                // "userName": "abc"
                 password: this.Form.password,
                 userName: this.Form.username
               })

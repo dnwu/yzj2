@@ -131,7 +131,7 @@ export default {
       this.$router.push("/login");
     },
     initNav() {
-      if (this.fullPath.includes("account")) {
+      if (this.fullPath.includes("supplier/account")) {
         this.activeIndex = 0;
         this.title = "账号信息";
       } else if (this.fullPath.includes("ompany_info")) {
