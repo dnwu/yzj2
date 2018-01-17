@@ -5,15 +5,15 @@
       <div class="is-flex wrap">
         <div class="opt">
           <input v-model="last" value="1" name="last" id="last7" type="radio">
-          <label for="last7">最近7天</label>
+          <label class="btn" for="last7">最近7天</label>
         </div>
         <div class="opt">
           <input v-model="last" value="2" name="last" id="last30" type="radio">
-          <label for="last30">最近30天</label>
+          <label class="btn" for="last30">最近30天</label>
         </div>
         <div class="opt">
           <input v-model="last" value="3" name="last" id="last365" type="radio">
-          <label for="last365">最近1年</label>
+          <label class="btn" for="last365">最近1年</label>
         </div>
       </div>
       <span class="btn btn-export">导出</span>
@@ -198,7 +198,7 @@ export default {
 ul {
   padding-left: 0;
 }
-.btn {
+.btn-export {
   vertical-align: middle;
   border-radius: 2px;
   box-shadow: 1px 2px 10px 2px rgba(0, 0, 0, 0.1);
