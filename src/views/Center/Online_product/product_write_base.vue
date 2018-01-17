@@ -495,8 +495,8 @@ export default {
         // tellPhone2: [{ required: true, message: "请输入座机号", trigger: "blur" }]
       },
       goodsInfoRules: {
-        mainOrderNo1: [{ required: true, message: "请输前三位", trigger: "blur" }],
-        mainOrderNo2: [{ required: true, message: "请输后八位", trigger: "blur" }],
+        mainOrderNo1: [{ required: true, message: "请输前缀", trigger: "blur" }],
+        mainOrderNo2: [{ required: true, message: "请输八位运单号", trigger: "blur" }],
         proxyCode: [{ required: true, message: "请输入代理人代码", trigger: "blur" }],
         weight: [{ required: true, message: "请输入货物重量", trigger: "blur" }],
         num: [{ required: true, message: "请输入货物件数", trigger: "blur" }],

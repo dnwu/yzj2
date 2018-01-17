@@ -21,8 +21,6 @@ npm run build --report
 For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
 /*
  *yjq
- API:http://120.79.38.80:8088/haihang/api1/
- gitHub:https://github.com/dnwu/yzj2/invitations
  外网地址:http://yzj.sibat.cn/dist
  web前端tomcat部署地址:192.168.40.147
  */

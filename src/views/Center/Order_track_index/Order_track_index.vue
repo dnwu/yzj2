@@ -5,7 +5,7 @@
     <div class="input">
       <span>订单号</span>
       <i class="el-icon-search"></i>
-      <el-input v-model="orderNo" placeholder="请输入订单号"></el-input>
+      <el-input v-model="orderNo" @keyup.enter.native="getOrderDetail" placeholder="请输入订单号"></el-input>
       <el-button type="danger" @click="getOrderDetail" size="mini">查询</el-button>
     </div>
   </div>

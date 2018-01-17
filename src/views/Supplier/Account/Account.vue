@@ -339,7 +339,7 @@
 <style lang="scss" scoped>
   @mixin font {
     font-size: 16px;
-    font-weight: bold;
+    // font-weight: bold;
     text-align: justify;
     overflow: hidden;
     &::after {
@@ -436,7 +436,7 @@
           display: inline-block;
           min-width: 330px;
           font-size: 16px;
-          font-weight: bold;
+          // font-weight: bold;
         }
         .colon {
           margin: 0 15px;
@@ -450,14 +450,14 @@
       .info {
         display: flex;
         flex-direction: column;
-        justify-content: space-around;
+        // justify-content: space-around;
         width: $info-width;
         height: 100%;
         /* 是否跟据父级进行拓展 */
         padding-left: 60px;
         padding-bottom: 15px;
         p {
-          margin: 14px 0;
+          margin: 10px 0;
         }
       }
 
