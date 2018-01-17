@@ -42,7 +42,7 @@
     </div>
   </section>
 
-  <div v-show="dialogVisible" class="dialog">
+  <!-- <div v-show="dialogVisible" class="dialog">
       <header class="dialog-header is-flex jst-between ali-center">
         <div class="dialog-title">
           <img class="text-middle" src="../../../assets/ticket_info_modify.png" alt="">
@@ -93,7 +93,63 @@
       <footer>
         <div class="btn btn-save" @click="save">保存</div>
       </footer>
-  </div>
+  </div> -->
+
+
+  <el-dialog
+    class="dialog"
+    :visible.sync="dialogVisible"
+    width="1000px"
+  >
+    <span slot="title" class="dialog-header">
+      <img class="text-middle" src="../../../assets/ticket_info_modify.png" alt="">
+      <span>开票信息修改</span>
+    </span>
+    <main class="contain">
+      <div class="is-flex dir-column">
+        <div class="is-flex row">
+          <span class="text-jst name">企业名称:</span>
+          <input class="value text-middle" v-model="edit.companyName"></input>
+        </div>
+        <div class="is-flex row">
+          <span class="text-jst name">纳税人识别号:</span>
+          <input class="value" v-model="edit.taxpayerNo"></input>
+        </div>
+        <div class="is-flex row">
+          <span class="text-jst name">注册地址:</span>
+          <input class="value" v-model="edit.registerAddress"></input>
+        </div>
+        <div class="is-flex row">
+          <span class="text-jst name">联系电话:</span>
+          <input class="value" v-model="edit.telephone"></input>
+        </div>
+        <div class="is-flex row">
+          <span class="text-jst name">开户行:</span>
+          <input class="value" v-model="edit.bankName"></input>
+        </div>
+        <div class="is-flex row">
+          <span class="text-jst name">开户行账号:</span>
+          <input class="value" v-model="edit.bankCard"></input>
+        </div>
+        <div class="is-flex row">
+          <span class="text-jst name">开票人:</span>
+          <input class="value" v-model="edit.issuerName"></input>
+        </div>
+        <div class="is-flex row">
+          <span class="text-jst name">开票人电话:</span>
+          <input class="value" v-model="edit.issuerMobile"></input>
+        </div>
+        <div class="is-flex row">
+          <span class="text-jst name">开票人地址:</span>
+          <input class="value" v-model="edit.issuerAddress"></input>
+        </div>
+      </div>
+    </main>
+    <span slot="footer" class="dialog-footer">
+      <el-button class="btn btn-save" type="primary" @click="save">保存</el-button>
+    </span>
+  </el-dialog>
+
 </div>
 </template>
 <script>
@@ -242,22 +298,22 @@ $colorLeft: #f2f2f2;
   }
 }
 .dialog {
-  position: fixed;
+  /* position: fixed;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
   width: 1000px;
   background: white;
-  box-shadow: 0px 2px 8px -1px rgba(0, 0, 0, 0.1);
-  .dialog-header {
+  box-shadow: 0px 2px 8px -1px rgba(0, 0, 0, 0.1); */
+  /* .dialog-header {
     background: $yellow;
     padding: 10px 20px;
     color: white;
     font-size: 18px;
-  }
+  } */
   .contain {
     color: $gray;
-    margin-left: 370px;
+    margin-left: 330px;
     .row {
       margin-top: 20px;
       height: 20px;
@@ -283,6 +339,43 @@ $colorLeft: #f2f2f2;
     background: $yellow;
     text-align: center;
     box-shadow: 1px 2px 10px 2px rgba(0, 0, 0, 0.1);
+  }
+}
+</style>
+<style lang="scss">
+.ticket_info_egis {
+  .dialog {
+    .el-input__inner {
+      vertical-align: middle;
+      border: 0;
+      height: 30px;
+    }
+
+    .el-form-item {
+      margin-bottom: 0;
+      width: 100%;
+    }
+
+    .el-dialog__header {
+      background: #fccf00;
+      padding: 10px 20px;
+      color: white;
+      font-size: 18px;
+      .el-dialog__headerbtn .el-dialog__close {
+        color: white;
+      }
+    }
+    .el-dialog__footer {
+      text-align: center;
+      .el-button {
+        margin: 0 auto;
+        box-sizing: content-box;
+        padding: 3px 20px;
+      }
+      .el-button--primary {
+        border: 0;
+      }
+    }
   }
 }
 </style>
