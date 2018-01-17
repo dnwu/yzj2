@@ -154,14 +154,17 @@ export default {
   },
   methods: {
     changePage(page) {
+      // 分页按钮触发
       this.pageIndex = page;
       this.getBillList();
     },
     handleCheck() {
+      // 手动查询
       this.pageIndex = 1;
       this.getBillList();
     },
     getBillList() {
+      // 获取账单列表
       var params = {
         endTime: this.orderTime[1],
         id: this.id,
@@ -211,6 +214,7 @@ export default {
   computed: {
     ...mapGetters(["id", "token"]),
     filterTableData() {
+      // 渲染数据前对数据进行格式化
       return this.tableData.filter(item => {
         item.payTime = this.formatDate(item.payTime);
         var type = {

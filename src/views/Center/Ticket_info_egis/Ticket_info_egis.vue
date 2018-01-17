@@ -42,60 +42,6 @@
     </div>
   </section>
 
-  <!-- <div v-show="dialogVisible" class="dialog">
-      <header class="dialog-header is-flex jst-between ali-center">
-        <div class="dialog-title">
-          <img class="text-middle" src="../../../assets/ticket_info_modify.png" alt="">
-          <span>开票信息修改</span>
-        </div>
-        <i class="el-icon-close" @click="dialogVisible = false"></i>
-      </header>
-      <main class="contain">
-        <div class="is-flex dir-column">
-          <div class="is-flex row">
-            <span class="text-jst name">企业名称:</span>
-            <input class="value text-middle" v-model="edit.companyName"></input>
-          </div>
-          <div class="is-flex row">
-            <span class="text-jst name">纳税人识别号:</span>
-            <input class="value" v-model="edit.taxpayerNo"></input>
-          </div>
-          <div class="is-flex row">
-            <span class="text-jst name">注册地址:</span>
-            <input class="value" v-model="edit.registerAddress"></input>
-          </div>
-          <div class="is-flex row">
-            <span class="text-jst name">联系电话:</span>
-            <input class="value" v-model="edit.telephone"></input>
-          </div>
-          <div class="is-flex row">
-            <span class="text-jst name">开户行:</span>
-            <input class="value" v-model="edit.bankName"></input>
-          </div>
-          <div class="is-flex row">
-            <span class="text-jst name">开户行账号:</span>
-            <input class="value" v-model="edit.bankCard"></input>
-          </div>
-          <div class="is-flex row">
-            <span class="text-jst name">开票人:</span>
-            <input class="value" v-model="edit.issuerName"></input>
-          </div>
-          <div class="is-flex row">
-            <span class="text-jst name">开票人电话:</span>
-            <input class="value" v-model="edit.issuerMobile"></input>
-          </div>
-          <div class="is-flex row">
-            <span class="text-jst name">开票人地址:</span>
-            <input class="value" v-model="edit.issuerAddress"></input>
-          </div>
-        </div>
-      </main>
-      <footer>
-        <div class="btn btn-save" @click="save">保存</div>
-      </footer>
-  </div> -->
-
-
   <el-dialog
     class="dialog"
     :visible.sync="dialogVisible"
@@ -173,18 +119,8 @@ export default {
     };
   },
   methods: {
-    createArrayFromJson(arr, json) {
-      var newArr = [];
-      for (var i = 0; i < arr.length; i++) {
-        var obj = {};
-        for (var name in json) {
-          obj[json[name]] = arr[i][name];
-        }
-        newArr.push(obj);
-      }
-      return newArr;
-    },
     save() {
+      // 开票信息保存
       this.axios
         .post("/app/v1/invoice/saveInvoice", this.edit)
         .then(res => {
@@ -209,6 +145,7 @@ export default {
         });
     },
     check() {
+      // 开票信息获取
       this.axios
         .post("/app/v1/invoice/getInvoice", {
           id: this.id,

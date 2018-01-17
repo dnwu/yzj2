@@ -253,6 +253,7 @@ export default {
       this.param[name] = file;
     },
     apply() {
+      // 判断用户申请状态，避免按钮重复请求
       if (this.isApply != 1) {
         this.axios
           .post("/app/v1/enterprise/apply", {
@@ -280,6 +281,7 @@ export default {
       }
     },
     getAuthStatus() {
+      // 进入页面查询用户当前权限状态 // 控制按钮的可执行状态
       this.axios
         .post("/app/v1/user/userInfo", {
           id: this.id,
@@ -303,6 +305,7 @@ export default {
         });
     },
     showInfo() {
+      // 获取企业信息
       this.axios
         .post("/app/v1/enterprise/info", {
           id: this.id,
@@ -341,6 +344,7 @@ export default {
         });
     },
     saveInfo() {
+      // 保存企业信息
       var arr = this.arr;
 
       for (var i = 0; i < arr.length; i++) {

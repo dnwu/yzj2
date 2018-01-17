@@ -103,6 +103,7 @@ export default {
   },
   computed: {
     filterTableDate() {
+      // 数据渲染前对数据进行相应格式化
       // 修改变更经验的符号
       var arr = this.tableData.map((obj, index, arr) => {
         var sign = {
@@ -145,6 +146,7 @@ export default {
       return [];
     },
     check() {
+      // 获取会员经验信息
       this.axios
         .post("/app/v1/member/getMemberExps", {
           id: this.id,
@@ -180,11 +182,6 @@ export default {
           console.log(err);
         });
     }
-    /* getTime(str) {
-      var strDate = str.split(" ")[0].replace(/-/, "/");
-      var date = new Date(strDate);
-      return date.getTime();
-    } */
   },
   mounted() {
     this.check();
