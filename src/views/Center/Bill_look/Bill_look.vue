@@ -181,6 +181,10 @@ export default {
           if (res.data.code == 1) {
             this.total = res.data.total;
             this.tableData = res.data.bills;
+            this.$message({
+              message: `账单列表获取成功(${res.data.msg})`,
+              type: "success"
+            });
           } else {
             this.$message({
               message: `账单列表获取失败(${res.data.msg})`,
