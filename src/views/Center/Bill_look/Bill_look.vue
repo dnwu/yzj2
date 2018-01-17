@@ -136,7 +136,7 @@ export default {
         ]
       },
       tableData: [
-        {
+        /* {
           payTime: "2016-05-02", //  支付时间
           orderLog: "1440624203", // 流水号
           orderNo: "11224445632", // 订单编号
@@ -145,7 +145,7 @@ export default {
           fullName: "王小虎", // 姓名
           orderAmt: "998", // 支付金额
           payType: 1 // 支付类型 1：订单支付 2：订单补缴 3：订单退款,
-        }
+        } */
       ],
       size: 10,
       pageIndex: 1,

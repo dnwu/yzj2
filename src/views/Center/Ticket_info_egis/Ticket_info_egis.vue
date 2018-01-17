@@ -215,6 +215,7 @@ export default {
           token: this.token
         })
         .then(res => {
+          console.log(res);
           if (res.data.code == 1) {
             this.info = res.data.data || {};
             for (var name in this.info) {
