@@ -253,7 +253,7 @@ export default {
       this.$set(this.choose, index, "choose");
     },
     getUserInfo() {
-      // 获取用户信息
+      // 获取用户信息 // 之后根据用户认证状态决定是否获取子账号列表
       var params = {
         id: this.id,
         token: this.token
@@ -270,6 +270,11 @@ export default {
                 this[arr[i]][name].value =
                   data[name] || data.level[name] || undefined;
               }
+            }
+            var status = res.data.data.authStatus;
+            var isApply = status || false; // 认证状态 1：待认证 2：通过 3：拒绝,
+            if (isApply == 2) {
+              this.getAccountList();
             }
           } else {
             this.$message({
@@ -447,7 +452,6 @@ export default {
   },
   mounted() {
     this.getUserInfo();
-    this.getAccountList();
   }
 };
 </script>

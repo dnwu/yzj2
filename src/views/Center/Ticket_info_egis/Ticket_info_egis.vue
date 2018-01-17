@@ -160,6 +160,13 @@ export default {
             }
             this.edit.id = this.id;
             this.edit.token = this.token;
+
+            if (!res.data.data) {
+              this.$message({
+                message: `开票信息查询成功(请填写相应信息)`,
+                type: "success"
+              });
+            }
           } else {
             this.$message({
               message: `开票信息查询失败(${res.data.msg})`,
