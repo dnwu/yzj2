@@ -20,13 +20,13 @@
         <div class="is-flex  ali-center row">
           <div class="is-flex ali-center order">
             <span class="name time">订单号</span>
-            <input v-model="keyword" placeholder="请输入订单号"></input>   
+            <input v-model="orderNo" placeholder="请输入订单号"></input>   
           </div>
           <div class="is-flex ali-center">
             <span class="name keyword">流水号</span>
-            <el-input v-model="keyword" placeholder="请输入流水号"></el-input>
+            <el-input v-model="orderLog" placeholder="请输入流水号"></el-input>
           </div>
-          <div class="btn btn-check">查询</div>
+          <div class="btn btn-check" @click="handleCheck">查询</div>
         </div>
         <div class="is-flex ali-center row import">
           <div class="btn btn-import">导出</div>
@@ -35,28 +35,28 @@
       <section class="result">
         <div class="contain">
           <el-table
-            :data="pageTableData"
+            :data="filterTableData"
             style="width: 100%">
             <el-table-column
               align="center"
-              prop="date"
+              prop="payTime"
               label="交易时间"
               width="150">
             </el-table-column>
             <el-table-column
              align="center"
-              prop="serial"
+              prop="orderLog"
               label="流水号"
               width="150">
             </el-table-column>
             <el-table-column
             align="center"
-              prop="value"
+              prop="orderNo"
               label="订单号">
             </el-table-column>
             <el-table-column
             align="center"
-              prop="num"
+              prop="memberNo"
               label="会员编号">
             </el-table-column>
             <el-table-column
@@ -66,26 +66,26 @@
             </el-table-column>
             <el-table-column
             align="center"
-              prop="name"
+              prop="fullName"
               label="姓名">
             </el-table-column>
             <el-table-column
              align="center"
-              prop="cash"
+              prop="orderAmt"
               label="交易金额">
             </el-table-column>
             <el-table-column
              align="center"
-              prop="pay"
+              prop="payType"
               label="支付方式">
             </el-table-column>
           </el-table>
           <el-pagination
             class="is-flex jst-center"
             layout="prev, pager, next"
-            :total="tableData.length"
-            :page-size="pageSize"
-            :current-page="curPage"
+            :total="total"
+            :page-size="size"
+            :current-page="pageIndex"
             @current-change="changePage"
           >
           </el-pagination>
@@ -95,14 +95,15 @@
   </div>
 </template>
 <script>
+import { mapGetters } from "vuex";
 export default {
   data() {
     return {
-      item: {}, // 当前选中的对象
+      /* item: {}, */ // 当前选中的对象
       keyword: "", // 关键字
-      orderTime: "", // 订单时间范围
-      orderNumber: "", // 订单号
-      serialNumber: "", // 流水号
+      orderTime: [], // 订单时间范围 // [ "2017-02-04T16:00:00.000Z", "2018-02-09T16:00:00.000Z" ]
+      orderNo: "", // 订单号
+      orderLog: "", // 流水号
       pickerOptions2: {
         shortcuts: [
           {
@@ -134,82 +135,91 @@ export default {
           }
         ]
       },
-      pageSize: 6,
-      curPage: 1,
       tableData: [
         {
-          date: "2016-05-02",
-          serial: "1440624203",
-          value: "11224445632",
-          num: "0658",
+          payTime: "2016-05-02", //  支付时间
+          orderLog: "1440624203", // 流水号
+          orderNo: "11224445632", // 订单编号
+          memberNo: "0658", //  会员编号
           account: "10613190",
-          name: "王小虎",
-          cash: "998",
-          pay: "现金"
-        },
-        {
-          date: "2016-05-02",
-          serial: "1440624203",
-          value: "11224445632",
-          num: "0658",
-          account: "10613190",
-          name: "王小虎",
-          cash: "998",
-          pay: "现金"
-        },
-        {
-          date: "2016-05-02",
-          serial: "1440624203",
-          value: "11224445632",
-          num: "0658",
-          account: "10613190",
-          name: "王小虎",
-          cash: "998",
-          pay: "现金"
+          fullName: "王小虎", // 姓名
+          orderAmt: "998", // 支付金额
+          payType: 1 // 支付类型 1：订单支付 2：订单补缴 3：订单退款,
         }
-      ]
+      ],
+      size: 10,
+      pageIndex: 1,
+      total: 0
     };
   },
   methods: {
     changePage(page) {
-      this.curPage = page;
+      this.pageIndex = page;
+      this.getBillList();
     },
-    querySearch(queryString, cb) {
-      var data = this.pageTableData;
-      var results = queryString
-        ? data.filter(this.createFilter(queryString))
-        : data;
-      // 调用 callback 返回建议列表的数据
-      cb(results);
+    handleCheck() {
+      this.pageIndex = 1;
+      this.getBillList();
     },
-    createFilter(queryString) {
-      return itme => {
-        return (
-          itme.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0
-        );
+    getBillList() {
+      var params = {
+        endTime: this.orderTime[1],
+        id: this.id,
+        keyword: this.keyword,
+        orderLog: this.orderLog,
+        orderNo: this.orderNo,
+        pageIndex: 1,
+        size: 10,
+        startTime: this.orderTime[0],
+        token: this.token
       };
+      console.log(params);
+      this.axios
+        .post("/app/v1/bill/list", params)
+        .then(res => {
+          console.log(res);
+          if (res.data.code == 1) {
+            this.total = res.data.total;
+            this.tableData = res.data.bills;
+          } else {
+            this.$message({
+              message: `账单列表获取失败(${res.data.msg})`,
+              type: "warning"
+            });
+          }
+        })
+        .catch(err => {
+          this.$message.error("发生未知错误，请刷新网页或稍后尝试");
+          console.log(err);
+        });
     },
-    handleSelect(item) {
-      /* this.itme = item; */
+    formatDate(strTime) {
+      // 将传入的字符传时间格式化成 xxxx-xx-xx
+      var date = new Date(strTime);
+      var year = date.getFullYear();
+      var month = date.getMonth() + 1;
+      month = month < 10 ? "0" + month : month;
+      var day = date.getDate();
+      day = day < 10 ? "0" + day : day;
+      return year + "-" + month + "-" + day;
     }
-    /* search() {
-      if (this.number !== "") {
-        this.tableData = [];
-        this.tableData.push(item);
-        this.curPage = 1;
-      }
-    } */
   },
   computed: {
-    pageTableData() {
-      var data = this.tableData,
-        cur = this.curPage,
-        size = this.pageSize,
-        start = (cur - 1) * size,
-        end = start + size;
-      return this.tableData.slice(start, end);
+    ...mapGetters(["id", "token"]),
+    filterTableData() {
+      return this.tableData.filter(item => {
+        item.payTime = this.formatDate(item.payTime);
+        var type = {
+          1: "订单支付",
+          2: "订单补缴",
+          3: "订单退款"
+        };
+        item.payType = type[item.payType];
+        return true;
+      });
     }
-  }
+  },
+  mounted() {}
 };
 </script>
 <style lang="scss" scoped>

@@ -99,7 +99,7 @@
               <div :class="['is-flex','ali-center','left',choose[4]]">
                 <span class="name text-jst">登陆密码</span>
                 <el-form-item prop="password">
-                  <el-input v-model="addAccountInfo.password" @focus="fnChoose(4)"></el-input>
+                  <el-input type="password" v-model="addAccountInfo.password" @focus="fnChoose(4)"></el-input>
                 </el-form-item>
               </div>
               <div :class="['is-flex','ali-center','right',choose[5]]">
@@ -113,7 +113,7 @@
               <div  :class="['is-flex','ali-center','left',choose[6]]">
                 <span class="name text-jst">确认密码</span>
                 <el-form-item prop="secondPassword">
-                  <el-input v-model="addAccountInfo.secondPassword" @focus="fnChoose(6)"></el-input>
+                  <el-input type="password" v-model="addAccountInfo.secondPassword" @focus="fnChoose(6)"></el-input>
                 </el-form-item>
               </div>
               <div :class="['is-flex','ali-center','right',choose[7]]">
@@ -136,7 +136,7 @@
         </el-form>
       </main>
       <footer>
-        <div class="btn-add" @click="submitForm('ruleForm')">立即添加</div>
+        <div class="btn btn-add" @click="submitForm('ruleForm')">立即添加</div>
       </footer>
     </div>
   </div>
@@ -158,23 +158,23 @@ export default {
       rules: {
         fullName: [{ required: true, message: "请输入真实姓名", trigger: "blur" }],
         account: [
-          { required: true, message: "请输入用户名", trigger: "blur" },
-          { min: 6, max: 60, message: "长度在 6 到 60 个字符之间", trigger: "blur" }
+          { required: true, message: "请输入用户名", trigger: "blur" }
+          /* { min: 6, max: 60, message: '长度在 6 到 60 个字符之间', trigger: 'blur' } */
         ],
         identityCard: [
-          { required: true, message: "请输入真实身份证号", trigger: "blur" }
+          { required: false, message: "请输入真实身份证号", trigger: "blur" }
         ],
         password: [
-          { required: true, message: "请输入密码", trigger: "blur" },
-          { min: 3, max: 5, message: "长度在 3 到 5 个字符", trigger: "blur" }
+          { required: true, message: "请输入密码", trigger: "blur" }
+          /* { min: 6, max: 20, message: '长度在 6 到 20 个字母数字组成', trigger: 'blur' } */
         ],
         secondPassword: [{ validator: validatePass, trigger: "blur" }],
-        phone: [{ required: true, message: "请输入手机号", trigger: "blur" }],
+        phone: [{ required: false, message: "请输入手机号", trigger: "blur" }],
         telephone: [
-          { required: true, message: "请输入固定电话", trigger: "blur" },
-          { min: 3, max: 5, message: "长度在 3 到 5 个字符", trigger: "blur" }
+          { required: false, message: "请输入固定电话", trigger: "blur" }
+          /* { min: 3, max: 5, message: "长度在 3 到 5 个字符", trigger: "blur" } */
         ],
-        email: [{ required: true, message: "请输入邮箱", trigger: "blur" }]
+        email: [{ required: false, message: "请输入邮箱", trigger: "blur" }]
       },
       msg: {
         memberName: {

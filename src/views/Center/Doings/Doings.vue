@@ -265,14 +265,6 @@ export default {
   },
   computed: {
     ...mapGetters(["token", "id"])
-    /* pageTableData() {
-      var arr = this.orders;
-      var cur = this.curPage,
-        size = this.pageSize,
-        start = (cur - 1) * size,
-        end = start + size;
-      return arr.slice(start, end);
-    } */
   },
   mounted() {}
 };
