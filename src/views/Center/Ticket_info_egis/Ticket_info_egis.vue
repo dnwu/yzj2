@@ -91,7 +91,7 @@
         </div>
       </main>
       <footer>
-        <div class="btn-save" @click="save">保存</div>
+        <div class="btn btn-save" @click="save">保存</div>
       </footer>
   </div>
 </div>
@@ -133,10 +133,18 @@ export default {
         .post("/app/v1/invoice/saveInvoice", this.edit)
         .then(res => {
           console.log(res);
-          this.check();
-          this.dialogVisible = false;
+          if (res.data.code == 1) {
+            this.check();
+            this.dialogVisible = false;
+          } else {
+            this.$message({
+              message: `开票信息保存失败(${res.data.msg})`,
+              type: "warning"
+            });
+          }
         })
         .catch(err => {
+          this.$message.error("发生未知错误，请刷新网页或稍后尝试");
           console.log(err);
         });
     },
@@ -162,6 +170,7 @@ export default {
           }
         })
         .catch(err => {
+          this.$message.error("发生未知错误，请刷新网页或稍后尝试");
           console.log(err);
         });
     }
