@@ -192,6 +192,10 @@ export default {
           if (res.data.code == 1) {
             this.check();
             this.dialogVisible = false;
+            this.$message({
+              message: "开票信息保存成功",
+              type: "success"
+            });
           } else {
             this.$message({
               message: `开票信息保存失败(${res.data.msg})`,
