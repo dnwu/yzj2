@@ -147,13 +147,19 @@ export default {
           token: this.token
         })
         .then(res => {
-          this.info = res.data.data;
-          for (var name in this.info) {
-            this.edit[name] = this.info[name];
+          if (res.data.code == 1) {
+            this.info = res.data.data || {};
+            for (var name in this.info) {
+              this.edit[name] = this.info[name];
+            }
+            this.edit.id = this.id;
+            this.edit.token = this.token;
+          } else {
+            this.$message({
+              message: `开票信息查询失败(${res.data.msg})`,
+              type: "warning"
+            });
           }
-          this.edit.id = this.id;
-          this.edit.token = this.token;
-          console.log(this.info);
         })
         .catch(err => {
           console.log(err);
