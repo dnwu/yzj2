@@ -271,6 +271,10 @@ export default {
                   data[name] || data.level[name] || undefined;
               }
             }
+            this.$message({
+              message: `获取会员信息成功(${res.data.msg})`,
+              type: "success"
+            });
             var status = res.data.data.authStatus;
             var isApply = status || false; // 认证状态 1：待认证 2：通过 3：拒绝,
             if (isApply == 2) {
