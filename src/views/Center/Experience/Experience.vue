@@ -169,7 +169,10 @@ export default {
               }
             );
           } else {
-            this.$message.error("获取会员经验失败，请稍后尝试");
+            this.$message({
+              message: `获取会员经验失败(${res.data.msg})`,
+              type: "warning"
+            });
           }
         })
         .catch(err => {

@@ -262,7 +262,7 @@ export default {
               this.edit = false;
             } else {
               this.$message({
-                message: "企业申请替提交失败，请稍后再试",
+                message: `企业申请替提交失败(${res.data.msg})`,
                 type: "warning"
               });
             }
@@ -285,7 +285,7 @@ export default {
             this.isApply = status || false;
           } else {
             this.$message({
-              message: "企业申请替提交失败，请稍后再试",
+              message: `用户状态获取失败(${res.data.msg})`,
               type: "warning"
             });
           }
@@ -323,7 +323,7 @@ export default {
             }
           } else {
             this.$message({
-              message: "企业状态获取失败，请稍后再试",
+              message: `企业信息获取失败(${res.data.msg})`,
               type: "warning"
             });
           }
@@ -374,7 +374,7 @@ export default {
             });
           } else {
             this.$message({
-              message: "保存失败",
+              message: `保存失败(${res.data.msg})`,
               type: "warning"
             });
           }

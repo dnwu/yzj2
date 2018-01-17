@@ -164,7 +164,7 @@ export default {
             );
           } else {
             this.$message({
-              message: "会员积分查询失败",
+              message: `会员积分查询失败(${res.data.msg})`,
               type: "warning"
             });
           }

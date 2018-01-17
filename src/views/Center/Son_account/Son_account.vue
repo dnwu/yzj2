@@ -271,7 +271,7 @@ export default {
             }
           } else {
             this.$message({
-              message: "获取会员信息失败，请稍后再试",
+              message: `获取会员信息失败(${res.data.msg})`,
               type: "warning"
             });
           }
@@ -299,7 +299,7 @@ export default {
             this.lists = arr;
           } else {
             this.$message({
-              message: "获取子账号失败，请稍后再试",
+              message: `获取子账号失败(${res.data.msg})`,
               type: "warning"
             });
           }
@@ -347,7 +347,7 @@ export default {
             });
           } else {
             this.$message({
-              message: "获取子账号保存失败，请确保您有相应的权限已经信息填写完整",
+              message: `子账号保存失败(${res.data.msg})`,
               type: "warning"
             });
           }
@@ -374,7 +374,7 @@ export default {
             this.getAccountList();
           } else {
             this.$message({
-              message: "账号状态修改失败，请稍后再试",
+              message: `子账号状态修改失败(${res.data.msg})`,
               type: "warning"
             });
           }
@@ -399,7 +399,7 @@ export default {
             this.getAccountList();
           } else {
             this.$message({
-              message: "账号删除失败，请稍后再试",
+              message: `子账号删除失败(${res.data.msg})`,
               type: "warning"
             });
           }
