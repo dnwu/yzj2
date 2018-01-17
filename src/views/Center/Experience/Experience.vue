@@ -41,7 +41,7 @@
           <el-table-column
             prop="exp"
             align="center"
-            label="剩余经验值"
+            label="累计经验值"
             width="180"
           >
           </el-table-column>
@@ -84,7 +84,7 @@ import { mapGetters } from "vuex";
 export default {
   data() {
     return {
-      last: "3",
+      last: "1",
       curPage: 1,
       pageSize: 10,
       tableData: [

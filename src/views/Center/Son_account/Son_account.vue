@@ -70,22 +70,73 @@
         <i class="btn el-icon-close" @click="dialogVisible = false"></i>
       </header>
       <main class="content">
-        <ul>
-          <li class="wrap is-flex jst-between" v-for="(item,index) in dialogs">
-            <div :class="['left' ,'is-flex',{'choose':choose[index*2-1]},{'no-border':!item.left.name}]" @click="fnChoose(index*2-1)">
-              <span class="name text-jst" v-text="item.left.name" v-show="item.left.name"></span>
-              <input class="value" type="text" v-model="item.left.value" :placeholder="item.left.placeholder" v-show="item.left.placeholder">
-            </div>
-            <div :class="['right' ,'is-flex',{'choose':choose[index*2]}]" @click="fnChoose(index*2)">
-              <span class="name text-jst" v-text="item.right.name"></span>
-              <input class="tip" type="text" :placeholder="item.right.tip">
-              <input :class="['value',{'tel-wide':item.right.tip}]" v-model="item.right.value" type="text" :placeholder="item.right.placeholder">
-            </div>
-          </li>
-        </ul>
+        <el-form :model="addAccountInfo" :rules="rules" ref="ruleForm">
+          <ul>
+            <li class="row is-flex jst-between">
+              <div class="is-flex ali-center left no-border"></div>
+              <div :class="['is-flex','ali-center','right',choose[1]]">
+                <span class="name text-jst">姓名</span>
+                <el-form-item prop="fullName">
+                  <el-input v-model="addAccountInfo.fullName" @focus="fnChoose(1)"></el-input>
+                </el-form-item>
+              </div>
+            </li>
+            <li class="row is-flex jst-between">
+              <div :class="['is-flex','ali-center','left',choose[2]]">
+                <span class="name text-jst">用户名</span>
+                <el-form-item prop="account">
+                  <el-input v-model="addAccountInfo.account" @focus="fnChoose(2)"></el-input>
+                </el-form-item>
+              </div>
+              <div :class="['is-flex','ali-center','right',choose[3]]">
+                <span class="name text-jst">身份证</span>
+                <el-form-item prop="identityCard">
+                  <el-input v-model="addAccountInfo.identityCard" @focus="fnChoose(3)"></el-input>
+                </el-form-item>
+              </div>
+            </li>
+            <li class="row is-flex jst-between">
+              <div :class="['is-flex','ali-center','left',choose[4]]">
+                <span class="name text-jst">登陆密码</span>
+                <el-form-item prop="password">
+                  <el-input v-model="addAccountInfo.password" @focus="fnChoose(4)"></el-input>
+                </el-form-item>
+              </div>
+              <div :class="['is-flex','ali-center','right',choose[5]]">
+                <span class="name text-jst">手机号</span>
+                <el-form-item prop="phone">
+                  <el-input v-model="addAccountInfo.phone" @focus="fnChoose(5)"></el-input>
+                </el-form-item>
+              </div>
+            </li>
+            <li class="row is-flex jst-between">
+              <div  :class="['is-flex','ali-center','left',choose[6]]">
+                <span class="name text-jst">确认密码</span>
+                <el-form-item prop="secondPassword">
+                  <el-input v-model="addAccountInfo.secondPassword" @focus="fnChoose(6)"></el-input>
+                </el-form-item>
+              </div>
+              <div :class="['is-flex','ali-center','right',choose[7]]">
+                <span class="name text-jst">固定电话</span>
+                <el-form-item prop="telephone">
+                  <el-input v-model="addAccountInfo.telephone" @focus="fnChoose(7)"></el-input>
+                </el-form-item>
+              </div>
+            </li>
+            <li class="row is-flex jst-between">
+              <div class="is-flex ali-center left no-border"></div>
+              <div :class="['is-flex','ali-center','right',choose[9]]">
+                <span class="name text-jst">电子邮箱</span>
+                <el-form-item prop="email">
+                  <el-input v-model="addAccountInfo.email" @focus="fnChoose(9)"></el-input>
+                </el-form-item>
+              </div>
+            </li>
+          </ul>
+        </el-form>
       </main>
       <footer>
-        <div class="btn-add" @click="addAccount">立即添加</div>
+        <div class="btn-add" @click="submitForm('ruleForm')">立即添加</div>
       </footer>
     </div>
   </div>
@@ -94,7 +145,37 @@
 import { mapGetters } from "vuex";
 export default {
   data() {
+    let validatePass = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("请再次输入密码"));
+      } else if (value !== this.addAccountInfo.password) {
+        callback(new Error("两次输入密码不一致!"));
+      } else {
+        callback();
+      }
+    };
     return {
+      rules: {
+        fullName: [{ required: true, message: "请输入真实姓名", trigger: "blur" }],
+        account: [
+          { required: true, message: "请输入用户名", trigger: "blur" },
+          { min: 6, max: 60, message: "长度在 6 到 60 个字符之间", trigger: "blur" }
+        ],
+        identityCard: [
+          { required: true, message: "请输入真实身份证号", trigger: "blur" }
+        ],
+        password: [
+          { required: true, message: "请输入密码", trigger: "blur" },
+          { min: 3, max: 5, message: "长度在 3 到 5 个字符", trigger: "blur" }
+        ],
+        secondPassword: [{ validator: validatePass, trigger: "blur" }],
+        phone: [{ required: true, message: "请输入手机号", trigger: "blur" }],
+        telephone: [
+          { required: true, message: "请输入固定电话", trigger: "blur" },
+          { min: 3, max: 5, message: "长度在 3 到 5 个字符", trigger: "blur" }
+        ],
+        email: [{ required: true, message: "请输入邮箱", trigger: "blur" }]
+      },
       msg: {
         memberName: {
           name: "会员名称",
@@ -124,15 +205,15 @@ export default {
         }
       },
       lists: [
-        {
-          /* accountStatus: 0,
+        /* {
+           accountStatus: 0,
           account: "ske0001",
           fullName: "李大师",
           phone: "13528809121",
           email: "lcy888@aliyun.com",
           id: "lcy888@aliyun.com",
-          createtime: "2017-05-05 12:00" */
-        }
+          createtime: "2017-05-05 12:00" 
+        }*/
       ],
       color: {
         1: "green",
@@ -140,62 +221,17 @@ export default {
       },
       dialogVisible: false,
       choose: [],
-      dialogs: [
-        {
-          left: {},
-          right: {
-            name: "姓名",
-            value: "",
-            placeholder: "请输入姓名"
-          }
-        },
-        {
-          left: {
-            name: "用户名",
-            value: "",
-            placeholder: "请输入用户名"
-          },
-          right: {
-            name: "身份证",
-            value: "",
-            placeholder: "请输入身份证"
-          }
-        },
-        {
-          left: {
-            name: "登陆密码",
-            value: "",
-            placeholder: "请输入登陆密码"
-          },
-          right: {
-            name: "手机好",
-            value: "",
-            placeholder: "请输入手机好",
-            /* tip: "+86" */
-          }
-        },
-        {
-          left: {
-            name: "确认密码",
-            value: "",
-            placeholder: "确认密码"
-          },
-          right: {
-            name: "固定电话",
-            value: "",
-            placeholder: "请输入手机好",
-            /* tip: "0755" */
-          }
-        },
-        {
-          left: {},
-          right: {
-            name: "电子邮箱",
-            value: "",
-            placeholder: "请输入电子邮箱"
-          }
-        }
-      ],
+      addAccountInfo: {
+        //新增子帐号信息
+        fullName: "", // 姓名
+        password: "", // 密码
+        secondPassword: "", // 确认密码
+        account: "", // 账号
+        identityCard: "", // 身份证
+        phone: "", // 手机号
+        telephone: "", // 固定电话
+        email: "" // 电子邮件
+      },
       pageIndex: 1,
       size: 10,
       total: 0
@@ -224,6 +260,7 @@ export default {
       this.axios
         .post("/app/v1/user/userInfo", params)
         .then(res => {
+          console.log(res);
           if (res.data.code == 1) {
             var data = res.data.data;
             for (var i = 0; i < arr.length; i++) {
@@ -234,7 +271,7 @@ export default {
             }
           } else {
             this.$message({
-              message: "会员信息查询",
+              message: "获取会员信息失败，请稍后再试",
               type: "warning"
             });
           }
@@ -262,7 +299,7 @@ export default {
             this.lists = arr;
           } else {
             this.$message({
-              message: "子账号列表信息查询",
+              message: "获取子账号失败，请稍后再试",
               type: "warning"
             });
           }
@@ -272,18 +309,28 @@ export default {
           console.log(err);
         });
     },
+    submitForm(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.addAccount();
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
     addAccount() {
       // 添加子账号
       var params = {
-        account: this.account,
-        email: this.email,
-        fullName: this.fullName,
+        account: this.addAccountInfo.account,
+        email: this.addAccountInfo.email,
+        fullName: this.addAccountInfo.fullName,
         id: this.id,
-        identityCard: this.identityCard,
-        password: this.password,
-        phone: this.phone,
+        identityCard: this.addAccountInfo.identityCard,
+        password: this.addAccountInfo.password,
+        phone: this.addAccountInfo.phone,
         // subAccountId: 0, // 子帐号ID，修改时传入，新增时不传入参数,
-        telephone: this.telephone,
+        telephone: this.addAccountInfo.telephone,
         token: this.token
       };
       console.log(params);
@@ -300,7 +347,7 @@ export default {
             });
           } else {
             this.$message({
-              message: "子账号保存失败",
+              message: "获取子账号保存失败，请确保您有相应的权限已经信息填写完整",
               type: "warning"
             });
           }
@@ -327,7 +374,7 @@ export default {
             this.getAccountList();
           } else {
             this.$message({
-              message: "子账号状态修改失败",
+              message: "账号状态修改失败，请稍后再试",
               type: "warning"
             });
           }
@@ -352,7 +399,7 @@ export default {
             this.getAccountList();
           } else {
             this.$message({
-              message: "子账号删除失败",
+              message: "账号删除失败，请稍后再试",
               type: "warning"
             });
           }
@@ -373,8 +420,8 @@ export default {
         }
         return true;
       });
-    },
-    fullName() {
+    }
+    /* fullName() {
       return this.dialogs[0].right.value; // 姓名
     },
     account() {
@@ -394,7 +441,7 @@ export default {
     },
     email() {
       return this.dialogs[4].right.value; // 电子邮箱
-    }
+    } */
   },
   mounted() {
     this.getUserInfo();
@@ -535,15 +582,12 @@ ul {
     .content {
       padding: 40px;
     }
-    .wrap {
-      input {
-        height: 17px;
-        border: 0;
-      }
+    .row {
       .name {
         display: inline-block;
         width: 80px;
-        padding-right: 30px;
+        height: 18px;
+        padding-right: 10px;
       }
       .left,
       .right {
@@ -584,6 +628,21 @@ ul {
       background: $yellow;
       text-align: center;
       box-shadow: 1px 2px 10px 2px rgba(0, 0, 0, 0.1);
+    }
+  }
+}
+</style>
+<style lang="scss">
+.son_account {
+  .dialog {
+    .el-input__inner {
+      vertical-align: middle;
+      border: 0;
+      /* height: 30px; */
+    }
+    .el-form-item {
+      margin-bottom: 0;
+      width: 100%;
     }
   }
 }
