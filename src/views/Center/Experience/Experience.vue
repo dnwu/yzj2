@@ -5,15 +5,15 @@
       <div class="is-flex wrap">
         <div class="opt">
           <input v-model="last" value="1" name="last" id="last7" type="radio">
-          <label for="last7">最近7天</label>
+          <label class="btn" for="last7">最近7天</label>
         </div>
         <div class="opt">
           <input v-model="last" value="2" name="last" id="last30" type="radio">
-          <label for="last30">最近30天</label>
+          <label class="btn" for="last30">最近30天</label>
         </div>
         <div class="opt">
           <input v-model="last" value="3" name="last" id="last365" type="radio">
-          <label for="last365">最近1年</label>
+          <label class="btn" for="last365">最近1年</label>
         </div>
       </div>
       <span class="btn btn-export">导出</span>
@@ -103,6 +103,7 @@ export default {
   },
   computed: {
     filterTableDate() {
+      // 数据渲染前对数据进行相应格式化
       // 修改变更经验的符号
       var arr = this.tableData.map((obj, index, arr) => {
         var sign = {
@@ -145,6 +146,7 @@ export default {
       return [];
     },
     check() {
+      // 获取会员经验信息
       this.axios
         .post("/app/v1/member/getMemberExps", {
           id: this.id,
@@ -169,7 +171,10 @@ export default {
               }
             );
           } else {
-            this.$message.error("获取会员经验失败，请稍后尝试");
+            this.$message({
+              message: `获取会员经验失败(${res.data.msg})`,
+              type: "warning"
+            });
           }
         })
         .catch(err => {
@@ -177,11 +182,6 @@ export default {
           console.log(err);
         });
     }
-    /* getTime(str) {
-      var strDate = str.split(" ")[0].replace(/-/, "/");
-      var date = new Date(strDate);
-      return date.getTime();
-    } */
   },
   mounted() {
     this.check();
@@ -195,7 +195,7 @@ export default {
 ul {
   padding-left: 0;
 }
-.btn {
+.btn-export {
   vertical-align: middle;
   border-radius: 2px;
   box-shadow: 1px 2px 10px 2px rgba(0, 0, 0, 0.1);

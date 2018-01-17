@@ -171,9 +171,9 @@ export default {
       ],
       orderStatus: [
         {
-          color:'#000',
-          name:'全部',
-          value:-1
+          color: "#000",
+          name: "全部",
+          value: -1
         },
         {
           color: "yellow",
@@ -195,7 +195,7 @@ export default {
       total: 0
     };
   },
-  created(){
+  created() {
     this.check(1);
   },
   methods: {
@@ -230,19 +230,28 @@ export default {
       this.axios
         .post("/app/v1/bargaining/getBargainingList", parms)
         .then(res => {
+<<<<<<< HEAD
           console.log(res);
           if(res.data.code == 1){
             console.log(res);
+=======
+          if (res.data.code == 1) {
+>>>>>>> 29a1057e5955f301eecbc37ba57424254b88f24e
             if (res.data.data.length !== 0) {
               this.total = res.data.total;
               this.orders = res.data.data;
             }
-            if(res.data.data.length == 0){
+            if (res.data.data.length == 0) {
               this.$message({
                 message: "暂无相关信息",
                 type: "success"
               });
             }
+          } else {
+            this.$message({
+              message: `查询失败(${res.data.msg})`,
+              type: "warning"
+            });
           }
         })
         .catch(err => {
@@ -262,14 +271,6 @@ export default {
   },
   computed: {
     ...mapGetters(["token", "id"])
-    /* pageTableData() {
-      var arr = this.orders;
-      var cur = this.curPage,
-        size = this.pageSize,
-        start = (cur - 1) * size,
-        end = start + size;
-      return arr.slice(start, end);
-    } */
   },
   mounted() {}
 };
@@ -376,7 +377,7 @@ ul {
     background: $red;
     color: white;
     box-shadow: 1px 2px 10px 2px rgba(0, 0, 0, 0.1);
-    &:active{
+    &:active {
       background-color: #f55757;
     }
   }

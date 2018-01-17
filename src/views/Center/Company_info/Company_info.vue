@@ -4,7 +4,7 @@
       <span class="info">企业信息</span>
       <span class="btn btn-apply" v-if="isApply == false" v-show="!edit" @click="edit = true">完善企业信息</span>
       <span class="btn btn-apply" v-if="isApply == false" v-show="edit" @click="saveInfo">保存</span>
-      <span :class="['btn','btn-apply',{'is-no-apply':isApply===1}]" v-if="isApply !== 2 && isApply !== 3" @click="apply">企业注册申请</span>
+      <span :class="['btn','btn-apply',{'is-no-apply':isApply===1}]" v-if="isApply !== 2 && isApply !== 3" @click="submit">企业注册申请</span>
     </div>
     <div class="main">
       <section class="card">
@@ -71,123 +71,129 @@ export default {
       info1: {
         enterpriseName: {
           name: "公司名称",
-          value: "深圳云捷讯信息系统有限公司（已注册）[Test]"
+          value: ""
         },
         enterpriseLicenseImgs: {
           name: "营业执照号",
-          value: "1283929389389EDCA[Test]"
+          value: ""
         },
         legalName: {
           name: "法人代表",
-          value: "讯沙紫[Test]"
+          value: ""
         },
         identityCard: {
           name: "身份证号码",
-          value: "003920399203920392[Test]"
+          value: ""
         },
         identityCardImgFile: {
           /* ------------------------------------------------------ */
           name: "身份证电子版",
-          value: false
+          value: "",
+          file: true
         },
         organizationCode: {
           name: "组织机构代码",
-          value: "14384939399EJFJFJ[Test]"
+          value: ""
         },
         codeCertificate: {
           name: "组织机构代码证有效期 ",
-          value: "2017-02-03 至 长期[Test]"
+          value: ""
         },
         electronicVersionFile: {
           /* ------------------------------------------------------ */
           name: "组织机构代码证电子版",
-          value: false
+          value: "",
+          file: true
         }
       },
       info2: {
         businessLocation: {
           name: "营业执照所在地",
-          value: "广东省深圳市宝安区[Test]"
+          value: ""
         },
         detailAddress: {
           name: "详细地址",
-          value: "粤海啥看的咳咳咳额三生三世[Test]"
+          value: ""
         },
         businessTerm: {
           name: "营业期限",
-          value: "2017-02-03 至 长期[Test]"
+          value: ""
         },
         registeredCapital: {
           name: "注册资金",
-          value: "2万[Test]"
+          value: ""
         },
         businessScope: {
           name: "经营范围",
-          value: "系统集成，软件开发，系统集成，软件开发系统集成，软件开发系统集成，软件开发系统集成，软件开发系统集成，软件开发[Test]"
+          value: ""
         },
         licenseElectronicFile: {
           /* ------------------------------------------------------ */
           name: "营业执照电子版",
-          value: false
+          value: "",
+          file: true
         }
       },
       tax1: {
         taxpayerNumber: {
           name: "纳税人识别号",
-          value: "188382829ED3839[Test]"
+          value: ""
         }
       },
       tax2: {
         taxCertificateFile: {
           /* ------------------------------------------------------ */
           name: "税务登记证电子版",
-          value: false
+          value: "",
+          file: true
         },
         taxpayerCertificateFile: {
           /* ------------------------------------------------------ */
           name: "一般纳税人资格证电子版",
-          value: false
+          value: "",
+          file: true
         }
       },
       paper1: {
         bankAccountName: {
           name: "银行开户名",
-          value: "国有支付清算信息科技有限公司[Test]"
+          value: ""
         },
         bankBranch: {
           name: "开户银行支行名称",
-          value: "1283929389389EDCA[Test]"
+          value: ""
         },
         bankLicenseFile: {
           /* ------------------------------------------------------ */
           name: "银行开户许可证电子版",
-          value: false
+          value: "",
+          file: true
         }
       },
       paper2: {
         corporateBankAccount: {
           name: "公司银行账户",
-          value: "12393939392929340403029[Test]"
+          value: ""
         },
         branchAddress: {
           name: "开户银行支行所在地",
-          value: "广东省深圳市宝安区[Test]"
+          value: ""
         }
       },
       msg1: {
         contactName: {
           name: "联系人姓名",
-          value: "筛子[Test]"
+          value: ""
         }
       },
       msg2: {
         contactPohone: {
           name: "联系人手机",
-          value: "102930293029[Test]"
+          value: ""
         },
         contactEmail: {
           name: "联系人邮箱",
-          value: "2929393@11.com[Test]"
+          value: ""
         }
       },
       arr: [
@@ -246,46 +252,68 @@ export default {
       // 该方法由子组件进行调用（用于传递文件数据），将对param对象中的对应文件对象进行赋值操作
       this.param[name] = file;
     },
-    apply() {
+    submit() {
+      // 企业注册申请，提示权限
+      // 判断用户申请状态，避免按钮重复请求
       if (this.isApply != 1) {
-        this.axios
-          .post("/app/v1/enterprise/apply", {
-            id: this.id,
-            token: this.token
+        this.$confirm("请务必保证企业信息填写正确性和完整性，<br>申请后将不能再次修改", "提示", {
+          confirmButtonText: "继续申请",
+          cancelButtonText: "再次检查",
+          type: "warning",
+          dangerouslyUseHTMLString: true
+        })
+          .then(() => {
+            this.apply();
           })
-          .then(res => {
-            if (res.data.code == 1) {
-              this.$message({
-                message: "企业申请替提交成功，请耐心等待",
-                type: "success"
-              });
-              this.edit = false;
-            } else {
-              this.$message({
-                message: "企业申请替提交失败，请稍后再试",
-                type: "warning"
-              });
-            }
-          })
-          .catch(err => {
-            this.$message.error("发生未知错误，请刷新网页或稍后尝试");
-            console.log(err);
+          .catch(() => {
+            this.$message({
+              type: "info",
+              message: "已取消企业申请"
+            });
           });
       }
     },
+    apply() {
+      // 企业注册申请
+      this.axios
+        .post("/app/v1/enterprise/apply", {
+          id: this.id,
+          token: this.token
+        })
+        .then(res => {
+          if (res.data.code == 1) {
+            this.$message({
+              message: "企业申请替提交成功，请耐心等待",
+              type: "success"
+            });
+            this.edit = false;
+          } else {
+            this.$message({
+              message: `企业申请替提交失败(${res.data.msg})`,
+              type: "warning"
+            });
+          }
+        })
+        .catch(err => {
+          this.$message.error("发生未知错误，请刷新网页或稍后尝试");
+          console.log(err);
+        });
+    },
     getAuthStatus() {
+      // 进入页面查询用户当前权限状态 // 控制按钮的可执行状态
       this.axios
         .post("/app/v1/user/userInfo", {
           id: this.id,
           token: this.token
         })
         .then(res => {
+          console.log(res);
           if (res.data.code == 1) {
             var status = res.data.data.authStatus;
             this.isApply = status || false;
           } else {
             this.$message({
-              message: "企业申请替提交失败，请稍后再试",
+              message: `用户状态获取失败(${res.data.msg})`,
               type: "warning"
             });
           }
@@ -296,6 +324,7 @@ export default {
         });
     },
     showInfo() {
+      // 获取企业信息
       this.axios
         .post("/app/v1/enterprise/info", {
           id: this.id,
@@ -317,13 +346,13 @@ export default {
               }
             } else {
               this.$message({
-                message: "请填写企业信息",
+                message: "请完善企业信息",
                 type: "success"
               });
             }
           } else {
             this.$message({
-              message: "企业状态获取失败，请稍后再试",
+              message: `企业信息获取失败(${res.data.msg})`,
               type: "warning"
             });
           }
@@ -334,7 +363,7 @@ export default {
         });
     },
     saveInfo() {
-      this.edit = false;
+      // 保存企业信息
       var arr = this.arr;
 
       for (var i = 0; i < arr.length; i++) {
@@ -368,13 +397,15 @@ export default {
         .post("/app/v1/enterprise/save", this.param)
         .then(res => {
           if (res.data.code == 1) {
+            this.showInfo();
             this.$message({
               message: "保存成功",
               type: "success"
             });
+            this.edit = false;
           } else {
             this.$message({
-              message: "保存失败",
+              message: `保存失败(${res.data.msg})`,
               type: "warning"
             });
           }
