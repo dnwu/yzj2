@@ -639,24 +639,7 @@ export default {
         planeIcon: require("../../../assets/plane_icon.png")
       },
       orderNum: "",
-      goodsTypeData: [
-        {
-          value: 7,
-          label: "普货"
-        },
-        {
-          value: 8,
-          label: "冷链"
-        },
-        {
-          value: 9,
-          label: "重货"
-        },
-        {
-          value: 10,
-          label: "危险品"
-        },
-      ],
+      goodsTypeData: [],
       goodsType: "",
       orderStatusData: [
         {
@@ -702,9 +685,26 @@ export default {
     };
   },
   created() {
+    this.getGoodTypeList();
     this.getOrderList(1);
   },
   methods:{
+    getGoodTypeList (){
+      this.axios.post("/app/v1/common/queryDict",{
+        "dataType": 2
+      }).then(data => {
+        let arr = [];
+        if(data.data.data.detailDTOS.length){
+          for(let i=0;i<data.data.data.detailDTOS.length;i++){
+            let obj={};
+            obj.value = data.data.data.detailDTOS[i].id;
+            obj.label = data.data.data.detailDTOS[i].dataName;
+            arr.push(obj);
+          }
+        }
+        this.goodsTypeList = arr;
+      });
+    },
     getOrderList(page) {
       let goodsType = this.goodsType || -1;
       let orderStatus = this.orderStatus || -1;

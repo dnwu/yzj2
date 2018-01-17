@@ -20,12 +20,12 @@
           <div class="box airport">
             <div class="label">所在机场</div>
             <div class="value">
-              <el-select size="mini" v-model="airPort" placeholder="请选择">
+              <el-select size="mini" filterable v-model="airPort" placeholder="请选择">
                 <el-option
-                  v-for="item in airPortList"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value">
+                  v-for="item in portList"
+                  :key="item.id"
+                  :label="item.cnName+'（'+item.airportCode+'）'"
+                  :value="item.cnName+'（'+item.airportCode+'）'">
                 </el-option>
               </el-select>
             </div>
@@ -61,12 +61,14 @@
           <div class="box start-end">
             <div class="label">始发/目的</div>
             <div class="value">
-              <el-input
-                placeholder="请输入航班号"
-                :clearable = true
-                size="mini"
-                v-model="startEnd">
-              </el-input>
+              <el-select size="mini" v-model="startEnd" placeholder="请选择">
+                <el-option
+                  v-for="item in startEndList"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value">
+                </el-option>
+              </el-select>
             </div>
           </div>
           <div class="box product-status">
@@ -109,22 +111,21 @@
               <button :class="{disableStyle:isDisable}">
                 <img class="addIcon" src="../../../assets/son_add.png">
                 <span class="distributionType">
-                  <span @click="generalDistribution = true">一般配送</span>
+                  <span @click="generalDistribution = true;">一般配送</span>
                   <span @click="carDistribution = true">专车配送</span>
                 </span>
               </button></li>
           </ul>
           <ul :class="{show:isShow}" class="menu2">
-            <li><button type="button" class="green">启用</button></li>
-            <li><button type="button" class="red">禁用</button></li>
-            <li><button type="button" class="gray">删除</button></li>
+            <li><button @click="enableMoreProduct" type="button" class="green">启用</button></li>
+            <li><button @click="disableMoreProduct" type="button" class="red">禁用</button></li>
+            <li><button @click="deleteMoreProduct" type="button" class="gray">删除</button></li>
           </ul>
         </div>
         <ul class="product-list">
           <li class="list-head">
             <div class="detail">
               <p>状态</p>
-              <p>供应商</p>
               <p>机场</p>
               <p>始发/目的</p>
               <p>生效开始时间</p>
@@ -133,27 +134,38 @@
               <p>操作</p>
             </div>
           </li>
-          <li>
+          <li v-if="productList.length!==0" v-for="(item,index) in productList" @click="clickItem(index)" :class="{hand:isShow}">
             <div class="title">
-              <p>自营</p>
-              <p>普货</p>
-              <img :class="{hide:isShow}" src="../../../assets/air_delete.png">
+              <p>{{item.resourceType===1?'自营':'第三方'}}</p>
+              <p>{{item.hnaDataName}}</p>
+              <img @click="deleteProduct(item.id)" :class="{hide:isShow}" title="删除" src="../../../assets/air_delete.png">
+              <img @click="switchProduct(item.id,item.productStatus)" :title="item.productStatus===0?'禁用':'启用'" :class="{hide:isShow||item.productStatus===2}" :src="item.productStatus===0?productStatusSrc1:productStatusSrc2">
+              <span :class="{active:item.check}" class="sign"></span>
             </div>
             <div class="detail">
               <p class="state">
-                <span><img src="../../../assets/air_state_1.png"></span>
-                <span>启用</span>
+                <span><img :src="productStatusImg(item.productStatus)"></span>
+                <span>{{productStatusName(item.productStatus)}}</span>
               </p>
-              <p>海航货运</p>
-              <p>北京</p>
-              <p>始发站</p>
-              <p>2018-01-01</p>
-              <p>2018-01-07</p>
-              <p>一般配送</p>
-              <p class="blue">查看范围&价格</p>
+              <p>{{item.city}}</p>
+              <p>{{item.departureArrival===0?'始发站':'目的地'}}</p>
+              <p>{{item.effectiveStart.substring(0,10)}}</p>
+              <p>{{item.effectiveEnd.substring(0,10)}}</p>
+              <p>{{item.productType===1?'专车产品':'一般产品'}}</p>
+              <p class="blue"><a @click="seeRangeAndPrice(item.id,item.productType)" href="javascript:void(0);">查看范围&价格</a></p>
             </div>
           </li>
+          <li v-if="productList.length===0" class="handle">暂无数据</li>
         </ul>
+        <!--分页-->
+        <div class="block pagination">
+          <el-pagination
+            layout="prev, pager, next"
+            :page-size = 10
+            @current-change = "flipList"
+            :total="pageTotal">
+          </el-pagination>
+        </div>
         <!--一般配送模态框-->
         <div class="general-distribution">
           <el-dialog width="1000px" title="一般配送" :visible.sync="generalDistribution">
@@ -161,24 +173,11 @@
               <div class="up">
                 <div class="left">
                   <div class="box">
-                    <div class="label">供应商:</div>
-                    <div class="value">
-                      <el-select size="small" v-model="resourcesType">
-                        <el-option
-                          v-for="item in resourcesTypeList"
-                          :key="item.value"
-                          :label="item.label"
-                          :value="item.value">
-                        </el-option>
-                      </el-select>
-                    </div>
-                  </div>
-                  <div class="box">
                     <div class="label">货物类型:</div>
                     <div class="value">
-                      <el-select size="small" v-model="resourcesType">
+                      <el-select size="small" v-model="generalParameter.goodsType">
                         <el-option
-                          v-for="item in resourcesTypeList"
+                          v-for="item in goodsTypeList"
                           :key="item.value"
                           :label="item.label"
                           :value="item.value">
@@ -189,25 +188,16 @@
                 </div>
                 <div class="center">
                   <div class="box">
-                    <div class="label">所在机场:</div>
+                    <div class="label">所在机场</div>
                     <div class="value">
-                      <el-select size="small" v-model="resourcesType">
+                      <el-select size="mini" filterable v-model="generalParameter.airPort" placeholder="请选择">
                         <el-option
-                          v-for="item in resourcesTypeList"
-                          :key="item.value"
-                          :label="item.label"
-                          :value="item.value">
+                          v-for="item in portList"
+                          :key="item.id"
+                          :label="item.cnName+'（'+item.airportCode+'）'"
+                          :value="item.cnName+'（'+item.airportCode+'）'">
                         </el-option>
                       </el-select>
-                    </div>
-                  </div>
-                  <div class="box">
-                    <div class="label">业务类型:</div>
-                    <div class="value">
-                      <el-input
-                        :clearable = true
-                        size="mini">
-                      </el-input>
                     </div>
                   </div>
                 </div>
@@ -215,7 +205,22 @@
                   <div class="box">
                     <div class="label">始发/目的:</div>
                     <div class="value">
-                      <el-select size="small" v-model="resourcesType">
+                      <el-select size="small" v-model="generalParameter.startEnd">
+                        <el-option
+                          v-for="item in startEndList"
+                          :key="item.value"
+                          :label="item.label"
+                          :value="item.value">
+                        </el-option>
+                      </el-select>
+                    </div>
+                  </div>
+                </div>
+                <div class="left">
+                  <div class="box">
+                    <div class="label">资源类型:</div>
+                    <div class="value">
+                      <el-select size="small" v-model="generalParameter.resourcesType">
                         <el-option
                           v-for="item in resourcesTypeList"
                           :key="item.value"
@@ -225,18 +230,21 @@
                       </el-select>
                     </div>
                   </div>
+                </div>
+                <div class="bottom">
                   <div class="box date">
                     <div class="label">生效时间:</div>
                     <div class="value">
                       <el-date-picker
-                        v-model="effectiveDate"
-                        type="date"
-                        size="mini"
+                        v-model="generalParameter.addDateRange"
+                        :clearable=false
                         :editable=false
-                        placeholder="选择日期">
+                        type="daterange"
+                        value-format = "yyyy-MM-dd"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期">
                       </el-date-picker>
                     </div>
-                    <div class="arrow el-icon-arrow-down"></div>
                   </div>
                 </div>
               </div>
@@ -250,10 +258,10 @@
                     <div class="box">最低收费</div>
                     <div class="box"></div>
                   </li>
-                  <li>
+                  <li v-for="(list,index) in chargeStandardList">
                     <div class="box">
                       <div class="value">
-                        <el-select v-model="city" @change="selectCity" size="small" filterable>
+                        <el-select v-model="list.city" @change="selectCity" size="small" filterable>
                           <el-option
                             v-for="item in cityList"
                             :key="item.value"
@@ -265,7 +273,7 @@
                     </div>
                     <div class="box">
                       <div class="value">
-                        <el-select v-model="county" size="small">
+                        <el-select v-model="list.county" size="small">
                           <el-option
                             v-for="item in countyList"
                             :key="item.value"
@@ -276,11 +284,11 @@
                       </div>
                     </div>
                     <div class="box"></div>
-                    <div class="box"><input class="num" @keyup="formatNumber($event)" type="number"></div>
-                    <div class="box"><input class="num" @keyup="formatNumber($event)" type="number"></div>
+                    <div class="box"><input v-model="list.unitPrice" class="num" @keyup="formatNumber($event)" type="number"></div>
+                    <div class="box"><input v-model="list.minimumPrice" class="num" @keyup="formatNumber($event)" type="number"></div>
                     <div class="box">
-                      <img src="../../../assets/son_add.png">
-                      <img src="../../../assets/minus_sign_delete.png">
+                      <img @click="chargeStandardList.splice(index,1)" src="../../../assets/minus_sign_delete.png">
+                      <img :class="{hide:index !== (chargeStandardList.length-1)}" @click="addOneLine" src="../../../assets/son_add.png">
                     </div>
                   </li>
                 </ul>
@@ -288,35 +296,22 @@
             </div>
             <div slot="footer" class="dialog-footer">
               <span class="cancel" @click="generalDistribution = false">取 消</span>
-              <el-button @click="getAddFlight" size="mini" class="sure" type="warning">保 存</el-button>
+              <el-button @click="getAddProduct" size="mini" class="sure" type="warning">保 存</el-button>
             </div>
           </el-dialog>
         </div>
         <!--专车配送模态框-->
         <div class="car-distribution">
-          <el-dialog width="1000px" title="专车配送" :visible.sync="carDistribution">
+          <el-dialog width="1100px" title="专车配送" :visible.sync="carDistribution">
             <div class="content">
               <div class="up">
                 <div class="left">
                   <div class="box">
-                    <div class="label">供应商:</div>
-                    <div class="value">
-                      <el-select size="small" v-model="resourcesType">
-                        <el-option
-                          v-for="item in resourcesTypeList"
-                          :key="item.value"
-                          :label="item.label"
-                          :value="item.value">
-                        </el-option>
-                      </el-select>
-                    </div>
-                  </div>
-                  <div class="box">
                     <div class="label">货物类型:</div>
                     <div class="value">
-                      <el-select size="small" v-model="resourcesType">
+                      <el-select size="small" v-model="carParameter.goodsType">
                         <el-option
-                          v-for="item in resourcesTypeList"
+                          v-for="item in goodsTypeList"
                           :key="item.value"
                           :label="item.label"
                           :value="item.value">
@@ -327,25 +322,16 @@
                 </div>
                 <div class="center">
                   <div class="box">
-                    <div class="label">所在机场:</div>
+                    <div class="label">所在机场</div>
                     <div class="value">
-                      <el-select size="small" v-model="resourcesType">
+                      <el-select size="mini" filterable v-model="carParameter.airPort" placeholder="请选择">
                         <el-option
-                          v-for="item in resourcesTypeList"
-                          :key="item.value"
-                          :label="item.label"
-                          :value="item.value">
+                          v-for="item in portList"
+                          :key="item.id"
+                          :label="item.cnName+'（'+item.airportCode+'）'"
+                          :value="item.cnName+'（'+item.airportCode+'）'">
                         </el-option>
                       </el-select>
-                    </div>
-                  </div>
-                  <div class="box">
-                    <div class="label">业务类型:</div>
-                    <div class="value">
-                      <el-input
-                        :clearable = true
-                        size="mini">
-                      </el-input>
                     </div>
                   </div>
                 </div>
@@ -353,7 +339,22 @@
                   <div class="box">
                     <div class="label">始发/目的:</div>
                     <div class="value">
-                      <el-select size="small" v-model="resourcesType">
+                      <el-select size="small" v-model="carParameter.startEnd">
+                        <el-option
+                          v-for="item in startEndList"
+                          :key="item.value"
+                          :label="item.label"
+                          :value="item.value">
+                        </el-option>
+                      </el-select>
+                    </div>
+                  </div>
+                </div>
+                <div class="left">
+                  <div class="box">
+                    <div class="label">资源类型:</div>
+                    <div class="value">
+                      <el-select size="small" v-model="carParameter.resourcesType">
                         <el-option
                           v-for="item in resourcesTypeList"
                           :key="item.value"
@@ -363,18 +364,21 @@
                       </el-select>
                     </div>
                   </div>
+                </div>
+                <div class="bottom">
                   <div class="box date">
                     <div class="label">生效时间:</div>
                     <div class="value">
                       <el-date-picker
-                        v-model="effectiveDate"
-                        type="date"
-                        size="mini"
+                        v-model="carParameter.addDateRange"
+                        :clearable=false
                         :editable=false
-                        placeholder="选择日期">
+                        type="daterange"
+                        value-format = "yyyy-MM-dd"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期">
                       </el-date-picker>
                     </div>
-                    <div class="arrow el-icon-arrow-down"></div>
                   </div>
                 </div>
               </div>
@@ -384,14 +388,13 @@
                     <div class="box">所在市</div>
                     <div class="box">所在县区</div>
                     <div class="box"></div>
-                    <div class="box">1吨金杯车</div>
-                    <div class="box">2吨厢式车</div>
-                    <div class="box">＞两吨厢式车</div>
+                    <div v-for="item in carTypeList" class="box">{{item.dataName}}</div>
+                    <div class="box"></div>
                   </li>
-                  <li>
+                  <li v-for="(list,index) in chargeStandardList2">
                     <div class="box">
                       <div class="value">
-                        <el-select v-model="city" @change="selectCity" size="small" filterable>
+                        <el-select v-model="list.city" @change="selectCity" size="small" filterable>
                           <el-option
                             v-for="item in cityList"
                             :key="item.value"
@@ -403,7 +406,7 @@
                     </div>
                     <div class="box">
                       <div class="value">
-                        <el-select v-model="county" size="small">
+                        <el-select v-model="list.county" size="small">
                           <el-option
                             v-for="item in countyList"
                             :key="item.value"
@@ -414,12 +417,10 @@
                       </div>
                     </div>
                     <div class="box"></div>
-                    <div class="box"><input class="num" @keyup="formatNumber($event)" type="number"></div>
-                    <div class="box"><input class="num" @keyup="formatNumber($event)" type="number"></div>
-                    <div class="box"><input class="num" @keyup="formatNumber($event)" type="number"></div>
+                    <div v-for="(item,i) in carTypeList" class="box"><input v-model="list.priceList[i]" class="num" @keyup="formatNumber($event)" type="number"></div>
                     <div class="box">
-                      <img src="../../../assets/son_add.png">
-                      <img src="../../../assets/minus_sign_delete.png">
+                      <img @click="chargeStandardList2.splice(index,1)" src="../../../assets/minus_sign_delete.png">
+                      <img :class="{hide:index !== (chargeStandardList2.length-1)}" @click="addOneLine2" src="../../../assets/son_add.png">
                     </div>
                   </li>
                 </ul>
@@ -427,7 +428,7 @@
             </div>
             <div slot="footer" class="dialog-footer">
               <span class="cancel" @click="carDistribution = false">取 消</span>
-              <el-button @click="getAddFlight" size="mini" class="sure" type="warning">保 存</el-button>
+              <el-button @click="getAddProduct2" size="mini" class="sure" type="warning">保 存</el-button>
             </div>
           </el-dialog>
         </div>
@@ -436,101 +437,464 @@
   </div>
 </template>
 <script>
-  import StartPortselect from "@/components/StartPortselect";
-  import EndPortselect from "@/components/EndPortselect";
+  import { mapGetters } from "vuex";
   export default {
-    components: {
-      StartPortselect,
-      EndPortselect,
-    },
     data () {
       return {
 //    搜索的初始值
         resourcesType: '',
         resourcesTypeList: [
           {
-            value: "1",
-            label: "选项1"
+            value: 1,
+            label: "自营"
           },
           {
-            value: "2",
-            label: "选项2"
+            value: 2,
+            label: "第三方"
           },
         ],
+        airPort: '',
+        portList: [],
         transportType: '',
         transportTypeList: [
           {
-            value: "1",
-            label: "选项1"
+            value: 1,
+            label: "专车产品"
           },
           {
-            value: "2",
-            label: "选项2"
+            value: 2,
+            label: "一般产品"
           },
         ],
         goodsType: '',
-        goodsTypeList: [
+        goodsTypeList: [],
+        startEnd: '',
+        startEndList: [
           {
-            value: "1",
-            label: "选项1"
+            value: 0,
+            label: "始发站"
           },
           {
-            value: "2",
-            label: "选项1"
+            value: 1,
+            label: "目的站"
           },
         ],
         productStatus: '',
         productStatusList: [
           {
-            value: "1",
-            label: "选项1"
+            value: 0,
+            label: "启用"
           },
           {
-            value: "2",
-            label: "选项1"
+            value: 1,
+            label: "禁用"
           },
         ],
-        airPort: '',
-        airPortList: [
-          {
-            value: "1",
-            label: "选项1"
-          },
-          {
-            value: "2",
-            label: "选项1"
-          },
-        ],
-        startEnd: '',
         effectiveDate: '',
         checkMore: '批量选择',
+        productList: [],
+        statusSrc1: require('../../../assets/air_state_1.png'),
+        statusSrc2: require('../../../assets/air_state_2.png'),
+        productStatusSrc1: require('../../../assets/air_state_4.png'),
+        productStatusSrc2: require('../../../assets/son_state_1.png'),
+        pageTotal: 0,
 //    模态框状态
+        //一般配送
         generalDistribution: false,
+        generalParameter: {},
+        chargeStandardList: [
+          {
+            city: '',
+            county: '',
+            unitPrice: '',
+            minimumPrice: '',
+          }
+        ],
+        //专车配送
         carDistribution: false,
-        city: '',
-        cityList: [],
-        county: '',
+        carParameter: {},
+        chargeStandardList2: [
+          {
+            city: '',
+            county: '',
+            priceList: [],
+          }
+        ],
+        carTypeList: [],
         countyList: [],
+        cityList: [],
+
       }
     },
     created() {
+      this.getPortList();
+      this.getGoodTypeList();
+      this.getCarTypeList();
+      this.getProductList();
       this.createCity();
     },
+    watch: {
+      generalDistribution (){
+        if(this.generalDistribution === false){
+          this.generalParameter = {};
+          this.chargeStandardList = [
+            {
+              city: '',
+              county: '',
+              unitPrice: '',
+              minimumPrice: '',
+            }
+          ];
+        }
+      },
+      carDistribution (){
+        if(this.carDistribution === false){
+          this.carParameter = {};
+          this.chargeStandardList2 = [
+            {
+              city: '',
+              county: '',
+              priceList: [],
+            }
+          ]
+        }
+      }
+    },
     methods:{
-      queryProduct (){
-        alert("待开发")
+      getPortList (){
+        this.axios.get("/airport/list").then(data => {
+          this.portList = data.data;
+        });
+      },
+      getGoodTypeList (){
+        this.axios.post("/app/v1/common/queryDict",{
+          "dataType": 2
+        }).then(data => {
+          let arr = [];
+          if(data.data.data.detailDTOS.length){
+            for(let i=0;i<data.data.data.detailDTOS.length;i++){
+              let obj={};
+              obj.value = data.data.data.detailDTOS[i].id;
+              obj.label = data.data.data.detailDTOS[i].dataName;
+              arr.push(obj);
+            }
+          }
+          this.goodsTypeList = arr;
+        });
+      },
+      getCarTypeList (){
+        this.axios.post("/app/v1/common/queryDict",{
+          "dataType": 7
+        }).then(data => {
+          this.carTypeList = data.data.data.detailDTOS;
+        });
+      },
+      getProductList (page){
+        this.productList =[];
+        let resourcesType = this.resourcesType || -1;
+        let goodsType = this.goodsType || -1;
+        let transportType = this.transportType || -1;
+        let productStatus ;
+        if(this.productStatus === 0){
+          productStatus = 0;
+        }else {
+          productStatus = this.productStatus || -1;
+        }
+        let startEnd ;
+        if(this.startEnd === 0){
+            startEnd = 0;
+        }else{
+            startEnd = this.startEnd || -1;
+        }
+        this.axios.post("/web/v1/product/landCarriage/getList",{
+          "id": this.id,
+          "token": this.token,
+          "city": this.airPort,
+          "departureArrival": startEnd,
+          "effectiveDate": this.effectiveDate,
+          "goodsType": goodsType,
+          "productStatus": productStatus,
+          "productType": transportType,
+          "resourceType": resourcesType,
+          "pageIndex": page,
+          "size": 10,
+        }).then(data => {
+          if(data.data.code === 1){
+            if(data.data.hnaLandCarriages.length){
+              this.productList = data.data.hnaLandCarriages;
+              this.pageTotal = data.data.total;
+            }
+          }
+        });
+      },
+      getAddProduct (){
+        let str = '';
+        for(let i=0;i<this.chargeStandardList.length;i++){
+          if(!this.chargeStandardList[i].city
+            ||!this.chargeStandardList[i].county
+            ||!this.chargeStandardList[i].unitPrice
+            ||!this.chargeStandardList[i].minimumPrice
+          ){
+            this.$notify.error({
+              title: '错误',
+              message: '填写有误，所有的项都是必须选择或填写的，请检查！'
+            });
+            return
+          }
+          str += this.chargeStandardList[i].city + ':'
+            + this.chargeStandardList[i].county + '-'
+            + this.chargeStandardList[i].unitPrice + '-'
+            + this.chargeStandardList[i].minimumPrice + ';'
+        }
+        this.getAddData(this.generalParameter,str,2);
+      },
+      getAddProduct2 (){
+        let pass = false;
+        let str = '';
+        for(let i=0;i<this.chargeStandardList2.length;i++){
+          if(!this.chargeStandardList2[i].city || !this.chargeStandardList2[i].county){
+            this.$notify.error({
+              title: '错误',
+              message: '填写有误，所有的项都是必须选择或填写的，请检查！'
+            });
+            return
+          }
+          str += 'range-' + this.chargeStandardList2[i].city + ':'
+            + this.chargeStandardList2[i].county + ',';
+          if(this.chargeStandardList2[i].priceList.length){
+            for(let j=0;j<this.chargeStandardList2[i].priceList.length;j++){
+              if(this.chargeStandardList2[i].priceList[j]){
+                pass = true;
+              }
+              str += this.carTypeList[j].id + '-'
+                + this.chargeStandardList2[i].priceList[j] + ',';
+            }
+            str = str.slice(0,-1) + ';'
+          }
+        }
+        if(!pass){
+          this.$notify.error({
+            title: '错误',
+            message: '填写有误，所有的项都是必须选择或填写的，请检查！'
+          });
+          return
+        }
+        this.getAddData(this.carParameter,str,1);
+      },
+      getAddData (obj,str,type){
+        if(!obj.goodsType
+          ||!obj.airPort
+          ||!obj.resourcesType
+          ||!obj.addDateRange
+          ||!(obj.startEnd===0||obj.startEnd===1)
+        ){
+          this.$notify.error({
+            title: '错误',
+            message: '填写有误，所有的项都是必须选择或填写的，请检查！'
+          });
+          return
+        }
+        this.axios.post("/web/v1/product/landCarriage/save",{
+          "id": this.id,
+          "token": this.token,
+          "city": obj.airPort,
+          "departureArrival": obj.startEnd,
+          "effectiveStart": obj.addDateRange[0],
+          "effectiveEnd": obj.addDateRange[1],
+          "goodsType": obj.goodsType,
+          "priceValues": str,
+          "productType": type
+        }).then(data => {
+          if(data.data.code === 1){
+            this.$notify({
+              title: '成功',
+              message: '操作成功！',
+              type: 'success'
+            });
+            this.generalDistribution =false;
+            this.getProductList (1);
+          }else{
+            this.$notify.error({
+              title: '错误',
+              message: data.data.msg
+            });
+          }
+        });
+      },
+      switchProduct (productId,status){
+        let url = '';
+        if(status===1){
+          url = '/web/v1/product/landCarriage/setEnable';
+        }else{
+          url = '/web/v1/product/landCarriage/setDisable';
+        }
+        this.axios.post(url, {
+          "id": this.id,
+          "token": this.token,
+          "ids": productId,
+        }).then(data => {
+          if(data.data.code === 1){
+            this.$notify({
+              title: '成功',
+              message: '操作成功！',
+              type: 'success'
+            });
+            this.getProductList(1);
+          }else{
+            this.$notify.error({
+              title: '错误',
+              message: data.data.msg
+            });
+          }
+        });
+      },
+      deleteProduct (id){
+        this.$confirm('此操作将删除所选空运产品，无法恢复, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.axios.post("/web/v1/product/landCarriage/del",{
+            "id": this.id,
+            "token": this.token,
+            "ids": id
+          }).then(data => {
+            if(data.data.code === 1){
+              this.$notify({
+                title: '成功',
+                message: '删除成功！',
+                type: 'success'
+              });
+              this.getProductList(1);
+            }else{
+              this.$notify.error({
+                title: '错误',
+                message: data.data.msg
+              });
+            }
+          });
+        });
+      },
+      deleteMoreProduct (){
+        let ids = this.getCheckId();
+        if(ids){
+          this.deleteProduct(ids);
+        }else{
+          this.$notify.error({
+            title: '警告',
+            message: '您还没有勾选要删除的空运产品，请点击勾选！',
+            type: 'warning'
+          });
+        }
+      },
+      enableMoreProduct (){
+        let ids = this.getCheckId();
+        if(ids){
+          this.switchProduct(ids,1);
+        }else{
+          this.$notify.error({
+            title: '警告',
+            message: '您还没有勾选要启用的空运产品，请点击勾选！',
+            type: 'warning'
+          });
+        }
+      },
+      disableMoreProduct (){
+        let ids = this.getCheckId();
+        if(ids){
+          this.switchProduct(ids,2);
+        }else{
+          this.$notify.error({
+            title: '警告',
+            message: '您还没有勾选要禁用的空运产品，请点击勾选！',
+            type: 'warning'
+          });
+        }
+      },
+      seeRangeAndPrice (id,type){
+        /*if(type === 2){
+          this.generalDistribution = true;
+        }else{
+          this.carDistribution = true;
+        }*/
+        this.axios.post("/web/v1/product/landCarriage/getDetail",{
+          "id": this.id,
+          "token": this.token,
+          "recordId": id
+        }).then(data => {
+          console.log(data);
+        });
+      },
+      getCheckId (){
+        let ids = '';
+        for(let i=0;i<this.productList.length;i++){
+          if(this.productList[i].check){
+            ids += this.productList[i].id+',';
+          }
+        }
+        return ids
+      },
+      addOneLine (){
+        let obj = {
+          city: '',
+          county: '',
+          unitPrice: '',
+          minimumPrice: '',
+        };
+        this.chargeStandardList.push(obj);
+      },
+      addOneLine2 (){
+        let obj = {
+          city: '',
+          county: '',
+          priceList: [],
+        };
+        this.chargeStandardList2.push(obj);
       },
       checkProduct (){
         this.checkMore = (this.checkMore === '批量选择')?'取消选择':'批量选择';
+        if(this.checkMore === '批量选择'){
+          this.removeCheck();
+        }
+      },
+      removeCheck (){
+        let productList = this.productList;
+        for(let i=0;i<productList.length;i++){
+          this.$set(this.productList[i],'check',false);
+        }
+      },
+      flipList (page){
+        this.getProductList(page)
+      },
+      queryProduct (){
+        this.getProductList(1);
+      },
+      clickItem (index){
+        if(this.checkMore === '批量选择'){
+          return
+        }
+        this.$set(this.productList[index],'check',!this.productList[index].check)
+      },
+      productStatusName (type){
+        let name = '';
+        switch (type){
+          case 0: name = "启用"; break;
+          case 1: name = "禁用"; break;
+          case 2: name = "审核中"; break;
+        }
+        return name
+      },
+      productStatusImg (type){
+        let imgSrc = '';
+        switch (type){
+          case 0: imgSrc = require('../../../assets/air_state_1.png'); break;
+          case 1: imgSrc = require('../../../assets/air_state_2.png'); break;
+          case 2: imgSrc = require('../../../assets/air_state_3.png'); break;
+        }
+        return imgSrc
       },
       formatNumber(e){//保留小数点后一位
         e.target.value = e.target.value&&Math.floor(parseFloat(e.target.value)*10)/10;
-      },
-      getAddFlight (){
-        alert("待开发")
-      },
-      getFlightGenerate (){
-        alert("待开发")
       },
       createCity (){
         //区域城市
@@ -1254,6 +1618,7 @@
       }
     },
     computed: {
+      ...mapGetters(["id", "token"]),
       isDisable: function () {
         return this.checkMore === '取消选择'
       },
@@ -1466,16 +1831,20 @@
         .product-list{
           padding: 0;
           margin: 0;
+          min-height: 600px;
+          padding-left: 30px;
           li{
             height: 100px;
             box-sizing: border-box;
             border-bottom: 1px solid #EBEBEB;
             .title{
               height: 30px;
-              padding-left: 40px;
+              padding-left: 43px;
+              padding-right: 75px;
               position: relative;
               .sign{
                 position: absolute;
+                display: none;
                 width: 0;
                 height: 0;
                 border-top: 15px solid #fccf00;
@@ -1484,6 +1853,9 @@
                 border-left: 15px solid transparent;
                 right: 0;
                 top: 10px;
+              }
+              .active{
+                display: block;
               }
               p{
                 float: left;
@@ -1496,7 +1868,7 @@
               img{
                 float: right;
                 margin-top: 10px;
-                margin-right: 30px;
+                margin-right: 15px;
                 cursor: pointer;
               }
               .hide{
@@ -1522,6 +1894,14 @@
                 .modify{
                   margin-right: 10px;
                 }
+                a{
+                  color:#39B0FF;
+                  text-decoration: none;
+                }
+                a:hover{
+                  cursor: pointer;
+                  text-decoration: underline;
+                }
               }
               .state{
                 padding-top: 15px;
@@ -1531,19 +1911,23 @@
                   line-height: 20px;
                 }
               }
-              .blue{
-                color: #39B0FF;
-              }
-              p:nth-child(1){width: 8%}
-              p:nth-child(2){width: 12%}
-              p:nth-child(3){width: 15%}
-              p:nth-child(4){width: 10%}
+              p:nth-child(1){width: 10%}
+              p:nth-child(2){width: 14%}
+              p:nth-child(3){width: 14%}
+              p:nth-child(4){width: 15%}
               p:nth-child(5){width: 15%}
-              p:nth-child(6){width: 15%}
-              p:nth-child(7){width: 10%}
-              p:nth-child(8){width: 15%}
+              p:nth-child(6){width: 14%}
+              p:nth-child(7){width: 14%}
             }
 
+          }
+          .handle{
+            text-align: center;
+            border: 0;
+            margin-top: 30px;
+          }
+          .hand{
+            cursor: pointer;
           }
           .list-head{
             height: 40px;
@@ -1555,6 +1939,10 @@
               }
             }
           }
+        }
+        .pagination{
+          text-align: center;
+          margin-bottom: 30px;
         }
         .general-distribution{
           .el-dialog {
@@ -1568,6 +1956,7 @@
               padding: 0;
               .content{
                 padding: 20px 60px;
+                min-height: 370px;
                 .up{
                   box-sizing: border-box;
                   overflow: hidden;
@@ -1586,6 +1975,10 @@
                       }
                       .value{
                         display: inline-block;
+                        .el-date-editor{
+                          width: 300px;
+                          border: 0;
+                        }
                         .el-input{
                           width: 180px;
                           input{
@@ -1593,15 +1986,6 @@
                             width: 180px;
                           }
                         }
-                      }
-                    }
-                    .date{
-                      position: relative;
-                      .arrow{
-                        position: absolute;
-                        right: 10px;
-                        top: 13px;
-                        color: #c0c4cc;
                       }
                     }
                   }
@@ -1618,6 +2002,10 @@
                   .right{
                     float: left;
                     width: 30%;
+                  }
+                  .bottom{
+                    float: left;
+                    width: 400px;
                   }
                 }
                 .down{
@@ -1672,8 +2060,13 @@
                         img{
                           width: 20px;
                           height: 20px;
-                          margin-left: 5px;
-                          margin-top: 8px;
+                          float: right;
+                          margin-top: 10px;
+                          margin-right: 7px;
+                          cursor: pointer;
+                        }
+                        .hide{
+                          display: none;
                         }
                       }
                       .box:nth-child(1){width: 180px;}
@@ -1688,6 +2081,7 @@
               }
             }
             .el-dialog__footer {
+              padding-bottom: 30px;
               .dialog-footer {
                 text-align: center;
                 position: relative;
@@ -1717,6 +2111,7 @@
               padding: 0;
               .content{
                 padding: 20px 60px;
+                min-height: 370px;
                 .up{
                   box-sizing: border-box;
                   overflow: hidden;
@@ -1735,6 +2130,10 @@
                       }
                       .value{
                         display: inline-block;
+                        .el-date-editor{
+                          width: 300px;
+                          border: 0;
+                        }
                         .el-input{
                           width: 180px;
                           input{
@@ -1742,15 +2141,6 @@
                             width: 180px;
                           }
                         }
-                      }
-                    }
-                    .date{
-                      position: relative;
-                      .arrow{
-                        position: absolute;
-                        right: 10px;
-                        top: 13px;
-                        color: #c0c4cc;
                       }
                     }
                   }
@@ -1768,18 +2158,23 @@
                     float: left;
                     width: 30%;
                   }
+                  .bottom{
+                    float: left;
+                    width: 400px;
+                  }
                 }
                 .down{
+                  text-align: center;
                   ul{
                     margin-top: 30px;
                     padding: 0;
-                    width: 820px;
-                    margin-left: 30px;
+                    display: inline-block;
                     box-sizing: border-box;
                     li{
                       overflow: hidden;
                       .box{
                         box-sizing: border-box;
+                        width: 100px;
                         color: #A7A7A7;
                         float: left;
                         height: 40px;
@@ -1821,23 +2216,26 @@
                         img{
                           width: 20px;
                           height: 20px;
-                          margin-left: 5px;
-                          margin-top: 8px;
+                          float: right;
+                          margin-top: 10px;
+                          margin-right: 7px;
+                          cursor: pointer;
+                        }
+                        .hide{
+                          display: none;
                         }
                       }
-                      .box:nth-child(1){width: 180px;}
-                      .box:nth-child(2){width: 180px;}
-                      .box:nth-child(3){width: 40px;}
-                      .box:nth-child(4){width: 120px;}
-                      .box:nth-child(5){width: 120px;}
-                      .box:nth-child(6){width: 120px;}
-                      .box:nth-child(7){width: 60px;}
+                      .box:nth-child(1){width: 160px;}
+                      .box:nth-child(2){width: 160px;}
+                      .box:nth-child(3){width: 20px;}
+                      .box:last-child{width: 60px;}
                     }
                   }
                 }
               }
             }
             .el-dialog__footer {
+              padding-bottom: 30px;
               .dialog-footer {
                 text-align: center;
                 position: relative;
