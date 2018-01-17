@@ -230,13 +230,9 @@ export default {
       this.axios
         .post("/app/v1/bargaining/getBargainingList", parms)
         .then(res => {
-<<<<<<< HEAD
           console.log(res);
           if(res.data.code == 1){
             console.log(res);
-=======
-          if (res.data.code == 1) {
->>>>>>> 29a1057e5955f301eecbc37ba57424254b88f24e
             if (res.data.data.length !== 0) {
               this.total = res.data.total;
               this.orders = res.data.data;
