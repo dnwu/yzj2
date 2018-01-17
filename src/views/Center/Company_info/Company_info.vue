@@ -397,6 +397,7 @@ export default {
         .post("/app/v1/enterprise/save", this.param)
         .then(res => {
           if (res.data.code == 1) {
+            this.showInfo();
             this.$message({
               message: "保存成功",
               type: "success"

@@ -227,7 +227,9 @@ export default {
       });
     }
   },
-  mounted() {}
+  mounted() {
+    this.getBillList();
+  }
 };
 </script>
 <style lang="scss" scoped>
