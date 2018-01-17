@@ -67,7 +67,7 @@
             <li><button @click="checkFlightPlan" type="button" class="gray">{{checkMore}}</button></li>
             <li><button :class="{disableStyle:isDisable}">导出</button></li>
             <li><button :class="{disableStyle:isDisable}">导入</button></li>
-            <li class="add"><button @click="addFlightPlan = true" :class="{disableStyle:isDisable}"><img class="addIcon" src="../../../assets/son_add.png"></button></li>
+            <li class="add"><button title="新增/修改航班计划" @click="addFlightPlan = true" :class="{disableStyle:isDisable}"><img class="addIcon" src="../../../assets/son_add.png"></button></li>
           </ul>
           <ul :class="{show:isShow}" class="menu2">
             <li><button @click="generateMoreFlight" type="button" class="yellow">航班生成</button></li>
@@ -121,7 +121,7 @@
         </div>
         <!--新增航班计划模态框-->
         <div class="add-flight-plan">
-          <el-dialog width="1000px" title="新增航班计划" :visible.sync="addFlightPlan">
+          <el-dialog width="1000px" title="新增/修改航班计划" :visible.sync="addFlightPlan">
             <div class="content">
               <div class="left">
                 <div class="box">
@@ -276,8 +276,6 @@
 <script>
   import { mapGetters } from "vuex";
   export default {
-    components: {
-    },
     data () {
       return {
 //    搜索的初始值
@@ -292,8 +290,6 @@
             label: "第三方"
           },
         ],
-        supplier: '',
-        supplierList: [],
         startPort: '',
         endPort: '',
         portList: [],
@@ -467,7 +463,6 @@
         })
       },
       modifyFlightPlan (obj){
-        console.log(obj);
         this.addFlightPlan = true;
         this.addFlightParameter.resourcesType = obj.resourceType;
         this.domesticAbroad = obj.countryType;
@@ -488,6 +483,7 @@
         this.addFlightParameter.planEnd = obj.planEnd;
         this.addFlightParameter.flightNumber = obj.flight;
         this.addFlightParameter.shippingSpace = obj.shippingSpace;
+        this.addFlightParameter.domesticAbroad = obj.countryType;
         this.flightPlanId = obj.id;
       },
       flightPlanGenerate (ids){

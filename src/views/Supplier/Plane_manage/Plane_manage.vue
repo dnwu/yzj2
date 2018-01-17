@@ -77,7 +77,7 @@
       <div class="content">
         <div class="tool">
           <ul class="menu">
-            <li class="add"><img @click="addFlight = true" class="addIcon" src="../../../assets/son_add.png"></li>
+            <li class="add"><img title="航班新增" @click="addFlight = true" class="addIcon" src="../../../assets/son_add.png"></li>
           </ul>
         </div>
         <ul class="flight-list">
@@ -106,7 +106,7 @@
             <p>{{item.totalSeats}}</p>
             <p>{{item.syShippingSpace}}</p>
             <p>
-              <img @click="deleteFlight(item.id)" src="../../../assets/son_delete.png">
+              <img title="删除" @click="deleteFlight(item.id)" src="../../../assets/son_delete.png">
             </p>
           </li>
           <li v-if="flightList.length===0" class="handle">暂无数据</li>
@@ -225,14 +225,8 @@
   </div>
 </template>
 <script>
-  import StartPortselect from "@/components/StartPortselect";
-  import EndPortselect from "@/components/EndPortselect";
   import { mapGetters } from "vuex";
   export default {
-    components: {
-      StartPortselect,
-      EndPortselect,
-    },
     data () {
       return {
 //    搜索的初始值
@@ -250,7 +244,7 @@
         goodsType: '',
         goodsTypeList: [
           {
-            value: '7',
+            value: 7,
             label: "普货"
           },
           {
@@ -286,7 +280,6 @@
             label: "国际"
           },
         ],
-        supplierList: [],
         addStartPort: '',
         addEndPort: '',
       }
@@ -311,6 +304,7 @@
         });
       },
       getFlightList (page){
+        this.flightList =[];
         let resourcesType = this.resourcesType || -1;
         this.axios.post("/web/v1/fligt/getFlightRecordList",{
           "id": this.id,

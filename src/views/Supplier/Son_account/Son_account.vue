@@ -169,7 +169,7 @@
         <span>创建时间</span>
         <!--<span></span>-->
         <span></span>
-        <span><img @click="addAccount = true" class="add" src="../../../assets/son_add.png"></span>
+        <span><img title="新增子账号" @click="addAccount = true" class="add" src="../../../assets/son_add.png"></span>
       </li>
       <li v-if="sonAccountList.length!==0" v-for="item in sonAccountList">
         <span><i :class="{circleGreen:item.accountStatus===1}" class="circle-yellow"></i></span>
@@ -180,8 +180,8 @@
         <span>{{item.identityCard}}</span>
         <span>{{dateTransform(item.createtime)}}</span>
         <!--<span><img src="../../../assets/son_modify.png"></span>-->
-        <span><img @click="switchAccount(item.id,item.accountStatus)" :src="item.accountStatus===1?statusSrc2:statusSrc1"></span>
-        <span><img @click="deleteAccount(item.id)" src="../../../assets/son_delete.png"></span>
+        <span><img :title="item.accountStatus===1?'禁用':'启用'" @click="switchAccount(item.id,item.accountStatus)" :src="item.accountStatus===1?statusSrc2:statusSrc1"></span>
+        <span><img title="删除" @click="deleteAccount(item.id)" src="../../../assets/son_delete.png"></span>
       </li>
       <li v-if="sonAccountList.length===0" class="handle">暂无数据</li>
     </ul>
@@ -277,6 +277,7 @@
         });
       },
       getSonAccountList (page){
+        this.sonAccountList = [];
         this.axios.post("/web/v1/supplier/subaccount/list", {
           "id": this.id,
           "token": this.token,
@@ -287,8 +288,6 @@
             if(data.data.hnaAccounts.length){
               this.sonAccountList = data.data.hnaAccounts
               this.pageTotal = data.data.total;
-            }else{
-              this.sonAccountList = [];
             }
           }else if(data.data.code===-2){
             this.hasSonList = false;
@@ -374,7 +373,7 @@
               message: '操作成功！',
               type: 'success'
             });
-            this.getSonAccountList(this.page);
+            this.getSonAccountList(1);
           }else{
             this.$notify.error({
               title: '错误',

@@ -47,124 +47,175 @@
   </div>
 </template>
 <script>
-import {mapGetters,mapMutations} from 'vuex'
+import { mapGetters, mapMutations } from "vuex";
 export default {
   data() {
     return {
-      title:'供应商中心',
+      title: "供应商中心",
       fullPath: "/center/account",
-      activeIndex:0,
-      iconARR:[{default:require('../../assets/nav1.png'),active:require('../../assets/nav1_1.png')},
-              {default:require('../../assets/nav2.png'),active:require('../../assets/nav2_2.png')},
-              {default:require('../../assets/nav14.png'),active:require('../../assets/nav14_14.png')},
-              {default:require('../../assets/nav7.png'),active:require('../../assets/nav7_7.png')},
-              {default:require('../../assets/nav15.png'),active:require('../../assets/nav15_15.png')},
-              {default:require('../../assets/nav16.png'),active:require('../../assets/nav16_16.png')},
-              {default:require('../../assets/nav17.png'),active:require('../../assets/nav17_17.png')},
-              {default:require('../../assets/nav18.png'),active:require('../../assets/nav18_18.png')},
-              {default:require('../../assets/nav18.png'),active:require('../../assets/nav18_18.png')},
-              {default:require('../../assets/nav19.png'),active:require('../../assets/nav19_19.png')},
-              {default:require('../../assets/nav20.png'),active:require('../../assets/nav20_20.png')},
-              {default:require('../../assets/nav21.png'),active:require('../../assets/nav21_21.png')},
-              {default:require('../../assets/nav21.png'),active:require('../../assets/nav21_21.png')},
+      activeIndex: 0,
+      iconARR: [
+        {
+          default: require("../../assets/nav1.png"),
+          active: require("../../assets/nav1_1.png")
+        },
+        {
+          default: require("../../assets/nav2.png"),
+          active: require("../../assets/nav2_2.png")
+        },
+        {
+          default: require("../../assets/nav14.png"),
+          active: require("../../assets/nav14_14.png")
+        },
+        {
+          default: require("../../assets/nav7.png"),
+          active: require("../../assets/nav7_7.png")
+        },
+        {
+          default: require("../../assets/nav15.png"),
+          active: require("../../assets/nav15_15.png")
+        },
+        {
+          default: require("../../assets/nav16.png"),
+          active: require("../../assets/nav16_16.png")
+        },
+        {
+          default: require("../../assets/nav17.png"),
+          active: require("../../assets/nav17_17.png")
+        },
+        {
+          default: require("../../assets/nav18.png"),
+          active: require("../../assets/nav18_18.png")
+        },
+        {
+          default: require("../../assets/nav18.png"),
+          active: require("../../assets/nav18_18.png")
+        },
+        {
+          default: require("../../assets/nav19.png"),
+          active: require("../../assets/nav19_19.png")
+        },
+        {
+          default: require("../../assets/nav20.png"),
+          active: require("../../assets/nav20_20.png")
+        },
+        {
+          default: require("../../assets/nav21.png"),
+          active: require("../../assets/nav21_21.png")
+        },
+        {
+          default: require("../../assets/nav21.png"),
+          active: require("../../assets/nav21_21.png")
+        }
       ]
     };
   },
   created() {
-    console.log(this.$route.fullPath);
+    // console.log(this.$route.fullPath);
     this.fullPath = this.$route.fullPath;
-    if(this.fullPath.includes('account')){
-      this.activeIndex = 0
-      this.title = '账号信息'
-    }else if(this.fullPath.includes('ompany_info')){
-      this.activeIndex = 1
-      this.title = '企业信息'
-    }else if(this.fullPath.includes('erver_info')){
-      this.activeIndex = 2
-      this.title = '服务信息'
-    }else if(this.fullPath.includes('on_account')){
-      this.activeIndex = 3
-      this.title = '子账号管理'
-    }else if(this.fullPath.includes('rder_taking')){
-      this.activeIndex = 4
-      this.title = '接单管理'
-    }else if(this.fullPath.includes('ooking_space')){
-      this.activeIndex = 5
-      this.title = '订舱管理'
-    }else if(this.fullPath.includes('aking_bill')){
-      this.activeIndex = 6
-      this.title = '制单管理'
-    }else if(this.fullPath.includes('air_plan')){
-      this.activeIndex = 7
-      this.title = '航班计划维护'
-    }else if(this.fullPath.includes('plane_manage')){
-      this.activeIndex = 8
-      this.title = '航班管理'
-    }else if(this.fullPath.includes('irlift')){
-      this.activeIndex = 9
-      this.title = '空运产品管理'
-    }else if(this.fullPath.includes('and_transport')){
-      this.activeIndex = 10
-      this.title = '陆运产品管理'
-    }else if(this.fullPath.includes('irport_operation')){
-      this.activeIndex = 11
-      this.title = '机场操作产品管理'
-    }else if(this.fullPath.includes('alue_add')){
-      this.activeIndex = 12
-      this.title = '增值服务产品管理'
-    }
+    this.initNav()
   },
   methods: {
     ...mapMutations({
-      'setUsertype':'SET_USERTYPE',
-      'setToken':'SET_TOKEN',
-      'setUsername':'SET_USERNAME',
-      'setId':'SET_ID'
+      setUsertype: "SET_USERTYPE",
+      setToken: "SET_TOKEN",
+      setUsername: "SET_USERNAME",
+      setId: "SET_ID"
     }),
-    logout(){
-      this.$cookie.delete('username')
-      this.setUsername('')
-      this.setUsertype('')
-      this.setToken('')
-      this.setId('')
-      this.$router.push('/login')
+    logout() {
+      this.$cookie.delete("username");
+      this.setUsername("");
+      this.setUsertype("");
+      this.setToken("");
+      this.setId("");
+      this.$router.push("/login");
     },
-    goto(index,path){
-      this.$router.push(path)
-      this.activeIndex = index
-      if(index == 0){
-        this.title = '账号信息'
-      }else if(index == 1){
-        this.title = '企业信息'
-      }else if(index == 2){
-        this.title = '服务信息'
-      }else if(index == 3){
-        this.title = '子账号管理'
-      }else if(index == 4){
-        this.title = '接单管理'
-      }else if(index == 5){
-        this.title = '订舱管理'
-      }else if(index == 6){
-        this.title = '制单管理'
-      }else if(index == 7){
-        this.title = '航班计划维护'
-      }else if(index == 8){
-        this.title = '航班管理'
-      }else if(index == 9){
-        this.title = '空运产品管理'
-      }else if(index == 10){
-        this.title = '陆运产品管理'
-      }else if(index == 11){
-        this.title = '机场操作产品管理'
-      }else if(index == 12){
-        this.title = '增值服务产品管理'
+    initNav() {
+      if (this.fullPath.includes("account")) {
+        this.activeIndex = 0;
+        this.title = "账号信息";
+      } else if (this.fullPath.includes("ompany_info")) {
+        this.activeIndex = 1;
+        this.title = "企业信息";
+      } else if (this.fullPath.includes("erver_info")) {
+        this.activeIndex = 2;
+        this.title = "服务信息";
+      } else if (this.fullPath.includes("on_account")) {
+        this.activeIndex = 3;
+        this.title = "子账号管理";
+      } else if (this.fullPath.includes("rder_taking")) {
+        this.activeIndex = 4;
+        this.title = "接单管理";
+      } else if (this.fullPath.includes("ooking_space")) {
+        this.activeIndex = 5;
+        this.title = "订舱管理";
+      } else if (this.fullPath.includes("aking_bill")) {
+        this.activeIndex = 6;
+        this.title = "制单管理";
+      } else if (this.fullPath.includes("air_plan")) {
+        this.activeIndex = 7;
+        this.title = "航班计划维护";
+      } else if (this.fullPath.includes("plane_manage")) {
+        this.activeIndex = 8;
+        this.title = "航班管理";
+      } else if (this.fullPath.includes("irlift")) {
+        this.activeIndex = 9;
+        this.title = "空运产品管理";
+      } else if (this.fullPath.includes("and_transport")) {
+        this.activeIndex = 10;
+        this.title = "陆运产品管理";
+      } else if (this.fullPath.includes("irport_operation")) {
+        this.activeIndex = 11;
+        this.title = "机场操作产品管理";
+      } else if (this.fullPath.includes("alue_add")) {
+        this.activeIndex = 12;
+        this.title = "增值服务产品管理";
+      }
+    },
+    goto(index, path) {
+      this.$router.push(path);
+      this.activeIndex = index;
+      if (index == 0) {
+        this.title = "账号信息";
+      } else if (index == 1) {
+        this.title = "企业信息";
+      } else if (index == 2) {
+        this.title = "服务信息";
+      } else if (index == 3) {
+        this.title = "子账号管理";
+      } else if (index == 4) {
+        this.title = "接单管理";
+      } else if (index == 5) {
+        this.title = "订舱管理";
+      } else if (index == 6) {
+        this.title = "制单管理";
+      } else if (index == 7) {
+        this.title = "航班计划维护";
+      } else if (index == 8) {
+        this.title = "航班管理";
+      } else if (index == 9) {
+        this.title = "空运产品管理";
+      } else if (index == 10) {
+        this.title = "陆运产品管理";
+      } else if (index == 11) {
+        this.title = "机场操作产品管理";
+      } else if (index == 12) {
+        this.title = "增值服务产品管理";
       }
     }
   },
   computed: {
-    ...mapGetters([
-      'username'
-    ])
+    ...mapGetters(["username"])
+  },
+  watch: {
+    $route: {
+      handler(newValue, oldValue) {
+        // console.log("newValue", newValue.fullPath);
+        this.fullPath = newValue.fullPath
+        this.initNav()
+      },
+      deep: true
+    }
   }
 };
 </script>
@@ -184,12 +235,12 @@ export default {
     z-index: 9;
     box-shadow: 0 0 10px gray;
     position: relative;
-    &::after{
-      content: '';
+    &::after {
+      content: "";
       display: inline-block;
       width: 100%;
       height: 1px;
-      background-color: #E7E7E7;
+      background-color: #e7e7e7;
       position: absolute;
       bottom: -61px;
       left: 0;
@@ -296,8 +347,8 @@ export default {
               font-size: 12px;
               cursor: auto;
             }
-            &.active{
-              span{
+            &.active {
+              span {
                 color: red;
               }
             }

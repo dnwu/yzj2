@@ -683,6 +683,7 @@ export default {
     return {
       options2: [],
       goodsType: '',
+      goodsTypeList: [],
       serverInfoModel: {
         airtrans: false,
         beginport: false,
@@ -737,13 +738,14 @@ export default {
       flightNo: '',
       flightDate: '',
       flighttime: '',
-      transNum: ''
+      transNum: '',
     };
   },
   created() {
     this.orderId = this.$route.query.orderId;
     this.orderNo = this.$route.query.orderNo;
-    this.getOrderDetail()
+    this.getGoodTypeList();
+    this.getOrderDetail();
     this.axios.post("/app/v1/common/queryDict",{
       "dataType": 4
     }).then(data => {
@@ -784,6 +786,22 @@ export default {
   methods: {
     goto(path) {
       this.$router.push(path);
+    },
+    getGoodTypeList (){
+      this.axios.post("/app/v1/common/queryDict",{
+        "dataType": 2
+      }).then(data => {
+        let arr = [];
+        if(data.data.data.detailDTOS.length){
+          for(let i=0;i<data.data.data.detailDTOS.length;i++){
+            let obj={};
+            obj.value = data.data.data.detailDTOS[i].id;
+            obj.label = data.data.data.detailDTOS[i].dataName;
+            arr.push(obj);
+          }
+        }
+        this.goodsTypeList = arr;
+      });
     },
     getOrderDetail () {
       this.axios.post("/app/v1/order/getOrderDetail",{
@@ -895,11 +913,10 @@ export default {
           this.receiverAddress = res.receiverAddress||{};
           if(res.orderGoodsDetail){
             let goodsTypeName = '';
-            switch (parseInt(res.orderGoodsDetail.goodsType)){
-              case 7: goodsTypeName = '普货'; break;
-              case 8: goodsTypeName = '冷链'; break;
-              case 9: goodsTypeName = '重货'; break;
-              case 10: goodsTypeName = '危险品'; break;
+            for(let i=0;i<this.goodsTypeList.length;i++){
+                if(this.goodsTypeList[i].value == res.orderGoodsDetail.goodsType){
+                  goodsTypeName = this.goodsTypeList[i].label;
+                }
             }
             res.orderGoodsDetail.goodsTypeName = goodsTypeName;
             this.orderGoodsDetail = res.orderGoodsDetail;

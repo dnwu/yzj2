@@ -48,123 +48,174 @@
   </div>
 </template>
 <script>
-import {mapGetters,mapMutations} from 'vuex'
+import { mapGetters, mapMutations } from "vuex";
 export default {
   data() {
     return {
       // fullPath: "/center/account",
-      title:'用户中心',
-      activeIndex:0,
-      iconARR:[{default:require('../../assets/nav1.png'),active:require('../../assets/nav1_1.png')},
-              {default:require('../../assets/nav2.png'),active:require('../../assets/nav2_2.png')},
-              {default:require('../../assets/nav3.png'),active:require('../../assets/nav3_3.png')},
-              {default:require('../../assets/nav4.png'),active:require('../../assets/nav4_4.png')},
-              {default:require('../../assets/nav5.png'),active:require('../../assets/nav5_5.png')},
-              {default:require('../../assets/nav6.png'),active:require('../../assets/nav6_6.png')},
-              {default:require('../../assets/nav7.png'),active:require('../../assets/nav7_7.png')},
-              {default:require('../../assets/nav8.png'),active:require('../../assets/nav8_8.png')},
-              {default:require('../../assets/nav9.png'),active:require('../../assets/nav9_9.png')},
-              {default:require('../../assets/nav10.png'),active:require('../../assets/nav10_10.png')},
-              {default:require('../../assets/nav11.png'),active:require('../../assets/nav11_11.png')},
-              {default:require('../../assets/nav12.png'),active:require('../../assets/nav12_12.png')},
-              {default:require('../../assets/nav13.png'),active:require('../../assets/nav13_13.png')},
+      title: "用户中心",
+      activeIndex: 0,
+      iconARR: [
+        {
+          default: require("../../assets/nav1.png"),
+          active: require("../../assets/nav1_1.png")
+        },
+        {
+          default: require("../../assets/nav2.png"),
+          active: require("../../assets/nav2_2.png")
+        },
+        {
+          default: require("../../assets/nav3.png"),
+          active: require("../../assets/nav3_3.png")
+        },
+        {
+          default: require("../../assets/nav4.png"),
+          active: require("../../assets/nav4_4.png")
+        },
+        {
+          default: require("../../assets/nav5.png"),
+          active: require("../../assets/nav5_5.png")
+        },
+        {
+          default: require("../../assets/nav6.png"),
+          active: require("../../assets/nav6_6.png")
+        },
+        {
+          default: require("../../assets/nav7.png"),
+          active: require("../../assets/nav7_7.png")
+        },
+        {
+          default: require("../../assets/nav8.png"),
+          active: require("../../assets/nav8_8.png")
+        },
+        {
+          default: require("../../assets/nav9.png"),
+          active: require("../../assets/nav9_9.png")
+        },
+        {
+          default: require("../../assets/nav10.png"),
+          active: require("../../assets/nav10_10.png")
+        },
+        {
+          default: require("../../assets/nav11.png"),
+          active: require("../../assets/nav11_11.png")
+        },
+        {
+          default: require("../../assets/nav12.png"),
+          active: require("../../assets/nav12_12.png")
+        },
+        {
+          default: require("../../assets/nav13.png"),
+          active: require("../../assets/nav13_13.png")
+        }
       ]
     };
   },
   created() {
     this.fullPath = this.$route.fullPath;
-    if(this.fullPath.includes('account')){
-      this.activeIndex = 0
-      this.title = '账号信息'
-    }else if(this.fullPath.includes('company_info')){
-      this.activeIndex = 1
-      this.title = '企业信息'
-    }else if(this.fullPath.includes('doings')){
-      this.activeIndex = 2
-      this.title = '我的活动'
-    }else if(this.fullPath.includes('experience')){
-      this.activeIndex = 3
-      this.title = '会员经验'
-    }else if(this.fullPath.includes('integral')){
-      this.activeIndex = 4
-      this.title = '会员积分'
-    }else if(this.fullPath.includes('address')){
-      this.activeIndex = 5
-      this.title = '地址簿'
-    }else if(this.fullPath.includes('son_account')){
-      this.activeIndex = 6
-      this.title = '子账号管理'
-    }else if(this.fullPath.includes('nline_product')){
-      this.activeIndex = 7
-      this.title = '网上下单'
-    }else if(this.fullPath.includes('client_product')){
-      this.activeIndex = 8
-      this.title = '客户端下单'
-    }else if(this.fullPath.includes('order_search')){
-      this.activeIndex = 9
-      this.title = '订单查询'
-    }else if(this.fullPath.includes('order_track')){
-      this.activeIndex = 10
-      this.title = '订单跟踪'
-    }else if(this.fullPath.includes('ticket_info_egis')){
-      this.activeIndex = 11
-      this.title = '开票信息维护'
-    }else if(this.fullPath.includes('bill_look')){
-      this.activeIndex = 12
-      this.title = '账单查看'
-    }
+    this.initNav()
   },
   methods: {
     ...mapMutations({
-      'setUsertype':'SET_USERTYPE',
-      'setToken':'SET_TOKEN',
-      'setUsername':'SET_USERNAME',
-      'setId':'SET_ID'
+      setUsertype: "SET_USERTYPE",
+      setToken: "SET_TOKEN",
+      setUsername: "SET_USERNAME",
+      setId: "SET_ID"
     }),
-    goto(index,path){
-      this.$router.push(path)
-      this.activeIndex = index
-      if(index == 0){
-        this.title = '账号信息'
-      }else if(index == 1){
-        this.title = '企业信息'
-      }else if(index == 2){
-        this.title = '我的活动'
-      }else if(index == 3){
-        this.title = '会员经验'
-      }else if(index == 4){
-        this.title = '会员积分'
-      }else if(index == 5){
-        this.title = '地址簿'
-      }else if(index == 6){
-        this.title = '子账号管理'
-      }else if(index == 7){
-        this.title = '网上下单'
-      }else if(index == 8){
-        this.title = '客户端下单'
-      }else if(index == 9){
-        this.title = '订单查询'
-      }else if(index == 10){
-        this.title = '订单跟踪'
-      }else if(index == 11){
-        this.title = '开票信息维护'
-      }else if(index == 12){
-        this.title = '账单查看'
+    goto(index, path) {
+      this.$router.push(path);
+      this.activeIndex = index;
+      if (index == 0) {
+        this.title = "账号信息";
+      } else if (index == 1) {
+        this.title = "企业信息";
+      } else if (index == 2) {
+        this.title = "我的活动";
+      } else if (index == 3) {
+        this.title = "会员经验";
+      } else if (index == 4) {
+        this.title = "会员积分";
+      } else if (index == 5) {
+        this.title = "地址簿";
+      } else if (index == 6) {
+        this.title = "子账号管理";
+      } else if (index == 7) {
+        this.title = "网上下单";
+      } else if (index == 8) {
+        this.title = "客户端下单";
+      } else if (index == 9) {
+        this.title = "订单查询";
+      } else if (index == 10) {
+        this.title = "订单跟踪";
+      } else if (index == 11) {
+        this.title = "开票信息维护";
+      } else if (index == 12) {
+        this.title = "账单查看";
       }
     },
-    logout(){
-      this.$cookie.delete('username')
-      this.setUsername('')
-      this.setUsertype('')
-      this.setToken('')
-      this.setId('')
-      this.$router.push('/login')
+    initNav() {
+      if (this.fullPath.includes("account")) {
+        this.activeIndex = 0;
+        this.title = "账号信息";
+      } else if (this.fullPath.includes("company_info")) {
+        this.activeIndex = 1;
+        this.title = "企业信息";
+      } else if (this.fullPath.includes("doings")) {
+        this.activeIndex = 2;
+        this.title = "我的活动";
+      } else if (this.fullPath.includes("experience")) {
+        this.activeIndex = 3;
+        this.title = "会员经验";
+      } else if (this.fullPath.includes("integral")) {
+        this.activeIndex = 4;
+        this.title = "会员积分";
+      } else if (this.fullPath.includes("address")) {
+        this.activeIndex = 5;
+        this.title = "地址簿";
+      } else if (this.fullPath.includes("son_account")) {
+        this.activeIndex = 6;
+        this.title = "子账号管理";
+      } else if (this.fullPath.includes("nline_product")) {
+        this.activeIndex = 7;
+        this.title = "网上下单";
+      } else if (this.fullPath.includes("client_product")) {
+        this.activeIndex = 8;
+        this.title = "客户端下单";
+      } else if (this.fullPath.includes("order_search")) {
+        this.activeIndex = 9;
+        this.title = "订单查询";
+      } else if (this.fullPath.includes("order_track")) {
+        this.activeIndex = 10;
+        this.title = "订单跟踪";
+      } else if (this.fullPath.includes("ticket_info_egis")) {
+        this.activeIndex = 11;
+        this.title = "开票信息维护";
+      } else if (this.fullPath.includes("bill_look")) {
+        this.activeIndex = 12;
+        this.title = "账单查看";
+      }
+    },
+    logout() {
+      this.$cookie.delete("username");
+      this.setUsername("");
+      this.setUsertype("");
+      this.setToken("");
+      this.setId("");
+      this.$router.push("/login");
     }
   },
   computed: {
-    ...mapGetters([
-      'username',
-    ])
+    ...mapGetters(["username"])
+  },
+  watch: {
+    $route: {
+      handler(newValue, oldValue) {
+        // console.log("newValue", newValue.fullPath);
+        this.fullPath = newValue.fullPath
+        this.initNav()
+      },
+      deep: true
+    }
   }
 };
 </script>
@@ -184,12 +235,12 @@ export default {
     z-index: 9;
     box-shadow: 0 0 10px gray;
     position: relative;
-    &::after{
-      content: '';
+    &::after {
+      content: "";
       display: inline-block;
       width: 100%;
       height: 1px;
-      background-color: #E7E7E7;
+      background-color: #e7e7e7;
       position: absolute;
       bottom: -61px;
       left: 0;
@@ -296,8 +347,8 @@ export default {
               font-size: 12px;
               cursor: auto;
             }
-            &.active{
-              span{
+            &.active {
+              span {
                 color: red;
               }
             }
