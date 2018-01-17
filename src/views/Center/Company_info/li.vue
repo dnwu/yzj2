@@ -5,12 +5,12 @@
         <span class="name" v-text="obj.name"></span>
         <span class="dot">:</span>
         </div>
-        <input :style="widthStyle" class="value" v-text="obj.value" v-if="obj.value !== false" v-show="edit" v-model="obj.value"></input>
-        <span :style="widthStyle" class="value" v-text="obj.value" v-if="obj.value !== false" v-show="!edit"></span>
-        <span :style="widthStyle" v-if="obj.value === false" v-show="!edit" class="value"><i class="el-icon-picture"></i></span>
+        <input :style="widthStyle" class="value" v-text="obj.value" v-if="!obj.file" v-show="edit" v-model="obj.value"></input>
+        <span :style="widthStyle" class="value" v-text="obj.value" v-if="!obj.file" v-show="!edit"></span>
+        <span :style="widthStyle" v-if="obj.file&&obj.value" v-show="!edit" class="value"><i class="el-icon-picture"></i></span>
         <el-upload
             :style="widthStyle"
-            v-if="obj.value === false"
+            v-if="obj.file"
             v-show="edit"
             action="https://jsonplaceholder.typicode.com/posts/"
             :limit="1"
@@ -48,19 +48,7 @@ export default {
     },
     onChange(event) {
       this.$emit("fileChange", this.name, event.raw);
-    },
-    submitUpload() {
-      /* var arrName = Object.keys(this.info);
-      for (var i = 0; i < arrName.length; i++) {
-        this.$refs[arrName[i]] && this.$refs[arrName[i]][0].submit();
-      } */
     }
-    /* handleRemove(file, fileList) {
-      console.log(file, fileList);
-    },
-    handlePreview(file) {
-      console.log(file);
-    }*/
   },
   mounted() {
     this.getWitdthStyle();
