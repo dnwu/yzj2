@@ -7,7 +7,7 @@
         </el-carousel-item>
       </el-carousel>
       <div class="search-input">
-        <el-input placeholder="请输入订单号进行查询" icon="search" v-model="search" :on-icon-click="searchOrder"></el-input>
+        <el-input placeholder="请输入订单号进行查询" icon="search" @keyup.enter.native="getOrderTrack('/home/order_track_home')" v-model="search" :on-icon-click="searchOrder"></el-input>
         <button class="search-btn" @click="getOrderTrack('/home/order_track_home')" type="button">马上查单</button>
       </div>
     </div>

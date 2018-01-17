@@ -61,7 +61,7 @@
           <p>运送中</p>
         </div>
         <div class="right">
-          <el-button type="danger" @click="goto('/center/order_detail')">订单详情</el-button>
+          <el-button type="danger" disabled @click="goto('/center/order_detail')">订单详情</el-button>
         </div>
       </div>
     </div>
@@ -123,10 +123,16 @@ export default {
   data() {
     return {
       orderNo: "",
-      orderDetailData: {}
+      orderDetailData: {},
     };
   },
-  created() {},
+  created() {
+    console.log(this.$route.query.orderNo);
+    if(this.$route.query.orderNo){
+      this.orderNo = this.$route.query.orderNo
+      this.getOrderDetail()
+    }
+  },
   methods: {
     goto(path) {
       this.$router.push({

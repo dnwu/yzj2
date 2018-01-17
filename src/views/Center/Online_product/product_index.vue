@@ -86,7 +86,7 @@
                           <div class="value">{{userInfo.fullName}}</div>
                         </div>
                         <div>
-                          <div class="key">会员编号：</div>
+                          <div class="key" v-if="'level' in userInfo">会员编号：</div>
                           <div class="value">{{userInfo.level.memberNo}}</div>
                         </div>
                         <div>

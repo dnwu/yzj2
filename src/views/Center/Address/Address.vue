@@ -436,7 +436,7 @@ export default {
     },
     removeAddress() {
       this.storeRemoveAddress = [];
-      this.removeAddressModel = true;
+
       this.newAddressList.forEach(ele => {
         if (ele.remove == true) {
           this.storeRemoveAddress.push({
@@ -446,8 +446,14 @@ export default {
         }
       });
       this.removeAddressNo = this.storeRemoveAddress.length;
+      if(this.removeAddressNo == 0){
+        this.$message('您并没有选择要删除的地址！');
+        return
+      }
+      this.removeAddressModel = true;
     },
     removeAddressSubmit() {
+
       this.storeRemoveAddress.forEach(ele => {
         this.axios
           .post("/app/v1/address/deleteAddress", {
