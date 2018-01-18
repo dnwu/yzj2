@@ -1,14 +1,14 @@
 <template>
-<div class="my-li">
-    <li v-for="(obj,name) in info">
+  <ul class="my-ul">
+    <li class="my-li" v-for="(obj,name) in info">
         <div class="wrap">
         <span class="name" v-text="obj.name"></span>
         <span class="dot">:</span>
         </div>
         <input :style="widthStyle" class="value" v-text="obj.value" v-if="!obj.file" v-show="edit" v-model="obj.value"></input>
         <span :style="widthStyle" class="value" v-text="obj.value" v-if="!obj.file" v-show="!edit"></span>
-        <span :style="widthStyle" v-if="obj.file&&!obj.value" v-show="!edit" class="value"></span>
-        <span :style="widthStyle" v-if="obj.file&&obj.value" v-show="!edit" class="value"><i class="el-icon-picture"></i></span>
+        <span :style="widthStyle" class="value" v-if="obj.file&&!obj.value" v-show="!edit"></span>
+        <span :style="widthStyle" class="value" v-if="obj.file&&obj.value" v-show="!edit"><i class="el-icon-picture"></i></span>
         <el-upload
             :style="widthStyle"
             v-if="obj.file"
@@ -22,14 +22,7 @@
             <el-button slot="trigger" size="small" type="primary" @click="setName(name)">选取文件</el-button>
         </el-upload>
     </li>
-    <!--             
-      ref="upload"
-      action="https://jsonplaceholder.typicode.com/posts/"
-      :on-preview="handlePreview"
-      :on-remove="handleRemove"
-    -->
-</div>
-
+  </ul>
 </template>
 <script>
 export default {
@@ -71,6 +64,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
+ul {
+  padding-left: 0;
+}
+
 $font-height: 18px;
 @mixin font {
   text-align: justify;

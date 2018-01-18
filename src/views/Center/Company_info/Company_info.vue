@@ -1,6 +1,6 @@
 <template>
   <div class="company-info">
-    <div class="is-flex header">
+    <div class="is-flex ali-center jst-between header">
       <span class="info">企业信息</span>
       <span class="btn btn-apply" v-if="isApply == false" v-show="!edit" @click="edit = true">完善企业信息</span>
       <span class="btn btn-apply" v-if="isApply == false" v-show="edit" @click="saveInfo">保存</span>
@@ -8,58 +8,42 @@
     </div>
     <div class="main">
       <section class="card">
-        <header class="is-flex card-head">公司基本信息</header>
-        <main class="is-flex card-body">
-          <ul class="card-left">
-            <my-li ref="info1" :info="info1" :edit="edit" :width="widthLeft" @fileChange="fileChange"></my-li>
-          </ul>
-          <ul class="card-right">
-            <my-li ref="info2" :info="info2" :edit="edit" :width="widthRight" @fileChange="fileChange"></my-li>
-          </ul>
+        <header class="is-flex ali-center card-head">公司基本信息</header>
+        <main class="is-flex jst-between card-body">
+            <my-ul class="card-left" ref="info1" :info="info1" :edit="edit" :width="widthLeft" @fileChange="fileChange"></my-ul>
+            <my-ul class="card-right" ref="info2" :info="info2" :edit="edit" :width="widthRight" @fileChange="fileChange"></my-ul>
         </main>
       </section class="card">
       <section class="card card-two">
-        <header class="is-flex card-head">公司税务登记证</header>
-        <main class="is-flex card-body">
-          <ul class="card-left info-justify-font">
-            <my-li ref="tax1" :info="tax1" :edit="edit" :width="widthLeft" @fileChange="fileChange"></my-li>
-          </ul>
-          <ul class="card-right">
-            <my-li ref="tax2" :info="tax2" :edit="edit" :width="widthRight" @fileChange="fileChange"></my-li>
-          </ul>
+        <header class="is-flex ali-center card-head">公司税务登记证</header>
+        <main class="is-flex jst-between card-body">
+            <my-ul class="card-left is-flex ali-center" ref="tax1" :info="tax1" :edit="edit" :width="widthLeft" @fileChange="fileChange"></my-ul>
+            <my-ul class="card-right" ref="tax2" :info="tax2" :edit="edit" :width="widthRight" @fileChange="fileChange"></my-ul>
         </main>
       </section class="card">
       <section class="card">
-        <header class="is-flex card-head">开户银行许可证</header>
-        <main class="is-flex card-body">
-          <ul class="card-left">
-            <my-li ref="paper1" :info="paper1" :edit="edit" :width="widthLeft" @fileChange="fileChange"></my-li>
-          </ul>
-          <ul class="card-right">
-            <my-li ref="paper2" :info="paper2" :edit="edit" :width="widthRight" @fileChange="fileChange"></my-li>
-          </ul>
+        <header class="is-flex ali-center card-head">开户银行许可证</header>
+        <main class="is-flex jst-between card-body">
+            <my-ul class="card-left" ref="paper1" :info="paper1" :edit="edit" :width="widthLeft" @fileChange="fileChange"></my-ul>
+            <my-ul class="card-right" ref="paper2" :info="paper2" :edit="edit" :width="widthRight" @fileChange="fileChange"></my-ul>
         </main>
       </section class="card">
       <section class="card card-two">
-        <header class="is-flex card-head">联系人信息</header>
-        <main class="is-flex card-body">
-          <ul class="card-left info-justify-font">
-            <my-li ref="msg1" :info="msg1" :edit="edit" :width="widthLeft" @fileChange="fileChange"></my-li>
-          </ul>
-          <ul class="card-right">
-            <my-li ref="msg2" :info="msg2" :edit="edit" :width="widthRight" @fileChange="fileChange"></my-li>
-          </ul>
+        <header class="is-flex ali-center card-head">联系人信息</header>
+        <main class="is-flex jst-between card-body">
+            <my-ul class="card-left is-flex ali-center" ref="msg1" :info="msg1" :edit="edit" :width="widthLeft" @fileChange="fileChange"></my-ul>
+            <my-ul class="card-right" ref="msg2" :info="msg2" :edit="edit" :width="widthRight" @fileChange="fileChange"></my-ul>
         </main>
       </section class="card">
     </div>
   </div>
 </template>
 <script>
-import Li from "./li";
+import Ul from "./ul";
 import { mapGetters } from "vuex";
 export default {
   components: {
-    "my-li": Li
+    "my-ul": Ul
   },
   data() {
     return {
@@ -432,28 +416,15 @@ export default {
 <style lang="scss" scoped>
 @import "../../../common/css/base.css";
 @import "../../../common/scss/center/index.scss";
-.is-flex {
-  display: flex;
-}
-
-ul {
-  padding-left: 0;
-}
 
 .company-info {
   width: 90%;
-  .el-icon-picture {
-    vertical-align: middle;
-  }
 }
 
-$orange: #fccf00;
 .header {
   $bth-height: 12px;
   padding-right: 50px;
   @include header;
-  align-items: center;
-  justify-content: space-between;
   .info {
     flex: 1;
   }
@@ -462,7 +433,7 @@ $orange: #fccf00;
     margin: 0 10px;
     padding: 4px 10px;
     line-height: $bth-height;
-    background: $orange;
+    background: $yellow;
     border-radius: 3px;
     color: #feffe1;
     box-shadow: 2px 3px 10px 1px rgba(0, 0, 0, 0.1);
@@ -470,20 +441,6 @@ $orange: #fccf00;
 }
 
 $font-height: 18px;
-@mixin font {
-  text-align: justify;
-  height: $font-height;
-  overflow: hidden;
-  &::after {
-    width: 100%;
-    height: 0;
-    margin: 0;
-    display: inline-block;
-    overflow: hidden;
-    content: "";
-  }
-}
-
 .main {
   $gap: 10px;
   padding: $gap;
@@ -491,15 +448,13 @@ $font-height: 18px;
     $radius: 3px;
     margin-bottom: $gap*2;
     .card-head {
-      align-items: center;
       padding-left: 10px;
       color: white;
       height: 30px;
-      background: $orange;
+      background: $yellow;
       border-radius: $radius;
     }
     .card-body {
-      justify-content: space-between;
       border-radius: $radius;
       box-shadow: 0px 1px 10px 2px rgba(0, 0, 0, 0.1);
       color: #888;
@@ -515,12 +470,15 @@ $font-height: 18px;
   }
 }
 
-.info-justify-font {
-  display: flex;
-  align-items: center;
-}
-
 .is-no-apply {
   cursor: not-allowed;
 }
 </style>
+<style lang="scss">
+.company-info {
+  .el-icon-picture {
+    vertical-align: middle;
+  }
+}
+</style>
+
