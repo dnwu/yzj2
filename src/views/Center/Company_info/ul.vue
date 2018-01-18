@@ -2,13 +2,12 @@
   <ul class="my-ul">
     <li class="my-li" v-for="(obj,name) in info">
         <div class="wrap">
-        <span class="name" v-text="obj.name"></span>
-        <span class="dot">:</span>
+          <span class="name" v-text="obj.name"></span>
+          <span class="dot">:</span>
         </div>
-        <input :style="widthStyle" class="value" v-text="obj.value" v-if="!obj.file" v-show="edit" v-model="obj.value"></input>
-        <span :style="widthStyle" class="value" v-text="obj.value" v-if="!obj.file" v-show="!edit"></span>
-        <span :style="widthStyle" class="value" v-if="obj.file&&!obj.value" v-show="!edit"></span>
-        <span :style="widthStyle" class="value" v-if="obj.file&&obj.value" v-show="!edit"><i class="el-icon-picture"></i></span>
+        <input :style="widthStyle" class="value" v-if="!obj.file" v-show="edit" v-model="obj.value"></input>
+        <span :style="widthStyle" class="value" v-if="!obj.file" v-show="!edit" v-text="obj.value"></span>
+        <span :style="widthStyle" class="value" v-if="obj.file" v-show="!edit"><i v-if="obj.value" class="el-icon-picture"></i></span>
         <el-upload
             :style="widthStyle"
             v-if="obj.file"
