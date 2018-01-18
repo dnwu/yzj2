@@ -656,7 +656,7 @@ export default {
         },
         {
           value: 5,
-          label: "运送中"
+          label: "运输中"
         },
         {
           value: 6,
@@ -685,6 +685,10 @@ export default {
     };
   },
   created() {
+    console.log(this.$route.query.type);
+    if(this.$route.query.type){
+      this.orderStatus =parseInt(this.$route.query.type)
+    }
     this.getGoodTypeList();
     this.getOrderList(1);
   },
@@ -693,6 +697,7 @@ export default {
       this.axios.post("/app/v1/common/queryDict",{
         "dataType": 2
       }).then(data => {
+        console.log(data);
         let arr = [];
         if(data.data.data.detailDTOS.length){
           for(let i=0;i<data.data.data.detailDTOS.length;i++){
@@ -702,7 +707,7 @@ export default {
             arr.push(obj);
           }
         }
-        this.goodsTypeList = arr;
+        this.goodsTypeData = arr;
       });
     },
     getOrderList(page) {

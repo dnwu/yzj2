@@ -329,7 +329,6 @@ export default {
           if (data.data.code == "1") {
             this.userInfo = data.data.data;
             this.resetEmailData.oldEmail = data.data.data.email;
-            // console.log(this.userInfo);
           } else if (data.data.code == 10001) {
             this.logout();
           }
@@ -794,21 +793,21 @@ export default {
                   padding: 6px 60px;
                 }
               }
-              .code {
-                .el-form-item__content {
-                  display: flex;
-                  .sendCode {
-                    margin-left: 100px;
-                    margin-right: 100px;
-                  }
-                }
-              }
-              .time {
-                position: absolute;
-                right: 40px;
-                color: #67c23a;
-                text-align: left;
-              }
+              // .code {
+              //   .el-form-item__content {
+              //     display: flex;
+              //     .sendCode {
+              //       margin-left: 100px;
+              //       margin-right: 100px;
+              //     }
+              //   }
+              // }
+              // .time {
+              //   position: absolute;
+              //   right: 40px;
+              //   color: #67c23a;
+              //   text-align: left;
+              // }
             }
           }
         }
