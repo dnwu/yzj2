@@ -158,7 +158,9 @@ export default {
     };
     return {
       rules: {
-        fullName: [{ required: true, message: "请输入真实姓名", trigger: "blur" }],
+        fullName: [
+          { required: true, message: "请输入真实姓名", trigger: "blur" }
+        ],
         account: [
           { required: true, message: "请输入用户名", trigger: "blur" }
           /* { min: 6, max: 60, message: '长度在 6 到 60 个字符之间', trigger: 'blur' } */
@@ -271,14 +273,15 @@ export default {
                   data[name] || data.level[name] || undefined;
               }
             }
-            this.$message({
-              message: `获取会员信息成功(${res.data.msg})`,
-              type: "success"
-            });
             var status = res.data.data.authStatus;
             var isApply = status || false; // 认证状态 1：待认证 2：通过 3：拒绝,
             if (isApply == 2) {
               this.getAccountList();
+            } else {
+              this.$message({
+                message: "您还没有权限对子账号进行操作",
+                type: "warning"
+              });
             }
           } else {
             this.$message({
@@ -308,6 +311,12 @@ export default {
             this.total = res.data.total;
             var arr = res.data.hnaAccounts;
             this.lists = arr;
+            if (this.lists.length == 0) {
+              this.$message({
+                message: `获取子账号成功(暂无相关数据)`,
+                type: "success"
+              });
+            }
           } else {
             this.$message({
               message: `获取子账号失败(${res.data.msg})`,

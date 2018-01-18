@@ -256,12 +256,16 @@ export default {
       // 企业注册申请，提示权限
       // 判断用户申请状态，避免按钮重复请求
       if (this.isApply != 1) {
-        this.$confirm("请务必保证企业信息填写正确性和完整性，<br>申请后将不能再次修改", "提示", {
-          confirmButtonText: "继续申请",
-          cancelButtonText: "再次检查",
-          type: "warning",
-          dangerouslyUseHTMLString: true
-        })
+        this.$confirm(
+          "请务必保证企业信息填写正确性和完整性，<br>申请后将不能再次修改",
+          "提示",
+          {
+            confirmButtonText: "继续申请",
+            cancelButtonText: "再次检查",
+            type: "warning",
+            dangerouslyUseHTMLString: true
+          }
+        )
           .then(() => {
             this.apply();
           })
@@ -384,12 +388,12 @@ export default {
       /* this.param.enterpriseLicenseCode = this.code; */
 
       // 暂时不传文件对象，直接删除，需要文件，直接注释即可；
-      delete this.param.bankLicenseFile;
+      /*       delete this.param.bankLicenseFile;
       delete this.param.electronicVersionFile;
       delete this.param.identityCardImgFile;
       delete this.param.licenseElectronicFile;
       delete this.param.taxCertificateFile;
-      delete this.param.taxpayerCertificateFile;
+      delete this.param.taxpayerCertificateFile; */
 
       console.log(this.param);
 

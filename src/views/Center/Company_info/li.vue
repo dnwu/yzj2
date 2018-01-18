@@ -33,7 +33,20 @@
 </template>
 <script>
 export default {
-  props: ["info", "edit", "width"],
+  props: {
+    info: {
+      type: Object,
+      required: true
+    },
+    edit: {
+      type: Boolean,
+      required: true
+    },
+    width: {
+      type: String,
+      required: true
+    }
+  },
   data() {
     return {
       widthStyle: "",
