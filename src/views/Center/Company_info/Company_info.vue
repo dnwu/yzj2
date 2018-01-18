@@ -13,28 +13,28 @@
             <my-ul class="card-left" ref="info1" :info="info1" :edit="edit" :width="widthLeft" @fileChange="fileChange"></my-ul>
             <my-ul class="card-right" ref="info2" :info="info2" :edit="edit" :width="widthRight" @fileChange="fileChange"></my-ul>
         </main>
-      </section class="card">
-      <section class="card card-two">
+      </section>
+      <section class="card">
         <header class="is-flex ali-center card-head">公司税务登记证</header>
         <main class="is-flex jst-between card-body">
             <my-ul class="card-left is-flex ali-center" ref="tax1" :info="tax1" :edit="edit" :width="widthLeft" @fileChange="fileChange"></my-ul>
             <my-ul class="card-right" ref="tax2" :info="tax2" :edit="edit" :width="widthRight" @fileChange="fileChange"></my-ul>
         </main>
-      </section class="card">
+      </section>
       <section class="card">
         <header class="is-flex ali-center card-head">开户银行许可证</header>
         <main class="is-flex jst-between card-body">
             <my-ul class="card-left" ref="paper1" :info="paper1" :edit="edit" :width="widthLeft" @fileChange="fileChange"></my-ul>
             <my-ul class="card-right" ref="paper2" :info="paper2" :edit="edit" :width="widthRight" @fileChange="fileChange"></my-ul>
         </main>
-      </section class="card">
-      <section class="card card-two">
+      </section>
+      <section class="card">
         <header class="is-flex ali-center card-head">联系人信息</header>
         <main class="is-flex jst-between card-body">
             <my-ul class="card-left is-flex ali-center" ref="msg1" :info="msg1" :edit="edit" :width="widthLeft" @fileChange="fileChange"></my-ul>
             <my-ul class="card-right" ref="msg2" :info="msg2" :edit="edit" :width="widthRight" @fileChange="fileChange"></my-ul>
         </main>
-      </section class="card">
+      </section>
     </div>
   </div>
 </template>
