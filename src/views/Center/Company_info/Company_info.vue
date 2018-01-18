@@ -65,8 +65,8 @@ export default {
     return {
       isApply: false, // 认证状态 1：待认证 2：通过 3：拒绝,
       edit: false, // 是否可以编辑状态
-      widthLeft: 300, // 企业信息左栏宽度控制（提供给Li组件使用，进行统一修改）
-      widthRight: 280, // 企业信息右栏宽度控制（提供给Li组件使用，进行统一修改）
+      widthLeft: "300px", // 企业信息左栏宽度控制（提供给Li组件使用，进行统一修改）
+      widthRight: "280px", // 企业信息右栏宽度控制（提供给Li组件使用，进行统一修改）
       // 下面数据均为企业信息内容
       info1: {
         enterpriseName: {
@@ -388,12 +388,12 @@ export default {
       /* this.param.enterpriseLicenseCode = this.code; */
 
       // 暂时不传文件对象，直接删除，需要文件，直接注释即可；
-      /*       delete this.param.bankLicenseFile;
+      delete this.param.bankLicenseFile;
       delete this.param.electronicVersionFile;
       delete this.param.identityCardImgFile;
       delete this.param.licenseElectronicFile;
       delete this.param.taxCertificateFile;
-      delete this.param.taxpayerCertificateFile; */
+      delete this.param.taxpayerCertificateFile;
 
       console.log(this.param);
 

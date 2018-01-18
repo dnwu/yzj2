@@ -44,7 +44,7 @@ export default {
     },
     width: {
       type: String,
-      required: true
+      default: "auto"
     }
   },
   data() {
@@ -55,7 +55,7 @@ export default {
   },
   methods: {
     getWitdthStyle() {
-      this.widthStyle = `width:${this.width}px`;
+      this.widthStyle = `width:${this.width}`;
     },
     setName(name) {
       this.name = name;
