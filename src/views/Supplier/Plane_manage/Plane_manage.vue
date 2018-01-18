@@ -62,7 +62,7 @@
               <el-date-picker
                 v-model="flightDate"
                 type="date"
-                value-format = "yyyy:MM:dd"
+                value-format = "yyyy-MM-dd"
                 size="mini"
                 :editable=false
                 placeholder="选择日期">
@@ -241,25 +241,25 @@
             label: "第三方"
           },
         ],
-        goodsType: '',
-        goodsTypeList: [
-          {
-            value: 7,
-            label: "普货"
-          },
-          {
-            value: 8,
-            label: "冷链"
-          },
-          {
-            value: 9,
-            label: "重货"
-          },
-          {
-            value: 10,
-            label: "危险品"
-          },
-        ],
+        // goodsType: '',
+        // goodsTypeList: [
+        //   {
+        //     value: 7,
+        //     label: "普货"
+        //   },
+        //   {
+        //     value: 8,
+        //     label: "冷链"
+        //   },
+        //   {
+        //     value: 9,
+        //     label: "重货"
+        //   },
+        //   {
+        //     value: 10,
+        //     label: "危险品"
+        //   },
+        // ],
         portList: [],
         startPort: '',
         endPort: '',
@@ -298,12 +298,30 @@
       },
     },
     methods:{
+      // getGoodTypeList (){
+      //   this.axios.post("/app/v1/common/queryDict",{
+      //     "dataType": 2
+      //   }).then(data => {
+      //     console.log(data);
+      //     let arr = [];
+      //     if(data.data.data.detailDTOS.length){
+      //       for(let i=0;i<data.data.data.detailDTOS.length;i++){
+      //         let obj={};
+      //         obj.value = data.data.data.detailDTOS[i].id;
+      //         obj.label = data.data.data.detailDTOS[i].dataName;
+      //         arr.push(obj);
+      //       }
+      //     }
+      //     this.goodsTypeList = arr;
+      //   });
+      // },
       getPortList (){
         this.axios.get("/airport/list").then(data => {
           this.portList = data.data;
         });
       },
       getFlightList (page){
+        // console.log(this.flightDate);
         this.flightList =[];
         let resourcesType = this.resourcesType || -1;
         this.axios.post("/web/v1/fligt/getFlightRecordList",{
@@ -317,6 +335,7 @@
           "resourceType": resourcesType,
           "size": 10,
         }).then(data => {
+          // console.log(data);
           if(data.data.code === 1){
             this.flightList = data.data.hnaFlightRecords;
             this.pageTotal = data.data.total;

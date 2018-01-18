@@ -530,8 +530,9 @@ export default {
     .title {
       margin-left: 30px;
       line-height: 61px;
-      display: grid;
-      grid-template-columns: 1fr;
+      // display: grid;
+      // grid-template-columns: 1fr;
+      display: flex;
       // justify-items: center;
       align-items: center;
     }
@@ -554,9 +555,11 @@ export default {
       .content {
         padding: 0 20px;
         color: #a0a0a0;
-        display: grid;
-        grid-template-columns: 1fr 250px 250px;
+        // display: grid;
+        // grid-template-columns: 1fr 250px 250px;
+        display: flex;
         .left {
+          width: 720px;
           .box {
             display: flex;
             margin: 10px 0;
@@ -596,12 +599,14 @@ export default {
         }
         .middle {
           color: #fed001;
-          width: 100%;
+          // width: 100%;
+          width: 250px;
           text-align: center;
           padding-top: 60px;
         }
         .right {
-          width: 100%;
+          // width: 100%;
+          width: 250px;
           text-align: center;
           padding-top: 80px;
           button {
