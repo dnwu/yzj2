@@ -242,15 +242,6 @@
           name: [
             { required: true, message: '请输入真实姓名', trigger: 'blur' },
           ],
-          card: [
-            { required: true, message: '请输入真实身份证号', trigger: 'blur' },
-          ],
-          phone: [
-            { required: true, message: '请输入手机号', trigger: 'blur' },
-          ],
-          email: [
-            { required: true, message: '请输入邮箱', trigger: 'blur' },
-          ],
         }
       }
     },
