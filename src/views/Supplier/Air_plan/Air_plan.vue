@@ -436,7 +436,7 @@
         });
       },
       deleteFlight (flightId){
-        this.$confirm('此操作将删除该帐号，无法恢复, 是否继续?', '提示', {
+        this.$confirm('此操作将删除该条航班计划，无法恢复, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'

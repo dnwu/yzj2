@@ -143,10 +143,16 @@ export default {
       } else if (this.fullPath.includes("on_account")) {
         this.activeIndex = 3;
         this.title = "子账号管理";
-      } else if (this.fullPath.includes("rder_taking")) {
+      } else if (this.fullPath.includes("order_taking")) {
         this.activeIndex = 4;
         this.title = "接单管理";
-      } else if (this.fullPath.includes("ooking_space")) {
+      }else if(this.fullPath.includes("order_track")){
+        this.activeIndex = 4;
+        this.title = "订单跟踪";
+      }else if(this.fullPath.includes("order_deal")){
+        this.activeIndex = 4;
+        this.title = "订单详情";
+      }else if (this.fullPath.includes("ooking_space")) {
         this.activeIndex = 5;
         this.title = "订舱管理";
       } else if (this.fullPath.includes("aking_bill")) {
