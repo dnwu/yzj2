@@ -9,6 +9,7 @@
         <span :style="widthStyle" class="value" v-if="!obj.file" v-show="!edit" v-text="obj.value"></span>
         <span :style="widthStyle" class="value" v-if="obj.file" v-show="!edit"><i v-if="obj.value" class="el-icon-picture"></i></span>
         <el-upload
+            ref="upload"
             :style="widthStyle"
             v-if="obj.file"
             v-show="edit"
@@ -42,7 +43,8 @@ export default {
   data() {
     return {
       widthStyle: "",
-      name: ""
+      name: "",
+      fileName: ""
     };
   },
   methods: {
@@ -50,10 +52,13 @@ export default {
       this.widthStyle = `width:${this.width}`;
     },
     setName(name) {
-      this.name = name;
+      this.name = name + "File";
+      this.fileName = name;
     },
     onChange(event) {
+      console.log(this.$refs);
       this.$emit("fileChange", this.name, event.raw);
+      this.$emit("fileNameChange", this.fileName, event.raw.name);
     }
   },
   mounted() {
